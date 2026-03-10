@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-const PORTRAIT = "https://placehold.co/600x400/1a1a2e/00E5FF?text=PORTRAIT";
-const OUTDOOR = "https://placehold.co/1200x675/0a0a20/BB86FC?text=OUTDOOR";
-const STAGE = "https://placehold.co/1200x675/05050D/00E5FF?text=STAGE";
+const PORTRAIT = "/images/portrait.jpg";
+const OUTDOOR = "/images/outdoor.jpg";
+const STAGE = "/images/stage.jpg";
 
 export default function StevenAngel() {
   const C = "#00E5FF";
