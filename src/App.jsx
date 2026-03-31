@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const PORTRAIT = "/images/portrait.jpg";
 const OUTDOOR = "/images/outdoor.jpg";
@@ -135,6 +136,13 @@ export default function StevenAngel() {
 
   return (
     <div style={{ background: "#000", color: "#fff", overflowX: "hidden" }}>
+
+      <Helmet>
+        <title>Steven Angel | Ableton Lessons, Ghost Production &amp; Mixing Mastering</title>
+        <meta name="description" content="Steven Angel — Professional Ableton lessons, ghost production and mixing & mastering for DJs and producers. 20+ years experience, 100M+ streams. Supported by Hugel, Claptone, ARTBAT & more." />
+        <meta name="keywords" content="ghost producer, ghost production, afro house ghost production, ableton lessons, music production lessons, mixing mastering, DJ producer, Steven Angel" />
+        <link rel="canonical" href="https://www.steven-angel.com/" />
+      </Helmet>
 
       {/* NAV */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, display: "flex", justifyContent: "space-between", alignItems: "center", height: 64, padding: "0 48px", background: "rgba(0,0,0,0.9)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(255,255,255,0.06)", boxSizing: "border-box" }}>
