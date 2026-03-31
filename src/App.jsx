@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 
 const PORTRAIT = "/images/portrait.jpg";
@@ -11,6 +11,7 @@ export default function StevenAngel() {
   const [playerOpen, setPlayerOpen] = useState(false);
   const [playerTab, setPlayerTab] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const isGhostPage = useMemo(() => window.location.pathname === "/ghost", []);
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handler);
@@ -138,10 +139,10 @@ export default function StevenAngel() {
     <div style={{ background: "#000", color: "#fff", overflowX: "hidden" }}>
 
       <Helmet>
-        <title>Steven Angel | Ableton Lessons, Ghost Production &amp; Mixing Mastering</title>
-        <meta name="description" content="Steven Angel — Professional Ableton lessons, ghost production and mixing & mastering for DJs and producers. 20+ years experience, 100M+ streams. Supported by Hugel, Claptone, ARTBAT & more." />
-        <meta name="keywords" content="ghost producer, ghost production, afro house ghost production, ableton lessons, music production lessons, mixing mastering, DJ producer, Steven Angel" />
-        <link rel="canonical" href="https://www.steven-angel.com/" />
+        <title>{isGhostPage ? "Ghost Producer Afro House, Indie Dance, Afro Latin and more | Steven Angel" : "Steven Angel | Ableton Lessons, Ghost Production & Mixing Mastering"}</title>
+        <meta name="description" content={isGhostPage ? "Hire a professional ghost producer for Afro House, Indie Dance, Afro Latin, Melodic Techno, Tech House and more. Club-ready, label-ready tracks — 100% yours. NDA included." : "Steven Angel — Professional Ableton lessons, ghost production and mixing & mastering for DJs and producers. 20+ years experience, 100M+ streams. Supported by Hugel, Claptone, ARTBAT & more."} />
+        <meta name="keywords" content={isGhostPage ? "ghost producer, ghost production, afro house ghost production, indie dance ghost producer, afro latin ghost producer, melodic techno ghost producer, hire ghost producer" : "ghost producer, ghost production, afro house ghost production, ableton lessons, music production lessons, mixing mastering, DJ producer, Steven Angel"} />
+        <link rel="canonical" href={isGhostPage ? "https://www.steven-angel.com/ghost" : "https://www.steven-angel.com/"} />
       </Helmet>
 
       {/* NAV */}
