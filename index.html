@@ -35,7 +35,99 @@
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static SEO content — replaced by React on load -->
+      <header>
+        <h1>Steven Angel | Ableton Lessons, Ghost Production &amp; Mixing Mastering</h1>
+        <p>Ableton Mentor &middot; Ghost Producer &middot; Mixing &amp; Mastering Engineer</p>
+      </header>
+      <main>
+        <section>
+          <h2>About Steven Angel</h2>
+          <p>Steven Angel is a DJ, Producer and Audio Engineer with over 20 years of experience. One half of the Afro-House duo The Angels, and mastering engineer for the Swedish label HMWL.</p>
+          <p>Released on Sony, Ultra, Armada, MoBlack, Godeeva, MTGD and more. Worked with Hernan Cattaneo, SKAZI, Hugel, Floyd Levine and DJ Chus.</p>
+          <p>Gained over 100M+ streams worldwide. Teaching philosophy: Cut the Fat — no theory overload, just what works on dancefloors.</p>
+        </section>
+        <section>
+          <h2>Ableton Production Lessons</h2>
+          <p>Learn to make tracks that get signed. 1-on-1 Ableton lessons for Beginner, Intermediate, and Advanced producers.</p>
+          <ul>
+            <li>Make your tracks POWERFUL, punchy, and crystal clear</li>
+            <li>Produce EDM, House and Techno tracks from scratch</li>
+            <li>Get your music signed on the right labels</li>
+            <li>Master mixing and mastering for a professional sound</li>
+            <li>Create catchy arrangements, buildups, drops and intros</li>
+            <li>Start and finish new tracks quickly and easily</li>
+          </ul>
+          <p>Pricing: 1 Hour — $85 | 2 Hours — $150 | 4 Hours — $275</p>
+        </section>
+        <section>
+          <h2>Ghost Production — Your Vision, My Sound</h2>
+          <p>Hire a professional ghost producer for Afro House, Melodic Techno, Tech House and more. Custom tracks built for your sound — club-ready, label-ready, and 100% yours.</p>
+          <p>Available genres: Melodic Techno, Afro House, Afro Tech, Latin Afro House, Tech House, House, Hard Techno, Indie Dance, Tribal / Deep Tech, Balkan / Arab House.</p>
+          <p>Full tracks, demo finishing, mix and master — NDA included.</p>
+        </section>
+        <section>
+          <h2>Supported By</h2>
+          <p>Hugel, Claptone, Hernan Cattaneo, Roger Sanchez, DJ Chus, ARTBAT and more.</p>
+        </section>
+        <section>
+          <h2>Contact Steven Angel</h2>
+          <p>Book a free 15-minute intro call or send a message for lessons, ghost production, or mixing and mastering.</p>
+        </section>
+      </main>
+    </div>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Steven Angel",
+      "description": "Professional Ableton lessons, ghost production and mixing & mastering for DJs and producers.",
+      "url": "https://www.steven-angel.com",
+      "image": "https://www.steven-angel.com/images/portrait.jpg",
+      "telephone": "+972523561353",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IL"
+      },
+      "sameAs": [
+        "https://www.instagram.com/theangels_tlv/",
+        "https://soundcloud.com/theangelsoflove"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Music Production Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "1-on-1 Ableton Production Lesson — 1 Hour",
+            "price": "85",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "1-on-1 Ableton Production Lesson — 2 Hours",
+            "price": "150",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "1-on-1 Ableton Production Lesson — 4 Hours",
+            "price": "275",
+            "priceCurrency": "USD"
+          },
+          {
+            "@type": "Offer",
+            "name": "Ghost Production",
+            "description": "Professional ghost production for Afro House, Melodic Techno, Tech House, Indie Dance and more genres. Club-ready, label-ready tracks, NDA included."
+          }
+        ]
+      }
+    }
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
