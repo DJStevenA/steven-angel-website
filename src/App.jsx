@@ -12,6 +12,10 @@ export default function StevenAngel() {
   const [playerTab, setPlayerTab] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isGhostPage = useMemo(() => window.location.pathname === "/ghost", []);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [audioRef] = useState(() => typeof Audio !== "undefined" ? new Audio() : null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handler);
@@ -24,6 +28,22 @@ export default function StevenAngel() {
     l.rel = "stylesheet";
     document.head.appendChild(l);
   }, []);
+
+  useEffect(() => {
+    if (!audioRef) return;
+    const onTime = () => { if (audioRef.duration) setProgress((audioRef.currentTime / audioRef.duration) * 100); };
+    const onEnd = () => { setIsPlaying(false); setProgress(0); };
+    audioRef.addEventListener("timeupdate", onTime);
+    audioRef.addEventListener("ended", onEnd);
+    return () => { audioRef.removeEventListener("timeupdate", onTime); audioRef.removeEventListener("ended", onEnd); };
+  }, [audioRef]);
+
+  const playTrack = (src) => {
+    if (!audioRef) return;
+    if (currentTrack === src && isPlaying) { audioRef.pause(); setIsPlaying(false); return; }
+    if (currentTrack !== src) { audioRef.src = src; setCurrentTrack(src); setProgress(0); }
+    audioRef.play(); setIsPlaying(true);
+  };
 
   const H = (s) => ({
     fontFamily: "Barlow Condensed, sans-serif",
@@ -439,15 +459,38 @@ export default function StevenAngel() {
             Hire a professional ghost producer for Afro House, Melodic Techno, Tech House and more. Custom tracks built for your sound — club-ready, label-ready, and 100% yours.
           </div>
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 12, marginBottom: 36 }}>
-            {genres.map(([g, ref, audio]) => (
-              <div key={g} style={{ padding: "18px 22px", background: "#000", border: "1px solid #141420", borderRadius: 6 }}>
-                <div style={{ ...H(17), color: "rgba(255,255,255,0.8)", marginBottom: 5 }}>{g}</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: audio ? 10 : 0 }}>{ref}</div>
-                {audio && (Array.isArray(audio) ? audio : [audio]).map((src, i) => (
-                  <audio key={i} controls src={src} style={{ width: "100%", height: 28, display: "block", marginTop: 6, opacity: 0.8 }} />
-                ))}
-              </div>
-            ))}
+            {genres.map(([g, ref, audio]) => {
+              const tracks = audio ? (Array.isArray(audio) ? audio : [audio]) : [];
+              const hasAudio = tracks.length > 0;
+              return (
+                <div key={g} style={{ padding: "18px 22px", background: "#000", border: hasAudio ? `1px solid rgba(0,229,255,0.15)` : "1px solid #141420", borderRadius: 6, transition: "border-color 0.3s" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                    <div style={{ ...H(17), color: "rgba(255,255,255,0.8)" }}>{g}</div>
+                    {hasAudio && <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.2em", color: C, background: "rgba(0,229,255,0.08)", padding: "3px 8px", borderRadius: 10 }}>SAMPLE</div>}
+                  </div>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: hasAudio ? 12 : 0 }}>{ref}</div>
+                  {tracks.map((src, i) => {
+                    const active = currentTrack === src;
+                    const trackName = src.split("/").pop().replace(".mp3", "").replace(/-/g, " ");
+                    return (
+                      <div key={i} onClick={() => playTrack(src)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", cursor: "pointer", borderTop: i ? "1px solid #0d0d18" : "none" }}>
+                        <div style={{ width: 30, height: 30, borderRadius: "50%", background: active && isPlaying ? `linear-gradient(135deg,${C},${P})` : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "background 0.3s" }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill={active && isPlaying ? "#000" : "rgba(255,255,255,0.5)"}>
+                            {active && isPlaying ? <><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></> : <polygon points="8,4 20,12 8,20"/>}
+                          </svg>
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, fontWeight: 500, color: active ? C : "rgba(255,255,255,0.6)", textTransform: "capitalize" }}>{trackName}</div>
+                          <div style={{ width: "100%", height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, marginTop: 4, overflow: "hidden" }}>
+                            <div style={{ width: (active ? progress : 0) + "%", height: "100%", background: `linear-gradient(90deg,${C},${P})`, borderRadius: 2, transition: "width 0.3s linear" }} />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <a href="https://api.whatsapp.com/send?phone=972523561353" target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 32px", borderRadius: 50, textDecoration: "none" }}>WHATSAPP ME</a>
