@@ -12,6 +12,10 @@ export default function StevenAngel() {
   const [playerTab, setPlayerTab] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isGhostPage = useMemo(() => window.location.pathname === "/ghost", []);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [audioRef] = useState(() => typeof Audio !== "undefined" ? new Audio() : null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handler);
@@ -24,6 +28,28 @@ export default function StevenAngel() {
     l.rel = "stylesheet";
     document.head.appendChild(l);
   }, []);
+
+  useEffect(() => {
+    if (!audioRef) return;
+    const onTime = () => { if (audioRef.duration) setProgress((audioRef.currentTime / audioRef.duration) * 100); };
+    const onEnd = () => { setIsPlaying(false); setProgress(0); };
+    audioRef.addEventListener("timeupdate", onTime);
+    audioRef.addEventListener("ended", onEnd);
+    return () => { audioRef.removeEventListener("timeupdate", onTime); audioRef.removeEventListener("ended", onEnd); };
+  }, [audioRef]);
+
+  const playTrack = (src) => {
+    if (!audioRef) return;
+    if (currentTrack === src && isPlaying) { audioRef.pause(); setIsPlaying(false); return; }
+    if (currentTrack !== src) { audioRef.src = src; setCurrentTrack(src); setProgress(0); }
+    audioRef.play(); setIsPlaying(true);
+  };
+
+  const demoTracks = [
+    { title: "Tequila", genre: "Latin Afro House", src: "/audio/tequila.mp3" },
+    { title: "Sagapo", genre: "Balkan / Arab House", src: "/audio/sagapo.mp3" },
+    { title: "Disko Spalvov", genre: "Balkan / Arab House", src: "/audio/disko-spalvov.mp3" },
+  ];
 
   const H = (s) => ({
     fontFamily: "Barlow Condensed, sans-serif",
@@ -438,14 +464,36 @@ export default function StevenAngel() {
           <div style={{ ...body, textAlign: "center", maxWidth: 580, margin: "0 auto 44px" }}>
             Hire a professional ghost producer for Afro House, Melodic Techno, Tech House and more. Custom tracks built for your sound — club-ready, label-ready, and 100% yours.
           </div>
+          {/* MINI PLAYER */}
+          <div style={{ background: "#000", border: "1px solid #141420", borderRadius: 10, padding: isMobile ? "16px" : "20px 24px", marginBottom: 32 }}>
+            <div style={{ ...label(C), marginBottom: 14, fontSize: 11 }}>LISTEN TO SAMPLES</div>
+            {demoTracks.map((t, i) => {
+              const active = currentTrack === t.src;
+              return (
+                <div key={i} onClick={() => playTrack(t.src)} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 0", borderTop: i ? "1px solid #0d0d18" : "none", cursor: "pointer", transition: "background 0.2s" }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: active && isPlaying ? `linear-gradient(135deg,${C},${P})` : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill={active && isPlaying ? "#000" : "rgba(255,255,255,0.5)"}>
+                      {active && isPlaying ? <><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></> : <polygon points="8,4 20,12 8,20"/>}
+                    </svg>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 15, color: active ? C : "rgba(255,255,255,0.8)", letterSpacing: "0.05em" }}>{t.title}</div>
+                    <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{t.genre}</div>
+                  </div>
+                  <div style={{ width: isMobile ? 80 : 120, height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", flexShrink: 0 }}>
+                    <div style={{ width: (active ? progress : 0) + "%", height: "100%", background: `linear-gradient(90deg,${C},${P})`, borderRadius: 2, transition: "width 0.3s linear" }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* GENRE GRID */}
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 12, marginBottom: 36 }}>
-            {genres.map(([g, ref, audio]) => (
+            {genres.map(([g, ref]) => (
               <div key={g} style={{ padding: "18px 22px", background: "#000", border: "1px solid #141420", borderRadius: 6 }}>
                 <div style={{ ...H(17), color: "rgba(255,255,255,0.8)", marginBottom: 5 }}>{g}</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: audio ? 10 : 0 }}>{ref}</div>
-                {audio && (Array.isArray(audio) ? audio : [audio]).map((src, i) => (
-                  <audio key={i} controls src={src} style={{ width: "100%", height: 28, display: "block", marginTop: 6, opacity: 0.8 }} />
-                ))}
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.3)" }}>{ref}</div>
               </div>
             ))}
           </div>
