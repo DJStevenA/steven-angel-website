@@ -144,17 +144,17 @@ const AUDIO_SAMPLES = [
 const VIDEO_SHOWCASES = [
   {
     src: "/videos/pacha-barcelona.mp4",
-    thumb: "/videos/pacha-barcelona-thumb.jpg",
+    thumb: "/videos/pacha-barcelona-thumb.webp",
     caption: "Pacha Barcelona",
   },
   {
     src: "/videos/zamna-festival.mp4",
-    thumb: "/videos/zamna-festival-thumb.jpg",
+    thumb: "/videos/zamna-festival-thumb.webp",
     caption: "Zamna Festival — Mexico",
   },
   {
     src: "/videos/artbat-ghost.mp4",
-    thumb: "/videos/artbat-ghost-thumb.jpg",
+    thumb: "/videos/artbat-ghost-thumb.webp",
     caption: "La Cantadora — Mastered by Steven Angel · Played by ARTBAT",
   },
 ];
@@ -721,7 +721,7 @@ function GhostPage() {
         {/* ═══ Pacha Ibiza Video ═══ */}
         <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <VideoPlayer yt="tPYhltoFTZo" caption="" thumb="/images/pacha-ibiza-thumb.jpg" />
+            <VideoPlayer yt="tPYhltoFTZo" caption="" thumb="/images/pacha-ibiza-thumb.webp" />
             <div
               style={{
                 fontFamily: "DM Sans, sans-serif",
