@@ -87,6 +87,25 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Hidden forms for Netlify Forms detection (SPA requirement) -->
+    <form name="ghost-contact" netlify netlify-honeypot="bot-field" hidden>
+      <input name="form-name" type="hidden" value="ghost-contact" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="email" />
+      <input name="reference" />
+      <select name="genre"></select>
+      <textarea name="message"></textarea>
+    </form>
+    <form name="homepage-contact" netlify netlify-honeypot="bot-field" hidden>
+      <input name="form-name" type="hidden" value="homepage-contact" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="email" />
+      <select name="service"></select>
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.jsx"></script>
 
     <!-- Analytics deferred to after page load -->

@@ -644,7 +644,23 @@ export default function App() {
             <h2 style={{ ...heading(72), marginBottom: 12 }}>READY?<br />LET'S MAKE<br />SOMETHING.</h2>
             <div style={{ ...body, marginBottom: 44 }}>Send me your demo — I'll tell you exactly what's missing.</div>
 
-            <form name="homepage-contact" method="POST" data-netlify="true" style={{ textAlign: "left" }}>
+            <form
+              name="homepage-contact"
+              method="POST"
+              data-netlify="true"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.target;
+                fetch("/", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                  body: new URLSearchParams(new FormData(form)).toString(),
+                })
+                  .then(() => { alert("Message sent! I'll get back to you soon."); form.reset(); })
+                  .catch(() => alert("Something went wrong. Please try again."));
+              }}
+              style={{ textAlign: "left" }}
+            >
               <input type="hidden" name="form-name" value="homepage-contact" />
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 12 }}>
                 <input name="name" placeholder="Your Name" required style={{ fontFamily: "DM Sans, sans-serif", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4 }} />

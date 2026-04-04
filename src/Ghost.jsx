@@ -1936,6 +1936,17 @@ function GhostPage() {
                 name="ghost-contact"
                 method="POST"
                 data-netlify="true"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = e.target;
+                  fetch("/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(new FormData(form)).toString(),
+                  })
+                    .then(() => { alert("Message sent! I'll get back to you within 24 hours."); form.reset(); })
+                    .catch(() => alert("Something went wrong. Please try WhatsApp instead."));
+                }}
                 style={{
                   display: "flex",
                   flexDirection: "column",
