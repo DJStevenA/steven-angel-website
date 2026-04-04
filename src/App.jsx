@@ -25,8 +25,6 @@ export default function App() {
   const purple = "#BB86FC";
 
   /* ── state ── */
-  const [playerOpen, setPlayerOpen] = useState(false);
-  const [playerTab, setPlayerTab]   = useState(0);
   const [isMobile, setIsMobile]     = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -456,7 +454,7 @@ export default function App() {
             {/* Audio samples */}
             <div style={{ marginBottom: 28 }}>
               <div style={{ ...label(cyan), marginBottom: 16, textAlign: "center" }}>LISTEN TO SAMPLES</div>
-              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 16, alignItems: "start" }}>
                 {ghostSamples.map(({ genre, artists, tracks }) => (
                   <div key={genre} style={{ background: "#04040f", border: "1px solid #141420", borderTop: "2px solid " + (tracks.length ? purple : "rgba(255,255,255,0.08)"), borderRadius: 8, padding: "18px 20px" }}>
                     <div style={{ ...label(tracks.length ? purple : "rgba(255,255,255,0.25)"), marginBottom: 4 }}>{genre}</div>
@@ -682,50 +680,16 @@ export default function App() {
       {/* ── FLOATING MUSIC PLAYER ── */}
       <div style={{ position: "fixed", bottom: isMobile ? 16 : 28, right: isMobile ? 16 : 28, zIndex: 999 }}>
         <button
-          onClick={() => setPlayerOpen((prev) => !prev)}
-          style={{ display: "flex", alignItems: "center", gap: 10, background: playerOpen ? "rgba(0,0,0,0.95)" : "linear-gradient(135deg,#00E5FF,#BB86FC)", border: playerOpen ? "1px solid rgba(0,229,255,0.3)" : "none", borderRadius: 50, padding: "12px 22px", cursor: "pointer", boxShadow: "0 4px 32px rgba(0,229,255,0.35)" }}
+          onClick={() => { const el = document.getElementById("ghost"); if (el) { el.scrollIntoView({ behavior: "smooth" }); } }}
+          style={{ display: "flex", alignItems: "center", gap: 10, background: "linear-gradient(135deg,#00E5FF,#BB86FC)", border: "none", borderRadius: 50, padding: "12px 22px", cursor: "pointer", boxShadow: "0 4px 32px rgba(0,229,255,0.35)" }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill={playerOpen ? cyan : "#000"}>
-            {playerOpen
-              ? <Fragment><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></Fragment>
-              : <polygon points="5,3 19,12 5,21" />
-            }
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#000">
+            <polygon points="5,3 19,12 5,21" />
           </svg>
-          <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: playerOpen ? cyan : "#000", whiteSpace: "nowrap" }}>
-            {playerOpen ? "CLOSE PLAYER" : "LISTEN TO MY WORK"}
+          <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: "#000", whiteSpace: "nowrap" }}>
+            LISTEN TO MY WORK
           </span>
         </button>
-
-        {playerOpen && (
-          <div style={{ position: "absolute", bottom: 62, right: 0, width: isMobile ? 300 : 360, background: "#08080f", border: "1px solid rgba(0,229,255,0.2)", borderRadius: 12, overflow: "hidden" }}>
-            {/* Tabs */}
-            <div style={{ display: "flex", borderBottom: "1px solid #0d0d18" }}>
-              {[["PRODUCTIONS", 0], ["MASTERING", 1]].map(([tabLabel, idx]) => (
-                <button key={tabLabel} onClick={() => setPlayerTab(idx)} style={{ flex: 1, padding: "12px 8px", background: "none", border: "none", borderBottom: playerTab === idx ? "2px solid " + cyan : "2px solid transparent", cursor: "pointer", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", color: playerTab === idx ? cyan : "rgba(255,255,255,0.35)" }}>{tabLabel}</button>
-              ))}
-            </div>
-
-            {/* Productions */}
-            {playerTab === 0 && (
-              <iframe
-                width="360" height="300"
-                scrolling="no" frameBorder="no" allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/theangelsoflove/sets/steven-angel-productions-2026/s-OQGp26KiwbI&color=%2300e5ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"
-                style={{ display: "block" }}
-              />
-            )}
-
-            {/* Mastering */}
-            {playerTab === 1 && (
-              <iframe
-                width="360" height="300"
-                scrolling="no" frameBorder="no" allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/theangelsoflove/sets/premaster-vs-master/s-7B87xgWzOoY&color=%2300e5ff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"
-                style={{ display: "block" }}
-              />
-            )}
-          </div>
-        )}
       </div>
 
     </div>

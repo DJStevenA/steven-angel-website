@@ -142,7 +142,6 @@ const AUDIO_SAMPLES = [
 
 /* ─── Video Showcases ─── */
 const VIDEO_SHOWCASES = [
-  { yt: "tPYhltoFTZo", caption: "Supported by Hugel & Claptone — Pacha Ibiza" },
   {
     src: "/videos/pacha-barcelona.mp4",
     thumb: "/videos/pacha-barcelona-thumb.jpg",
@@ -242,7 +241,7 @@ function VideoPlayer({ src, yt, caption, thumb }) {
               }}
             >
               <img
-                src={`https://img.youtube.com/vi/${yt}/hqdefault.jpg`}
+                src={thumb || `https://img.youtube.com/vi/${yt}/hqdefault.jpg`}
                 alt={caption}
                 loading="lazy"
                 style={{
@@ -716,20 +715,30 @@ function GhostPage() {
               Your Vision. My Sound. Label-Ready Result.
             </h2>
 
+          </div>
+        </section>
+
+        {/* ═══ Pacha Ibiza Video ═══ */}
+        <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000" }}>
+          <div style={{ maxWidth: 720, margin: "0 auto" }}>
+            <VideoPlayer yt="tPYhltoFTZo" caption="" thumb="/images/pacha-ibiza-thumb.jpg" />
             <div
               style={{
-                display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                gap: 16,
-                justifyContent: "center",
-                alignItems: "center",
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: 15,
+                color: "rgba(255,255,255,0.75)",
+                textAlign: "center",
+                marginTop: 16,
+                lineHeight: 1.6,
               }}
             >
-              {/* Calendly CTA */}
-              <a
-                href="https://calendly.com/dj-steven-angel/15-min-zoom"
-                target="_blank"
-                rel="noreferrer"
+              My Track <span style={{ color: CYAN, fontWeight: 600 }}>"El Barrio"</span> out on <span style={{ color: PURPLE, fontWeight: 600 }}>MTGD</span> played at Pacha Ibiza.
+            </div>
+
+            {/* Listen CTA */}
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 28 }}>
+              <button
+                onClick={() => { const el = document.getElementById("audio-samples"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -743,50 +752,119 @@ function GhostPage() {
                   textTransform: "uppercase",
                   padding: "16px 36px",
                   borderRadius: 50,
-                  textDecoration: "none",
+                  border: "none",
+                  cursor: "pointer",
                   boxShadow: "0 0 28px rgba(0,229,255,0.5)",
-                  minWidth: 220,
-                  justifyContent: "center",
                 }}
               >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="#000"
-                >
-                  <path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 18H5V9h14v12zm0-14H5V5h14v2zM7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#000">
+                  <polygon points="5,3 19,12 5,21" />
                 </svg>
-                Book a Consultation (Zoom)
-              </a>
+                Listen To My Work
+              </button>
+            </div>
+          </div>
+        </section>
 
-              {/* WhatsApp CTA */}
-              <a
-                href={WHATSAPP_LINK}
-                target="_blank"
-                rel="noreferrer"
+        {/* ═══ About Steven ═══ */}
+        <section
+          style={{
+            padding: isMobile ? "60px 20px" : "90px 60px",
+            background: BG,
+            borderTop: "1px solid #0d0d0d",
+          }}
+        >
+          <div
+            style={{
+              maxWidth: 900,
+              margin: "0 auto",
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap: 48,
+              alignItems: "center",
+            }}
+          >
+            <img
+              src="/images/portrait.webp"
+              alt="Steven Angel"
+              loading="lazy"
+              width="800"
+              height="903"
+              style={{
+                width: "100%",
+                borderRadius: 12,
+                objectFit: "cover",
+                maxHeight: 480,
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}
+            />
+
+            <div>
+              <div style={{ ...label(CYAN), marginBottom: 16 }}>
+                ABOUT STEVEN
+              </div>
+              <div
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  background: "#1a7a42",
-                  color: "#fff",
-                  fontFamily: "Barlow Condensed, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 15,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  padding: "16px 36px",
-                  borderRadius: 50,
-                  textDecoration: "none",
-                  boxShadow: "0 0 28px rgba(37,211,102,0.45)",
-                  minWidth: 220,
-                  justifyContent: "center",
+                  ...heading(isMobile ? 28 : 40),
+                  marginBottom: 24,
                 }}
               >
-                <WhatsAppIcon size={18} />
-                WhatsApp Me
-              </a>
+                DJ, Producer &<br />
+                <span style={{ color: CYAN }}>Audio Engineer</span>
+              </div>
+              <div style={{ ...body, marginBottom: 16 }}>
+                20+ years in electronic music. Released on MTGD, Moblack,
+                Godeeva, Sony, Ultra and Armada. Played by Hugel, Claptone,
+                Hernan Cattaneo and ARTBAT.
+              </div>
+              <div style={{ ...body, marginBottom: 20 }}>
+                Also one half of{" "}
+                <a
+                  href="https://ra.co/dj/theangels"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: CYAN,
+                    textDecoration: "none",
+                    fontWeight: 600,
+                  }}
+                >
+                  The Angels
+                </a>{" "}
+                &mdash; an Afro House / Afro Latin duo that hit #1 on iTunes
+                Israel and topped Beatport charts in 10+ countries. Performed
+                across Israel, Europe and Latin America. Find us on{" "}
+                <a
+                  href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: CYAN,
+                    textDecoration: "none",
+                    fontWeight: 600,
+                  }}
+                >
+                  Spotify
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://www.beatport.com/artist/the-angels-il/913642"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    color: CYAN,
+                    textDecoration: "none",
+                    fontWeight: 600,
+                  }}
+                >
+                  Beatport
+                </a>
+                .
+              </div>
+              <div style={{ ...body }}>
+                I don't hide behind a marketplace. You know exactly who is
+                making your track.
+              </div>
             </div>
           </div>
         </section>
@@ -1107,109 +1185,6 @@ function GhostPage() {
           </div>
         </section>
 
-        {/* ═══ About Steven ═══ */}
-        <section
-          style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
-            background: BG,
-            borderTop: "1px solid #0d0d0d",
-          }}
-        >
-          <div
-            style={{
-              maxWidth: 900,
-              margin: "0 auto",
-              display: "grid",
-              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-              gap: 48,
-              alignItems: "center",
-            }}
-          >
-            <img
-              src="/images/portrait.webp"
-              alt="Steven Angel"
-              loading="lazy"
-              width="800"
-              height="903"
-              style={{
-                width: "100%",
-                borderRadius: 12,
-                objectFit: "cover",
-                maxHeight: 480,
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}
-            />
-
-            <div>
-              <div style={{ ...label(CYAN), marginBottom: 16 }}>
-                ABOUT STEVEN
-              </div>
-              <div
-                style={{
-                  ...heading(isMobile ? 28 : 40),
-                  marginBottom: 24,
-                }}
-              >
-                DJ, Producer &<br />
-                <span style={{ color: CYAN }}>Audio Engineer</span>
-              </div>
-              <div style={{ ...body, marginBottom: 16 }}>
-                20+ years in electronic music. Released on MTGD, Moblack,
-                Godeeva, Sony, Ultra and Armada. Played by Hugel, Claptone,
-                Hernan Cattaneo and ARTBAT.
-              </div>
-              <div style={{ ...body, marginBottom: 20 }}>
-                Also one half of{" "}
-                <a
-                  href="https://ra.co/dj/theangels"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    color: CYAN,
-                    textDecoration: "none",
-                    fontWeight: 600,
-                  }}
-                >
-                  The Angels
-                </a>{" "}
-                &mdash; an Afro House / Afro Latin duo that hit #1 on iTunes
-                Israel and topped Beatport charts in 10+ countries. Performed
-                across Israel, Europe and Latin America. Find us on{" "}
-                <a
-                  href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    color: CYAN,
-                    textDecoration: "none",
-                    fontWeight: 600,
-                  }}
-                >
-                  Spotify
-                </a>{" "}
-                and{" "}
-                <a
-                  href="https://www.beatport.com/artist/the-angels-il/913642"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    color: CYAN,
-                    textDecoration: "none",
-                    fontWeight: 600,
-                  }}
-                >
-                  Beatport
-                </a>
-                .
-              </div>
-              <div style={{ ...body }}>
-                I don't hide behind a marketplace. You know exactly who is
-                making your track.
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ═══ Packages Section ═══ */}
         <section
           style={{
@@ -1331,7 +1306,7 @@ function GhostPage() {
                 </div>
 
                 <button
-                  onClick={() => openHowItWorks("demo")}
+                  onClick={() => window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank")}
                   style={{
                     ...outlineBtn(CYAN, SHADOW_CYAN),
                     display: "flex",
@@ -1340,7 +1315,7 @@ function GhostPage() {
                     marginTop: "auto",
                   }}
                 >
-                  Place Your Order &mdash; $300 &rarr;
+                  Book A Free Consultation &rarr;
                 </button>
               </div>
 
@@ -1440,7 +1415,7 @@ function GhostPage() {
                 </div>
 
                 <button
-                  onClick={() => openHowItWorks("full")}
+                  onClick={() => window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank")}
                   style={{
                     ...outlineBtn(PURPLE, SHADOW_PURPLE),
                     display: "flex",
@@ -1451,7 +1426,7 @@ function GhostPage() {
                     marginTop: "auto",
                   }}
                 >
-                  Place Your Order &mdash; $800 &rarr;
+                  Book A Free Consultation &rarr;
                 </button>
               </div>
             </div>
@@ -1497,6 +1472,7 @@ function GhostPage() {
 
         {/* ═══ Audio Samples ═══ */}
         <section
+          id="audio-samples"
           style={{
             padding: isMobile ? "60px 20px" : "90px 60px",
             background: BG,
