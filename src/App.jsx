@@ -645,18 +645,18 @@ export default function App() {
             <div style={{ ...body, marginBottom: 44 }}>Send me your demo — I'll tell you exactly what's missing.</div>
 
             <form
-              name="homepage-contact"
-              method="POST"
-              data-netlify="true"
               onSubmit={(e) => {
                 e.preventDefault();
                 const form = e.target;
-                fetch("/", {
+                const data = Object.fromEntries(new FormData(form));
+                data.source = "homepage";
+                fetch("https://ghost-backend-production-adb6.up.railway.app/contact-form", {
                   method: "POST",
-                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                  body: new URLSearchParams(new FormData(form)).toString(),
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(data),
                 })
-                  .then(() => { alert("Message sent! I'll get back to you soon."); form.reset(); })
+                  .then((r) => r.json())
+                  .then((d) => { if (d.success) { alert("Message sent! I'll get back to you soon."); form.reset(); } else { alert("Something went wrong. Please try again."); } })
                   .catch(() => alert("Something went wrong. Please try again."));
               }}
               style={{ textAlign: "left" }}
