@@ -1938,7 +1938,7 @@ function GhostPage() {
                   const form = e.target;
                   const data = Object.fromEntries(new FormData(form));
                   data.source = "ghost-page";
-                  fetch("https://ghost-backend-production-adb6.up.railway.app/contact-form", {
+                  fetch("https://ghost-backend-production-adb6.up.railway.app/contact", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
