@@ -677,20 +677,6 @@ export default function App() {
         </span>
       </footer>
 
-      {/* ── FLOATING MUSIC PLAYER ── */}
-      <div style={{ position: "fixed", bottom: isMobile ? 16 : 28, right: isMobile ? 16 : 28, zIndex: 999 }}>
-        <button
-          onClick={() => { const el = document.getElementById("ghost"); if (el) { el.scrollIntoView({ behavior: "smooth" }); } }}
-          style={{ display: "flex", alignItems: "center", gap: 10, background: "linear-gradient(135deg,#00E5FF,#BB86FC)", border: "none", borderRadius: 50, padding: "12px 22px", cursor: "pointer", boxShadow: "0 4px 32px rgba(0,229,255,0.35)" }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#000">
-            <polygon points="5,3 19,12 5,21" />
-          </svg>
-          <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: "#000", whiteSpace: "nowrap" }}>
-            LISTEN TO MY WORK
-          </span>
-        </button>
-      </div>
 
     </div>
   );
