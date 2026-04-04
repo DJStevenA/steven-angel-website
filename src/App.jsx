@@ -644,21 +644,23 @@ export default function App() {
             <h2 style={{ ...heading(72), marginBottom: 12 }}>READY?<br />LET'S MAKE<br />SOMETHING.</h2>
             <div style={{ ...body, marginBottom: 44 }}>Send me your demo — I'll tell you exactly what's missing.</div>
 
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 12 }}>
-              {["Your Name", "Email Address"].map((ph) => (
-                <input key={ph} placeholder={ph} style={{ fontFamily: "DM Sans, sans-serif", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4 }} />
-              ))}
-            </div>
-            <select aria-label="Service" style={{ fontFamily: "DM Sans, sans-serif", width: "100%", background: "#04040f", border: "1px solid #1a1a2e", color: "rgba(255,255,255,0.4)", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4, marginBottom: 12 }}>
-              <option>I am interested in...</option>
-              <option>1-on-1 Production Lessons</option>
-              <option>Ghost Production</option>
-              <option>Mix & Mastering</option>
-            </select>
-            <textarea placeholder="Tell me about your music and what you want to achieve..." rows={4} style={{ fontFamily: "DM Sans, sans-serif", width: "100%", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4, marginBottom: 16, resize: "vertical", boxSizing: "border-box" }} />
-            <button style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, letterSpacing: "0.25em", width: "100%", padding: "18px", background: "linear-gradient(90deg," + cyan + "," + purple + ")", border: "none", color: "#000", fontSize: 16, textTransform: "uppercase", cursor: "pointer", borderRadius: 4, marginBottom: 24 }}>
-              SEND MESSAGE
-            </button>
+            <form name="homepage-contact" method="POST" data-netlify="true" style={{ textAlign: "left" }}>
+              <input type="hidden" name="form-name" value="homepage-contact" />
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                <input name="name" placeholder="Your Name" required style={{ fontFamily: "DM Sans, sans-serif", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4 }} />
+                <input name="email" type="email" placeholder="Email Address" required style={{ fontFamily: "DM Sans, sans-serif", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4 }} />
+              </div>
+              <select name="service" aria-label="Service" style={{ fontFamily: "DM Sans, sans-serif", width: "100%", background: "#04040f", border: "1px solid #1a1a2e", color: "rgba(255,255,255,0.4)", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4, marginBottom: 12 }}>
+                <option value="">I am interested in...</option>
+                <option>1-on-1 Production Lessons</option>
+                <option>Ghost Production</option>
+                <option>Mix & Mastering</option>
+              </select>
+              <textarea name="message" placeholder="Tell me about your music and what you want to achieve..." rows={4} style={{ fontFamily: "DM Sans, sans-serif", width: "100%", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4, marginBottom: 16, resize: "vertical", boxSizing: "border-box" }} />
+              <button type="submit" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, letterSpacing: "0.25em", width: "100%", padding: "18px", background: "linear-gradient(90deg," + cyan + "," + purple + ")", border: "none", color: "#000", fontSize: 16, textTransform: "uppercase", cursor: "pointer", borderRadius: 4, marginBottom: 24 }}>
+                SEND MESSAGE
+              </button>
+            </form>
 
             <div style={{ display: "flex", justifyContent: "center", gap: 24 }}>
               {[["INSTAGRAM", "https://www.instagram.com/theangels_tlv/"], ["SOUNDCLOUD", "https://soundcloud.com/theangelsoflove"], ["WHATSAPP", "https://wa.me/972523561353"]].map(([lbl, href]) => (

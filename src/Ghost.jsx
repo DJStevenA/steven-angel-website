@@ -1949,20 +1949,21 @@ function GhostPage() {
                 />
 
                 {[
-                  ["Your name", "name", "text"],
-                  ["Your email", "email", "email"],
+                  ["Your name", "name", "text", true],
+                  ["Your email", "email", "email", true],
                   [
                     "Reference track link (YouTube, Spotify, SoundCloud)",
                     "reference",
-                    "url",
+                    "text",
+                    false,
                   ],
-                ].map(([placeholder, name, type]) => (
+                ].map(([placeholder, name, type, isRequired]) => (
                   <input
                     key={name}
                     name={name}
                     type={type}
                     placeholder={placeholder}
-                    required
+                    required={isRequired}
                     style={{
                       background: "#08080f",
                       border: "1px solid #1a1a2e",
