@@ -149,7 +149,7 @@ export default function App() {
   /* ── shared "price confirmed" note ── */
   const priceNote = (
     <div style={{ textAlign: "center", marginTop: 16 }}>
-      <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.3)", fontStyle: "italic" }}>
+      <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", fontStyle: "italic" }}>
         Final price confirmed after hearing your project
       </span>
     </div>
@@ -186,9 +186,10 @@ export default function App() {
               fetchPriority="high"
               width="1920"
               height="1080"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", filter: "brightness(0.35) saturate(1.2)" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }}
             />
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 100%)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.65)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,1) 100%)" }} />
             <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 40%, rgba(0,229,255,0.05) 0%, transparent 65%)" }} />
           </div>
 
@@ -241,7 +242,7 @@ export default function App() {
 
             {/* Supported by row */}
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 16, display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 10 }}>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", color: "rgba(255,255,255,0.25)", marginRight: 8, alignSelf: "center" }}>SUPPORTED BY</div>
+              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", color: "rgba(255,255,255,0.5)", marginRight: 8, alignSelf: "center" }}>SUPPORTED BY</div>
               {["Hugel", "Claptone", "Hernan Cattaneo", "Roger Sanchez", "DJ Chus", "ARTBAT", "Oscar G", "PAUZA", "M\u00EBstiza"].map((name) => (
                 <span key={name} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em", padding: "5px 14px", border: "1px solid rgba(0,229,255,0.2)", borderRadius: 20, color: "rgba(255,255,255,0.6)", background: "rgba(0,229,255,0.04)" }}>{name}</span>
               ))}
@@ -249,16 +250,16 @@ export default function App() {
 
             {/* Signed to row */}
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14, marginTop: 14, display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 8 }}>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", color: "rgba(255,255,255,0.25)", marginRight: 8, alignSelf: "center" }}>SIGNED TO</div>
+              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", color: "rgba(255,255,255,0.5)", marginRight: 8, alignSelf: "center" }}>SIGNED TO</div>
               {["Moblack", "Sony", "Ultra", "Armada", "Godeeva", "Spinn", "MTGD", "Redolent", "Made in Miami"].map((name) => (
                 <span key={name} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 10, letterSpacing: "0.12em", padding: "3px 10px", border: "1px solid rgba(187,134,252,0.25)", borderRadius: 20, color: purple, background: "rgba(187,134,252,0.04)" }}>{name}</span>
               ))}
-              <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.15em", padding: "4px 12px", color: "rgba(255,255,255,0.25)", alignSelf: "center" }}>& more</span>
+              <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.15em", padding: "4px 12px", color: "rgba(255,255,255,0.5)", alignSelf: "center" }}>& more</span>
             </div>
 
             {/* Genres row */}
             <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14, marginTop: 14, display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 8 }}>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", color: "rgba(255,255,255,0.25)", marginRight: 8, alignSelf: "center" }}>GENRES</div>
+              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", color: "rgba(255,255,255,0.5)", marginRight: 8, alignSelf: "center" }}>GENRES</div>
               {["Afro House", "Tech House", "Techno", "House", "Indie Dance"].map((genre) => (
                 <span key={genre} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.15em", padding: "4px 12px", border: "1px solid rgba(0,229,255,0.15)", borderRadius: 20, color: cyan, background: "rgba(0,229,255,0.04)" }}>{genre}</span>
               ))}
@@ -353,7 +354,7 @@ export default function App() {
                   <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 64, lineHeight: 1, color: best ? "#fff" : "rgba(255,255,255,0.85)", marginBottom: 4 }}>{price}</div>
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: best ? cyan : "rgba(255,255,255,0.3)", marginBottom: 18 }}>{ph}</div>
                   <div style={{ ...body, fontSize: 13, marginBottom: 12, flexGrow: 1 }}>{d}</div>
-                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 16, fontStyle: "italic" }}>Limited spots available each month</div>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 16, fontStyle: "italic" }}>Limited spots available each month</div>
                   <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.2)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
                 </div>
               ))}
@@ -467,7 +468,7 @@ export default function App() {
                         </audio>
                       </div>
                     )) : (
-                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.2)", fontStyle: "italic", marginTop: 8 }}>Sample coming soon</div>
+                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginTop: 8 }}>Sample coming soon</div>
                     )}
                   </div>
                 ))}
@@ -583,7 +584,7 @@ export default function App() {
               {shopItems.map(({ name, sub, d, cta, url }) => (
                 <div key={name} style={{ padding: "28px 32px", background: "#04040f", border: "1px solid #141420", borderRadius: 8, display: "flex", flexDirection: "column" }}>
                   <div style={{ ...heading(20), color: "#fff", marginBottom: sub ? 4 : 8 }}>{name}</div>
-                  {sub && <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 8 }}>{sub}</div>}
+                  {sub && <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 8 }}>{sub}</div>}
                   <div style={{ ...body, fontSize: 13, marginBottom: 16, flexGrow: 1 }}>{d}</div>
                   <a href={url} target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + cyan, color: cyan, boxShadow: "0 0 16px rgba(0,229,255,0.2)" }}>{cta}</a>
                 </div>
@@ -610,7 +611,7 @@ export default function App() {
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div>
                       <div style={{ ...heading(16) }}>{n}</div>
-                      <div style={{ ...body, fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{flags[f]} {f}</div>
+                      <div style={{ ...body, fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>{flags[f]} {f}</div>
                     </div>
                     <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, padding: "5px 12px", border: "1px solid rgba(187,134,252,0.3)", borderRadius: 20, fontSize: 11, color: purple, letterSpacing: "0.15em" }}>{g}</span>
                   </div>

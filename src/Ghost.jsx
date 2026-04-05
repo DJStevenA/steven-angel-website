@@ -286,6 +286,7 @@ function VideoPlayer({ src, yt, caption, thumb }) {
               <img
                 src={thumb}
                 alt={caption}
+                loading="lazy"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -673,9 +674,10 @@ function GhostPage() {
               height: "100%",
               objectFit: "cover",
               objectPosition: "center 30%",
-              filter: "brightness(0.25) saturate(0.8)",
             }}
           />
+          {/* Dark overlay replaces CSS filter (filter blocks LCP by 200-400ms) */}
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.78)" }} />
 
           <div
             style={{
@@ -721,7 +723,7 @@ function GhostPage() {
         {/* ═══ Pacha Ibiza Video ═══ */}
         <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <VideoPlayer yt="tPYhltoFTZo" caption="" thumb="/images/pacha-ibiza-thumb.webp" />
+            <VideoPlayer src="/videos/hugel-claptone-ibiza.mp4" caption="" thumb="/videos/hugel-claptone-ibiza-thumb.webp" />
             <div
               style={{
                 fontFamily: "DM Sans, sans-serif",
@@ -1173,7 +1175,7 @@ function GhostPage() {
                       style={{
                         fontFamily: "DM Sans, sans-serif",
                         fontSize: 14,
-                        color: "rgba(255,255,255,0.3)",
+                        color: "rgba(255,255,255,0.5)",
                       }}
                     >
                       {item}
@@ -1297,7 +1299,7 @@ function GhostPage() {
                     style={{
                       fontFamily: "DM Sans, sans-serif",
                       fontSize: 12,
-                      color: "rgba(255,255,255,0.3)",
+                      color: "rgba(255,255,255,0.5)",
                       marginTop: 8,
                     }}
                   >
@@ -1406,7 +1408,7 @@ function GhostPage() {
                     style={{
                       fontFamily: "DM Sans, sans-serif",
                       fontSize: 12,
-                      color: "rgba(255,255,255,0.3)",
+                      color: "rgba(255,255,255,0.5)",
                       marginTop: 8,
                     }}
                   >
@@ -1460,7 +1462,7 @@ function GhostPage() {
                 style={{
                   fontFamily: "DM Sans, sans-serif",
                   fontSize: 12,
-                  color: "rgba(255,255,255,0.25)",
+                  color: "rgba(255,255,255,0.5)",
                   fontStyle: "italic",
                 }}
               >
@@ -1610,7 +1612,7 @@ function GhostPage() {
                             <div
                               style={{
                                 ...heading(15),
-                                color: "rgba(255,255,255,0.25)",
+                                color: "rgba(255,255,255,0.5)",
                                 marginBottom: 12,
                               }}
                             >
@@ -1726,7 +1728,7 @@ function GhostPage() {
               style={{
                 fontFamily: "DM Sans, sans-serif",
                 fontSize: 13,
-                color: "rgba(255,255,255,0.3)",
+                color: "rgba(255,255,255,0.5)",
                 marginTop: 12,
                 fontStyle: "italic",
               }}
@@ -2132,7 +2134,7 @@ function GhostPage() {
           style={{
             fontFamily: "DM Sans, sans-serif",
             fontSize: 12,
-            color: "rgba(255,255,255,0.3)",
+            color: "rgba(255,255,255,0.5)",
             marginBottom: 6,
           }}
         >
