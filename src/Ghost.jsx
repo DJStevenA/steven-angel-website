@@ -723,7 +723,7 @@ function GhostPage() {
         {/* ═══ Pacha Ibiza Video ═══ */}
         <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000", contain: "layout" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <VideoPlayer src="/videos/hugel-claptone-ibiza.mp4" caption="" thumb="/videos/hugel-claptone-ibiza-thumb.webp" />
+            <VideoPlayer src="/videos/hugel-claptone-ibiza.mp4" caption="" thumb="/images/pacha-ibiza-thumb.webp" />
             <div
               style={{
                 fontFamily: "DM Sans, sans-serif",
