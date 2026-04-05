@@ -473,7 +473,7 @@ function GhostPage() {
               style={{
                 fontFamily: "DM Sans, sans-serif",
                 fontSize: 13,
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.6)",
                 marginBottom: 32,
               }}
             >
@@ -585,7 +585,7 @@ function GhostPage() {
                 width: "100%",
                 background: "none",
                 border: "1px solid #1a1a2e",
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.6)",
                 borderRadius: 8,
                 padding: "12px",
                 fontFamily: "DM Sans, sans-serif",
@@ -689,7 +689,7 @@ function GhostPage() {
           >
             <div
               style={{
-                ...label("rgba(255,255,255,0.4)"),
+                ...label("rgba(255,255,255,0.6)"),
                 marginBottom: 20,
               }}
             >
@@ -721,7 +721,7 @@ function GhostPage() {
         </section>
 
         {/* ═══ Pacha Ibiza Video ═══ */}
-        <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000" }}>
+        <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000", contain: "layout" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
             <VideoPlayer src="/videos/hugel-claptone-ibiza.mp4" caption="" thumb="/videos/hugel-claptone-ibiza-thumb.webp" />
             <div
@@ -903,7 +903,7 @@ function GhostPage() {
                     style={{
                       fontFamily: "DM Sans, sans-serif",
                       fontSize: 11,
-                      color: "rgba(255,255,255,0.35)",
+                      color: "rgba(255,255,255,0.6)",
                       marginTop: 4,
                     }}
                   >
@@ -1163,7 +1163,7 @@ function GhostPage() {
                       style={{
                         color:
                           idx === 4
-                            ? "rgba(255,255,255,0.3)"
+                            ? "rgba(255,255,255,0.55)"
                             : "rgba(255,60,60,0.6)",
                         fontWeight: 700,
                         marginTop: 2,
@@ -1761,7 +1761,7 @@ function GhostPage() {
               style={{
                 fontFamily: "DM Sans, sans-serif",
                 fontSize: 14,
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.6)",
                 textAlign: "center",
                 marginBottom: 48,
               }}
@@ -1814,7 +1814,7 @@ function GhostPage() {
                       fontWeight: 700,
                       fontSize: 13,
                       letterSpacing: "0.1em",
-                      color: "rgba(255,255,255,0.35)",
+                      color: "rgba(255,255,255,0.6)",
                     }}
                   >
                     &mdash; {t.author}, {t.location}
@@ -2118,7 +2118,7 @@ function GhostPage() {
           style={{
             fontFamily: "DM Sans, sans-serif",
             fontSize: 13,
-            color: "rgba(255,255,255,0.35)",
+            color: "rgba(255,255,255,0.6)",
             marginBottom: 8,
           }}
         >

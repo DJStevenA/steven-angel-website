@@ -355,7 +355,7 @@ export default function App() {
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: best ? cyan : "rgba(255,255,255,0.3)", marginBottom: 18 }}>{ph}</div>
                   <div style={{ ...body, fontSize: 13, marginBottom: 12, flexGrow: 1 }}>{d}</div>
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 16, fontStyle: "italic" }}>Limited spots available each month</div>
-                  <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.2)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
+                  <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.5)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
                 </div>
               ))}
             </div>
@@ -459,7 +459,7 @@ export default function App() {
                 {ghostSamples.map(({ genre, artists, tracks }) => (
                   <div key={genre} style={{ background: "#04040f", border: "1px solid #141420", borderTop: "2px solid " + (tracks.length ? purple : "rgba(255,255,255,0.08)"), borderRadius: 8, padding: "18px 20px" }}>
                     <div style={{ ...label(tracks.length ? purple : "rgba(255,255,255,0.25)"), marginBottom: 4 }}>{genre}</div>
-                    {artists && <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 12 }}>{artists}</div>}
+                    {artists && <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: 12 }}>{artists}</div>}
                     {tracks.length > 0 ? tracks.map(({ file, title }) => (
                       <div key={file} style={{ marginBottom: 10 }}>
                         <div style={{ ...heading(13), color: "rgba(255,255,255,0.7)", marginBottom: 6 }}>{title}</div>
@@ -504,7 +504,7 @@ export default function App() {
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20, marginBottom: 28 }}>
               {/* Hugel */}
               <div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>HUGEL — LIVE SET</div>
+                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>HUGEL — LIVE SET</div>
                 <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>Steven Angel's tracks supported by top DJs</div>
                 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
                   <LazyYouTube id="tPYhltoFTZo" title="Hugel Live Set" />
@@ -553,7 +553,7 @@ export default function App() {
                   "Sounds really good!!"
                 </div>
                 <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 16, color: "#fff", letterSpacing: "0.05em" }}>HERNAN CATTANEO</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>Legendary DJ & Producer · On Steven Angel mastering work</div>
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", marginTop: 2 }}>Legendary DJ & Producer · On Steven Angel mastering work</div>
               </div>
               <div style={{ width: isMobile ? "100%" : 320, flexShrink: 0, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(187,134,252,0.2)", boxShadow: "0 4px 20px rgba(0,0,0,0.4)" }}>
                 <img
@@ -576,7 +576,7 @@ export default function App() {
             <h2 style={{ ...heading(isMobile ? 28 : 48), textAlign: "center", marginBottom: 10 }}>
               THE TOOLS I USE TO MAKE<br />TRACKS THAT GET SIGNED
             </h2>
-            <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: isMobile ? 13 : 16, letterSpacing: "0.06em", color: "rgba(255,255,255,0.4)", textAlign: "center", marginBottom: 40 }}>
+            <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: isMobile ? 13 : 16, letterSpacing: "0.06em", color: "rgba(255,255,255,0.6)", textAlign: "center", marginBottom: 40 }}>
               Ableton Templates · Sample Packs · Video Course — Instant Download
             </div>
 
@@ -667,7 +667,7 @@ export default function App() {
                 <input name="name" placeholder="Your Name" required style={{ fontFamily: "DM Sans, sans-serif", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4 }} />
                 <input name="email" type="email" placeholder="Email Address" required style={{ fontFamily: "DM Sans, sans-serif", background: "#04040f", border: "1px solid #1a1a2e", color: "#fff", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4 }} />
               </div>
-              <select name="service" aria-label="Service" style={{ fontFamily: "DM Sans, sans-serif", width: "100%", background: "#04040f", border: "1px solid #1a1a2e", color: "rgba(255,255,255,0.4)", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4, marginBottom: 12 }}>
+              <select name="service" aria-label="Service" style={{ fontFamily: "DM Sans, sans-serif", width: "100%", background: "#04040f", border: "1px solid #1a1a2e", color: "rgba(255,255,255,0.6)", padding: "15px 17px", fontSize: 14, outline: "none", borderRadius: 4, marginBottom: 12 }}>
                 <option value="">I am interested in...</option>
                 <option>1-on-1 Production Lessons</option>
                 <option>Ghost Production</option>

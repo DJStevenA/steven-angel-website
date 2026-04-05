@@ -1,5 +1,51 @@
 # Steven Angel Website — Project Status
-## Date: 2026-04-04
+## Date: 2026-04-05
+
+---
+
+## Post-Push Protocol
+
+**After every git push, run a PageSpeed test:**
+
+```bash
+# Wait for Netlify deploy (90 seconds)
+sleep 90
+
+# Run PageSpeed test via API
+curl -s "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://steven-angel.com/ghost&strategy=mobile&category=performance&category=accessibility" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+lh=d.get('lighthouseResult',{})
+cats=lh.get('categories',{})
+print(f'Performance: {int(cats.get(\"performance\",{}).get(\"score\",0)*100)}')
+print(f'Accessibility: {int(cats.get(\"accessibility\",{}).get(\"score\",0)*100)}')
+audits=lh.get('audits',{})
+for k in ['first-contentful-paint','largest-contentful-paint','total-blocking-time','speed-index','cumulative-layout-shift']:
+    a=audits.get(k,{})
+    print(f'{a.get(\"title\",k)}: {a.get(\"displayValue\",\"N/A\")}')
+print()
+print('=== OPPORTUNITIES ===')
+for k,a in audits.items():
+    det=a.get('details',{})
+    if det.get('type')==\"opportunity\" and det.get('overallSavingsMs',0)>0:
+        print(f'{a[\"title\"]}: savings {det.get(\"overallSavingsMs\",0)}ms')
+"
+```
+
+**If API quota exceeded, test manually at:**
+https://pagespeed.web.dev/analysis/https-steven-angel-com-ghost/
+
+**Targets:**
+- Performance: 90+
+- Accessibility: 95+
+- SEO: 100
+- Best Practices: 100
+
+**If score drops below target, check:**
+1. Did a new image get added without WebP conversion?
+2. Did a new section add DOM elements without lazy loading?
+3. Is there a new CSS filter or expensive style?
+4. Are third-party scripts (GA/Clarity) blocking?
 
 ---
 
