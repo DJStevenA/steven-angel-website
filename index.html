@@ -92,7 +92,24 @@
 
   </head>
   <body>
+    <!-- Static hero shell: visible immediately while React loads -->
+    <div id="hero-shell" style="position:fixed;inset:0;z-index:0;background:#000;">
+      <img src="/images/dj-hero-ghost.webp" alt="Steven Angel" fetchpriority="high" width="800" height="1200"
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.78);"></div>
+    </div>
     <div id="root"></div>
+    <script>
+      // Remove static hero shell once React renders
+      const observer = new MutationObserver(() => {
+        if (document.getElementById('root')?.children.length > 0) {
+          const shell = document.getElementById('hero-shell');
+          if (shell) shell.remove();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('root'), { childList: true });
+    </script>
 
     <!-- Hidden forms for Netlify Forms detection (SPA requirement) -->
     <form name="ghost-contact" netlify netlify-honeypot="bot-field" hidden>
