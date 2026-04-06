@@ -657,7 +657,23 @@ export default function App() {
                   body: JSON.stringify(data),
                 })
                   .then((r) => r.json())
-                  .then((d) => { if (d.success) { alert("Message sent! I'll get back to you soon."); form.reset(); } else { alert("Something went wrong. Please try again."); } })
+                  .then((d) => {
+                    if (d.success) {
+                      alert("Message sent! I'll get back to you soon.");
+                      form.reset();
+                      if (window.gtag) {
+                        window.gtag('event', 'conversion', {
+                          'send_to': 'AW-999991173',
+                          'value': 300,
+                          'currency': 'USD',
+                          'event_category': 'lead',
+                          'event_label': 'homepage_contact_form',
+                        });
+                      }
+                    } else {
+                      alert("Something went wrong. Please try again.");
+                    }
+                  })
                   .catch(() => alert("Something went wrong. Please try again."));
               }}
               style={{ textAlign: "left" }}

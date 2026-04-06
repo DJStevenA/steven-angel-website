@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 /* ─── Color Constants ─── */
 const CYAN = "#00E5FF";
@@ -143,14 +143,19 @@ const AUDIO_SAMPLES = [
 /* ─── Video Showcases ─── */
 const VIDEO_SHOWCASES = [
   {
+    src: "/videos/hugel-claptone-ibiza.mp4",
+    thumb: "/images/pacha-ibiza-thumb.webp",
+    caption: 'My Track "El Barrio" — Played by Hugel & Claptone at Pacha Ibiza',
+  },
+  {
     src: "/videos/pacha-barcelona.mp4",
     thumb: "/videos/pacha-barcelona-thumb.webp",
-    caption: "Pacha Barcelona",
+    caption: 'Hugel playing my track "Dale Sentido" at Pacha Barcelona',
   },
   {
     src: "/videos/zamna-festival.mp4",
     thumb: "/videos/zamna-festival-thumb.webp",
-    caption: "Zamna Festival — Mexico",
+    caption: 'Hugel playing my track "Dale Sentido" at Zamna Festival',
   },
   {
     src: "/videos/artbat-ghost.mp4",
@@ -269,6 +274,8 @@ function VideoPlayer({ src, yt, caption, thumb }) {
             src={src}
             controls
             autoPlay
+            playsInline
+            preload="metadata"
             style={{ ...fillStyle, objectFit: "cover" }}
           />
         ) : (
@@ -376,57 +383,8 @@ function GhostPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  /* ── SEO meta tags ── */
-  useEffect(() => {
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", "https://steven-angel.com/ghost");
-
-    const prevTitle = document.title;
-    document.title =
-      "Ghost Producer \u00B7 Afro House & Indie Dance | Steven Angel";
-
-    const setMeta = (selector, attr, value) => {
-      let el = document.querySelector(selector);
-      if (!el) {
-        el = document.createElement("meta");
-        document.head.appendChild(el);
-      }
-      el.setAttribute(attr, value);
-    };
-
-    const prevDescription = document.querySelector(
-      'meta[name="description"]'
-    )?.content;
-
-    setMeta(
-      'meta[name="description"]',
-      "content",
-      "Hire a signed Afro House ghost producer \u2014 released on MTGD, Moblack & Godeeva. Beatport Top 10. Full track or finish your demo. NDA included."
-    );
-    setMeta(
-      'meta[property="og:title"]',
-      "content",
-      "Ghost Producer \u00B7 Hugel & MoBlack Style | Steven Angel"
-    );
-    setMeta(
-      'meta[property="og:description"]',
-      "content",
-      "Afro House & Indie Dance ghost production. Signed MTGD, MoBlack, Godeeva. From $300."
-    );
-    setMeta(
-      'meta[property="og:url"]',
-      "content",
-      "https://steven-angel.com/ghost"
-    );
-
-    return () => {
-      if (canonical)
-        canonical.setAttribute("href", "https://steven-angel.com/");
-      document.title = prevTitle;
-      if (prevDescription)
-        setMeta('meta[name="description"]', "content", prevDescription);
-    };
-  }, []);
+  /* SEO: page title, meta description, and canonical URL are handled
+     globally by the <PageTitle /> component in main.jsx (based on route). */
 
   /* ────────────────────────────────────────────────────
      Render
@@ -472,7 +430,7 @@ function GhostPage() {
             <div
               style={{
                 fontFamily: "DM Sans, sans-serif",
-                fontSize: 13,
+                fontSize: isMobile ? 11 : 13,
                 color: "rgba(255,255,255,0.6)",
                 marginBottom: 32,
               }}
@@ -544,7 +502,7 @@ function GhostPage() {
                   <div
                     style={{
                       fontFamily: "DM Sans, sans-serif",
-                      fontSize: 13,
+                      fontSize: isMobile ? 11 : 13,
                       color: "rgba(255,255,255,0.5)",
                       lineHeight: 1.6,
                     }}
@@ -589,7 +547,7 @@ function GhostPage() {
                 borderRadius: 8,
                 padding: "12px",
                 fontFamily: "DM Sans, sans-serif",
-                fontSize: 13,
+                fontSize: isMobile ? 11 : 13,
                 cursor: "pointer",
               }}
             >
@@ -622,7 +580,7 @@ function GhostPage() {
           color: "#fff",
           fontFamily: "Barlow Condensed, sans-serif",
           fontWeight: 700,
-          fontSize: 13,
+          fontSize: isMobile ? 11 : 13,
           letterSpacing: "0.15em",
           padding: "10px 20px",
           borderRadius: 50,
@@ -655,7 +613,7 @@ function GhostPage() {
         {/* ═══ Hero Section ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px 80px" : "80px 60px 100px",
+            padding: isMobile ? "50px 20px 60px" : "60px 60px 70px",
             textAlign: "center",
             position: "relative",
             overflow: "hidden",
@@ -696,13 +654,29 @@ function GhostPage() {
               GHOST PRODUCTION
             </div>
 
-            <h1 style={{ ...heading(isMobile ? 36 : 64), marginBottom: 20 }}>
+            {/* Hidden H1 for SEO (visually hidden, screen-reader accessible) */}
+            <h1 style={{
+              position: "absolute",
+              width: "1px",
+              height: "1px",
+              padding: 0,
+              margin: "-1px",
+              overflow: "hidden",
+              clip: "rect(0, 0, 0, 0)",
+              whiteSpace: "nowrap",
+              border: 0,
+            }}>
+              Afro House Ghost Producer — Signed MTGD & Moblack Artist
+            </h1>
+
+            {/* Visible hero headline (was h1, now div — visual unchanged) */}
+            <div role="heading" aria-level="2" style={{ ...heading(isMobile ? 36 : 64), marginBottom: 20 }}>
               Last Night Hugel & Claptone
               <br />
               Played My Track.
               <br />
               <span style={{ color: CYAN }}>Want Yours Next?</span>
-            </h1>
+            </div>
 
             <h2
               style={{
@@ -717,28 +691,8 @@ function GhostPage() {
               Your Vision. My Sound. Label-Ready Result.
             </h2>
 
-          </div>
-        </section>
-
-        {/* ═══ Pacha Ibiza Video ═══ */}
-        <section style={{ padding: isMobile ? "48px 20px" : "64px 60px", background: "#000", contain: "layout" }}>
-          <div style={{ maxWidth: 720, margin: "0 auto" }}>
-            <VideoPlayer src="/videos/hugel-claptone-ibiza.mp4" caption="" thumb="/images/pacha-ibiza-thumb.webp" />
-            <div
-              style={{
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: 15,
-                color: "rgba(255,255,255,0.75)",
-                textAlign: "center",
-                marginTop: 16,
-                lineHeight: 1.6,
-              }}
-            >
-              My Track <span style={{ color: CYAN, fontWeight: 600 }}>"El Barrio"</span> out on <span style={{ color: PURPLE, fontWeight: 600 }}>MTGD</span> played at Pacha Ibiza.
-            </div>
-
             {/* Listen CTA */}
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 28 }}>
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
               <button
                 onClick={() => { const el = document.getElementById("audio-samples"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
                 style={{
@@ -771,7 +725,7 @@ function GhostPage() {
         {/* ═══ About Steven ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
+            padding: isMobile ? "40px 20px" : "60px 60px",
             background: BG,
             borderTop: "1px solid #0d0d0d",
           }}
@@ -815,9 +769,8 @@ function GhostPage() {
                 <span style={{ color: CYAN }}>Audio Engineer</span>
               </div>
               <div style={{ ...body, marginBottom: 16 }}>
-                20+ years in electronic music. Released on MTGD, Moblack,
-                Godeeva, Sony, Ultra and Armada. Played by Hugel, Claptone,
-                Hernan Cattaneo and ARTBAT.
+                20+ years in electronic music. Signed to top labels, charted on
+                Beatport, and played by the biggest names in the game.
               </div>
               <div style={{ ...body, marginBottom: 20 }}>
                 Also one half of{" "}
@@ -832,10 +785,9 @@ function GhostPage() {
                   }}
                 >
                   The Angels
-                </a>{" "}
-                &mdash; an Afro House / Afro Latin duo that hit #1 on iTunes
-                Israel and topped Beatport charts in 10+ countries. Performed
-                across Israel, Europe and Latin America. Find us on{" "}
+                </a>
+                {" "}&mdash; Hit #1 on iTunes Israel, 2 Beatport Top 10 releases,
+                performed across the USA, Latin America & Europe. Find us on{" "}
                 <a
                   href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz"
                   target="_blank"
@@ -895,16 +847,16 @@ function GhostPage() {
                 ["20+", "Years Experience"],
                 ["100M+", "Streams & Views"],
                 ["Top 10 \u00D72", "Beatport Charts"],
-                ["Named Artist", "Verified Releases"],
               ].map(([stat, desc]) => (
                 <div key={stat} style={{ textAlign: "center" }}>
-                  <div style={{ ...heading(20), color: CYAN }}>{stat}</div>
+                  <div style={{ ...heading(isMobile ? 26 : 32), color: CYAN }}>{stat}</div>
                   <div
                     style={{
                       fontFamily: "DM Sans, sans-serif",
-                      fontSize: 11,
-                      color: "rgba(255,255,255,0.6)",
-                      marginTop: 4,
+                      fontSize: isMobile ? 12 : 13,
+                      color: "rgba(255,255,255,0.7)",
+                      marginTop: 6,
+                      letterSpacing: "0.05em",
                     }}
                   >
                     {desc}
@@ -1053,10 +1005,96 @@ function GhostPage() {
           </div>
         </div>
 
+        {/* ═══ Video Showcases ═══ */}
+        <section
+          style={{
+            padding: isMobile ? "40px 16px" : "60px 60px",
+            background: "#04040f",
+            borderTop: "1px solid #0d0d0d",
+          }}
+        >
+          <div style={{ maxWidth: 900, margin: "0 auto" }}>
+            <div
+              style={{
+                ...heading(isMobile ? 26 : 40),
+                textAlign: "center",
+                marginBottom: 8,
+              }}
+            >
+              Your Track &mdash; Played on the Biggest Stages
+            </div>
+            <div style={{ ...body, textAlign: "center", marginBottom: 32 }}>
+              This is what your ghost produced track can achieve.
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: isMobile ? 10 : 20,
+              }}
+            >
+              {VIDEO_SHOWCASES.map(({ src, yt, caption, thumb }, idx) => (
+                <VideoPlayer
+                  key={idx}
+                  src={src}
+                  yt={yt}
+                  caption={caption}
+                  thumb={thumb}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ Hernan Cattaneo Section ═══ */}
+        <section
+          style={{
+            padding: isMobile ? "40px 20px" : "60px 60px",
+            background: "#04040f",
+            borderTop: "1px solid #0d0d0d",
+          }}
+        >
+          <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+            <div style={{ ...label(CYAN), marginBottom: 16 }}>INDUSTRY RECOGNITION</div>
+            <div style={{ ...heading(isMobile ? 22 : 32), marginBottom: 32 }}>
+              When <span style={{ color: CYAN }}>Hernan Cattaneo</span> Emails You Back
+            </div>
+            <img
+              src="/images/hernan-email.webp"
+              alt="Hernan Cattaneo email praising Steven Angel mastering work"
+              loading="lazy"
+              width="655"
+              height="210"
+              style={{
+                width: "100%",
+                maxWidth: 560,
+                height: "auto",
+                display: "block",
+                margin: "0 auto",
+                borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 0 40px rgba(0,229,255,0.08)",
+              }}
+            />
+            <div
+              style={{
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: isMobile ? 11 : 13,
+                color: "rgba(255,255,255,0.5)",
+                marginTop: 12,
+                fontStyle: "italic",
+              }}
+            >
+              Hernan Cattaneo &mdash; Legendary DJ & Producer, on Steven Angel's mastering work
+            </div>
+          </div>
+        </section>
+
         {/* ═══ Comparison Section ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
+            padding: isMobile ? "40px 20px" : "60px 60px",
             background: BG,
           }}
         >
@@ -1082,115 +1120,80 @@ function GhostPage() {
               </div>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: 2,
-                borderRadius: 10,
-                overflow: "hidden",
-                border: "1px solid #141420",
-              }}
-            >
-              {/* Steven Angel column */}
-              <div style={{ background: "#04040f", padding: "28px 32px" }}>
-                <div style={{ ...label(CYAN), marginBottom: 20 }}>
-                  Steven Angel
-                </div>
-                {[
-                  "Named artist with label releases",
-                  "Played by Hugel & Claptone",
-                  "Beatport Top 10 \u2014 verified",
-                  "Work directly with the producer",
-                  "NDA + full copyright transfer",
-                  "Afro House, Afro Latin, Indie Dance specialist",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: 10,
-                      marginBottom: 12,
-                    }}
-                  >
-                    <span
-                      style={{ color: CYAN, fontWeight: 700, marginTop: 2 }}
-                    >
-                      &#10003;
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "DM Sans, sans-serif",
-                        fontSize: 14,
-                        color: "rgba(255,255,255,0.7)",
-                      }}
-                    >
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Anonymous Marketplaces column */}
-              <div style={{ background: "#020208", padding: "28px 32px" }}>
+            {(() => {
+              const rows = [
+                { steven: "Named artist with label releases", marketplace: "No name, no face, no proof", marketplacePositive: false },
+                { steven: "Played by Hugel & Claptone", marketplace: "Unknown who plays their tracks", marketplacePositive: false },
+                { steven: "Beatport Top 10 \u2014 verified", marketplace: "No chart history", marketplacePositive: false },
+                { steven: "Work directly with the producer", marketplace: "Platform middleman", marketplacePositive: false },
+                { steven: "NDA + full copyright transfer", marketplace: "NDA + full copyright transfer", marketplacePositive: true },
+                { steven: "Afro House, Afro Latin, Indie Dance specialist", marketplace: "Generic EDM \u2014 all genres", marketplacePositive: false },
+              ];
+              const cellPad = isMobile ? "14px 12px" : "18px 24px";
+              const headerPad = isMobile ? "16px 12px" : "22px 24px";
+              const textStyle = { fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 12 : 14, lineHeight: 1.4 };
+              return (
                 <div
                   style={{
-                    ...label("rgba(255,255,255,0.65)"),
-                    marginBottom: 20,
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    borderRadius: 10,
+                    overflow: "hidden",
+                    border: "1px solid #141420",
                   }}
                 >
-                  Anonymous Marketplaces
-                </div>
-                {[
-                  "No name, no face, no proof",
-                  "Unknown who plays their tracks",
-                  "No chart history",
-                  "Platform middleman",
-                  "NDA + full copyright transfer",
-                  "Generic EDM \u2014 all genres",
-                ].map((item, idx) => (
-                  <div
-                    key={item}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: 10,
-                      marginBottom: 12,
-                    }}
-                  >
-                    <span
-                      style={{
-                        color:
-                          idx === 4
-                            ? "rgba(255,255,255,0.55)"
-                            : "rgba(255,60,60,0.6)",
-                        fontWeight: 700,
-                        marginTop: 2,
-                      }}
-                    >
-                      {idx === 4 ? "\u2713" : "\u2717"}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "DM Sans, sans-serif",
-                        fontSize: 14,
-                        color: "rgba(255,255,255,0.5)",
-                      }}
-                    >
-                      {item}
-                    </span>
+                  {/* Header: Steven Angel */}
+                  <div style={{ background: "#04040f", padding: headerPad, borderBottom: "1px solid #141420" }}>
+                    <div style={{ ...label(CYAN) }}>Steven Angel</div>
                   </div>
-                ))}
-              </div>
-            </div>
+                  {/* Header: Marketplaces */}
+                  <div style={{ background: "#020208", padding: headerPad, borderBottom: "1px solid #141420", borderLeft: "1px solid #141420" }}>
+                    <div style={{ ...label("rgba(255,255,255,0.65)") }}>Anonymous Marketplaces</div>
+                  </div>
+
+                  {/* Rows */}
+                  {rows.map((row, idx) => (
+                    <Fragment key={idx}>
+                      <div style={{
+                        background: "#04040f",
+                        padding: cellPad,
+                        borderBottom: idx < rows.length - 1 ? "1px solid #141420" : "none",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 8,
+                      }}>
+                        <span style={{ color: CYAN, fontWeight: 700, marginTop: 1, flexShrink: 0 }}>&#10003;</span>
+                        <span style={{ ...textStyle, color: "rgba(255,255,255,0.8)" }}>{row.steven}</span>
+                      </div>
+                      <div style={{
+                        background: "#020208",
+                        padding: cellPad,
+                        borderBottom: idx < rows.length - 1 ? "1px solid #141420" : "none",
+                        borderLeft: "1px solid #141420",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 8,
+                      }}>
+                        <span style={{
+                          color: row.marketplacePositive ? "rgba(255,255,255,0.55)" : "rgba(255,60,60,0.6)",
+                          fontWeight: 700,
+                          marginTop: 1,
+                          flexShrink: 0,
+                        }}>{row.marketplacePositive ? "\u2713" : "\u2717"}</span>
+                        <span style={{ ...textStyle, color: "rgba(255,255,255,0.5)" }}>{row.marketplace}</span>
+                      </div>
+                    </Fragment>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
         </section>
 
         {/* ═══ Packages Section ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
+            padding: isMobile ? "40px 20px" : "60px 60px",
             background: "#04040f",
             borderTop: "1px solid #0d0d0d",
           }}
@@ -1209,8 +1212,8 @@ function GhostPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: 20,
+                gridTemplateColumns: "1fr 1fr",
+                gap: isMobile ? 10 : 20,
                 marginBottom: 20,
               }}
             >
@@ -1221,7 +1224,7 @@ function GhostPage() {
                   border: "1px solid #141420",
                   borderTop: "2px solid rgba(0,229,255,0.4)",
                   borderRadius: 10,
-                  padding: "32px 28px",
+                  padding: isMobile ? "28px 16px 20px" : "32px 28px",
                   position: "relative",
                   display: "flex",
                   flexDirection: "column",
@@ -1230,37 +1233,39 @@ function GhostPage() {
                 <div
                   style={{
                     position: "absolute",
-                    top: -12,
-                    left: 24,
+                    top: -10,
+                    left: isMobile ? 12 : 24,
                     background: "rgba(0,229,255,0.15)",
                     border: "1px solid " + CYAN,
                     color: CYAN,
                     fontFamily: "Barlow Condensed, sans-serif",
                     fontWeight: 700,
-                    fontSize: 10,
-                    letterSpacing: "0.25em",
-                    padding: "3px 14px",
+                    fontSize: isMobile ? 8 : 10,
+                    letterSpacing: isMobile ? "0.1em" : "0.25em",
+                    padding: "3px 10px",
                     borderRadius: 20,
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  BEST ENTRY POINT
+                  {isMobile ? "BEST ENTRY" : "BEST ENTRY POINT"}
                 </div>
 
-                <div style={{ ...heading(26), marginBottom: 8 }}>
+                <div style={{ ...heading(isMobile ? 18 : 26), marginBottom: 8 }}>
                   Finish Your Demo
                 </div>
                 <div
                   style={{
                     fontFamily: "Barlow Condensed, sans-serif",
                     fontWeight: 900,
-                    fontSize: 40,
+                    fontSize: isMobile ? 22 : 40,
                     color: CYAN,
                     marginBottom: 12,
+                    lineHeight: 1.1,
                   }}
                 >
-                  Starting from $300
+                  {isMobile ? <>From<br />$300</> : "Starting from $300"}
                 </div>
-                <div style={{ ...body, fontSize: 14, marginBottom: 20 }}>
+                <div style={{ ...body, fontSize: isMobile ? 12 : 14, marginBottom: 20 }}>
                   You started it &mdash; I finish it. Full arrangement polish,
                   mix and master. Stems + NDA included.
                 </div>
@@ -1287,7 +1292,7 @@ function GhostPage() {
                       <span
                         style={{
                           fontFamily: "DM Sans, sans-serif",
-                          fontSize: 13,
+                          fontSize: isMobile ? 11 : 13,
                           color: "rgba(255,255,255,0.55)",
                         }}
                       >
@@ -1315,9 +1320,12 @@ function GhostPage() {
                     justifyContent: "center",
                     width: "100%",
                     marginTop: "auto",
+                    fontSize: isMobile ? 11 : 14,
+                    letterSpacing: isMobile ? "0.08em" : "0.2em",
+                    padding: isMobile ? "12px 8px" : "14px 32px",
                   }}
                 >
-                  Book A Free Consultation &rarr;
+                  {isMobile ? "BOOK FREE CALL →" : "Book A Free Consultation →"}
                 </button>
               </div>
 
@@ -1328,7 +1336,7 @@ function GhostPage() {
                   border: "2px solid " + PURPLE,
                   borderTop: "2px solid " + PURPLE,
                   borderRadius: 10,
-                  padding: "32px 28px",
+                  padding: isMobile ? "28px 16px 20px" : "32px 28px",
                   position: "relative",
                   boxShadow: "0 0 40px rgba(187,134,252,0.1)",
                   display: "flex",
@@ -1338,36 +1346,38 @@ function GhostPage() {
                 <div
                   style={{
                     position: "absolute",
-                    top: -12,
-                    left: 24,
+                    top: -10,
+                    left: isMobile ? 12 : 24,
                     background: `linear-gradient(90deg,${PURPLE},${CYAN})`,
                     color: "#000",
                     fontFamily: "Barlow Condensed, sans-serif",
                     fontWeight: 700,
-                    fontSize: 10,
-                    letterSpacing: "0.25em",
-                    padding: "4px 14px",
+                    fontSize: isMobile ? 8 : 10,
+                    letterSpacing: isMobile ? "0.1em" : "0.25em",
+                    padding: "3px 10px",
                     borderRadius: 20,
+                    whiteSpace: "nowrap",
                   }}
                 >
                   MOST POPULAR
                 </div>
 
-                <div style={{ ...heading(26), marginBottom: 8 }}>
+                <div style={{ ...heading(isMobile ? 18 : 26), marginBottom: 8 }}>
                   Full Production
                 </div>
                 <div
                   style={{
                     fontFamily: "Barlow Condensed, sans-serif",
                     fontWeight: 900,
-                    fontSize: 40,
+                    fontSize: isMobile ? 22 : 40,
                     color: PURPLE,
                     marginBottom: 12,
+                    lineHeight: 1.1,
                   }}
                 >
-                  Starting from $800
+                  {isMobile ? <>From<br />$800</> : "Starting from $800"}
                 </div>
-                <div style={{ ...body, fontSize: 14, marginBottom: 20 }}>
+                <div style={{ ...body, fontSize: isMobile ? 12 : 14, marginBottom: 20 }}>
                   Full Afro House ghost production from scratch &mdash; label
                   ready. Afro Latin House and Indie Dance also available. 100%
                   yours.
@@ -1396,7 +1406,7 @@ function GhostPage() {
                       <span
                         style={{
                           fontFamily: "DM Sans, sans-serif",
-                          fontSize: 13,
+                          fontSize: isMobile ? 11 : 13,
                           color: "rgba(255,255,255,0.55)",
                         }}
                       >
@@ -1426,9 +1436,12 @@ function GhostPage() {
                     background: PURPLE,
                     color: "#000",
                     marginTop: "auto",
+                    fontSize: isMobile ? 11 : 14,
+                    letterSpacing: isMobile ? "0.08em" : "0.2em",
+                    padding: isMobile ? "12px 8px" : "14px 32px",
                   }}
                 >
-                  Book A Free Consultation &rarr;
+                  {isMobile ? "BOOK FREE CALL →" : "Book A Free Consultation →"}
                 </button>
               </div>
             </div>
@@ -1476,7 +1489,7 @@ function GhostPage() {
         <section
           id="audio-samples"
           style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
+            padding: isMobile ? "40px 20px" : "60px 60px",
             background: BG,
             borderTop: "1px solid #0d0d0d",
           }}
@@ -1637,112 +1650,10 @@ function GhostPage() {
           </div>
         </section>
 
-        {/* ═══ Video Showcases ═══ */}
-        <section
-          style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
-            background: "#04040f",
-            borderTop: "1px solid #0d0d0d",
-          }}
-        >
-          <div style={{ maxWidth: 900, margin: "0 auto" }}>
-            <div
-              style={{
-                ...heading(isMobile ? 28 : 40),
-                textAlign: "center",
-                marginBottom: 8,
-              }}
-            >
-              Your Track &mdash; Played on the Biggest Stages
-            </div>
-            <div style={{ ...body, textAlign: "center", marginBottom: 40 }}>
-              This is what your ghost produced track can achieve.
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                gap: 20,
-              }}
-            >
-              {VIDEO_SHOWCASES.map(({ src, yt, caption, thumb }, idx) => (
-                <VideoPlayer
-                  key={idx}
-                  src={src}
-                  yt={yt}
-                  caption={caption}
-                  thumb={thumb}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ Hernan Cattaneo Section ═══ */}
-        <section
-          style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
-            background: "#04040f",
-            borderTop: "1px solid #0d0d0d",
-          }}
-        >
-          <div
-            style={{
-              maxWidth: 700,
-              margin: "0 auto",
-              textAlign: "center",
-            }}
-          >
-            <div style={{ ...label(CYAN), marginBottom: 16 }}>
-              INDUSTRY RECOGNITION
-            </div>
-            <div
-              style={{
-                ...heading(isMobile ? 22 : 32),
-                marginBottom: 32,
-              }}
-            >
-              When{" "}
-              <span style={{ color: CYAN }}>Hernan Cattaneo</span>{" "}
-              Emails You Back
-            </div>
-            <img
-              src="/images/hernan-email.webp"
-              alt="Hernan Cattaneo email praising Steven Angel mastering work"
-              loading="lazy"
-              width="655"
-              height="210"
-              style={{
-                width: "100%",
-                maxWidth: 560,
-                height: "auto",
-                display: "block",
-                margin: "0 auto",
-                borderRadius: 10,
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 0 40px rgba(0,229,255,0.08)",
-              }}
-            />
-            <div
-              style={{
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.5)",
-                marginTop: 12,
-                fontStyle: "italic",
-              }}
-            >
-              Hernan Cattaneo &mdash; Legendary DJ & Producer, on Steven
-              Angel's mastering work
-            </div>
-          </div>
-        </section>
-
         {/* ═══ Testimonials ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
+            padding: isMobile ? "40px 20px" : "60px 60px",
             background: "#04040f",
             borderTop: "1px solid #0d0d0d",
           }}
@@ -1812,7 +1723,7 @@ function GhostPage() {
                     style={{
                       fontFamily: "Barlow Condensed, sans-serif",
                       fontWeight: 700,
-                      fontSize: 13,
+                      fontSize: isMobile ? 11 : 13,
                       letterSpacing: "0.1em",
                       color: "rgba(255,255,255,0.6)",
                     }}
@@ -1828,7 +1739,7 @@ function GhostPage() {
         {/* ═══ FAQ Section ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px" : "90px 60px",
+            padding: isMobile ? "40px 20px" : "60px 60px",
             background: BG,
             borderTop: "1px solid #0d0d0d",
           }}
@@ -1902,7 +1813,7 @@ function GhostPage() {
         {/* ═══ Contact / CTA Section ═══ */}
         <section
           style={{
-            padding: isMobile ? "60px 20px 80px" : "90px 60px 100px",
+            padding: isMobile ? "40px 20px 50px" : "60px 60px 70px",
             background: "#04040f",
             borderTop: "1px solid #0d0d0d",
           }}
@@ -1946,7 +1857,23 @@ function GhostPage() {
                     body: JSON.stringify(data),
                   })
                     .then((r) => r.json())
-                    .then((d) => { if (d.success) { alert("Message sent! I'll get back to you within 24 hours."); form.reset(); } else { alert("Something went wrong. Please try WhatsApp instead."); } })
+                    .then((d) => {
+                      if (d.success) {
+                        alert("Message sent! I'll get back to you within 24 hours.");
+                        form.reset();
+                        if (window.gtag) {
+                          window.gtag('event', 'conversion', {
+                            'send_to': 'AW-999991173',
+                            'value': 300,
+                            'currency': 'USD',
+                            'event_category': 'lead',
+                            'event_label': 'ghost_page_contact_form',
+                          });
+                        }
+                      } else {
+                        alert("Something went wrong. Please try WhatsApp instead.");
+                      }
+                    })
                     .catch(() => alert("Something went wrong. Please try WhatsApp instead."));
                 }}
                 style={{
@@ -2117,7 +2044,7 @@ function GhostPage() {
         <div
           style={{
             fontFamily: "DM Sans, sans-serif",
-            fontSize: 13,
+            fontSize: isMobile ? 11 : 13,
             color: "rgba(255,255,255,0.6)",
             marginBottom: 8,
           }}

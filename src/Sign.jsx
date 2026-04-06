@@ -37,6 +37,15 @@ export default function Sign() {
       if (!r.ok) throw new Error(data.error || "Failed");
       setSignedData(data);
       setStatus("signed");
+      if (window.gtag) {
+        window.gtag('event', 'conversion', {
+          'send_to': 'AW-999991173',
+          'value': pkg === 'demo' ? 300 : pkg === 'full' ? 800 : 1500,
+          'currency': 'USD',
+          'event_category': 'lead',
+          'event_label': `sign_${pkg}`,
+        });
+      }
     } catch (err) {
       alert("Something went wrong: " + err.message);
       setStatus("ready");
