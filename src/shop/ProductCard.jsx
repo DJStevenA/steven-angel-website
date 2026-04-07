@@ -53,10 +53,12 @@ const label = (color = CYAN) => ({
  */
 export default function ProductCard({ product, isMobile, onBuy }) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false);
 
   const isPurple = product.badgeColor === "purple";
   const accentColor = isPurple ? PURPLE : CYAN;
   const accentRgba = isPurple ? "187,134,252" : "0,229,255";
+  const hasVideo = !!product.previewVideoUrl;
 
   return (
     <div
@@ -97,128 +99,257 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </div>
       )}
 
-      {/* Album-art style product cover (placeholder until real artwork uploaded) */}
-      <div
-        style={{
-          width: "100%",
-          aspectRatio: "1/1",
-          background: "#06060f",
-          borderRadius: 8,
-          marginBottom: 18,
-          marginTop: product.badge ? 8 : 0,
-          overflow: "hidden",
-          position: "relative",
-          border: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        {/* Layered gradient background — accent color → black */}
+      {/* Product cover — video player (if previewVideoUrl) OR album-art mockup */}
+      {hasVideo ? (
         <div
           style={{
-            position: "absolute",
-            inset: 0,
-            background: isPurple
-              ? `radial-gradient(circle at 30% 20%, ${PURPLE}55 0%, transparent 50%), radial-gradient(circle at 70% 80%, ${CYAN}33 0%, transparent 50%), linear-gradient(135deg, #0a0a20, #0d0418)`
-              : `radial-gradient(circle at 25% 25%, ${accentColor}55 0%, transparent 50%), radial-gradient(circle at 75% 75%, ${PURPLE}22 0%, transparent 50%), linear-gradient(135deg, #08081a, #02020a)`,
+            width: "100%",
+            aspectRatio: "1/1",
+            background: "#06060f",
+            borderRadius: 8,
+            marginBottom: 18,
+            marginTop: product.badge ? 8 : 0,
+            overflow: "hidden",
+            position: "relative",
+            border: `1px solid rgba(${accentRgba},0.3)`,
+            cursor: videoPlaying ? "default" : "pointer",
           }}
-        />
-
-        {/* Geometric overlay (subtle grid lines for texture) */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-            backgroundSize: "30px 30px",
-          }}
-        />
-
-        {/* Top: small genre tag */}
-        <div
-          style={{
-            position: "absolute",
-            top: 14,
-            left: 14,
-            fontFamily: "Barlow Condensed, sans-serif",
-            fontWeight: 700,
-            fontSize: 9,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            color: accentColor,
-            padding: "3px 8px",
-            border: `1px solid ${accentColor}`,
-            borderRadius: 12,
-            background: "rgba(0,0,0,0.4)",
-            backdropFilter: "blur(4px)",
-          }}
+          onClick={() => !videoPlaying && setVideoPlaying(true)}
         >
-          {product.genre.split("/")[0].trim()}
+          {videoPlaying ? (
+            <video
+              src={product.previewVideoUrl}
+              controls
+              autoPlay
+              playsInline
+              preload="metadata"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <>
+              {/* Thumbnail */}
+              {product.previewVideoThumb && (
+                <img
+                  src={product.previewVideoThumb}
+                  alt={product.previewVideoCaption || product.name}
+                  loading="lazy"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    opacity: 0.75,
+                  }}
+                />
+              )}
+
+              {/* Dark overlay for readability */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)",
+                }}
+              />
+
+              {/* Top-left: "WATCH" tag */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 14,
+                  left: 14,
+                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 9,
+                  letterSpacing: "0.25em",
+                  textTransform: "uppercase",
+                  color: accentColor,
+                  padding: "3px 10px",
+                  border: `1px solid ${accentColor}`,
+                  borderRadius: 12,
+                  background: "rgba(0,0,0,0.5)",
+                  backdropFilter: "blur(4px)",
+                }}
+              >
+                ▶ Watch
+              </div>
+
+              {/* Centered play button */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 64,
+                  height: 64,
+                  borderRadius: "50%",
+                  background: `${accentColor}E6`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: `0 0 32px rgba(${accentRgba},0.6)`,
+                }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#000">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+
+              {/* Bottom caption */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  padding: "16px 14px",
+                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontWeight: 700,
+                  fontSize: isMobile ? 12 : 13,
+                  letterSpacing: "0.05em",
+                  color: "#fff",
+                  textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+                  textAlign: "center",
+                  lineHeight: 1.3,
+                }}
+              >
+                {product.previewVideoCaption || product.name}
+              </div>
+            </>
+          )}
         </div>
-
-        {/* Center: large product name */}
+      ) : (
         <div
           style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 24,
-            textAlign: "center",
+            width: "100%",
+            aspectRatio: "1/1",
+            background: "#06060f",
+            borderRadius: 8,
+            marginBottom: 18,
+            marginTop: product.badge ? 8 : 0,
+            overflow: "hidden",
+            position: "relative",
+            border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
+          {/* Layered gradient background — accent color → black */}
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
-              fontWeight: 900,
-              fontSize: isMobile ? 28 : 36,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              color: "#fff",
-              lineHeight: 1,
-              marginBottom: 8,
-              textShadow: `0 4px 24px rgba(0,0,0,0.6)`,
-            }}
-          >
-            {product.name}
-          </div>
-          <div
-            style={{
-              width: 40,
-              height: 2,
-              background: accentColor,
-              marginBottom: 10,
+              position: "absolute",
+              inset: 0,
+              background: isPurple
+                ? `radial-gradient(circle at 30% 20%, ${PURPLE}55 0%, transparent 50%), radial-gradient(circle at 70% 80%, ${CYAN}33 0%, transparent 50%), linear-gradient(135deg, #0a0a20, #0d0418)`
+                : `radial-gradient(circle at 25% 25%, ${accentColor}55 0%, transparent 50%), radial-gradient(circle at 75% 75%, ${PURPLE}22 0%, transparent 50%), linear-gradient(135deg, #08081a, #02020a)`,
             }}
           />
+
+          {/* Geometric overlay (subtle grid lines for texture) */}
           <div
             style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+              backgroundSize: "30px 30px",
+            }}
+          />
+
+          {/* Top: small genre tag */}
+          <div
+            style={{
+              position: "absolute",
+              top: 14,
+              left: 14,
               fontFamily: "Barlow Condensed, sans-serif",
-              fontWeight: 600,
-              fontSize: 10,
-              letterSpacing: "0.2em",
+              fontWeight: 700,
+              fontSize: 9,
+              letterSpacing: "0.25em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.8)",
+              color: accentColor,
+              padding: "3px 8px",
+              border: `1px solid ${accentColor}`,
+              borderRadius: 12,
+              background: "rgba(0,0,0,0.4)",
+              backdropFilter: "blur(4px)",
             }}
           >
-            By Steven Angel
+            {product.genre.split("/")[0].trim()}
+          </div>
+
+          {/* Center: large product name */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 24,
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "Barlow Condensed, sans-serif",
+                fontWeight: 900,
+                fontSize: isMobile ? 28 : 36,
+                letterSpacing: "0.04em",
+                textTransform: "uppercase",
+                color: "#fff",
+                lineHeight: 1,
+                marginBottom: 8,
+                textShadow: `0 4px 24px rgba(0,0,0,0.6)`,
+              }}
+            >
+              {product.name}
+            </div>
+            <div
+              style={{
+                width: 40,
+                height: 2,
+                background: accentColor,
+                marginBottom: 10,
+              }}
+            />
+            <div
+              style={{
+                fontFamily: "Barlow Condensed, sans-serif",
+                fontWeight: 600,
+                fontSize: 10,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.8)",
+              }}
+            >
+              By Steven Angel
+            </div>
+          </div>
+
+          {/* Bottom: DAW info */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: 14,
+              right: 14,
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: 9,
+              color: "rgba(255,255,255,0.5)",
+              letterSpacing: "0.05em",
+            }}
+          >
+            {product.daw}
           </div>
         </div>
-
-        {/* Bottom: DAW info */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 14,
-            right: 14,
-            fontFamily: "DM Sans, sans-serif",
-            fontSize: 9,
-            color: "rgba(255,255,255,0.5)",
-            letterSpacing: "0.05em",
-          }}
-        >
-          {product.daw}
-        </div>
-      </div>
+      )}
 
       {/* Genre · DAW label */}
       <div style={{ ...label(accentColor), marginBottom: 8 }}>

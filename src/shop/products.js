@@ -165,7 +165,9 @@ export const PRODUCTS = [
       "Vocal chops & full mixdown",
     ],
     image: "/shop/el-barrio-thumb.webp",
-    previewVideoUrl: null,
+    previewVideoUrl: "/videos/hugel-claptone-ibiza.mp4",
+    previewVideoThumb: "/images/pacha-ibiza-thumb.webp",
+    previewVideoCaption: "Hugel & Claptone playing El Barrio at Pacha Ibiza",
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/El Barrio/The Angels - El Bario Ableton Template Project.zip",
     fileSize: "429 MB",
