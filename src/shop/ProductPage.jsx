@@ -4,21 +4,24 @@
  * SEO-first design:
  * - Each product gets its own URL (slug-based) so it can rank independently
  * - Hidden H1 carries the most-targeted long-tail keyword
- * - Visible H1 is the marketing headline
+ * - Visible H2 is the product name
  * - Page title + meta description set dynamically via useEffect
  * - Schema.org Product JSON-LD injected for rich Google snippets
  * - "Related products" grid for internal linking
  *
- * Reuses ProductCard for both the hero image (videoPlayer / album-art) and the related grid.
+ * Visual: 2-column hero (visual + title/price/buy/description),
+ * SEO tag pills, audio preview, related products. No emojis, no
+ * features list, no file size, no Wi-Fi warnings.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import {
   getProductBySlug,
   getOrderedProducts,
   getProductSpecs,
 } from "./products.js";
+import Box3D from "./Box3D.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -32,7 +35,9 @@ const heading = (fontSize) => ({
   letterSpacing: "0.04em",
   textTransform: "uppercase",
   color: "#fff",
-  lineHeight: 1.1,
+  lineHeight: 1.15,
+  overflowWrap: "break-word",
+  wordBreak: "break-word",
 });
 
 const body = {
@@ -40,6 +45,8 @@ const body = {
   fontSize: 15,
   color: "rgba(255,255,255,0.65)",
   lineHeight: 1.7,
+  overflowWrap: "break-word",
+  wordBreak: "break-word",
 };
 
 const label = (color = CYAN) => ({
@@ -63,6 +70,64 @@ const visuallyHidden = {
   border: 0,
 };
 
+/* ─── AudioPlayer — minimal track preview (matches ProductCard) ─── */
+function AudioPlayer({ product, accentColor, accentRgba }) {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  if (!product.audioUrl) return null;
+
+  if (!playing) {
+    return (
+      <button
+        onClick={() => setPlaying(true)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+          width: "100%",
+          padding: "12px 18px",
+          background: "transparent",
+          border: `1px solid rgba(${accentRgba},0.45)`,
+          borderRadius: 6,
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 700,
+          fontSize: 13,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: accentColor,
+          cursor: "pointer",
+          marginBottom: 18,
+        }}
+        aria-label="Play track preview"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill={accentColor}>
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        Play Track Preview
+      </button>
+    );
+  }
+
+  return (
+    <audio
+      ref={audioRef}
+      src={product.audioUrl}
+      controls
+      autoPlay
+      preload="metadata"
+      style={{
+        width: "100%",
+        marginBottom: 18,
+        filter: "invert(0.92) hue-rotate(180deg)",
+      }}
+    >
+      Your browser does not support the audio element.
+    </audio>
+  );
+}
+
 export default function ProductPage() {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
@@ -85,12 +150,10 @@ export default function ProductPage() {
     if (meta && product.seoDescription) {
       meta.setAttribute("content", product.seoDescription);
     }
-    // Update canonical URL to point to this product page
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
       canonical.setAttribute("href", `https://steven-angel.com/shop/${product.slug}`);
     }
-    // Inject Product JSON-LD for rich Google snippets
     const existing = document.getElementById("product-jsonld");
     if (existing) existing.remove();
     const ld = document.createElement("script");
@@ -113,7 +176,6 @@ export default function ProductPage() {
       },
     });
     document.head.appendChild(ld);
-    // Cleanup on unmount
     return () => {
       const node = document.getElementById("product-jsonld");
       if (node) node.remove();
@@ -126,7 +188,6 @@ export default function ProductPage() {
   }, [slug]);
 
   if (!product) {
-    // Unknown slug → redirect to /shop
     return <Navigate to="/shop" replace />;
   }
 
@@ -136,12 +197,10 @@ export default function ProductPage() {
   const hasVideo = !!product.previewVideoUrl;
   const specs = getProductSpecs(product);
 
-  // Up to 3 other products for the "related" grid
   const relatedProducts = getOrderedProducts()
     .filter((p) => p.id !== product.id)
     .slice(0, 3);
 
-  // Phase 4 will replace this with PayPal flow
   const handleBuy = () => {
     alert(
       `Coming soon!\n\n${product.name} — $${product.price} ${product.currency}\n\nPayPal checkout will be available shortly.`
@@ -149,13 +208,14 @@ export default function ProductPage() {
   };
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", color: "#fff" }}>
-      {/* Hidden H1 — carries most-targeted long-tail SEO keyword */}
+    <div style={{ background: BG, minHeight: "100vh", color: "#fff", overflowX: "hidden" }}>
+      {/* Hidden H1 — long-tail SEO keyword */}
       <h1 style={visuallyHidden}>
-        {product.seoTitle || `${product.name} — ${product.genre} Ableton Template by Steven Angel`}
+        {product.seoTitle ||
+          `${product.name} — ${product.genre} Ableton Template by Steven Angel`}
       </h1>
 
-      {/* ═══ Top Logo Bar ═══ */}
+      {/* Top Logo Bar */}
       <div style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}>
         <Link
           to="/"
@@ -172,12 +232,10 @@ export default function ProductPage() {
         </Link>
       </div>
 
-      {/* ═══ Breadcrumb ═══ */}
+      {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
-        style={{
-          padding: isMobile ? "20px 20px 0" : "24px 60px 0",
-        }}
+        style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}
       >
         <div
           style={{
@@ -201,12 +259,8 @@ export default function ProductPage() {
       </nav>
 
       <main>
-        {/* ═══ Hero — 2-column on desktop, stacked on mobile ═══ */}
-        <section
-          style={{
-            padding: isMobile ? "30px 20px 40px" : "40px 60px 60px",
-          }}
-        >
+        {/* Hero — 2-column on desktop, stacked on mobile */}
+        <section style={{ padding: isMobile ? "30px 20px 40px" : "40px 60px 60px" }}>
           <div
             style={{
               maxWidth: 1200,
@@ -217,8 +271,8 @@ export default function ProductPage() {
               alignItems: "start",
             }}
           >
-            {/* Left: Visual (video player or album-art mockup) */}
-            <div>
+            {/* Left: Visual (video player or 3D box) */}
+            <div style={{ minWidth: 0 }}>
               {hasVideo ? (
                 <div
                   style={{
@@ -291,7 +345,7 @@ export default function ProductPage() {
                           backdropFilter: "blur(4px)",
                         }}
                       >
-                        ▶ Watch
+                        Watch
                       </div>
                       <div
                         style={{
@@ -336,118 +390,19 @@ export default function ProductPage() {
                   )}
                 </div>
               ) : (
-                // Album-art mockup (same logic as ProductCard)
-                <div
-                  style={{
-                    width: "100%",
-                    aspectRatio: "1/1",
-                    background: "#06060f",
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    position: "relative",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: isPurple
-                        ? `radial-gradient(circle at 30% 20%, ${PURPLE}55 0%, transparent 50%), radial-gradient(circle at 70% 80%, ${CYAN}33 0%, transparent 50%), linear-gradient(135deg, #0a0a20, #0d0418)`
-                        : `radial-gradient(circle at 25% 25%, ${accentColor}55 0%, transparent 50%), radial-gradient(circle at 75% 75%, ${PURPLE}22 0%, transparent 50%), linear-gradient(135deg, #08081a, #02020a)`,
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-                      backgroundSize: "40px 40px",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 18,
-                      left: 18,
-                      fontFamily: "Barlow Condensed, sans-serif",
-                      fontWeight: 700,
-                      fontSize: 10,
-                      letterSpacing: "0.25em",
-                      textTransform: "uppercase",
-                      color: accentColor,
-                      padding: "4px 12px",
-                      border: `1px solid ${accentColor}`,
-                      borderRadius: 12,
-                      background: "rgba(0,0,0,0.4)",
-                      backdropFilter: "blur(4px)",
-                    }}
-                  >
-                    {product.genre.split("/")[0].trim()}
-                  </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 30,
-                      textAlign: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontFamily: "Barlow Condensed, sans-serif",
-                        fontWeight: 900,
-                        fontSize: isMobile ? 36 : 56,
-                        letterSpacing: "0.04em",
-                        textTransform: "uppercase",
-                        color: "#fff",
-                        lineHeight: 1,
-                        marginBottom: 12,
-                        textShadow: "0 4px 24px rgba(0,0,0,0.6)",
-                      }}
-                    >
-                      {product.name}
-                    </div>
-                    <div
-                      style={{ width: 56, height: 2, background: accentColor, marginBottom: 14 }}
-                    />
-                    <div
-                      style={{
-                        fontFamily: "Barlow Condensed, sans-serif",
-                        fontWeight: 600,
-                        fontSize: 11,
-                        letterSpacing: "0.2em",
-                        textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.8)",
-                      }}
-                    >
-                      By Steven Angel
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 18,
-                      right: 18,
-                      fontFamily: "DM Sans, sans-serif",
-                      fontSize: 10,
-                      color: "rgba(255,255,255,0.5)",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    {product.daw}
-                  </div>
-                </div>
+                <Box3D
+                  product={product}
+                  isPurple={isPurple}
+                  accentColor={accentColor}
+                  accentRgba={accentRgba}
+                  isMobile={isMobile}
+                />
               )}
             </div>
 
             {/* Right: Title, price, buy button, description */}
-            <div>
-              {/* Badge (if any) */}
+            <div style={{ minWidth: 0 }}>
+              {/* Badge */}
               {product.badge && (
                 <div
                   style={{
@@ -471,10 +426,10 @@ export default function ProductPage() {
                 </div>
               )}
 
-              {/* Genre + DAW + BPM + Key spec line */}
+              {/* Specs line */}
               <div style={{ ...label(accentColor), marginBottom: 14 }}>{specs}</div>
 
-              {/* Visible H2 — marketing headline */}
+              {/* Visible H2 — product name */}
               <h2
                 style={{
                   ...heading(isMobile ? 32 : 44),
@@ -485,7 +440,7 @@ export default function ProductPage() {
                 {product.name}
               </h2>
 
-              {/* Subtitle / SEO headline */}
+              {/* Subtitle / headline */}
               <div
                 style={{
                   fontFamily: "Barlow Condensed, sans-serif",
@@ -495,18 +450,21 @@ export default function ProductPage() {
                   color: accentColor,
                   marginBottom: 22,
                   lineHeight: 1.3,
+                  overflowWrap: "break-word",
+                  wordBreak: "break-word",
                 }}
               >
                 {product.headline}
               </div>
 
-              {/* Price + Buy CTA */}
+              {/* Price */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "baseline",
                   gap: 12,
                   marginBottom: 22,
+                  flexWrap: "wrap",
                 }}
               >
                 <div
@@ -533,6 +491,7 @@ export default function ProductPage() {
                 </div>
               </div>
 
+              {/* Buy button */}
               <button
                 onClick={handleBuy}
                 style={{
@@ -555,7 +514,7 @@ export default function ProductPage() {
                   marginBottom: 14,
                 }}
               >
-                Buy Now →
+                Buy Now
               </button>
 
               <div
@@ -564,126 +523,56 @@ export default function ProductPage() {
                   fontSize: 11,
                   color: "rgba(255,255,255,0.5)",
                   textAlign: "center",
-                  marginBottom: 28,
+                  marginBottom: 22,
                 }}
               >
                 Instant email delivery · Lifetime re-downloads · Royalty-free
               </div>
 
-              {/* Description */}
-              <p style={{ ...body, marginBottom: 26 }}>{product.description}</p>
+              {/* Audio preview */}
+              <AudioPlayer
+                product={product}
+                accentColor={accentColor}
+                accentRgba={accentRgba}
+              />
 
-              {/* Features list */}
-              <div
-                style={{
-                  ...label(),
-                  marginBottom: 12,
-                }}
-              >
-                What You Get
-              </div>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
-                {product.features.map((feat) => (
-                  <li
-                    key={feat}
-                    style={{
-                      ...body,
-                      fontSize: 14,
-                      paddingLeft: 24,
-                      position: "relative",
-                      marginBottom: 8,
-                    }}
-                  >
+              {/* SEO tags pills (replaces generic trust pills) */}
+              {product.seoTags && product.seoTags.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 8,
+                    marginBottom: 24,
+                  }}
+                >
+                  {product.seoTags.map((tag) => (
                     <span
+                      key={tag}
                       style={{
-                        position: "absolute",
-                        left: 0,
-                        top: 6,
-                        width: 14,
-                        height: 14,
-                        borderRadius: "50%",
-                        background: accentColor,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        fontFamily: "DM Sans, sans-serif",
+                        fontSize: 11,
+                        fontWeight: 500,
+                        color: "rgba(255,255,255,0.7)",
+                        background: `rgba(${accentRgba},0.06)`,
+                        border: `1px solid rgba(${accentRgba},0.2)`,
+                        padding: "5px 12px",
+                        borderRadius: 20,
                       }}
                     >
-                      <svg width="8" height="8" viewBox="0 0 24 24" fill="#000">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
+                      {tag}
                     </span>
-                    {feat}
-                  </li>
-                ))}
-              </ul>
+                  ))}
+                </div>
+              )}
 
-              {/* File size note */}
-              <div
-                style={{
-                  marginTop: 22,
-                  padding: "12px 14px",
-                  background: "rgba(255,255,255,0.03)",
-                  borderRadius: 6,
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: 12,
-                  color: "rgba(255,255,255,0.6)",
-                }}
-              >
-                📦 Download size: <span style={{ color: "#fff" }}>{product.fileSize}</span>
-                {product.largeFileWarning && (
-                  <div style={{ marginTop: 6, color: PURPLE }}>
-                    ⚠ Large file — recommended on Wi-Fi
-                  </div>
-                )}
-              </div>
+              {/* Description */}
+              <p style={{ ...body, marginBottom: 0 }}>{product.description}</p>
             </div>
           </div>
         </section>
 
-        {/* ═══ Trust pills row ═══ */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: 10,
-            padding: isMobile ? "0 16px 36px" : "0 60px 50px",
-          }}
-        >
-          {[
-            "100% Royalty-Free",
-            "Instant Email Delivery",
-            "Lifetime Re-Downloads",
-            "Real Released Project",
-          ].map((text) => (
-            <span
-              key={text}
-              style={{
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 600,
-                fontSize: 11,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                padding: "6px 14px",
-                border: "1px solid rgba(0,229,255,0.2)",
-                borderRadius: 20,
-                color: "rgba(255,255,255,0.7)",
-                background: "rgba(0,229,255,0.04)",
-              }}
-            >
-              {text}
-            </span>
-          ))}
-        </div>
-
-        {/* ═══ Related Products ═══ */}
+        {/* Related Products */}
         <section
           style={{
             padding: isMobile ? "40px 20px 60px" : "60px 60px 80px",
@@ -708,60 +597,64 @@ export default function ProductPage() {
                 gap: isMobile ? 18 : 22,
               }}
             >
-              {relatedProducts.map((p) => (
-                <Link
-                  key={p.id}
-                  to={`/shop/${p.slug}`}
-                  style={{
-                    display: "block",
-                    background: BG,
-                    padding: 18,
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    textDecoration: "none",
-                    color: "inherit",
-                    transition: "border-color 0.2s",
-                  }}
-                >
-                  <div
+              {relatedProducts.map((p) => {
+                const pAccent = p.badgeColor === "purple" ? PURPLE : CYAN;
+                return (
+                  <Link
+                    key={p.id}
+                    to={`/shop/${p.slug}`}
                     style={{
-                      ...label(p.badgeColor === "purple" ? PURPLE : CYAN),
-                      fontSize: 9,
-                      marginBottom: 8,
+                      display: "block",
+                      background: BG,
+                      padding: 18,
+                      borderRadius: 10,
+                      border: "1px solid rgba(255,255,255,0.06)",
+                      textDecoration: "none",
+                      color: "inherit",
+                      minWidth: 0,
+                      overflow: "hidden",
                     }}
                   >
-                    {p.genre}
-                  </div>
-                  <div
-                    style={{
-                      ...heading(20),
-                      marginBottom: 6,
-                    }}
-                  >
-                    {p.name}
-                  </div>
-                  <div
-                    style={{
-                      ...body,
-                      fontSize: 13,
-                      marginBottom: 12,
-                    }}
-                  >
-                    {p.shortDescription}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "Barlow Condensed, sans-serif",
-                      fontWeight: 800,
-                      fontSize: 18,
-                      color: p.badgeColor === "purple" ? PURPLE : CYAN,
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    ${p.price} {p.currency}
-                  </div>
-                </Link>
-              ))}
+                    <div
+                      style={{
+                        ...label(pAccent),
+                        fontSize: 9,
+                        marginBottom: 8,
+                      }}
+                    >
+                      {p.genre}
+                    </div>
+                    <div
+                      style={{
+                        ...heading(20),
+                        marginBottom: 6,
+                      }}
+                    >
+                      {p.name}
+                    </div>
+                    <div
+                      style={{
+                        ...body,
+                        fontSize: 13,
+                        marginBottom: 12,
+                      }}
+                    >
+                      {p.shortDescription}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "Barlow Condensed, sans-serif",
+                        fontWeight: 800,
+                        fontSize: 18,
+                        color: pAccent,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      ${p.price} {p.currency}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
 
             <div style={{ textAlign: "center", marginTop: 36 }}>
@@ -781,14 +674,14 @@ export default function ProductPage() {
                   textDecoration: "none",
                 }}
               >
-                ← Back to Shop
+                Back to Shop
               </Link>
             </div>
           </div>
         </section>
       </main>
 
-      {/* ═══ Footer ═══ */}
+      {/* Footer */}
       <footer
         style={{
           padding: "28px 40px",

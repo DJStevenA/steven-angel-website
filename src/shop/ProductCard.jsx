@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import Box3D from "./Box3D.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
-const BG = "#080810";
 const BG_ALT = "#04040f";
 
-/* ─── Style Helpers (matches Ghost.jsx patterns) ─── */
+/* ─── Style Helpers ─── */
 const heading = (fontSize) => ({
   fontFamily: "Barlow Condensed, sans-serif",
   fontWeight: 900,
@@ -15,7 +15,9 @@ const heading = (fontSize) => ({
   letterSpacing: "0.04em",
   textTransform: "uppercase",
   color: "#fff",
-  lineHeight: 1.1,
+  lineHeight: 1.15,
+  overflowWrap: "break-word",
+  wordBreak: "break-word",
 });
 
 const body = {
@@ -23,6 +25,8 @@ const body = {
   fontSize: 14,
   color: "rgba(255,255,255,0.6)",
   lineHeight: 1.6,
+  overflowWrap: "break-word",
+  wordBreak: "break-word",
 };
 
 const label = (color = CYAN) => ({
@@ -35,25 +39,86 @@ const label = (color = CYAN) => ({
 });
 
 /**
+ * AudioPlayer — minimal track preview for product cards
+ *
+ * Hidden until the user clicks "Play Preview". Renders a native HTML5 <audio>
+ * with controls so users can scrub. Returns null if the product has no audioUrl.
+ */
+function AudioPlayer({ product, accentColor, accentRgba }) {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  if (!product.audioUrl) return null;
+
+  if (!playing) {
+    return (
+      <button
+        onClick={() => setPlaying(true)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+          width: "100%",
+          padding: "10px 16px",
+          background: "transparent",
+          border: `1px solid rgba(${accentRgba},0.45)`,
+          borderRadius: 6,
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 700,
+          fontSize: 12,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          color: accentColor,
+          cursor: "pointer",
+          marginBottom: 14,
+        }}
+        aria-label="Play track preview"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill={accentColor}>
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        Play Track Preview
+      </button>
+    );
+  }
+
+  return (
+    <audio
+      ref={audioRef}
+      src={product.audioUrl}
+      controls
+      autoPlay
+      preload="metadata"
+      style={{
+        width: "100%",
+        marginBottom: 14,
+        filter: "invert(0.92) hue-rotate(180deg)",
+      }}
+    >
+      Your browser does not support the audio element.
+    </audio>
+  );
+}
+
+/**
  * ProductCard — single shop product
  *
- * Visual structure (matches Ghost.jsx packages section):
+ * Visual structure:
  *   ┌─────────────────────────┐
  *   │  [BADGE]                 │
- *   │  [Image / Preview]       │
- *   │  Genre · DAW             │
+ *   │  [Video player OR Box3D] │
+ *   │  Genre · DAW · BPM · Key │
  *   │  Product Name (h3)       │
  *   │  Headline                │
  *   │  Short description       │
- *   │  ✓ Feature 1             │
- *   │  ✓ Feature 2             │
- *   │  ...                     │
+ *   │  [SEO tag pills]         │
+ *   │  [Audio preview button]  │
  *   │  $XX.XX                  │
  *   │  [BUY NOW button]        │
  *   └─────────────────────────┘
  */
 export default function ProductCard({ product, isMobile, onBuy }) {
-  const [imageLoaded, setImageLoaded] = useState(false);
   const [videoPlaying, setVideoPlaying] = useState(false);
 
   const isPurple = product.badgeColor === "purple";
@@ -73,6 +138,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         display: "flex",
         flexDirection: "column",
         boxShadow: isPurple ? "0 0 40px rgba(187,134,252,0.1)" : "none",
+        overflow: "hidden",
+        minWidth: 0,
       }}
     >
       {/* Badge — top-left */}
@@ -100,7 +167,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </div>
       )}
 
-      {/* Product cover — video player (if previewVideoUrl) OR album-art mockup */}
+      {/* Product cover — video player OR Box3D mockup */}
       {hasVideo ? (
         <div
           style={{
@@ -134,7 +201,6 @@ export default function ProductCard({ product, isMobile, onBuy }) {
             />
           ) : (
             <>
-              {/* Thumbnail */}
               {product.previewVideoThumb && (
                 <img
                   src={product.previewVideoThumb}
@@ -146,12 +212,10 @@ export default function ProductCard({ product, isMobile, onBuy }) {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    opacity: 0.75,
+                    opacity: 0.78,
                   }}
                 />
               )}
-
-              {/* Dark overlay for readability */}
               <div
                 style={{
                   position: "absolute",
@@ -160,8 +224,6 @@ export default function ProductCard({ product, isMobile, onBuy }) {
                     "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)",
                 }}
               />
-
-              {/* Top-left: "WATCH" tag */}
               <div
                 style={{
                   position: "absolute",
@@ -180,10 +242,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
                   backdropFilter: "blur(4px)",
                 }}
               >
-                ▶ Watch
+                Watch
               </div>
-
-              {/* Centered play button */}
               <div
                 style={{
                   position: "absolute",
@@ -204,8 +264,6 @@ export default function ProductCard({ product, isMobile, onBuy }) {
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
-
-              {/* Bottom caption */}
               <div
                 style={{
                   position: "absolute",
@@ -232,146 +290,38 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         <Link
           to={`/shop/${product.slug}`}
           style={{
-            width: "100%",
-            aspectRatio: "1/1",
-            background: "#06060f",
-            borderRadius: 8,
+            display: "block",
             marginBottom: 18,
             marginTop: product.badge ? 8 : 0,
-            overflow: "hidden",
-            position: "relative",
-            border: "1px solid rgba(255,255,255,0.06)",
-            display: "block",
             textDecoration: "none",
             color: "inherit",
           }}
         >
-          {/* Layered gradient background — accent color → black */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: isPurple
-                ? `radial-gradient(circle at 30% 20%, ${PURPLE}55 0%, transparent 50%), radial-gradient(circle at 70% 80%, ${CYAN}33 0%, transparent 50%), linear-gradient(135deg, #0a0a20, #0d0418)`
-                : `radial-gradient(circle at 25% 25%, ${accentColor}55 0%, transparent 50%), radial-gradient(circle at 75% 75%, ${PURPLE}22 0%, transparent 50%), linear-gradient(135deg, #08081a, #02020a)`,
-            }}
+          <Box3D
+            product={product}
+            isPurple={isPurple}
+            accentColor={accentColor}
+            accentRgba={accentRgba}
+            isMobile={isMobile}
           />
-
-          {/* Geometric overlay (subtle grid lines for texture) */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-              backgroundSize: "30px 30px",
-            }}
-          />
-
-          {/* Top: small genre tag */}
-          <div
-            style={{
-              position: "absolute",
-              top: 14,
-              left: 14,
-              fontFamily: "Barlow Condensed, sans-serif",
-              fontWeight: 700,
-              fontSize: 9,
-              letterSpacing: "0.25em",
-              textTransform: "uppercase",
-              color: accentColor,
-              padding: "3px 8px",
-              border: `1px solid ${accentColor}`,
-              borderRadius: 12,
-              background: "rgba(0,0,0,0.4)",
-              backdropFilter: "blur(4px)",
-            }}
-          >
-            {product.genre.split("/")[0].trim()}
-          </div>
-
-          {/* Center: large product name */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 24,
-              textAlign: "center",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 900,
-                fontSize: isMobile ? 28 : 36,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                color: "#fff",
-                lineHeight: 1,
-                marginBottom: 8,
-                textShadow: `0 4px 24px rgba(0,0,0,0.6)`,
-              }}
-            >
-              {product.name}
-            </div>
-            <div
-              style={{
-                width: 40,
-                height: 2,
-                background: accentColor,
-                marginBottom: 10,
-              }}
-            />
-            <div
-              style={{
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 600,
-                fontSize: 10,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.8)",
-              }}
-            >
-              By Steven Angel
-            </div>
-          </div>
-
-          {/* Bottom: DAW info */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: 14,
-              right: 14,
-              fontFamily: "DM Sans, sans-serif",
-              fontSize: 9,
-              color: "rgba(255,255,255,0.5)",
-              letterSpacing: "0.05em",
-            }}
-          >
-            {product.daw}
-          </div>
         </Link>
       )}
 
-      {/* Genre · DAW label */}
-      <div style={{ ...label(accentColor), marginBottom: 8 }}>
+      {/* Genre · DAW · BPM · Key label */}
+      <div style={{ ...label(accentColor), marginBottom: 8, lineHeight: 1.4 }}>
         {product.genre} · {product.daw}
         {product.bpm && ` · ${product.bpm} BPM`}
         {product.musicalKey && ` · ${product.musicalKey}`}
       </div>
 
-      {/* Product Name (linked to per-product page for SEO + UX) */}
-      <h3 style={{ marginBottom: 6 }}>
+      {/* Product Name (linked to per-product page) */}
+      <h3 style={{ marginBottom: 6, marginTop: 0 }}>
         <Link
           to={`/shop/${product.slug}`}
           style={{
             ...heading(isMobile ? 22 : 24),
             display: "block",
             textDecoration: "none",
-            transition: "color 0.2s",
           }}
         >
           {product.name}
@@ -388,76 +338,51 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           letterSpacing: "0.05em",
           marginBottom: 12,
           lineHeight: 1.3,
+          overflowWrap: "break-word",
+          wordBreak: "break-word",
         }}
       >
         {product.headline}
       </div>
 
       {/* Short description */}
-      <div style={{ ...body, fontSize: isMobile ? 12 : 13, marginBottom: 12 }}>
+      <div style={{ ...body, fontSize: isMobile ? 12 : 13, marginBottom: 14, flexGrow: 1 }}>
         {product.shortDescription}
       </div>
 
-      {/* View Details link (subtle secondary CTA pointing to per-product page) */}
-      <Link
-        to={`/shop/${product.slug}`}
-        style={{
-          fontFamily: "DM Sans, sans-serif",
-          fontSize: 12,
-          color: accentColor,
-          textDecoration: "none",
-          marginBottom: 14,
-          display: "inline-block",
-        }}
-      >
-        View Full Details →
-      </Link>
-
-      {/* Features list */}
-      <div style={{ marginBottom: 16, flexGrow: 1 }}>
-        {product.features.slice(0, 4).map((feature) => (
-          <div
-            key={feature}
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: 8,
-              marginBottom: 6,
-            }}
-          >
-            <span style={{ color: accentColor, fontWeight: 700, marginTop: 1, flexShrink: 0 }}>
-              ✓
-            </span>
+      {/* SEO tag pills (replaces generic trust pills — better for SEO + UX) */}
+      {product.seoTags && product.seoTags.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 6,
+            marginBottom: 14,
+          }}
+        >
+          {product.seoTags.map((tag) => (
             <span
+              key={tag}
               style={{
                 fontFamily: "DM Sans, sans-serif",
-                fontSize: isMobile ? 12 : 13,
-                color: "rgba(255,255,255,0.7)",
-                lineHeight: 1.4,
+                fontSize: 10,
+                fontWeight: 500,
+                color: "rgba(255,255,255,0.65)",
+                background: `rgba(${accentRgba},0.06)`,
+                border: `1px solid rgba(${accentRgba},0.18)`,
+                padding: "3px 9px",
+                borderRadius: 20,
+                whiteSpace: "nowrap",
               }}
             >
-              {feature}
+              {tag}
             </span>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* File size + warning */}
-      <div
-        style={{
-          fontFamily: "DM Sans, sans-serif",
-          fontSize: 11,
-          color: "rgba(255,255,255,0.5)",
-          marginBottom: 12,
-        }}
-      >
-        ⤓ {product.fileSize}
-        {product.largeFileWarning && (
-          <span style={{ display: "block", marginTop: 4, color: "rgba(255,200,100,0.7)" }}>
-            ⚠ Large file — recommended on Wi-Fi
-          </span>
-        )}
-      </div>
+      {/* Audio preview player (only shown if product has audioUrl) */}
+      <AudioPlayer product={product} accentColor={accentColor} accentRgba={accentRgba} />
 
       {/* Price */}
       <div
@@ -509,7 +434,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           marginTop: "auto",
         }}
       >
-        Buy Now →
+        Buy Now
       </button>
     </div>
   );

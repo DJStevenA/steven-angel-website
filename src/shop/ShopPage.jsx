@@ -148,33 +148,40 @@ export default function ShopPage() {
           </div>
         </section>
 
-        {/* ═══ Inline Trust Pills (minimal, no big stats) ═══ */}
+        {/* ═══ Shop-wide SEO category pills (keyword-rich, replaces generic trust pills) ═══ */}
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             flexWrap: "wrap",
-            gap: 10,
+            gap: 8,
             padding: isMobile ? "0 16px 30px" : "0 60px 40px",
+            maxWidth: 1000,
+            margin: "0 auto",
           }}
         >
           {[
-            "100% Royalty-Free",
-            "Instant Email Delivery",
-            "Lifetime Re-Downloads",
+            "Afro House Templates",
+            "Melodic Techno Templates",
+            "Ableton Live Projects",
+            "Hugel Style",
+            "Keinemusik Style",
+            "Solomun Style",
+            "Artbat Style",
+            "Sample Packs",
+            "Online Masterclass",
+            "Royalty-Free",
           ].map((text) => (
             <span
               key={text}
               style={{
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 600,
+                fontFamily: "DM Sans, sans-serif",
+                fontWeight: 500,
                 fontSize: 11,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                padding: "6px 14px",
-                border: "1px solid rgba(0,229,255,0.2)",
+                padding: "5px 12px",
+                border: "1px solid rgba(0,229,255,0.18)",
                 borderRadius: 20,
-                color: "rgba(255,255,255,0.7)",
+                color: "rgba(255,255,255,0.65)",
                 background: "rgba(0,229,255,0.04)",
               }}
             >
@@ -309,7 +316,7 @@ export default function ShopPage() {
         >
           Looking for ghost production?{" "}
           <a href="/ghost" style={{ color: CYAN, textDecoration: "none" }}>
-            Visit the Ghost page →
+            Visit the Ghost page
           </a>
         </div>
         <span

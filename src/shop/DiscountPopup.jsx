@@ -135,7 +135,7 @@ export default function DiscountPopup() {
             marginBottom: 12,
           }}
         >
-          ⚡ Welcome Offer
+          Welcome Offer
         </div>
 
         {/* Headline */}
@@ -205,7 +205,7 @@ export default function DiscountPopup() {
             transition: "color 0.2s",
           }}
         >
-          {copied ? "✓ Copied to clipboard!" : "Click to copy"}
+          {copied ? "Copied to clipboard" : "Click to copy"}
         </div>
 
         {/* CTA */}
@@ -236,7 +236,7 @@ export default function DiscountPopup() {
             boxShadow: "0 0 28px rgba(0,229,255,0.5)",
           }}
         >
-          Browse the Shop →
+          Browse the Shop
         </button>
 
         {/* Tiny disclaimer */}

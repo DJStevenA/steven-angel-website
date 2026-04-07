@@ -70,9 +70,18 @@ export const PRODUCTS = [
       "Lifetime access to updates",
     ],
     image: "/shop/masterclass-thumb.webp", // created in Phase 6
-    previewVideoUrl: null, // filled in Phase 6 (Cloudflare R2)
+    previewVideoUrl: null, // intro/sales video — pending ffmpeg compression or R2
+    audioUrl: null, // local MP3 to be added (Jungle Walk preview)
     dropboxPath: "/On Line Lessons/Afro House Master Class/Afro House MasterClass - DL PACK.zip",
     fileSize: "237 MB",
+    // SEO tags shown as pills under the buy button — high-value search terms
+    seoTags: [
+      "Afro House Masterclass",
+      "Ableton Live Tutorial",
+      "Beatport Top 10",
+      "Online Course",
+      "Sample Pack Included",
+    ],
   },
 
   // ─────────────────────────────────────────────────────────
@@ -122,9 +131,17 @@ export const PRODUCTS = [
     ],
     image: "/shop/balkan-boy-thumb.webp",
     previewVideoUrl: null,
+    audioUrl: null,
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/Balkan Boy/Balkan Boy_Ableton Template By Steven Angel.zip",
     fileSize: "269 MB",
+    seoTags: [
+      "Ableton Template",
+      "Afro House Project",
+      "Hugel Style",
+      "Balkan Afro House",
+      "Ableton Live 12",
+    ],
   },
 
   // ─────────────────────────────────────────────────────────
@@ -174,9 +191,17 @@ export const PRODUCTS = [
     ],
     image: "/shop/maria-maria-thumb.webp",
     previewVideoUrl: null,
+    audioUrl: null,
     dropboxPath:
       "/Ghost Tracks templates sample packs/2024/Maria Maria/The Angels - Maria Maria (Afro House Remix) Project.zip",
     fileSize: "883 MB",
+    seoTags: [
+      "Ableton Template",
+      "Afro House Remix",
+      "DJ Chus Supported",
+      "Santana Remix",
+      "Ableton Live 11",
+    ],
   },
 
   // ─────────────────────────────────────────────────────────
@@ -232,9 +257,17 @@ export const PRODUCTS = [
     previewVideoUrl: "/videos/hugel-claptone-ibiza.mp4",
     previewVideoThumb: "/images/pacha-ibiza-thumb.webp",
     previewVideoCaption: "Hugel & Claptone playing El Barrio at Pacha Ibiza",
+    audioUrl: null,
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/El Barrio/The Angels - El Bario Ableton Template Project.zip",
     fileSize: "429 MB",
+    seoTags: [
+      "Ableton Template",
+      "Afro House Project",
+      "Hugel Style",
+      "MTGD Release",
+      "Pacha Ibiza Track",
+    ],
   },
 
   // ─────────────────────────────────────────────────────────
@@ -286,9 +319,17 @@ export const PRODUCTS = [
     ],
     image: "/shop/solomun-arabian-thumb.webp",
     previewVideoUrl: null,
+    audioUrl: null,
     dropboxPath:
       "/Ghost Tracks templates sample packs/For IN SOUND/SOLOMUN/Solomun Melodic Techno Project.zip",
     fileSize: "737 MB",
+    seoTags: [
+      "Melodic Techno Template",
+      "Solomun Style",
+      "Artbat Style",
+      "Arabian Techno",
+      "Festival Sound",
+    ],
   },
 
   // ─────────────────────────────────────────────────────────
@@ -342,9 +383,16 @@ export const PRODUCTS = [
     ],
     image: "/shop/mega-bundle-thumb.webp",
     previewVideoUrl: null,
+    audioUrl: null,
     dropboxPath: "/Ghost Tracks templates sample packs/For IN SOUND/MELODIC TECHNO/Mega_Bundle_Pack.zip",
     fileSize: "1.29 GB",
-    largeFileWarning: true, // Show "Large file — recommended on Wi-Fi" notice on this product
+    seoTags: [
+      "Melodic Techno Bundle",
+      "Artbat Style",
+      "Tale Of Us Style",
+      "3 Templates + Pack",
+      "Best Value",
+    ],
   },
 ];
 
