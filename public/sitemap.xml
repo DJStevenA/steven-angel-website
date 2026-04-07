@@ -18,4 +18,41 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <!-- Per-product pages (added Phase 2.5 — long-tail SEO slugs) -->
+  <url>
+    <loc>https://steven-angel.com/shop/afro-house-masterclass-ableton-live-tutorial-jungle-walk</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/afro-house-ableton-live-template-el-barrio-mtgd</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/melodic-techno-afro-house-ableton-template-bundle</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/afro-house-balkan-ableton-live-template-balkan-boy</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/afro-house-remix-ableton-live-template-maria-maria</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/melodic-techno-ableton-template-solomun-artbat-style</loc>
+    <lastmod>2026-04-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

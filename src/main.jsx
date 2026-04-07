@@ -6,11 +6,18 @@ import App from "./App.jsx";
 const Ghost = lazy(() => import("./Ghost.jsx"));
 const Sign = lazy(() => import("./Sign.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
+const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
 
 // Dynamic page title + meta description per route (SEO)
+// Note: ProductPage (/shop/:slug) sets its own title/meta/canonical via useEffect.
+// We skip the override here for dynamic shop product pages to avoid clobbering.
 function PageTitle() {
   const location = useLocation();
   useEffect(() => {
+    // Skip override for per-product pages — ProductPage handles SEO itself
+    const isProductPage = location.pathname.startsWith("/shop/") && location.pathname !== "/shop";
+    if (isProductPage) return;
+
     const titles = {
       "/": "Ghost Producer · Afro House & Indie Dance | Steven Angel",
       "/ghost": "Afro House Ghost Producer — Signed MTGD & Moblack Artist | Steven Angel",
@@ -42,6 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/ghost" element={<Ghost />} />
           <Route path="/sign" element={<Sign />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/shop/:slug" element={<ProductPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

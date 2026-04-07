@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -228,7 +229,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           )}
         </div>
       ) : (
-        <div
+        <Link
+          to={`/shop/${product.slug}`}
           style={{
             width: "100%",
             aspectRatio: "1/1",
@@ -239,6 +241,9 @@ export default function ProductCard({ product, isMobile, onBuy }) {
             overflow: "hidden",
             position: "relative",
             border: "1px solid rgba(255,255,255,0.06)",
+            display: "block",
+            textDecoration: "none",
+            color: "inherit",
           }}
         >
           {/* Layered gradient background — accent color → black */}
@@ -348,22 +353,29 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           >
             {product.daw}
           </div>
-        </div>
+        </Link>
       )}
 
       {/* Genre · DAW label */}
       <div style={{ ...label(accentColor), marginBottom: 8 }}>
         {product.genre} · {product.daw}
+        {product.bpm && ` · ${product.bpm} BPM`}
+        {product.musicalKey && ` · ${product.musicalKey}`}
       </div>
 
-      {/* Product Name */}
-      <h3
-        style={{
-          ...heading(isMobile ? 22 : 24),
-          marginBottom: 6,
-        }}
-      >
-        {product.name}
+      {/* Product Name (linked to per-product page for SEO + UX) */}
+      <h3 style={{ marginBottom: 6 }}>
+        <Link
+          to={`/shop/${product.slug}`}
+          style={{
+            ...heading(isMobile ? 22 : 24),
+            display: "block",
+            textDecoration: "none",
+            transition: "color 0.2s",
+          }}
+        >
+          {product.name}
+        </Link>
       </h3>
 
       {/* Headline */}
@@ -382,9 +394,24 @@ export default function ProductCard({ product, isMobile, onBuy }) {
       </div>
 
       {/* Short description */}
-      <div style={{ ...body, fontSize: isMobile ? 12 : 13, marginBottom: 16 }}>
+      <div style={{ ...body, fontSize: isMobile ? 12 : 13, marginBottom: 12 }}>
         {product.shortDescription}
       </div>
+
+      {/* View Details link (subtle secondary CTA pointing to per-product page) */}
+      <Link
+        to={`/shop/${product.slug}`}
+        style={{
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: 12,
+          color: accentColor,
+          textDecoration: "none",
+          marginBottom: 14,
+          display: "inline-block",
+        }}
+      >
+        View Full Details →
+      </Link>
 
       {/* Features list */}
       <div style={{ marginBottom: 16, flexGrow: 1 }}>

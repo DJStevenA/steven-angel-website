@@ -60,7 +60,7 @@ export default function ShopPage() {
       {/* Welcome discount popup (shows once per visitor) */}
       <DiscountPopup />
 
-      {/* Hidden H1 for SEO (visually hidden, screen-reader accessible) */}
+      {/* Hidden H1 for SEO — long-tail keywords mixed in */}
       <h1
         style={{
           position: "absolute",
@@ -74,8 +74,25 @@ export default function ShopPage() {
           border: 0,
         }}
       >
-        Afro House Ableton Templates & Masterclass — Steven Angel Shop
+        Afro House Ableton Templates, Melodic Techno Project Files & Online Masterclass — Hugel, Claptone, Keinemusik, Solomun & Artbat Style — Steven Angel Shop
       </h1>
+
+      {/* Hidden H2 (also screen-reader only) — secondary keyword cluster */}
+      <h2
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: 0,
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+      >
+        Premium Ableton Live project files download — Afro House, Melodic Techno, Tech House, Indie Dance — released on MTGD, Moblack, Godeeva
+      </h2>
 
       {/* ═══ Top Logo Bar ═══ */}
       <div style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}>
