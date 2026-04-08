@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getOrderedProducts } from "./products.js";
 import ProductCard from "./ProductCard.jsx";
 import DiscountPopup from "./DiscountPopup.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -41,6 +43,7 @@ export default function ShopPage() {
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
   const products = getOrderedProducts();
+  const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
@@ -94,8 +97,16 @@ export default function ShopPage() {
         Premium Ableton Live project files download — Afro House, Melodic Techno, Tech House, Indie Dance — released on MTGD, Moblack, Godeeva
       </h2>
 
-      {/* ═══ Top Logo Bar ═══ */}
-      <div style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}>
+      {/* ═══ Top Logo Bar (with auth button) ═══ */}
+      <div
+        style={{
+          padding: isMobile ? "20px 20px 0" : "24px 60px 0",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
         <a
           href="/"
           style={{
@@ -109,6 +120,32 @@ export default function ShopPage() {
         >
           STEVEN <span style={{ color: CYAN }}>ANGEL</span>
         </a>
+
+        {/* Sign in / My Account button — hidden during initial auth load to avoid flicker */}
+        {!authLoading && (
+          <Link
+            to={user ? "/shop/account" : "/shop/login"}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              background: user ? "rgba(0,229,255,0.08)" : "transparent",
+              border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.2)"}`,
+              color: user ? CYAN : "rgba(255,255,255,0.85)",
+              fontFamily: "Barlow Condensed, sans-serif",
+              fontWeight: 700,
+              fontSize: isMobile ? 11 : 12,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              padding: isMobile ? "7px 14px" : "9px 18px",
+              borderRadius: 4,
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {user ? (isMobile ? "Account" : "My Account") : "Sign In"}
+          </Link>
+        )}
       </div>
 
       <main>
