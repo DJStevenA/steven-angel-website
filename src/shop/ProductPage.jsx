@@ -22,6 +22,7 @@ import {
   getProductSpecs,
 } from "./products.js";
 import Box3D from "./Box3D.jsx";
+import CheckoutModal from "./CheckoutModal.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -135,6 +136,7 @@ export default function ProductPage() {
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
   const [videoPlaying, setVideoPlaying] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);
@@ -202,9 +204,7 @@ export default function ProductPage() {
     .slice(0, 3);
 
   const handleBuy = () => {
-    alert(
-      `Coming soon!\n\n${product.name} — $${product.price} ${product.currency}\n\nPayPal checkout will be available shortly.`
-    );
+    setCheckoutOpen(true);
   };
 
   return (
@@ -706,6 +706,14 @@ export default function ProductPage() {
           </Link>
         </span>
       </footer>
+
+      {/* Checkout Modal — opens when user clicks Buy Now */}
+      {checkoutOpen && (
+        <CheckoutModal
+          product={product}
+          onClose={() => setCheckoutOpen(false)}
+        />
+      )}
     </div>
   );
 }

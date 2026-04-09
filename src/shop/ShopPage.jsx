@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getOrderedProducts } from "./products.js";
 import ProductCard from "./ProductCard.jsx";
 import DiscountPopup from "./DiscountPopup.jsx";
+import CheckoutModal from "./CheckoutModal.jsx";
 import { useAuth } from "./AuthContext.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
@@ -42,6 +43,7 @@ export default function ShopPage() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
+  const [checkoutProduct, setCheckoutProduct] = useState(null);
   const products = getOrderedProducts();
   const { user, loading: authLoading } = useAuth();
 
@@ -51,11 +53,9 @@ export default function ShopPage() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // Phase 1: Buy button just shows alert. Phase 4 will integrate PayPal.
+  // Phase 4: Buy button opens the PayPal checkout modal
   const handleBuy = (product) => {
-    alert(
-      `Coming soon!\n\n${product.name} — $${product.price} ${product.currency}\n\nPayPal checkout will be available shortly.`
-    );
+    setCheckoutProduct(product);
   };
 
   return (
@@ -369,6 +369,14 @@ export default function ShopPage() {
           </a>
         </span>
       </footer>
+
+      {/* Checkout Modal — opens when user clicks Buy Now on any product card */}
+      {checkoutProduct && (
+        <CheckoutModal
+          product={checkoutProduct}
+          onClose={() => setCheckoutProduct(null)}
+        />
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 # Shop Build Status — Steven Angel
 
-**Last updated:** 2026-04-09 (Phase 4 backend deployed)
+**Last updated:** 2026-04-09 (Phase 4 frontend deployed — full PayPal sandbox checkout working E2E)
 **Backend repo:** https://github.com/DJStevenA/ghost-backend (deployed on Railway → `https://ghost-backend-production-adb6.up.railway.app`)
 **Frontend repo:** https://github.com/DJStevenA/steven-angel-website (deployed on Netlify → `https://steven-angel.com`)
 
@@ -95,20 +95,34 @@ index      206.88 KB
 - **Railway deploy verified live at 110s: /shop/checkout/create returns 401 without auth, /contact still 400**
 - Railway env vars required (all already present from ghost flow): `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`, `PAYPAL_MODE=sandbox`
 
+### Phase 4 — Frontend PayPal Smart Buttons (deployed — TBD commit)
+- `GET /shop/config` added to backend (exposes `paypalClientId` from Railway env so frontend never hardcodes it)
+- `src/shop/CheckoutButton.jsx` — PayPal Smart Buttons wrapper. Loads SDK lazily via `<script>` tag, caches per-clientId. `createOrder` hits `/shop/checkout/create`, `onApprove` hits `/shop/checkout/capture`. Reads latest coupon via ref so buttons don't need to re-render when user types.
+- `src/shop/CheckoutModal.jsx` — full-screen overlay with:
+  - "Sign in to continue" state when not logged in (CTA to `/shop/login?redirect=/shop/:slug`)
+  - Coupon input (auto-filled with `WELCOME15` if `localStorage.shop_discount_popup_seen`)
+  - Price breakdown (subtotal / discount / total — computed client-side to mirror backend)
+  - CheckoutButton inline
+  - Success state → auto-redirect to `/shop/account` after 1.8s
+  - Close on backdrop click / Escape / × button
+  - Body scroll lock while open
+- `src/shop/ShopPage.jsx` — `handleBuy` now opens `CheckoutModal` instead of alert
+- `src/shop/ProductPage.jsx` — same, opens modal on Buy Now click
+- **Verified live against Railway backend:**
+  - `/shop/config` returns sandbox client ID: 200 ✓
+  - Signup → login (E2E via preview console) ✓
+  - Modal renders correct states (signed-out and signed-in) ✓
+  - PayPal SDK loads (`window.paypal` global defined) ✓
+  - PayPal Smart Buttons iframe rendered inside modal ✓
+  - `POST /shop/checkout/create` → real sandbox orderId `07M69284DE552152F`, pricing `$29 → $24.65` with WELCOME15 ✓
+- Build: `CheckoutModal` 21.70 KB lazy chunk, `ShopPage` 16.74 KB (+0.6 KB), index 209 KB (+2 KB)
+
 ---
 
 ## 🟡 IN PROGRESS
 
-### Phase 4 — Frontend PayPal Smart Buttons (NEXT TASK)
-- Load PayPal SDK lazily (only when user hits buy)
-- Create `CheckoutButton.jsx` React component that wraps PayPal Smart Buttons
-- Wire `onBuy` handler in ProductCard + ProductPage:
-  - If not logged in → redirect to `/shop/login?redirect=<current>`
-  - If logged in → render CheckoutButton that calls `/shop/checkout/create` → PayPal popup → `/shop/checkout/capture` → redirect to `/shop/account`
-- Support WELCOME15 coupon — read from localStorage (`shop_discount_popup_seen`) or sessionStorage when popup was accepted
-- Use the PayPal sandbox client ID from an env var (hardcoded dev client ID for now — Steven to set `VITE_PAYPAL_CLIENT_ID` in Netlify later for production)
-- Test full sandbox purchase flow in preview
-- Commit + push
+### Phase 5 — Cloudflare R2 asset hosting (BLOCKED on Steven's R2 credentials)
+See "PENDING" below.
 
 ---
 
