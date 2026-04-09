@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import App from "./App.jsx";
 import { AuthProvider } from "./shop/AuthContext.jsx";
 
@@ -62,6 +62,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/shop/signup" element={<SignupPage />} />
             <Route path="/shop/account" element={<AccountPage />} />
             <Route path="/shop/:slug" element={<ProductPage />} />
+            {/* Catch-all — any unknown URL (e.g. /fallover, typos, stale links) redirects to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
       </AuthProvider>
