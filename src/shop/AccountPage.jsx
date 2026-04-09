@@ -27,6 +27,8 @@ export default function AccountPage() {
   const [purchases, setPurchases] = useState(null);
   const [purchasesError, setPurchasesError] = useState("");
   const [purchasesLoading, setPurchasesLoading] = useState(false);
+  const [downloadingId, setDownloadingId] = useState(null);
+  const [downloadError, setDownloadError] = useState("");
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -74,11 +76,29 @@ export default function AccountPage() {
   };
 
   const handleDownload = async (purchase) => {
-    // Phase 5 will implement /shop/download/:productId with signed R2 URLs.
-    // For now, alert until we have R2 wired up.
-    alert(
-      `Download not yet wired up.\n\nProduct: ${purchase.product_name}\n\nThis will work after R2 migration is complete.`
-    );
+    setDownloadingId(purchase.id);
+    setDownloadError("");
+    try {
+      const res = await fetch(
+        `${apiBase}/shop/download/${encodeURIComponent(purchase.product_id)}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to get download link");
+      }
+      if (!data.downloadUrl) {
+        throw new Error("Server returned no download URL");
+      }
+      // Navigate in a new tab so the user stays on the account page
+      window.open(data.downloadUrl, "_blank", "noopener");
+    } catch (err) {
+      setDownloadError(
+        `${purchase.product_name}: ${err.message || "Download failed"}`
+      );
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   // Loading state
@@ -245,6 +265,23 @@ export default function AccountPage() {
             </div>
           )}
 
+          {downloadError && (
+            <div
+              style={{
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: 13,
+                color: "#ff6b6b",
+                padding: "12px 16px",
+                background: "rgba(255,107,107,0.08)",
+                border: "1px solid rgba(255,107,107,0.3)",
+                borderRadius: 6,
+                marginBottom: 20,
+              }}
+            >
+              {downloadError}
+            </div>
+          )}
+
           {purchases && purchases.length === 0 && !purchasesLoading && (
             <div
               style={{
@@ -364,6 +401,7 @@ export default function AccountPage() {
                     {isPaid ? (
                       <button
                         onClick={() => handleDownload(p)}
+                        disabled={downloadingId === p.id}
                         style={{
                           background: `linear-gradient(135deg, ${accent}, ${
                             product?.badgeColor === "purple" ? "#9c5bff" : "#00b8d4"
@@ -377,13 +415,14 @@ export default function AccountPage() {
                           fontSize: 12,
                           letterSpacing: "0.18em",
                           textTransform: "uppercase",
-                          cursor: "pointer",
+                          cursor: downloadingId === p.id ? "wait" : "pointer",
                           boxShadow: `0 0 20px rgba(${accentRgba},0.35)`,
                           whiteSpace: "nowrap",
                           alignSelf: isMobile ? "stretch" : "center",
+                          opacity: downloadingId === p.id ? 0.6 : 1,
                         }}
                       >
-                        Download
+                        {downloadingId === p.id ? "Loading…" : "Download"}
                       </button>
                     ) : (
                       <span
