@@ -1,6 +1,6 @@
 # Shop Build Status — Steven Angel
 
-**Last updated:** 2026-04-08
+**Last updated:** 2026-04-09 (Phase 4 backend deployed)
 **Backend repo:** https://github.com/DJStevenA/ghost-backend (deployed on Railway → `https://ghost-backend-production-adb6.up.railway.app`)
 **Frontend repo:** https://github.com/DJStevenA/steven-angel-website (deployed on Netlify → `https://steven-angel.com`)
 
@@ -74,18 +74,41 @@ index      206.88 KB
 
 ---
 
-## 🟡 IN PROGRESS (saved but not yet pushed)
+### Phase 3 — Shop Auth frontend (commit `28e710e`)
+- `AuthContext.jsx` — React context with useAuth() hook, JWT in localStorage (`steven_angel_shop_token`), auto /me fetch on mount, login/signup/logout/refresh
+- `LoginPage.jsx` (`/shop/login`) — email+password with `?redirect=` support
+- `SignupPage.jsx` (`/shop/signup`) — email+password+name+confirm with min-8-chars validation
+- `AccountPage.jsx` (`/shop/account`) — protected page, shows user info + purchases list + Sign Out
+- `main.jsx` — wrapped in `<AuthProvider>`, auth routes placed BEFORE `/shop/:slug`
+- `ShopPage.jsx` — header has Sign In / My Account button that switches based on user state
+- **Tested end-to-end in preview against PROD backend:** signup→account redirect, logout, login, wrong password, auth guard, existing pages untouched
 
-### Phase 3 — Frontend Auth pages (started, not deployed)
-- ✅ `src/shop/AuthContext.jsx` — full React context with login/signup/logout/refresh + localStorage persistence + auto /me fetch on mount
-- ✅ `src/shop/LoginPage.jsx` — email + password sign-in form with error handling, redirect support, "remember me" via localStorage
-- ⬜ `src/shop/SignupPage.jsx` — TODO
-- ⬜ `src/shop/AccountPage.jsx` — TODO (lists user's purchases + download links)
-- ⬜ Add routes `/shop/login`, `/shop/signup`, `/shop/account` in `main.jsx`
-- ⬜ Wrap `<App>` in `<AuthProvider>` so the whole app has access
-- ⬜ Add Sign In / Account header button to ShopPage
-- ⬜ Test the full flow in preview
-- ⬜ Commit + push
+### Phase 4 — PayPal checkout backend (commit `1d49b47` on `ghost-backend`)
+- `shop.js` — added `POST /shop/checkout/create` and `POST /shop/checkout/capture`
+- `SHOP_PRODUCTS` canonical price table (backend-owned so users can't tamper via frontend) — must stay in sync with `src/shop/products.js`
+- `COUPONS` static table — `WELCOME15` = 15% off, case-insensitive, unknown codes silently ignored
+- `PAYPAL_BASE` + `getPayPalToken` — duplicated from `index.js` (10 lines) to keep shop code self-contained
+- `applyCoupon(basePrice, couponCode)` helper with `round2` to avoid floating-point drift
+- `/checkout/create` — requires auth, validates productId, blocks double-purchase (hasUserPurchasedProduct), creates PayPal order via `/v2/checkout/orders` (NO_SHIPPING), stores `custom_id` JSON with { userId, productId, couponApplied }, inserts 'pending' purchase row, returns `{ orderId, originalAmount, discountAmount, finalAmount, couponApplied, productName }`
+- `/checkout/capture` — requires auth, looks up purchase by paypal_order_id, 403 if wrong user, idempotent if already paid, calls `/v2/checkout/orders/:id/capture`, only marks 'paid' if COMPLETED, returns `{ success, purchase }`
+- **All 7 local tests pass + /contact untouched + coupon math verified** (WELCOME15 on $19.99 → $16.99)
+- **Railway deploy verified live at 110s: /shop/checkout/create returns 401 without auth, /contact still 400**
+- Railway env vars required (all already present from ghost flow): `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`, `PAYPAL_MODE=sandbox`
+
+---
+
+## 🟡 IN PROGRESS
+
+### Phase 4 — Frontend PayPal Smart Buttons (NEXT TASK)
+- Load PayPal SDK lazily (only when user hits buy)
+- Create `CheckoutButton.jsx` React component that wraps PayPal Smart Buttons
+- Wire `onBuy` handler in ProductCard + ProductPage:
+  - If not logged in → redirect to `/shop/login?redirect=<current>`
+  - If logged in → render CheckoutButton that calls `/shop/checkout/create` → PayPal popup → `/shop/checkout/capture` → redirect to `/shop/account`
+- Support WELCOME15 coupon — read from localStorage (`shop_discount_popup_seen`) or sessionStorage when popup was accepted
+- Use the PayPal sandbox client ID from an env var (hardcoded dev client ID for now — Steven to set `VITE_PAYPAL_CLIENT_ID` in Netlify later for production)
+- Test full sandbox purchase flow in preview
+- Commit + push
 
 ---
 
@@ -112,13 +135,6 @@ index      206.88 KB
 - Wire `audioUrl` and `previewVideoUrl` (for masterclass) to public R2 URLs
 - Add backend endpoint `GET /shop/download/:productId` that returns a 15-minute signed R2 URL — only for users who have a `paid` purchase for that product
 - This **REPLACES the entire Phase 5 (Dropbox OAuth)** that was originally planned. R2 is better in every way.
-
-### Phase 4 — PayPal Sandbox integration (not yet started)
-- Backend already has PayPal credentials in env vars (`PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`, `PAYPAL_MODE=sandbox`) used by `/create-order`, `/capture-order` for ghost production
-- Add `/shop/checkout/create` and `/shop/checkout/capture` endpoints under `/shop/*` namespace (separate from ghost flow)
-- Add PayPal Smart Buttons to ProductPage + ProductCard
-- On capture: insert into `purchases` table with `status='paid'`
-- Apply `WELCOME15` coupon code if provided
 
 ---
 
@@ -164,15 +180,18 @@ index      206.88 KB
 - `Box3D.jsx` — shared 3D box mockup component (used by ProductCard + ProductPage)
 - `ProductCard.jsx` — single product card (in /shop grid)
 - `ProductPage.jsx` — per-product detail page (/shop/:slug)
-- `ShopPage.jsx` — main /shop page
+- `ShopPage.jsx` — main /shop page (has Sign In / My Account header button)
 - `DiscountPopup.jsx` — 15% off welcome popup
-- `AuthContext.jsx` — auth state + API calls (NOT YET IMPORTED ANYWHERE)
-- `LoginPage.jsx` — email/password login form (NOT YET ROUTED)
+- `AuthContext.jsx` — auth state + API calls (wired via `<AuthProvider>` in main.jsx)
+- `LoginPage.jsx` — email/password login (/shop/login)
+- `SignupPage.jsx` — email/password/name signup (/shop/signup)
+- `AccountPage.jsx` — protected page with purchases list (/shop/account)
+- `CheckoutButton.jsx` — (TODO Phase 4 frontend) PayPal Smart Buttons wrapper
 
 ### Backend (`ghost-backend/`)
-- `index.js` — Express server (existing /contact + /sign-first + new /shop router mount)
-- `db.js` — SQLite + schema + prepared statements
-- `shop.js` — /shop/* router (signup, login, me, logout, purchases)
+- `index.js` — Express server (existing /contact + /sign-first + new /shop router mount, untouched since Phase 2)
+- `db.js` — SQLite + schema + prepared statements (untouched since Phase 2)
+- `shop.js` — /shop/* router (auth: signup/login/me/logout/purchases + checkout: create/capture + SHOP_PRODUCTS + COUPONS + PayPal helpers)
 
 ---
 
