@@ -1,6 +1,6 @@
 # Shop Build Status — Steven Angel
 
-**Last updated:** 2026-04-09 (Phase 4 frontend deployed — full PayPal sandbox checkout working E2E)
+**Last updated:** 2026-04-09 (Phase 5 plumbing deployed — R2 download endpoint live, waiting on source files)
 **Backend repo:** https://github.com/DJStevenA/ghost-backend (deployed on Railway → `https://ghost-backend-production-adb6.up.railway.app`)
 **Frontend repo:** https://github.com/DJStevenA/steven-angel-website (deployed on Netlify → `https://steven-angel.com`)
 
@@ -119,36 +119,48 @@ index      206.88 KB
 
 ---
 
-## 🟡 IN PROGRESS
-
-### Phase 5 — Cloudflare R2 asset hosting (BLOCKED on Steven's R2 credentials)
-See "PENDING" below.
+### Phase 5 — Cloudflare R2 plumbing (backend commit `3ff5728`, frontend commit `a22af0b`)
+- **Credentials received, verified, and live on Railway:**
+  - `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT`, `R2_BUCKET` set via `railway variables --set`
+  - Also set a strong `JWT_SECRET` (64-byte hex) so the backend stops using the dev fallback
+  - Bucket name: `steven-angel-shop`
+  - Endpoint: `https://168da92bc19100644a5b866992180bd7.r2.cloudflarestorage.com`
+- **Backend (`shop.js`):**
+  - Imports `@aws-sdk/client-s3` + `@aws-sdk/s3-request-presigner`
+  - Lazy `S3Client` — only instantiated if all 4 R2 vars exist, otherwise `/shop/download/*` returns 503
+  - `SHOP_PRODUCTS` now carries `r2Key` + `downloadFilename` per product (6 keys under `products/*.zip`)
+  - **`GET /shop/download/:productId`** (requires auth):
+    - 404 unknown product
+    - 403 if `hasUserPurchasedProduct` returns nothing
+    - 503 if R2 not configured or `HeadObject` fails (catches "forgot to upload")
+    - Otherwise returns `{ downloadUrl, expiresInSeconds: 900, filename }` with a signed GET URL
+    - Sets `ResponseContentDisposition` so browsers save with a clean filename (e.g. `El-Barrio-Ableton-Template-Steven-Angel.zip`) instead of the opaque R2 key
+- **Frontend (`AccountPage.jsx`):**
+  - Download button removed the alert stub
+  - Hits `/shop/download/:productId`, opens signed URL in new tab (`noopener`)
+  - Per-purchase loading state (`downloadingId`), shared error banner above the list
+- **Scripts (manual, not imported by server):**
+  - `scripts/test-r2.js` — one-shot E2E sanity test (Head → Put → Sign → Get → Delete). Verified working against live bucket.
+  - `scripts/generate-manifest.js` — walks a source dir (e.g. the Dropbox folder), builds `upload-manifest.json` by matching filenames against known product IDs
+  - `scripts/upload-products.js` — multipart uploader using `@aws-sdk/lib-storage`, with progress logs and resume (skips files already in R2 with matching size)
+- **Verified live against Railway (after 70s deploy):**
+  - `/shop/download/el-barrio` no auth → 401 ✓
+  - `/shop/download/el-barrio` with fresh signup → 403 "You don't own this product" ✓
+  - `/shop/download/bogus-product` with auth → 404 "Unknown product" ✓
+  - `/contact` still 400 (untouched) ✓
+- **R2 env vars also configured on Railway via CLI in the same go:** `JWT_SECRET` (64-byte random hex) now set, backend no longer warns about dev fallback
+- **What's NOT done yet (blocked):** Uploading the actual ZIPs, masterclass video, and audio previews. The Dropbox folder `/Ghost Tracks templates sample packs/` is not locally synced — selective sync needs to be enabled before I can run `upload-products.js`.
 
 ---
 
 ## ⬜ PENDING (waiting on Steven)
 
-### Steven needs to:
-1. **Add `JWT_SECRET` to Railway env vars** (already generated, saved in Steven's Dropbox shop folder)
-2. **Send Cloudflare R2 credentials:**
-   - R2_ACCESS_KEY_ID
-   - R2_SECRET_ACCESS_KEY
-   - R2_ENDPOINT (`https://168da92bc19100644a5b866992180bd7.r2.cloudflarestorage.com`)
-   - R2_BUCKET (`steven-angel-shop` recommended)
-   - R2_PUBLIC_URL (`https://pub-XXX.r2.dev`)
-   - Full step-by-step guide in chat history
-3. **Fill in `bpm` and `musicalKey` for each product** in `src/shop/products.js` (currently `null`, marked with `TODO Steven` comments)
-4. **Approve final design** (Box3D artwork is "good enough for now" per Steven, will revisit with real photos later)
-5. **Provide cover image graphics** (or approve approach: real photos from Pexels/Unsplash). Full text spec for each product is in chat history (sizes 1080×1350, file naming convention `{product-slug}-cover.jpg`, target folder `/public/shop/`)
-
-### After Steven sends R2 credentials, I'll do Phase 5:
-- Upload all 6 product ZIP files (~3.85 GB total) to R2
-- Upload masterclass intro video (105 MB → 30 MB after ffmpeg compression — `/tmp/ffmpeg` is already downloaded)
-- Upload 6 audio preview MP3 files
-- Replace `dropboxPath` with `r2Key` in `products.js`
-- Wire `audioUrl` and `previewVideoUrl` (for masterclass) to public R2 URLs
-- Add backend endpoint `GET /shop/download/:productId` that returns a 15-minute signed R2 URL — only for users who have a `paid` purchase for that product
-- This **REPLACES the entire Phase 5 (Dropbox OAuth)** that was originally planned. R2 is better in every way.
+### Blocked on Steven:
+1. **Enable Dropbox Selective Sync** on the `Ghost Tracks templates sample packs` folder so the 6 product ZIPs (~3.85 GB) are visible locally. Once they are, I'll run `scripts/generate-manifest.js` + `scripts/upload-products.js` to push everything into R2.
+2. **Fill `bpm` and `musicalKey`** for each product in `src/shop/products.js` (6 × `// TODO Steven` comments)
+3. **Approve or provide cover images** — the Pexels/Unsplash spec I sent earlier, 6 × 1080×1350 JPG, to be dropped into `public/shop/` with the documented filenames
+4. **(Optional) 3D Box upgrade decision** — Steven chose Option C (keep Box3D, add real photos). No code change needed, just images.
+5. **(Blocked on data from Steven) 6 Clarity JS errors** — need the actual error messages from the Clarity dashboard before I can triage
 
 ---
 
