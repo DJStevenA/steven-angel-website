@@ -4,11 +4,18 @@
  * Used by both ProductCard.jsx (in the shop grid) and ProductPage.jsx (per-product page).
  *
  * Renders a perspective-transformed box with:
- *   - Front face: full-bleed GenreArtwork SVG cover + name overlay + spine logo
+ *   - Front face: full-bleed cover artwork + name overlay + spine logo
+ *     → uses `product.coverImageUrl` if set (real photo), otherwise falls back
+ *       to the procedural `GenreArtwork` SVG
  *   - Left spine face: vertical product name (the "VHS spine" effect)
  *   - Top edge highlight + drop shadow under the box
  *
- * GenreArtwork picks the right SVG cover based on product.type and product.genre:
+ * To use a real cover image: set `coverImageUrl` on the product in products.js
+ * (e.g. `coverImageUrl: "/shop/el-barrio-cover.jpg"`). The image should be
+ * 1080×1350 or 1080×1080, with the bottom 30% dark enough for the title and
+ * "By Steven Angel" overlay to read in white.
+ *
+ * GenreArtwork (fallback) picks the right SVG cover based on product.type and genre:
  *   - "course" → masterclass (Afro House dancer with raised arms + small play badge)
  *   - "techno" → Melodic Techno cosmic landscape (mountains, sun rings, stars)
  *   - default → Afro House mask + tribal sun
@@ -384,13 +391,29 @@ export default function Box3D({ product, isPurple, accentColor, accentRgba, isMo
           }}
         >
           <div style={{ position: "absolute", inset: 0 }}>
-            <GenreArtwork
-              product={product}
-              accentColor={accentColor}
-              accentRgba={accentRgba}
-              isPurple={isPurple}
-              isMobile={isMobile}
-            />
+            {product.coverImageUrl ? (
+              <img
+                src={product.coverImageUrl}
+                alt={product.name}
+                loading="lazy"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+              />
+            ) : (
+              <GenreArtwork
+                product={product}
+                accentColor={accentColor}
+                accentRgba={accentRgba}
+                isPurple={isPurple}
+                isMobile={isMobile}
+              />
+            )}
           </div>
 
           {/* Top tag */}

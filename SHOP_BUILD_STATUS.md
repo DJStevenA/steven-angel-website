@@ -1,6 +1,6 @@
 # Shop Build Status — Steven Angel
 
-**Last updated:** 2026-04-09 (Phase 5 plumbing deployed — R2 download endpoint live, waiting on source files)
+**Last updated:** 2026-04-09 (Phase 5 plumbing deployed + Dropbox→R2 migration script ready — only data upload remaining)
 **Backend repo:** https://github.com/DJStevenA/ghost-backend (deployed on Railway → `https://ghost-backend-production-adb6.up.railway.app`)
 **Frontend repo:** https://github.com/DJStevenA/steven-angel-website (deployed on Netlify → `https://steven-angel.com`)
 
@@ -149,18 +149,39 @@ index      206.88 KB
   - `/shop/download/bogus-product` with auth → 404 "Unknown product" ✓
   - `/contact` still 400 (untouched) ✓
 - **R2 env vars also configured on Railway via CLI in the same go:** `JWT_SECRET` (64-byte random hex) now set, backend no longer warns about dev fallback
-- **What's NOT done yet (blocked):** Uploading the actual ZIPs, masterclass video, and audio previews. The Dropbox folder `/Ghost Tracks templates sample packs/` is not locally synced — selective sync needs to be enabled before I can run `upload-products.js`.
+### Phase 5.5 — Dropbox→R2 migration script (commit TBD)
+- **`scripts/dropbox-to-r2.js`** — streams each of the 6 product ZIPs directly from Dropbox (via existing `DROPBOX_TOKEN`) into R2 multipart upload. Zero intermediate disk/memory overhead (native https → S3 Upload stream pipe). Resume-safe via R2 HeadObject + size check.
+- **Why this exists:** The Dropbox folder `/Ghost Tracks templates sample packs/` is not locally synced (selective sync off). Rather than waiting for Steven to enable sync + run locally, this script runs in any environment with both `DROPBOX_TOKEN` and the 4 R2 vars — ideally on Railway itself so the ~3.85 GB transfer happens in a datacenter, not over Steven's home internet.
+- **How to run (next session):**
+  ```bash
+  # Option A: run on Railway (recommended — no local bandwidth cost)
+  railway run --service ghost-backend node scripts/dropbox-to-r2.js
+
+  # Option B: run locally if all 5 env vars are present in your shell
+  DROPBOX_TOKEN=... R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... \
+    R2_ENDPOINT=... R2_BUCKET=steven-angel-shop \
+    node scripts/dropbox-to-r2.js
+  ```
+- Uses the canonical dropbox paths from the original `products.js` dropboxPath field. Must stay in sync with both SHOP_PRODUCTS in shop.js and the actual Dropbox folder structure — if Steven ever moves a file, update the `MIGRATIONS[]` array at the top of the script.
+
+### Phase 5.6 — Box3D coverImageUrl prop (commit TBD)
+- `Box3D.jsx` now checks `product.coverImageUrl` first, falling back to `GenreArtwork` SVG if none is set
+- Lets Steven drop real photos into `public/shop/` and just add `coverImageUrl: "/shop/el-barrio-cover.jpg"` to products.js — zero code changes, zero deploy coordination
+- Fallback verified in preview: the Afro House Masterclass card still renders the procedural SVG because no coverImageUrl is set yet
 
 ---
 
-## ⬜ PENDING (waiting on Steven)
+## ⬜ PENDING
+
+### Immediate next session (can be done without Steven):
+1. **Run `scripts/dropbox-to-r2.js` on Railway** to upload the 6 product ZIPs (~3.85 GB total) into the R2 bucket. This completes Phase 5 technically — after this, the Download buttons on /shop/account will serve real files to paying users.
+2. **After upload completes, verify** by signing up a test user, creating + capturing a sandbox PayPal purchase, then hitting `/shop/download/el-barrio` to confirm the signed URL works.
 
 ### Blocked on Steven:
-1. **Enable Dropbox Selective Sync** on the `Ghost Tracks templates sample packs` folder so the 6 product ZIPs (~3.85 GB) are visible locally. Once they are, I'll run `scripts/generate-manifest.js` + `scripts/upload-products.js` to push everything into R2.
-2. **Fill `bpm` and `musicalKey`** for each product in `src/shop/products.js` (6 × `// TODO Steven` comments)
-3. **Approve or provide cover images** — the Pexels/Unsplash spec I sent earlier, 6 × 1080×1350 JPG, to be dropped into `public/shop/` with the documented filenames
-4. **(Optional) 3D Box upgrade decision** — Steven chose Option C (keep Box3D, add real photos). No code change needed, just images.
-5. **(Blocked on data from Steven) 6 Clarity JS errors** — need the actual error messages from the Clarity dashboard before I can triage
+1. **Fill `bpm` and `musicalKey`** for each product in `src/shop/products.js` (6 × `// TODO Steven` comments) — purely SEO/display, not blocking checkout
+2. **Provide or approve cover images** — 6 × 1080×1350 JPG, filenames and spec in earlier chat. Drop into `public/shop/` and add `coverImageUrl` to products.js. Fallback SVG looks fine for launch.
+3. **(Blocked on data from Steven) 6 Clarity JS errors** — need the actual error messages from the Clarity dashboard
+4. **Post-launch: masterclass intro video + 6 audio previews** — separate R2 keys, can reuse the same upload script by adding entries
 
 ---
 
