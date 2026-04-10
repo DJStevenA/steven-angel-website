@@ -70,8 +70,8 @@ export const PRODUCTS = [
       "Lifetime access to updates",
     ],
     image: "/shop/masterclass-thumb.webp", // created in Phase 6
-    previewVideoUrl: null, // intro/sales video — pending ffmpeg compression or R2
-    audioUrl: null, // local MP3 to be added (Jungle Walk preview)
+    previewVideoUrl: null, // TODO: wire masterclass intro video from R2 (video/masterclass-intro.mp4)
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/jungle-walk.mp3",
     dropboxPath: "/On Line Lessons/Afro House Master Class/Afro House MasterClass - DL PACK.zip",
     fileSize: "237 MB",
     // SEO tags shown as pills under the buy button — high-value search terms
@@ -131,7 +131,7 @@ export const PRODUCTS = [
     ],
     image: "/shop/balkan-boy-thumb.webp",
     previewVideoUrl: null,
-    audioUrl: null,
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/balkan-boy.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/Balkan Boy/Balkan Boy_Ableton Template By Steven Angel.zip",
     fileSize: "269 MB",
@@ -191,7 +191,7 @@ export const PRODUCTS = [
     ],
     image: "/shop/maria-maria-thumb.webp",
     previewVideoUrl: null,
-    audioUrl: null,
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/maria-maria.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/2024/Maria Maria/The Angels - Maria Maria (Afro House Remix) Project.zip",
     fileSize: "883 MB",
@@ -257,7 +257,7 @@ export const PRODUCTS = [
     previewVideoUrl: "/videos/hugel-claptone-ibiza.mp4",
     previewVideoThumb: "/images/pacha-ibiza-thumb.webp",
     previewVideoCaption: "Hugel & Claptone playing El Barrio at Pacha Ibiza",
-    audioUrl: null,
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/el-barrio.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/El Barrio/The Angels - El Bario Ableton Template Project.zip",
     fileSize: "429 MB",
@@ -318,8 +318,8 @@ export const PRODUCTS = [
       "Royalty-free samples",
     ],
     image: "/shop/solomun-arabian-thumb.webp",
-    previewVideoUrl: null,
-    audioUrl: null,
+    previewVideoUrl: null, // TODO: wire solomun preview video from R2 (video/solomun-preview.mp4)
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/solomun-arabian.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/For IN SOUND/SOLOMUN/Solomun Melodic Techno Project.zip",
     fileSize: "737 MB",
@@ -383,7 +383,7 @@ export const PRODUCTS = [
     ],
     image: "/shop/mega-bundle-thumb.webp",
     previewVideoUrl: null,
-    audioUrl: null,
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/mega-bundle.mp3",
     dropboxPath: "/Ghost Tracks templates sample packs/For IN SOUND/MELODIC TECHNO/Mega_Bundle_Pack.zip",
     fileSize: "1.29 GB",
     seoTags: [
