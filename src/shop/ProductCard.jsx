@@ -118,12 +118,9 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
  *   └─────────────────────────┘
  */
 export default function ProductCard({ product, isMobile, onBuy }) {
-  const [videoPlaying, setVideoPlaying] = useState(false);
-
   const isPurple = product.badgeColor === "purple";
   const accentColor = isPurple ? PURPLE : CYAN;
   const accentRgba = isPurple ? "187,134,252" : "0,229,255";
-  const hasVideo = !!product.previewVideoUrl;
 
   return (
     <div
@@ -166,149 +163,29 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </div>
       )}
 
-      {/* Product cover — video player OR Box3D mockup */}
-      {hasVideo ? (
-        <div
+      {/* Product cover — always show the 3D box image (consistent grid) */}
+      <Link
+        to={`/shop/${product.slug}`}
+        style={{
+          display: "block",
+          marginBottom: 18,
+          marginTop: product.badge ? 8 : 0,
+          textDecoration: "none",
+          color: "inherit",
+        }}
+      >
+        <img
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
           style={{
             width: "100%",
-            aspectRatio: "1/1",
-            background: "#06060f",
-            borderRadius: 8,
-            marginBottom: 18,
-            marginTop: product.badge ? 8 : 0,
-            overflow: "hidden",
-            position: "relative",
-            border: `1px solid rgba(${accentRgba},0.3)`,
-            cursor: videoPlaying ? "default" : "pointer",
-          }}
-          onClick={() => !videoPlaying && setVideoPlaying(true)}
-        >
-          {videoPlaying ? (
-            <video
-              src={product.previewVideoUrl}
-              controls
-              autoPlay
-              playsInline
-              preload="metadata"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-          ) : (
-            <>
-              {product.previewVideoThumb && (
-                <img
-                  src={product.previewVideoThumb}
-                  alt={product.previewVideoCaption || product.name}
-                  loading="lazy"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    opacity: 0.78,
-                  }}
-                />
-              )}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  top: 14,
-                  left: 14,
-                  fontFamily: "Barlow Condensed, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 9,
-                  letterSpacing: "0.25em",
-                  textTransform: "uppercase",
-                  color: accentColor,
-                  padding: "3px 10px",
-                  border: `1px solid ${accentColor}`,
-                  borderRadius: 12,
-                  background: "rgba(0,0,0,0.5)",
-                  backdropFilter: "blur(4px)",
-                }}
-              >
-                Watch
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: 64,
-                  height: 64,
-                  borderRadius: "50%",
-                  background: `${accentColor}E6`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: `0 0 32px rgba(${accentRgba},0.6)`,
-                }}
-              >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="#000">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: "16px 14px",
-                  fontFamily: "Barlow Condensed, sans-serif",
-                  fontWeight: 700,
-                  fontSize: isMobile ? 12 : 13,
-                  letterSpacing: "0.05em",
-                  color: "#fff",
-                  textShadow: "0 2px 8px rgba(0,0,0,0.8)",
-                  textAlign: "center",
-                  lineHeight: 1.3,
-                }}
-              >
-                {product.previewVideoCaption || product.name}
-              </div>
-            </>
-          )}
-        </div>
-      ) : (
-        <Link
-          to={`/shop/${product.slug}`}
-          style={{
+            height: "auto",
             display: "block",
-            marginBottom: 18,
-            marginTop: product.badge ? 8 : 0,
-            textDecoration: "none",
-            color: "inherit",
+            borderRadius: 6,
           }}
-        >
-          <img
-            src={product.image}
-            alt={product.name}
-            loading="lazy"
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-              borderRadius: 6,
-            }}
-          />
-        </Link>
-      )}
+        />
+      </Link>
 
       {/* Genre · DAW · BPM · Key label */}
       <div style={{ ...label(accentColor), marginBottom: 8, lineHeight: 1.4 }}>

@@ -270,19 +270,34 @@ export default function ProductPage() {
               alignItems: "start",
             }}
           >
-            {/* Left: Visual (video player or 3D box) */}
+            {/* Left: 3D box image + optional video below */}
             <div style={{ minWidth: 0 }}>
-              {hasVideo ? (
+              {/* Always show 3D box render */}
+              <img
+                src={product.image}
+                alt={product.name}
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  borderRadius: 8,
+                }}
+              />
+
+              {/* Video player below the box (if product has a preview video) */}
+              {hasVideo && (
                 <div
                   style={{
                     width: "100%",
-                    aspectRatio: "1/1",
+                    aspectRatio: "16/9",
                     background: "#06060f",
-                    borderRadius: 12,
+                    borderRadius: 10,
                     overflow: "hidden",
                     position: "relative",
                     border: `1px solid rgba(${accentRgba},0.3)`,
                     cursor: videoPlaying ? "default" : "pointer",
+                    marginTop: 16,
                   }}
                   onClick={() => !videoPlaying && setVideoPlaying(true)}
                 >
@@ -314,7 +329,7 @@ export default function ProductPage() {
                             width: "100%",
                             height: "100%",
                             objectFit: "cover",
-                            opacity: 0.78,
+                            opacity: 0.75,
                           }}
                         />
                       )}
@@ -323,46 +338,26 @@ export default function ProductPage() {
                           position: "absolute",
                           inset: 0,
                           background:
-                            "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)",
+                            "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.8) 100%)",
                         }}
                       />
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: 18,
-                          left: 18,
-                          fontFamily: "Barlow Condensed, sans-serif",
-                          fontWeight: 700,
-                          fontSize: 10,
-                          letterSpacing: "0.25em",
-                          textTransform: "uppercase",
-                          color: accentColor,
-                          padding: "4px 12px",
-                          border: `1px solid ${accentColor}`,
-                          borderRadius: 12,
-                          background: "rgba(0,0,0,0.5)",
-                          backdropFilter: "blur(4px)",
-                        }}
-                      >
-                        Watch
-                      </div>
                       <div
                         style={{
                           position: "absolute",
                           top: "50%",
                           left: "50%",
                           transform: "translate(-50%, -50%)",
-                          width: 80,
-                          height: 80,
+                          width: 56,
+                          height: 56,
                           borderRadius: "50%",
                           background: `${accentColor}E6`,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          boxShadow: `0 0 40px rgba(${accentRgba},0.7)`,
+                          boxShadow: `0 0 32px rgba(${accentRgba},0.6)`,
                         }}
                       >
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="#000">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#000">
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </div>
@@ -372,10 +367,10 @@ export default function ProductPage() {
                           bottom: 0,
                           left: 0,
                           right: 0,
-                          padding: "20px 18px",
+                          padding: "14px 14px",
                           fontFamily: "Barlow Condensed, sans-serif",
                           fontWeight: 700,
-                          fontSize: isMobile ? 13 : 15,
+                          fontSize: isMobile ? 11 : 13,
                           letterSpacing: "0.05em",
                           color: "#fff",
                           textShadow: "0 2px 8px rgba(0,0,0,0.8)",
@@ -388,18 +383,6 @@ export default function ProductPage() {
                     </>
                   )}
                 </div>
-              ) : (
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  loading="lazy"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    display: "block",
-                    borderRadius: 8,
-                  }}
-                />
               )}
             </div>
 
