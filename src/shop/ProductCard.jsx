@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import Box3D from "./Box3D.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -297,12 +296,16 @@ export default function ProductCard({ product, isMobile, onBuy }) {
             color: "inherit",
           }}
         >
-          <Box3D
-            product={product}
-            isPurple={isPurple}
-            accentColor={accentColor}
-            accentRgba={accentRgba}
-            isMobile={isMobile}
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              borderRadius: 6,
+            }}
           />
         </Link>
       )}

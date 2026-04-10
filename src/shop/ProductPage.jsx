@@ -21,7 +21,6 @@ import {
   getOrderedProducts,
   getProductSpecs,
 } from "./products.js";
-import Box3D from "./Box3D.jsx";
 import CheckoutModal from "./CheckoutModal.jsx";
 
 const CYAN = "#00E5FF";
@@ -390,12 +389,16 @@ export default function ProductPage() {
                   )}
                 </div>
               ) : (
-                <Box3D
-                  product={product}
-                  isPurple={isPurple}
-                  accentColor={accentColor}
-                  accentRgba={accentRgba}
-                  isMobile={isMobile}
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  loading="lazy"
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "block",
+                    borderRadius: 8,
+                  }}
                 />
               )}
             </div>

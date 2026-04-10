@@ -32,6 +32,7 @@ export const PRODUCTS = [
     currency: "USD",
     badge: "BEST SELLER",
     badgeColor: "purple", // "cyan" | "purple" | null
+    label: "GODEEVA", // record label — shown on box cover
     genre: "Afro House",
     daw: "Ableton Live",
     bpm: null, // TODO Steven: fill in actual BPM
@@ -69,7 +70,7 @@ export const PRODUCTS = [
       "Serum presets included",
       "Lifetime access to updates",
     ],
-    image: "/shop/masterclass-thumb.webp", // created in Phase 6
+    image: "/shop/masterclass-cover.png",
     previewVideoUrl: null, // TODO: wire masterclass intro video from R2 (video/masterclass-intro.mp4)
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/jungle-walk.mp3",
     dropboxPath: "/On Line Lessons/Afro House Master Class/Afro House MasterClass - DL PACK.zip",
@@ -129,7 +130,7 @@ export const PRODUCTS = [
       "269 MB sample pack included",
       "Royalty-free for commercial release",
     ],
-    image: "/shop/balkan-boy-thumb.webp",
+    image: "/shop/balkan-boy-cover.png",
     previewVideoUrl: null,
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/balkan-boy.mp3",
     dropboxPath:
@@ -189,7 +190,7 @@ export const PRODUCTS = [
       "Full mixdown",
       "Royalty-free production rights",
     ],
-    image: "/shop/maria-maria-thumb.webp",
+    image: "/shop/maria-maria-cover.png",
     previewVideoUrl: null,
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/maria-maria.mp3",
     dropboxPath:
@@ -219,6 +220,7 @@ export const PRODUCTS = [
     currency: "USD",
     badge: "PLAYED BY HUGEL & CLAPTONE",
     badgeColor: "cyan",
+    label: "MTGD", // record label — shown on box cover
     genre: "Afro House",
     daw: "Ableton Live 11",
     bpm: null, // TODO Steven
@@ -253,7 +255,7 @@ export const PRODUCTS = [
       "Drum programming & bassline",
       "Vocal chops & full mixdown",
     ],
-    image: "/shop/el-barrio-thumb.webp",
+    image: "/shop/el-barrio-cover.png",
     previewVideoUrl: "/videos/hugel-claptone-ibiza.mp4",
     previewVideoThumb: "/images/pacha-ibiza-thumb.webp",
     previewVideoCaption: "Hugel & Claptone playing El Barrio at Pacha Ibiza",
@@ -317,7 +319,7 @@ export const PRODUCTS = [
       "All presets included",
       "Royalty-free samples",
     ],
-    image: "/shop/solomun-arabian-thumb.webp",
+    image: "/shop/solomun-arabian-cover.png",
     previewVideoUrl: null, // TODO: wire solomun preview video from R2 (video/solomun-preview.mp4)
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/solomun-arabian.mp3",
     dropboxPath:
@@ -381,7 +383,7 @@ export const PRODUCTS = [
       "Curated sample pack included",
       "Serum & Diva presets",
     ],
-    image: "/shop/mega-bundle-thumb.webp",
+    image: "/shop/mega-bundle-cover.png",
     previewVideoUrl: null,
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/mega-bundle.mp3",
     dropboxPath: "/Ghost Tracks templates sample packs/For IN SOUND/MELODIC TECHNO/Mega_Bundle_Pack.zip",
