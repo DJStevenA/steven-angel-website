@@ -138,13 +138,12 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         minWidth: 0,
       }}
     >
-      {/* Badge — top-left */}
+      {/* Badge — top-left (inside the card, not overlapping the border) */}
       {product.badge && (
         <div
           style={{
-            position: "absolute",
-            top: -10,
-            left: isMobile ? 12 : 20,
+            display: "inline-block",
+            alignSelf: "flex-start",
             background: isPurple
               ? `linear-gradient(90deg, ${PURPLE}, ${CYAN})`
               : `rgba(${accentRgba},0.15)`,
@@ -154,9 +153,10 @@ export default function ProductCard({ product, isMobile, onBuy }) {
             fontWeight: 700,
             fontSize: isMobile ? 9 : 10,
             letterSpacing: isMobile ? "0.12em" : "0.2em",
-            padding: "3px 12px",
+            padding: "4px 14px",
             borderRadius: 20,
             whiteSpace: "nowrap",
+            marginBottom: 8,
           }}
         >
           {product.badge}
@@ -169,7 +169,6 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         style={{
           display: "block",
           marginBottom: 18,
-          marginTop: product.badge ? 8 : 0,
           textDecoration: "none",
           color: "inherit",
         }}
