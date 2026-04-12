@@ -71,7 +71,7 @@ export const PRODUCTS = [
       "Lifetime access to updates",
     ],
     image: "/shop/masterclass-cover.webp",
-    previewVideoUrl: null, // TODO: wire masterclass intro video from R2 (video/masterclass-intro.mp4)
+    previewVideoUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/video/masterclass-intro.mp4",
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/jungle-walk.mp3",
     dropboxPath: "/On Line Lessons/Afro House Master Class/Afro House MasterClass - DL PACK.zip",
     fileSize: "237 MB",
