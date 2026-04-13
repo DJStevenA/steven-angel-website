@@ -1,5 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 
+/* ─── Google Ads conversion helper ─── */
+const fireWhatsAppConversion = () => { if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-999991173/b8BYCIHTmJIcEIXP6twD', 'value': 300.0, 'currency': 'USD' }); };
+
 /* ─── Color Constants ─── */
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -574,7 +577,7 @@ function GhostPage() {
       {/* ═══ Fixed WhatsApp Button ═══ */}
       <a
         href={WHATSAPP_LINK}
-        onClick={() => { if (window.clarity) window.clarity("event", "ghostWhatsAppClick"); }}
+        onClick={() => { fireWhatsAppConversion(); if (window.clarity) window.clarity("event", "ghostWhatsAppClick"); }}
         target="_blank"
         rel="noreferrer"
         style={{
@@ -1474,6 +1477,7 @@ function GhostPage() {
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={fireWhatsAppConversion}
                   style={{ color: CYAN, textDecoration: "underline" }}
                 >
                   ask me
@@ -2007,6 +2011,7 @@ function GhostPage() {
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={fireWhatsAppConversion}
                   style={{
                     display: "flex",
                     alignItems: "center",

@@ -1,6 +1,10 @@
 import { useEffect, useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 
+/* ── Google Ads conversion helpers ── */
+const fireCalendlyConversion = () => { if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-999991173/LFPzCO2VyJQBEIXP6twD', 'value': 300.0, 'currency': 'USD' }); };
+const fireWhatsAppConversion = () => { if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-999991173/b8BYCIHTmJIcEIXP6twD', 'value': 300.0, 'currency': 'USD' }); };
+
 /* ── image paths ── */
 const PORTRAIT = "/images/portrait.webp";
 const OUTDOOR  = "/images/outdoor.webp";
@@ -165,7 +169,7 @@ export default function App() {
         href="https://wa.me/972523561353"
         target="_blank"
         rel="noreferrer"
-        onClick={() => { if (window.clarity) window.clarity("event", "homeWhatsAppClick"); }}
+        onClick={() => { fireWhatsAppConversion(); if (window.clarity) window.clarity("event", "homeWhatsAppClick"); }}
         style={{
           position: "fixed",
           bottom: 24,
@@ -205,7 +209,7 @@ export default function App() {
             return <a key={link} href={"#" + link.toLowerCase()} style={navStyle}>{link}</a>;
           })}
         </div>
-        <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", lineHeight: 1, border: "2px solid " + cyan, color: cyan, padding: "10px 22px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}>
+        <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" onClick={fireCalendlyConversion} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", lineHeight: 1, border: "2px solid " + cyan, color: cyan, padding: "10px 22px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}>
           FREE INTRO CALL
         </a>
       </nav>
@@ -257,7 +261,7 @@ export default function App() {
 
             <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
               <a href="#lessons" style={btn(cyan, glowCyan)}>SEE LESSONS</a>
-              <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "homeCalendlyClick"); }} style={btn(purple, glowPurple)}>BOOK FREE INTRO</a>
+              <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" onClick={() => { fireCalendlyConversion(); if (window.clarity) window.clarity("event", "homeCalendlyClick"); }} style={btn(purple, glowPurple)}>BOOK FREE INTRO</a>
               <Link to="/ghost" onClick={() => { if (window.clarity) window.clarity("event", "homeGhostClick"); }} style={btn("rgba(255,255,255,0.7)", "0 0 20px rgba(255,255,255,0.1)")}>ORDER GHOST PRODUCTION</Link>
             </div>
           </div>
@@ -394,7 +398,7 @@ export default function App() {
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: best ? cyan : "rgba(255,255,255,0.3)", marginBottom: 18 }}>{ph}</div>
                   <div style={{ ...body, fontSize: 13, marginBottom: 12, flexGrow: 1 }}>{d}</div>
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 16, fontStyle: "italic" }}>Limited spots available each month</div>
-                  <a href={calendlyUrl} target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "lessonBooking"); }} style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.5)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
+                  <a href={calendlyUrl} target="_blank" rel="noreferrer" onClick={() => { fireCalendlyConversion(); if (window.clarity) window.clarity("event", "lessonBooking"); }} style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.5)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
                 </div>
               ))}
             </div>
@@ -416,8 +420,8 @@ export default function App() {
             <div style={{ textAlign: "center", padding: "44px", background: "linear-gradient(135deg,#04040f,#0a0418)", border: "1px solid rgba(0,229,255,0.1)", borderRadius: 8, marginTop: 28 }}>
               <div style={{ ...heading(36), marginBottom: 24 }}>READY TO LEVEL UP YOUR SOUND?</div>
               <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-                <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={btn(cyan, glowCyan)}>BOOK FREE INTRO CALL</a>
-                <a href="https://wa.me/972523561353" target="_blank" rel="noreferrer" style={btn(purple, glowPurple)}>WHATSAPP ME</a>
+                <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" onClick={fireCalendlyConversion} style={btn(cyan, glowCyan)}>BOOK FREE INTRO CALL</a>
+                <a href="https://wa.me/972523561353" target="_blank" rel="noreferrer" onClick={fireWhatsAppConversion} style={btn(purple, glowPurple)}>WHATSAPP ME</a>
               </div>
             </div>
           </div>
@@ -449,7 +453,7 @@ export default function App() {
             {priceNote}
 
             <div style={{ textAlign: "center", marginTop: 28 }}>
-              <a href="https://wa.me/972523561353" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 32px", borderRadius: 50, textDecoration: "none" }}>
+              <a href="https://wa.me/972523561353" target="_blank" rel="noreferrer" onClick={fireWhatsAppConversion} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 32px", borderRadius: 50, textDecoration: "none" }}>
                 SEND ME YOUR TRACK →
               </a>
             </div>
@@ -527,7 +531,7 @@ export default function App() {
             </div>
 
             <div style={{ textAlign: "center", marginTop: 24 }}>
-              <a href="https://wa.me/972523561353" target="_blank" rel="noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 32px", borderRadius: 50, textDecoration: "none" }}>
+              <a href="https://wa.me/972523561353" target="_blank" rel="noreferrer" onClick={fireWhatsAppConversion} style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 32px", borderRadius: 50, textDecoration: "none" }}>
                 WHATSAPP ME YOUR REFERENCE TRACK →
               </a>
             </div>
@@ -788,7 +792,7 @@ export default function App() {
 
             <div style={{ display: "flex", justifyContent: "center", gap: 24 }}>
               {[["INSTAGRAM", "https://www.instagram.com/theangels_tlv/"], ["SOUNDCLOUD", "https://soundcloud.com/theangelsoflove"], ["WHATSAPP", "https://wa.me/972523561353"]].map(([lbl, href]) => (
-                <a key={lbl} href={href} target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "homeSocialClick"); window.clarity("set", "socialPlatform", lbl); }} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>{lbl}</a>
+                <a key={lbl} href={href} target="_blank" rel="noreferrer" onClick={() => { if (lbl === "WHATSAPP") fireWhatsAppConversion(); if (window.clarity) { window.clarity("event", "homeSocialClick"); window.clarity("set", "socialPlatform", lbl); } }} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>{lbl}</a>
               ))}
             </div>
           </div>
