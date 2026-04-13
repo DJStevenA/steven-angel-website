@@ -374,13 +374,21 @@ function GhostPage() {
   const [openFaq, setOpenFaq] = useState(null);
   const [howItWorksPackage, setHowItWorksPackage] = useState(null);
 
-  const openHowItWorks = (pkg) => setHowItWorksPackage(pkg);
+  const openHowItWorks = (pkg) => {
+    setHowItWorksPackage(pkg);
+    if (window.clarity) { window.clarity("event", "ghostPackageView"); window.clarity("set", "ghostPackage", pkg); }
+  };
 
   /* ── Responsive listener ── */
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* Clarity: track ghost page visit */
+  useEffect(() => {
+    if (window.clarity) window.clarity("event", "ghostPageVisit");
   }, []);
 
   /* SEO: page title, meta description, and canonical URL are handled
@@ -566,6 +574,7 @@ function GhostPage() {
       {/* ═══ Fixed WhatsApp Button ═══ */}
       <a
         href={WHATSAPP_LINK}
+        onClick={() => { if (window.clarity) window.clarity("event", "ghostWhatsAppClick"); }}
         target="_blank"
         rel="noreferrer"
         style={{
@@ -1580,6 +1589,7 @@ function GhostPage() {
                                   .forEach((a) => {
                                     if (a !== ev.target) a.pause();
                                   });
+                                if (window.clarity) { window.clarity("event", "ghostAudioPlay"); window.clarity("set", "audioTrack", title); }
                               }}
                             >
                               <source src={file} type="audio/mpeg" />
@@ -1611,6 +1621,7 @@ function GhostPage() {
                                   .forEach((a) => {
                                     if (a !== ev.target) a.pause();
                                   });
+                                if (window.clarity) { window.clarity("event", "ghostAudioPlay"); window.clarity("set", "audioTrack", sample.title || "unknown"); }
                               }}
                             >
                               <source
@@ -1764,7 +1775,7 @@ function GhostPage() {
                 }}
               >
                 <button
-                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  onClick={() => { setOpenFaq(openFaq === idx ? null : idx); if (window.clarity && openFaq !== idx) window.clarity("event", "ghostFaqOpen"); }}
                   style={{
                     width: "100%",
                     background: "none",
@@ -1861,6 +1872,7 @@ function GhostPage() {
                       if (d.success) {
                         alert("Message sent! I'll get back to you within 24 hours.");
                         form.reset();
+                        if (window.clarity) window.clarity("event", "ghostFormSubmit");
                         if (window.gtag) {
                           window.gtag('event', 'conversion', {
                             'send_to': 'AW-999991173',

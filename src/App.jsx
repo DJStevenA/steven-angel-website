@@ -165,6 +165,7 @@ export default function App() {
         href="https://wa.me/972523561353"
         target="_blank"
         rel="noreferrer"
+        onClick={() => { if (window.clarity) window.clarity("event", "homeWhatsAppClick"); }}
         style={{
           position: "fixed",
           bottom: 24,
@@ -256,8 +257,8 @@ export default function App() {
 
             <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
               <a href="#lessons" style={btn(cyan, glowCyan)}>SEE LESSONS</a>
-              <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={btn(purple, glowPurple)}>BOOK FREE INTRO</a>
-              <a href="#ghost" style={btn("rgba(255,255,255,0.7)", "0 0 20px rgba(255,255,255,0.1)")}>ORDER GHOST PRODUCTION</a>
+              <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "homeCalendlyClick"); }} style={btn(purple, glowPurple)}>BOOK FREE INTRO</a>
+              <a href="#ghost" onClick={() => { if (window.clarity) window.clarity("event", "homeGhostClick"); }} style={btn("rgba(255,255,255,0.7)", "0 0 20px rgba(255,255,255,0.1)")}>ORDER GHOST PRODUCTION</a>
             </div>
           </div>
         </section>
@@ -750,6 +751,7 @@ export default function App() {
                     if (d.success) {
                       alert("Message sent! I'll get back to you soon.");
                       form.reset();
+                      if (window.clarity) window.clarity("event", "homeContactSubmit");
                       if (window.gtag) {
                         window.gtag('event', 'conversion', {
                           'send_to': 'AW-999991173',
@@ -786,7 +788,7 @@ export default function App() {
 
             <div style={{ display: "flex", justifyContent: "center", gap: 24 }}>
               {[["INSTAGRAM", "https://www.instagram.com/theangels_tlv/"], ["SOUNDCLOUD", "https://soundcloud.com/theangelsoflove"], ["WHATSAPP", "https://wa.me/972523561353"]].map(([lbl, href]) => (
-                <a key={lbl} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>{lbl}</a>
+                <a key={lbl} href={href} target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "homeSocialClick"); window.clarity("set", "socialPlatform", lbl); }} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 11, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>{lbl}</a>
               ))}
             </div>
           </div>
