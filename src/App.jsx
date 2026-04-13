@@ -1,4 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 /* ── image paths ── */
 const PORTRAIT = "/images/portrait.jpg";
@@ -115,9 +116,9 @@ export default function App() {
     { name: "Mix + Master + Feedback",   price: "Starting from $350", badge: "MOST POPULAR", d: "Everything in Mix + Master — plus a detailed breakdown of every decision I made." },
   ];
 
-  const shopItems = [
-    { name: "Afro House MasterClass", sub: "Full Video Course on Udemy", d: "Learn the exact production method behind Beatport Top 10 releases — from sound design to arrangement to mixdown.", cta: "Get the MasterClass →", url: "https://www.udemy.com/course/the-complete-afro-house-production-masterclass/?referralCode=D9C3A8FE510B4125A5CB" },
-    { name: "Templates & Sample Packs", sub: "Instant Download", d: "Ableton templates & sample packs from actual label releases on Moblack and Sony — royalty free.", cta: "Browse the Shop →", url: "https://www.drop-edm.co.il/thedealer" },
+  const featuredProducts = [
+    { name: "Jungle Walk Masterclass", badge: "BEST SELLER", badgeColor: "purple", price: "$29", sub: "Full Video Course + Sample Pack", d: "60-minute masterclass behind a Beatport Top 10 track — 5 lessons, Ableton project, 100+ samples.", image: "/shop/masterclass-cover.webp", slug: "afro-house-masterclass-ableton-live-tutorial-jungle-walk" },
+    { name: "El Barrio", badge: "PLAYED BY HUGEL & CLAPTONE", badgeColor: "cyan", price: "$19.99", sub: "MTGD Release · Full Ableton Project", d: "The actual session behind the MTGD release played at Pacha Ibiza by Hugel & Claptone.", image: "/shop/el-barrio-cover.webp", slug: "afro-house-ableton-live-template-el-barrio-mtgd" },
   ];
 
   const testimonials = [
@@ -165,9 +166,11 @@ export default function App() {
           STEVEN <span style={{ color: cyan }}>ANGEL</span>
         </div>
         <div style={{ display: isMobile ? "none" : "flex", gap: 32, alignItems: "center" }}>
-          {["About", "Lessons", "Mix", "Ghost", "Shop", "Contact"].map((link) => (
-            <a key={link} href={"#" + link.toLowerCase()} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", lineHeight: 1 }}>{link}</a>
-          ))}
+          {["About", "Lessons", "Mix", "Ghost", "Shop", "Contact"].map((link) => {
+            const navStyle = { fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", lineHeight: 1 };
+            if (link === "Shop") return <Link key={link} to="/shop" style={navStyle}>{link}</Link>;
+            return <a key={link} href={"#" + link.toLowerCase()} style={navStyle}>{link}</a>;
+          })}
         </div>
         <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", lineHeight: 1, border: "2px solid " + cyan, color: cyan, padding: "10px 22px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}>
           FREE INTRO CALL
@@ -580,15 +583,66 @@ export default function App() {
               Ableton Templates · Sample Packs · Video Course — Instant Download
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,1fr)", gap: 16 }}>
-              {shopItems.map(({ name, sub, d, cta, url }) => (
-                <div key={name} style={{ padding: "28px 32px", background: "#04040f", border: "1px solid #141420", borderRadius: 8, display: "flex", flexDirection: "column" }}>
-                  <div style={{ ...heading(20), color: "#fff", marginBottom: sub ? 4 : 8 }}>{name}</div>
-                  {sub && <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 8 }}>{sub}</div>}
-                  <div style={{ ...body, fontSize: 13, marginBottom: 16, flexGrow: 1 }}>{d}</div>
-                  <a href={url} target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + cyan, color: cyan, boxShadow: "0 0 16px rgba(0,229,255,0.2)" }}>{cta}</a>
-                </div>
-              ))}
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
+              {featuredProducts.map(({ name, badge, badgeColor, price, sub, d, image, slug }) => {
+                const isPurple = badgeColor === "purple";
+                const accent = isPurple ? "#BB86FC" : cyan;
+                const accentRgba = isPurple ? "187,134,252" : "0,229,255";
+                return (
+                  <Link key={slug} to={`/shop/${slug}`} style={{ textDecoration: "none", color: "inherit" }}>
+                    <div style={{
+                      background: isPurple ? "linear-gradient(135deg,#0a0a20,#0d0418)" : "#04040f",
+                      border: `1px solid ${isPurple ? "#BB86FC" : "#141420"}`,
+                      borderTop: `2px solid ${accent}`,
+                      borderRadius: 10,
+                      padding: isMobile ? "20px 16px" : "24px 24px",
+                      display: "flex",
+                      flexDirection: "column",
+                      boxShadow: isPurple ? "0 0 40px rgba(187,134,252,0.1)" : "none",
+                      overflow: "hidden",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = `0 8px 32px rgba(${accentRgba},0.25)`; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = isPurple ? "0 0 40px rgba(187,134,252,0.1)" : "none"; }}
+                    >
+                      {badge && (
+                        <div style={{
+                          display: "inline-block", alignSelf: "flex-start",
+                          background: isPurple ? "linear-gradient(90deg, #BB86FC, #00E5FF)" : `rgba(${accentRgba},0.15)`,
+                          border: isPurple ? "none" : `1px solid ${accent}`,
+                          color: isPurple ? "#000" : accent,
+                          fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 9 : 10,
+                          letterSpacing: isMobile ? "0.12em" : "0.2em", padding: "4px 14px", borderRadius: 20, whiteSpace: "nowrap", marginBottom: 10,
+                        }}>{badge}</div>
+                      )}
+                      <img src={image} alt={name} loading="lazy" style={{ width: "100%", height: "auto", borderRadius: 6, marginBottom: 16 }} />
+                      <div style={{ ...heading(isMobile ? 20 : 22), color: "#fff", marginBottom: 4 }}>{name}</div>
+                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 8 }}>{sub}</div>
+                      <div style={{ ...body, fontSize: 13, marginBottom: 14, flexGrow: 1 }}>{d}</div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 28 : 32, color: accent, lineHeight: 1 }}>
+                          {price}<span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginLeft: 4, fontWeight: 600 }}>USD</span>
+                        </span>
+                        <span style={{
+                          fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase",
+                          color: accent, border: `1px solid ${accent}`, padding: "8px 18px", borderRadius: 50,
+                        }}>VIEW DETAILS</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Browse All Products CTA */}
+            <div style={{ textAlign: "center", marginTop: 32 }}>
+              <Link to="/shop" style={{
+                display: "inline-block", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.18em", textTransform: "uppercase",
+                background: `linear-gradient(135deg, ${cyan}, #00b8d4)`, color: "#000", padding: "15px 40px", borderRadius: 50, textDecoration: "none",
+                boxShadow: "0 0 28px rgba(0,229,255,0.4)",
+              }}>
+                Browse All Products →
+              </Link>
             </div>
           </div>
         </section>
