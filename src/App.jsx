@@ -258,7 +258,7 @@ export default function App() {
             <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
               <a href="#lessons" style={btn(cyan, glowCyan)}>SEE LESSONS</a>
               <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "homeCalendlyClick"); }} style={btn(purple, glowPurple)}>BOOK FREE INTRO</a>
-              <a href="#ghost" onClick={() => { if (window.clarity) window.clarity("event", "homeGhostClick"); }} style={btn("rgba(255,255,255,0.7)", "0 0 20px rgba(255,255,255,0.1)")}>ORDER GHOST PRODUCTION</a>
+              <Link to="/ghost" onClick={() => { if (window.clarity) window.clarity("event", "homeGhostClick"); }} style={btn("rgba(255,255,255,0.7)", "0 0 20px rgba(255,255,255,0.1)")}>ORDER GHOST PRODUCTION</Link>
             </div>
           </div>
         </section>
