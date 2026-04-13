@@ -143,6 +143,14 @@ export default function ProductPage() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  // Clarity: track product page view
+  useEffect(() => {
+    if (!product || !window.clarity) return;
+    window.clarity("event", "productView");
+    window.clarity("set", "product", product.name);
+    window.clarity("set", "productPrice", String(product.price));
+  }, [product]);
+
   // Set dynamic page title + meta description + canonical + JSON-LD
   useEffect(() => {
     if (!product) return;

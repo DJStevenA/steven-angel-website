@@ -53,6 +53,11 @@ export default function ShopPage() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  // Clarity: track shop page visit
+  useEffect(() => {
+    if (window.clarity) window.clarity("event", "shopVisit");
+  }, []);
+
   // Phase 4: Buy button opens the PayPal checkout modal
   const handleBuy = (product) => {
     setCheckoutProduct(product);

@@ -145,6 +145,11 @@ export default function CheckoutButton({ product, couponCode, onSuccess, onError
               if (!res.ok) {
                 throw new Error(json.error || "Failed to capture payment");
               }
+              // Clarity: track successful purchase
+              if (window.clarity) {
+                window.clarity("event", "purchaseComplete");
+                window.clarity("set", "purchaseProduct", product?.name || "unknown");
+              }
               if (onSuccess) onSuccess(json.purchase);
             } catch (err) {
               const msg = err.message || "Payment capture failed";

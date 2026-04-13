@@ -64,6 +64,14 @@ export default function CheckoutModal({ product, onClose }) {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  // Clarity: track checkout start + prioritize recording
+  useEffect(() => {
+    if (!window.clarity) return;
+    window.clarity("event", "checkoutStart");
+    window.clarity("set", "checkoutProduct", product.name);
+    window.clarity("upgrade", "checkout");
+  }, [product]);
+
   // Lock body scroll while modal is open
   useEffect(() => {
     const prev = document.body.style.overflow;

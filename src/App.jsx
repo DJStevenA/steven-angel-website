@@ -2,9 +2,9 @@ import { useEffect, useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 
 /* ── image paths ── */
-const PORTRAIT = "/images/portrait.jpg";
-const OUTDOOR  = "/images/outdoor.jpg";
-const STAGE    = "/images/stage.jpg";
+const PORTRAIT = "/images/portrait.webp";
+const OUTDOOR  = "/images/outdoor.webp";
+const STAGE    = "/images/stage.webp";
 
 /* ── Lazy YouTube embed component ── */
 function LazyYouTube({ id, title }) {
@@ -97,9 +97,9 @@ export default function App() {
   ];
 
   const pricing = [
-    { dur: "1 HOUR",  price: "$120", ph: "$120 / hr", best: false, badge: null,           d: "Perfect for a focused deep-dive — sound design, mixing, arrangement, or workflow." },
-    { dur: "3 HOURS", price: "$320", ph: "$107 / hr", best: true,  badge: "MOST POPULAR", d: "Build something from scratch and really get into it. Most popular for producers levelling up." },
-    { dur: "6 HOURS", price: "$580", ph: "$97 / hr",  best: false, badge: "BEST VALUE",   d: "Full intensive — multiple tracks, complete workflow overhaul, or accelerated progression." },
+    { dur: "1 HOUR",  price: "$120", ph: "$120 / hr", best: false, badge: null,           d: "Perfect for a focused deep-dive — sound design, mixing, arrangement, or workflow.", calendlyUrl: "https://calendly.com/dj-steven-angel/3hr-production-lesson-mentoring-prepaid-clone" },
+    { dur: "3 HOURS", price: "$320", ph: "$107 / hr", best: true,  badge: "MOST POPULAR", d: "Build something from scratch and really get into it. Most popular for producers levelling up.", calendlyUrl: "https://calendly.com/dj-steven-angel/3hrproduction-lesson-mentoring-prepaid-clone" },
+    { dur: "6 HOURS", price: "$580", ph: "$97 / hr",  best: false, badge: "BEST VALUE",   d: "Full intensive — multiple tracks, complete workflow overhaul, or accelerated progression.", calendlyUrl: "https://calendly.com/dj-steven-angel/3hr-production-lesson-mentoring-prepaid-clone-1" },
   ];
 
   const ghostPackages = [
@@ -159,6 +159,38 @@ export default function App() {
   /* ═══════════════════════  RENDER  ═══════════════════════ */
   return (
     <div style={{ background: "#000", color: "#fff", overflowX: "hidden" }}>
+
+      {/* ── Fixed WhatsApp Button ── */}
+      <a
+        href="https://wa.me/972523561353"
+        target="_blank"
+        rel="noreferrer"
+        style={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+          zIndex: 999,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          background: "#1a7a42",
+          color: "#fff",
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 700,
+          fontSize: isMobile ? 11 : 13,
+          letterSpacing: "0.15em",
+          padding: isMobile ? "10px 16px" : "12px 22px",
+          borderRadius: 50,
+          textDecoration: "none",
+          boxShadow: "0 4px 20px rgba(37,211,102,0.5)",
+        }}
+      >
+        <svg width={16} height={16} viewBox="0 0 24 24" fill="#fff">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          <path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L.057 23.882a.5.5 0 00.61.61l6.163-1.529A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.626 0 11.999 0zm.001 21.818a9.818 9.818 0 01-5.012-1.374l-.36-.214-3.724.924.942-3.626-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818S21.818 6.58 21.818 12c0 5.421-4.398 9.818-9.818 9.818z" />
+        </svg>
+        WhatsApp
+      </a>
 
       {/* ── NAV ── */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, display: "flex", justifyContent: "space-between", alignItems: "center", height: 64, padding: "0 48px", background: "rgba(0,0,0,0.9)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(255,255,255,0.06)", boxSizing: "border-box" }}>
@@ -230,6 +262,50 @@ export default function App() {
           </div>
         </section>
 
+        {/* ── ABOUT ── */}
+        <section id="about" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+          <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 48, alignItems: "center", marginBottom: 60 }}>
+            <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)", order: isMobile ? -1 : 0 }}>
+              <img
+                src={PORTRAIT}
+                alt="Steven Angel"
+                loading="lazy"
+                width="800"
+                height="903"
+                style={{ width: "100%", borderRadius: 12, objectFit: "cover", maxHeight: 480, display: "block" }}
+              />
+            </div>
+            <div>
+              <div style={{ ...label(cyan), marginBottom: 16 }}>ABOUT STEVEN</div>
+              <h2 style={{ ...heading(isMobile ? 28 : 40), marginBottom: 24 }}>
+                DJ, Producer &<br /><span style={{ color: cyan }}>Audio Engineer</span>
+              </h2>
+              <div style={{ ...body, marginBottom: 16 }}>
+                20+ years in electronic music. Signed to top labels, charted on Beatport, and played by the biggest names in the game.
+              </div>
+              <div style={{ ...body, marginBottom: 20 }}>
+                Also one half of{" "}
+                <a href="https://ra.co/dj/theangels" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none", fontWeight: 600 }}>The Angels</a>
+                {" "}&mdash; Hit #1 on iTunes Israel, 2 Beatport Top 10 releases, performed across the USA, Latin America & Europe. Find us on{" "}
+                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none", fontWeight: 600 }}>Spotify</a>
+                {" "}and{" "}
+                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none", fontWeight: 600 }}>Beatport</a>.
+              </div>
+              <div style={{ ...body }}>
+                I don't hide behind a marketplace. You know exactly who is making your track.
+              </div>
+            </div>
+          </div>
+
+          {/* Watch me play */}
+          <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+            <div style={{ ...label("rgba(255,255,255,0.25)"), marginBottom: 16, textAlign: "center" }}>WATCH ME PLAY</div>
+            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 10, overflow: "hidden", border: "1px solid rgba(187,134,252,0.12)" }}>
+              <LazyYouTube id="sPArmZafsX8" title="Steven Angel Live Set" />
+            </div>
+          </div>
+        </section>
+
         {/* ── CREDIBILITY / STATS BAR ── */}
         <div style={{ background: "#04040f", borderTop: "1px solid #0d0d18", borderBottom: "1px solid #0d0d18", padding: "28px 48px" }}>
           <div style={{ maxWidth: 1060, margin: "0 auto" }}>
@@ -270,47 +346,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── ABOUT ── */}
-        <section id="about" style={{ padding: isMobile ? "60px 20px" : "90px 60px", background: "#04040f" }}>
-          {/* Bio + portrait */}
-          <div style={{ maxWidth: 1060, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 72, alignItems: "center", marginBottom: 60 }}>
-            <div>
-              <div style={{ ...label(), marginBottom: 14 }}>ABOUT STEVEN</div>
-              <h2 style={{ ...heading(isMobile ? 28 : 44), marginBottom: 28 }}>
-                20 YEARS. SONY.<br />MOBLACK. BEATPORT TOP 10.<br /><span style={{ color: cyan }}>NOW TEACHING.</span>
-              </h2>
-              <div style={{ ...body, marginBottom: 16 }}>
-                Steven Angel is a DJ, Producer and Audio Engineer with over 20 years of experience. One half of the Afro-House duo <strong style={{ color: "#fff" }}>The Angels</strong>, and mastering engineer for the Swedish label HMWL.
-              </div>
-              <div style={{ ...body, marginBottom: 16 }}>
-                Released on <strong style={{ color: "#fff" }}>Sony, Ultra, Armada, MoBlack, Godeeva, MTGD</strong> and more. Worked with <strong style={{ color: "#fff" }}>Hernan Cattaneo, SKAZI, Hugel, Floyd Levine</strong> and DJ Chus.
-              </div>
-              <div style={{ ...body }}>
-                Gained over <span style={{ color: cyan, fontWeight: 600 }}>100M+ streams</span> worldwide. Teaching philosophy: <span style={{ color: cyan, fontWeight: 600 }}>Cut the Fat</span> — no theory overload, just what works on dancefloors.
-              </div>
-            </div>
-
-            <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid rgba(187,134,252,0.12)", order: isMobile ? -1 : 0 }}>
-              <img
-                src={PORTRAIT}
-                alt="Steven Angel DJ producer Tel Aviv"
-                loading="lazy"
-                width="800"
-                height="1000"
-                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%", display: "block", minHeight: isMobile ? 320 : 480 }}
-              />
-            </div>
-          </div>
-
-          {/* Watch me play */}
-          <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-            <div style={{ ...label("rgba(255,255,255,0.25)"), marginBottom: 16, textAlign: "center" }}>WATCH ME PLAY</div>
-            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 10, overflow: "hidden", border: "1px solid rgba(187,134,252,0.12)" }}>
-              <LazyYouTube id="sPArmZafsX8" title="Steven Angel Live Set" />
-            </div>
-          </div>
-        </section>
-
         {/* ── LESSONS ── */}
         <section id="lessons" style={{ padding: isMobile ? "60px 20px" : "90px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 1060, margin: "0 auto" }}>
@@ -348,7 +383,7 @@ export default function App() {
             {/* Pricing */}
             <div style={{ ...label(purple), textAlign: "center", marginBottom: 24 }}>PRICING</div>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 20, marginBottom: 8 }}>
-              {pricing.map(({ dur, price, ph, best, badge, d }) => (
+              {pricing.map(({ dur, price, ph, best, badge, d, calendlyUrl }) => (
                 <div key={dur} style={{ padding: 32, borderRadius: 8, position: "relative", background: best ? "linear-gradient(135deg,#0a0a20,#0d0418)" : "#04040f", border: best ? "2px solid " + cyan : "1px solid #141420", boxShadow: best ? "0 0 40px rgba(0,229,255,0.1)" : "none", display: "flex", flexDirection: "column" }}>
                   {badge && (
                     <div style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: "linear-gradient(90deg," + cyan + "," + purple + ")", color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.25em", padding: "4px 14px", borderRadius: 20, whiteSpace: "nowrap" }}>{badge}</div>
@@ -358,7 +393,7 @@ export default function App() {
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: best ? cyan : "rgba(255,255,255,0.3)", marginBottom: 18 }}>{ph}</div>
                   <div style={{ ...body, fontSize: 13, marginBottom: 12, flexGrow: 1 }}>{d}</div>
                   <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 16, fontStyle: "italic" }}>Limited spots available each month</div>
-                  <a href="https://calendly.com/dj-steven-angel/15-min-zoom" target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.5)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
+                  <a href={calendlyUrl} target="_blank" rel="noreferrer" onClick={() => { if (window.clarity) window.clarity("event", "lessonBooking"); }} style={{ display: "block", textAlign: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 20px", borderRadius: 50, textDecoration: "none", border: "2px solid " + (best ? cyan : "rgba(255,255,255,0.5)"), color: best ? cyan : "rgba(255,255,255,0.45)", boxShadow: best ? "0 0 20px rgba(0,229,255,0.3)" : "none" }}>BOOK NOW</a>
                 </div>
               ))}
             </div>
