@@ -128,6 +128,89 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
   );
 }
 
+/* ─── SpecLine — single key:value row ─── */
+function SpecLine({ label: lbl, value, accentRgba }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "6px 0",
+        borderBottom: `1px solid rgba(${accentRgba},0.08)`,
+      }}
+    >
+      <span
+        style={{
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 700,
+          fontSize: 13,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "rgba(255,255,255,0.5)",
+        }}
+      >
+        {lbl}
+      </span>
+      <span
+        style={{
+          fontFamily: "DM Sans, sans-serif",
+          fontSize: 14,
+          color: "rgba(255,255,255,0.85)",
+        }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+/* ─── SpecList — titled bullet list ─── */
+function SpecList({ title, items, accentColor }) {
+  return (
+    <div style={{ marginTop: 14 }}>
+      <div
+        style={{
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 700,
+          fontSize: 12,
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          color: accentColor,
+          marginBottom: 8,
+        }}
+      >
+        {title}
+      </div>
+      {items.map((item, i) => (
+        <div
+          key={i}
+          style={{
+            fontFamily: "DM Sans, sans-serif",
+            fontSize: 13,
+            color: "rgba(255,255,255,0.7)",
+            lineHeight: 1.6,
+            paddingLeft: 14,
+            position: "relative",
+          }}
+        >
+          <span
+            style={{
+              position: "absolute",
+              left: 0,
+              color: accentColor,
+              fontSize: 10,
+              top: 2,
+            }}
+          >
+            ▸
+          </span>
+          {item}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ProductPage() {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
@@ -562,6 +645,84 @@ export default function ProductPage() {
 
               {/* Description */}
               <p style={{ ...body, marginBottom: 0 }}>{product.description}</p>
+
+              {/* Specs */}
+              {product.specs && (
+                <div
+                  style={{
+                    marginTop: 28,
+                    padding: "20px 22px",
+                    background: "rgba(255,255,255,0.03)",
+                    border: `1px solid rgba(${accentRgba},0.15)`,
+                    borderRadius: 10,
+                  }}
+                >
+                  <div
+                    style={{
+                      ...heading(isMobile ? 16 : 18),
+                      marginBottom: 16,
+                      color: accentColor,
+                    }}
+                  >
+                    Specs
+                  </div>
+
+                  {/* DAW / BPM / Key / Length / Channels — single-line items */}
+                  {product.specs.daw && (
+                    <SpecLine label="DAW" value={product.specs.daw} accentRgba={accentRgba} />
+                  )}
+                  {product.specs.bpm && (
+                    <SpecLine label="BPM" value={String(product.specs.bpm)} accentRgba={accentRgba} />
+                  )}
+                  {product.specs.key && (
+                    <SpecLine label="Key" value={product.specs.key} accentRgba={accentRgba} />
+                  )}
+                  {product.specs.length && (
+                    <SpecLine label="Length" value={product.specs.length} accentRgba={accentRgba} />
+                  )}
+                  {product.specs.channels && (
+                    <SpecLine label="Channels" value={product.specs.channels} accentRgba={accentRgba} />
+                  )}
+
+                  {/* List sections */}
+                  {product.specs.whatYouGet && (
+                    <SpecList title="What You Get" items={product.specs.whatYouGet} accentColor={accentColor} />
+                  )}
+                  {product.specs.lessons && (
+                    <SpecList title="Lesson Topics" items={product.specs.lessons} accentColor={accentColor} />
+                  )}
+                  {product.specs.samplePack && (
+                    <SpecList title="Sample Pack" items={product.specs.samplePack} accentColor={accentColor} />
+                  )}
+                  {product.specs.templates && (
+                    <SpecList title="Templates Included" items={product.specs.templates} accentColor={accentColor} />
+                  )}
+                  {product.specs.includes && (
+                    <SpecList title="Project Includes" items={product.specs.includes} accentColor={accentColor} />
+                  )}
+                  {product.specs.plugins && (
+                    <SpecList title="Plugins Needed" items={product.specs.plugins} accentColor={accentColor} />
+                  )}
+                  {product.specs.notes && (
+                    <div style={{ marginTop: 14 }}>
+                      {product.specs.notes.map((note, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            ...body,
+                            fontSize: 13,
+                            fontStyle: "italic",
+                            color: "rgba(255,255,255,0.5)",
+                            marginBottom: 4,
+                          }}
+                        >
+                          * {note}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </section>

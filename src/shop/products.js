@@ -75,7 +75,25 @@ export const PRODUCTS = [
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/jungle-walk.mp3",
     dropboxPath: "/On Line Lessons/Afro House Master Class/Afro House MasterClass - DL PACK.zip",
     fileSize: "237 MB",
-    // SEO tags shown as pills under the buy button — high-value search terms
+    specs: {
+      whatYouGet: [
+        "5 lessons with over 60 minutes of HD content",
+        "Watchable online & downloadable to your computer",
+      ],
+      samplePack: [
+        "Drum samples — one-shots",
+        "Synth presets",
+        "Vocal chain (used for Idd Aziz)",
+        "Full Ableton project file",
+      ],
+      lessons: [
+        "Kick & Bass — how to get the low-end rockin' a dance floor",
+        "Songwriting, Vocal Editing & Processing (with Idd Aziz)",
+        "Percussion Programming & Layering",
+        "Synths — layering, drones, automations",
+        "Mix & Mastering",
+      ],
+    },
     seoTags: [
       "Afro House Masterclass",
       "Ableton Live Tutorial",
@@ -136,6 +154,17 @@ export const PRODUCTS = [
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/Balkan Boy/Balkan Boy_Ableton Template By Steven Angel.zip",
     fileSize: "269 MB",
+    specs: {
+      daw: "Ableton Live 12",
+      includes: [
+        "1 Folder — Project file (Ableton)",
+        "1 Folder — VST Presets (Serum)",
+        "Sample Pack — One Shots & Loops (Drums, Percussions, Instruments, FX, Fills)",
+      ],
+      notes: [
+        "All MIDI is also bounced to audio — project opens with no external VST / plugins",
+      ],
+    },
     seoTags: [
       "Ableton Template",
       "Afro House Project",
@@ -196,6 +225,14 @@ export const PRODUCTS = [
     dropboxPath:
       "/Ghost Tracks templates sample packs/2024/Maria Maria/The Angels - Maria Maria (Afro House Remix) Project.zip",
     fileSize: "883 MB",
+    specs: {
+      daw: "Ableton Live 11",
+      plugins: ["Serum", "Nexus", "FabFilter Pro-Q3", "Ozone 10", "LFO Tool"],
+      notes: [
+        "All MIDI is also exported to audio — project loads with no external VST or plugins",
+        "Download does NOT include commercial license for the vocal",
+      ],
+    },
     seoTags: [
       "Ableton Template",
       "Afro House Remix",
@@ -263,6 +300,14 @@ export const PRODUCTS = [
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/El Barrio/The Angels - El Bario Ableton Template Project.zip",
     fileSize: "429 MB",
+    specs: {
+      daw: "Ableton Live 11",
+      plugins: ["Ozone 10", "FabFilter Pro-Q3", "OTT", "Endless"],
+      notes: [
+        "All MIDI is also exported to audio",
+        "Plugins are only needed for the mix — project loads without any external plugins or VST",
+      ],
+    },
     seoTags: [
       "Ableton Template",
       "Afro House Project",
@@ -288,9 +333,9 @@ export const PRODUCTS = [
     badge: null,
     badgeColor: null,
     genre: "Melodic Techno",
-    daw: "Ableton Live",
-    bpm: null, // TODO Steven
-    musicalKey: null, // TODO Steven
+    daw: "Ableton Live 10",
+    bpm: 125,
+    musicalKey: "Fm",
     description:
       "Arabian-influenced melodic techno in the style of Solomun and Artbat. Fully mixed and mastered Ableton Live project with authentic Middle Eastern percussion, atmospheric synth work, and a driving techno groove. Perfect template for producers exploring the cross-cultural melodic techno sound that's dominating mainstage festivals. Includes all presets, samples, and mixdown chains.",
     shortDescription: "Melodic Techno · Middle Eastern percussion · Fully mastered",
@@ -320,11 +365,26 @@ export const PRODUCTS = [
       "Royalty-free samples",
     ],
     image: "/shop/solomun-arabian-cover.webp",
-    previewVideoUrl: null, // TODO: wire solomun preview video from R2 (video/solomun-preview.mp4)
+    previewVideoUrl: null,
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/solomun-arabian.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/For IN SOUND/SOLOMUN/Solomun Melodic Techno Project.zip",
     fileSize: "737 MB",
+    specs: {
+      daw: "Ableton Live 10",
+      bpm: 125,
+      key: "Fm",
+      length: "6:55",
+      channels: "8 MIDI · 26 Audio · 2 Return",
+      includes: [
+        "Live Oud Recording",
+        "Live Moog Sampling",
+        "Fully Mixed & Mastered",
+      ],
+      notes: [
+        "No external plugins — uses only Ableton native plugins & VST",
+      ],
+    },
     seoTags: [
       "Melodic Techno Template",
       "Solomun Style",
@@ -388,6 +448,26 @@ export const PRODUCTS = [
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/mega-bundle.mp3",
     dropboxPath: "/Ghost Tracks templates sample packs/For IN SOUND/MELODIC TECHNO/Mega_Bundle_Pack.zip",
     fileSize: "1.29 GB",
+    specs: {
+      templates: [
+        "Artbat Style Melodic Techno Template",
+        "Tale Of Us Melodic Techno Template",
+        "Black Coffee / Pablo Fierro Afro-House Template",
+      ],
+      samplePack: [
+        "Afro Fever #1 — 102 audio files (16-bit 44.1kHz)",
+        "22 Loops (Clean & With FX)",
+        "15 Timpani Fills (Clean & With FX)",
+        "16 One Shots — Percussions",
+        "12 Drum Samples",
+        "3 Bass Presets (Ableton native VST)",
+      ],
+      notes: [
+        "All 3 templates fully mixed & mastered",
+        "All sounds in demo + project template are included",
+        "Uses only native plugins",
+      ],
+    },
     seoTags: [
       "Melodic Techno Bundle",
       "Artbat Style",
@@ -395,6 +475,37 @@ export const PRODUCTS = [
       "3 Templates + Pack",
       "Best Value",
     ],
+  },
+  // ─────────────────────────────────────────────────────────
+  // HIDDEN TEST PRODUCT — accessible only via direct URL, not in shop grid
+  {
+    id: "test-1-dollar",
+    slug: "test-purchase-1-dollar",
+    enabled: true,
+    type: "template",
+    name: "Test Purchase ($1)",
+    headline: "PayPal Flow Test",
+    seoTitle: "Test Purchase | Steven Angel",
+    seoDescription: "Test purchase for verifying PayPal checkout flow.",
+    price: 1,
+    currency: "USD",
+    badge: null,
+    badgeColor: null,
+    genre: "Test",
+    daw: "N/A",
+    bpm: null,
+    musicalKey: null,
+    description: "This is a $1 test product to verify the PayPal checkout flow works end-to-end. Not a real product.",
+    shortDescription: "Test only",
+    keywords: [],
+    features: [],
+    image: "/shop/masterclass-cover.webp",
+    previewVideoUrl: null,
+    audioUrl: null,
+    dropboxPath: null,
+    fileSize: null,
+    specs: null,
+    seoTags: [],
   },
 ];
 
@@ -419,10 +530,10 @@ export const getProductSpecs = (product) => {
 // Sort order for the shop grid (best sellers first)
 export const SHOP_DISPLAY_ORDER = [
   "afro-house-masterclass",
-  "el-barrio",
-  "mega-bundle",
   "balkan-boy",
   "maria-maria",
+  "el-barrio",
+  "mega-bundle",
   "solomun-arabian",
 ];
 
