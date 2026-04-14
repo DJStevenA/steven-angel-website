@@ -72,6 +72,7 @@ export const PRODUCTS = [
     ],
     image: "/shop/masterclass-cover.webp",
     previewVideoUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/video/masterclass-intro.mp4",
+    previewVideoAspect: "9/16",
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/jungle-walk.mp3",
     dropboxPath: "/On Line Lessons/Afro House Master Class/Afro House MasterClass - DL PACK.zip",
     fileSize: "237 MB",
