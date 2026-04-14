@@ -380,15 +380,16 @@ export default function ProductPage() {
               {hasVideo && (
                 <div
                   style={{
-                    width: "100%",
-                    aspectRatio: "16/9",
+                    width: product.previewVideoAspect === "9/16" ? (isMobile ? "80%" : "60%") : "100%",
+                    maxWidth: product.previewVideoAspect === "9/16" ? 340 : "none",
+                    margin: product.previewVideoAspect === "9/16" ? "16px auto 0" : "16px 0 0",
+                    aspectRatio: product.previewVideoAspect || "16/9",
                     background: "#06060f",
                     borderRadius: 10,
                     overflow: "hidden",
                     position: "relative",
                     border: `1px solid rgba(${accentRgba},0.3)`,
                     cursor: videoPlaying ? "default" : "pointer",
-                    marginTop: 16,
                   }}
                   onClick={() => !videoPlaying && setVideoPlaying(true)}
                 >
@@ -404,7 +405,7 @@ export default function ProductPage() {
                         inset: 0,
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover",
+                        objectFit: product.previewVideoAspect === "9/16" ? "contain" : "cover",
                       }}
                     />
                   ) : (
