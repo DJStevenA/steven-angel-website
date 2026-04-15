@@ -396,6 +396,47 @@ function GhostPage() {
 
   /* SEO: page title, meta description, and canonical URL are handled
      globally by the <PageTitle /> component in main.jsx (based on route). */
+  useEffect(() => {
+    const existing = document.getElementById("ghost-service-jsonld");
+    if (existing) existing.remove();
+
+    const ld = document.createElement("script");
+    ld.id = "ghost-service-jsonld";
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Afro House, Tech House & Indie Dance Ghost Production",
+      serviceType: "Ghost Production Service",
+      description:
+        "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.",
+      provider: {
+        "@type": "Person",
+        name: "Steven Angel",
+        url: "https://steven-angel.com/",
+        sameAs: [
+          "https://steven-angel.com/",
+          "https://steven-angel.com/ghost",
+        ],
+      },
+      areaServed: "Worldwide",
+      url: "https://steven-angel.com/ghost",
+      offers: {
+        "@type": "Offer",
+        price: "300",
+        priceCurrency: "USD",
+        url: "https://steven-angel.com/ghost",
+        availability: "https://schema.org/InStock",
+      },
+    });
+
+    document.head.appendChild(ld);
+
+    return () => {
+      const node = document.getElementById("ghost-service-jsonld");
+      if (node) node.remove();
+    };
+  }, []);
 
   /* ────────────────────────────────────────────────────
      Render

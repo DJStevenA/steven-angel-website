@@ -27,13 +27,13 @@ function PageTitle() {
 
     const titles = {
       "/": "Ghost Producer · Afro House & Indie Dance | Steven Angel",
-      "/ghost": "Afro House Ghost Producer — Signed MTGD & Moblack Artist | Steven Angel",
+      "/ghost": "Afro House & Tech House Ghost Producer | Steven Angel",
       "/sign": "Ghost Production Agreement | Steven Angel",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
     };
     const descriptions = {
       "/": "Steven Angel — professional ghost producer. Afro House, Indie Dance & Tech House. Released on Moblack, MTGD, Sony.",
-      "/ghost": "Ghost production by a signed MTGD & Moblack artist. Afro House, Indie Dance & Tech House. From $300. NDA included.",
+      "/ghost": "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.",
       "/sign": "Sign your ghost production agreement with Steven Angel.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
     };
