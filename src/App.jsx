@@ -125,7 +125,7 @@ export default function App() {
               Afro House · Tech House · Indie Dance
             </h2>
 
-            <div style={{ ...body, fontSize: 16, maxWidth: 520, margin: "0 auto", color: "rgba(255,255,255,0.5)" }}>
+            <div style={{ ...body, fontSize: 19, maxWidth: 520, margin: "0 auto", color: "rgba(255,255,255,0.75)" }}>
               Played by Hugel & Claptone at Pacha Ibiza
             </div>
           </div>
@@ -157,7 +157,7 @@ export default function App() {
                 Moblack Records · MTGD (Hugel's label) · Godeeva · Sony Music
               </div>
 
-              <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>PLAYED BY</div>
+              <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>DJS SUPPORTING MY MUSIC</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
                 Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · DJ Chus · Joeski
               </div>
@@ -167,7 +167,14 @@ export default function App() {
                 Pacha Ibiza · Pacha Barcelona · Zamna Festival · Canary Islands · USA · Latin America · Europe
               </div>
 
-              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.55)", fontStyle: "italic", marginTop: 8 }}>
+              <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8, marginTop: 16 }}>THE ANGELS DUO</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
+                Part of the Afro / Latin House duo{" "}
+                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none" }}>The Angels</a>
+                {" "}— 15M+ streams
+              </div>
+
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.55)", fontStyle: "italic", marginTop: 4 }}>
                 I teach what I know. I produce what you hear.
               </div>
             </div>
@@ -245,15 +252,16 @@ export default function App() {
         <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 800, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 36), textAlign: "center", marginBottom: 8 }}>
-              MY <span style={{ color: cyan }}>RELEASES.</span>
+              MY <span style={{ color: cyan }}>RELEASES & PRODUCTION WORK.</span>
             </h2>
             <div style={{ ...body, textAlign: "center", marginBottom: 32 }}>
               Original releases on MTGD, Moblack, Godeeva and more.
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 14 }}>
+            {/* Horizontal scroll row — swipeable on mobile */}
+            <div style={{ display: "flex", gap: 14, overflowX: "auto", paddingBottom: 8, scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
               {audioTracks.map(({ file, title, genre }) => (
-                <div key={file} style={{ background: "#04040f", border: "1px solid #141420", borderRadius: 8, padding: "16px 20px" }}>
+                <div key={file} style={{ background: "#04040f", border: "1px solid #141420", borderRadius: 8, padding: "16px 20px", minWidth: isMobile ? "80vw" : 280, flex: "0 0 auto", scrollSnapAlign: "start" }}>
                   <div style={{ ...label(cyan), fontSize: 10, marginBottom: 4 }}>{genre}</div>
                   <div style={{ ...heading(15), color: "rgba(255,255,255,0.8)", marginBottom: 10 }}>{title}</div>
                   <audio controls preload="none" controlsList="nodownload" style={{ width: "100%", accentColor: cyan }}>
@@ -379,6 +387,8 @@ export default function App() {
             { label: "Lessons", to: "/lessons" },
             { label: "Shop", to: "/shop" },
             { label: "Instagram", href: "https://www.instagram.com/theangels_tlv/" },
+            { label: "Spotify", href: "https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" },
+            { label: "Beatport", href: "https://www.beatport.com/artist/the-angels-il/913642" },
           ].map(({ label: lbl, to, href }) =>
             to ? (
               <Link key={lbl} to={to} style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: cyan, textDecoration: "none" }}>{lbl}</Link>

@@ -40,11 +40,22 @@ function PageTitle() {
       "/sign": "Sign your ghost production agreement with Steven Angel.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
     };
-    document.title = titles[location.pathname] || titles["/"];
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", descriptions[location.pathname] || descriptions["/"]);
+    const title = titles[location.pathname] || titles["/"];
+    const desc = descriptions[location.pathname] || descriptions["/"];
+    const url = "https://steven-angel.com" + (location.pathname === "/" ? "/" : location.pathname);
+
+    document.title = title;
+    const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute("content", val); };
+    setMeta('meta[name="description"]', desc);
     const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", "https://steven-angel.com" + (location.pathname === "/" ? "/" : location.pathname));
+    if (canonical) canonical.setAttribute("href", url);
+    // OG tags
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', desc);
+    setMeta('meta[property="og:url"]', url);
+    // Twitter
+    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:description"]', desc);
   }, [location]);
   return null;
 }

@@ -7,6 +7,7 @@
 
 import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
+import Nav from "./Nav.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -88,17 +89,26 @@ const CALENDLY_3HR = "https://calendly.com/dj-steven-angel/3hrproduction-lesson-
 const CALENDLY_6HR = "https://calendly.com/dj-steven-angel/3hr-production-lesson-mentoring-prepaid-clone-1";
 
 const fireCalendlyConversion = () => {
-  if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 120.0, currency: "USD" });
+  if (window.gtag) {
+    window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 120.0, currency: "USD" });
+    window.gtag("event", "generate_lead", { event_category: "booking", event_label: "lesson_full" });
+  }
   if (window.clarity) window.clarity("event", "lessonCalendlyClick");
 };
 
 const fireIntroClick = () => {
-  if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 30.0, currency: "USD" });
+  if (window.gtag) {
+    window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 30.0, currency: "USD" });
+    window.gtag("event", "generate_lead", { event_category: "booking", event_label: "lesson_intro" });
+  }
   if (window.clarity) window.clarity("event", "lessonStudioSessionClick");
 };
 
 const fireWhatsAppConversion = () => {
-  if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-999991173/b8BYCIHTmJIcEIXP6twD", value: 120.0, currency: "USD" });
+  if (window.gtag) {
+    window.gtag("event", "conversion", { send_to: "AW-999991173/b8BYCIHTmJIcEIXP6twD", value: 120.0, currency: "USD" });
+    window.gtag("event", "contact", { event_category: "whatsapp", event_label: "lessons_page" });
+  }
   if (window.clarity) window.clarity("event", "lessonWhatsAppClick");
 };
 
@@ -152,15 +162,7 @@ export default function Lessons() {
         WhatsApp
       </a>
 
-      {/* ═══ Top Logo Bar ═══ */}
-      <div style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Link to="/" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, letterSpacing: "0.1em", textDecoration: "none", color: "#fff" }}>
-          STEVEN <span style={{ color: CYAN }}>ANGEL</span>
-        </Link>
-        <a href={CALENDLY_INTRO} target="_blank" rel="noreferrer" onClick={fireIntroClick} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", border: `2px solid ${CYAN}`, color: CYAN, padding: "10px 22px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}>
-          BOOK LESSON
-        </a>
-      </div>
+      <Nav />
 
       <main>
         {/* ═══ HERO ═══ */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getOrderedProducts } from "./products.js";
 import ProductCard from "./ProductCard.jsx";
 import DiscountPopup from "./DiscountPopup.jsx";
@@ -102,29 +102,49 @@ export default function ShopPage() {
         Premium Ableton Live project files download — Afro House, Melodic Techno, Tech House, Indie Dance — released on MTGD, Moblack, Godeeva
       </h2>
 
-      {/* ═══ Top Logo Bar (with auth button) ═══ */}
-      <div
+      {/* ═══ Top Nav Bar ═══ */}
+      <nav
         style={{
-          padding: isMobile ? "20px 20px 0" : "24px 60px 0",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          height: 64,
+          padding: "0 clamp(20px, 4vw, 48px)",
+          background: "rgba(0,0,0,0.92)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          boxSizing: "border-box",
           gap: 12,
         }}
       >
-        <a
-          href="/"
+        <Link
+          to="/"
           style={{
             fontFamily: "Barlow Condensed, sans-serif",
             fontWeight: 900,
-            fontSize: 22,
+            fontSize: 20,
             letterSpacing: "0.1em",
             textDecoration: "none",
             color: "#fff",
+            whiteSpace: "nowrap",
           }}
         >
           STEVEN <span style={{ color: CYAN }}>ANGEL</span>
-        </a>
+        </Link>
+
+        {/* Nav links — hidden on small mobile */}
+        {!isMobile && (
+          <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+            {[{ label: "Ghost", to: "/ghost" }, { label: "Lessons", to: "/lessons" }, { label: "Shop", to: "/shop" }].map(({ label, to }) => (
+              <Link key={to} to={to} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: to === "/shop" ? CYAN : "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+                {label}
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Sign in / My Account button — hidden during initial auth load to avoid flicker */}
         {!authLoading && (
@@ -151,7 +171,7 @@ export default function ShopPage() {
             {user ? (isMobile ? "Account" : "My Account") : "Sign In"}
           </Link>
         )}
-      </div>
+      </nav>
 
       <main>
         {/* ═══ Hero Section ═══ */}

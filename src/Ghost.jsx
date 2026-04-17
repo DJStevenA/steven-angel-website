@@ -1,7 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
+import Nav from "./Nav.jsx";
 
 /* ─── Google Ads conversion helper ─── */
-const fireWhatsAppConversion = () => { if (window.gtag) window.gtag('event', 'conversion', { 'send_to': 'AW-999991173/b8BYCIHTmJIcEIXP6twD', 'value': 300.0, 'currency': 'USD' }); };
+const fireWhatsAppConversion = () => {
+  if (window.gtag) {
+    window.gtag('event', 'conversion', { 'send_to': 'AW-999991173/b8BYCIHTmJIcEIXP6twD', 'value': 300.0, 'currency': 'USD' });
+    window.gtag('event', 'contact', { event_category: 'whatsapp', event_label: 'ghost_page' });
+  }
+};
 
 /* ─── Color Constants ─── */
 const CYAN = "#00E5FF";
@@ -438,6 +444,29 @@ function GhostPage() {
     };
   }, []);
 
+  /* FAQPage schema — 11 FAQ items for Google rich results */
+  useEffect(() => {
+    const existing = document.getElementById("ghost-faq-jsonld");
+    if (existing) existing.remove();
+    const ld = document.createElement("script");
+    ld.id = "ghost-faq-jsonld";
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQ_DATA.map(([q, a]) => ({
+        "@type": "Question",
+        name: q,
+        acceptedAnswer: { "@type": "Answer", text: a },
+      })),
+    });
+    document.head.appendChild(ld);
+    return () => {
+      const node = document.getElementById("ghost-faq-jsonld");
+      if (node) node.remove();
+    };
+  }, []);
+
   /* ────────────────────────────────────────────────────
      Render
      ──────────────────────────────────────────────────── */
@@ -645,22 +674,7 @@ function GhostPage() {
         WhatsApp
       </a>
 
-      {/* ═══ Top Logo Bar ═══ */}
-      <div style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}>
-        <a
-          href="/"
-          style={{
-            fontFamily: "Barlow Condensed, sans-serif",
-            fontWeight: 900,
-            fontSize: 22,
-            letterSpacing: "0.1em",
-            textDecoration: "none",
-            color: "#fff",
-          }}
-        >
-          STEVEN <span style={{ color: CYAN }}>ANGEL</span>
-        </a>
-      </div>
+      <Nav />
 
       <main>
         {/* ═══ Hero Section ═══ */}
@@ -1393,6 +1407,7 @@ function GhostPage() {
                                     if (a !== ev.target) a.pause();
                                   });
                                 if (window.clarity) { window.clarity("event", "ghostAudioPlay"); window.clarity("set", "audioTrack", title); }
+                                if (window.gtag) window.gtag("event", "select_content", { event_category: "audio", event_label: title });
                               }}
                             >
                               <source src={file} type="audio/mpeg" />
@@ -1425,6 +1440,7 @@ function GhostPage() {
                                     if (a !== ev.target) a.pause();
                                   });
                                 if (window.clarity) { window.clarity("event", "ghostAudioPlay"); window.clarity("set", "audioTrack", sample.title || "unknown"); }
+                                if (window.gtag) window.gtag("event", "select_content", { event_category: "audio", event_label: sample.title || "unknown" });
                               }}
                             >
                               <source
@@ -1684,6 +1700,7 @@ function GhostPage() {
                             'event_category': 'lead',
                             'event_label': 'ghost_page_contact_form',
                           });
+                          window.gtag('event', 'generate_lead', { event_category: 'form', event_label: 'ghost_contact' });
                         }
                       } else {
                         alert("Something went wrong. Please try WhatsApp instead.");

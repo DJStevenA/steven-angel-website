@@ -64,12 +64,16 @@ export default function CheckoutModal({ product, onClose }) {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // Clarity: track checkout start + prioritize recording
+  // Track checkout start — Clarity + GA4
   useEffect(() => {
-    if (!window.clarity) return;
-    window.clarity("event", "checkoutStart");
-    window.clarity("set", "checkoutProduct", product.name);
-    window.clarity("upgrade", "checkout");
+    if (window.clarity) {
+      window.clarity("event", "checkoutStart");
+      window.clarity("set", "checkoutProduct", product.name);
+      window.clarity("upgrade", "checkout");
+    }
+    if (window.gtag) {
+      window.gtag("event", "begin_checkout", { event_category: "shop", event_label: product.name, value: product.price, currency: product.currency || "USD" });
+    }
   }, [product]);
 
   // Lock body scroll while modal is open
