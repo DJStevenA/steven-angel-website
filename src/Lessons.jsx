@@ -82,7 +82,7 @@ function LazyYouTube({ id, title }) {
 }
 
 /* Calendly links */
-const CALENDLY_INTRO = "https://calendly.com/dj-steven-angel/15-min-zoom";
+const CALENDLY_INTRO = "https://calendly.com/dj-steven-angel/1hr-production-lesson-mentoring-prepaid-clone";
 const CALENDLY_1HR = "https://calendly.com/dj-steven-angel/3hr-production-lesson-mentoring-prepaid-clone";
 const CALENDLY_3HR = "https://calendly.com/dj-steven-angel/3hrproduction-lesson-mentoring-prepaid-clone";
 const CALENDLY_6HR = "https://calendly.com/dj-steven-angel/3hr-production-lesson-mentoring-prepaid-clone-1";
