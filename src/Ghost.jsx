@@ -722,13 +722,16 @@ function GhostPage() {
               Afro House Ghost Producer — Signed MTGD & Moblack Artist
             </h1>
 
-            {/* Visible hero headline (was h1, now div — visual unchanged) */}
-            <div role="heading" aria-level="2" style={{ ...heading(isMobile ? 36 : 64), marginBottom: 20 }}>
-              Last Night Hugel & Claptone
+            {/* Main hero headline */}
+            <div role="heading" aria-level="2" style={{ ...heading(isMobile ? 32 : 64), marginBottom: 16, background: `linear-gradient(90deg, ${CYAN}, ${PURPLE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Last Night Hugel & Claptone Played My Track.
               <br />
-              Played My Track.
-              <br />
-              <span style={{ color: CYAN }}>Want Yours Next?</span>
+              Want Yours To Be Next?
+            </div>
+
+            {/* Sub-headline */}
+            <div style={{ ...heading(isMobile ? 18 : 28), marginBottom: 12, color: "#fff" }}>
+              Ghost Production for DJs & Artists Who Take Their Sound Seriously
             </div>
 
             <h2
@@ -738,11 +741,40 @@ function GhostPage() {
                 fontSize: isMobile ? 20 : 28,
                 letterSpacing: "0.1em",
                 color: CYAN,
-                marginBottom: 40,
+                marginBottom: 20,
               }}
             >
-              Your Vision. My Sound. Label-Ready Result.
             </h2>
+
+            {/* Specializing line */}
+            <div
+              style={{
+                fontFamily: "DM Sans, sans-serif",
+                fontSize: isMobile ? 12 : 14,
+                color: "rgba(255,255,255,0.45)",
+                letterSpacing: "0.08em",
+                marginBottom: 24,
+                lineHeight: 1.6,
+              }}
+            >
+              Specializing in: Afro House &middot; Afro Latin House &middot; Tech House &middot; Indie Dance
+              <br />
+              Release-Ready Tracks, Label Standard
+            </div>
+
+            {/* Tagline above CTA */}
+            <div
+              style={{
+                fontFamily: "Barlow Condensed, sans-serif",
+                fontWeight: 700,
+                fontSize: isMobile ? 18 : 24,
+                letterSpacing: "0.1em",
+                color: CYAN,
+                marginBottom: 20,
+              }}
+            >
+              Your Vision. My Sound.
+            </div>
 
             {/* Listen CTA */}
             <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
@@ -869,8 +901,7 @@ function GhostPage() {
                 .
               </div>
               <div style={{ ...body }}>
-                I don't hide behind a marketplace. You know exactly who is
-                making your track.
+                When I produce for you, I bring the same standards I use for my own releases.
               </div>
             </div>
           </div>
@@ -1077,7 +1108,7 @@ function GhostPage() {
               Your Track &mdash; Played on the Biggest Stages
             </div>
             <div style={{ ...body, textAlign: "center", marginBottom: 32 }}>
-              This is what your ghost produced track can achieve.
+              Last night Hugel & Claptone played my track. Want your track to be next?
             </div>
 
             <div
@@ -1144,398 +1175,125 @@ function GhostPage() {
           </div>
         </section>
 
-        {/* ═══ Comparison Section ═══ */}
-        <section
-          style={{
-            padding: isMobile ? "40px 20px" : "60px 60px",
-            background: BG,
-          }}
-        >
-          <div style={{ maxWidth: 900, margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: 40 }}>
-              <div
-                style={{
-                  ...heading(isMobile ? 28 : 44),
-                  marginBottom: 16,
-                }}
-              >
-                You're Not Buying a Track.
-                <br />
-                <span style={{ color: CYAN }}>
-                  You're Buying a Standard.
-                </span>
+        {/* ═══ This Is For You If ═══ */}
+        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG }}>
+          <div style={{ maxWidth: 700, margin: "0 auto" }}>
+            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 36 }}>
+              This Is For You If...
+            </h2>
+            {[
+              "You want a track that cooks the dance floor",
+              "You want a track that sounds ready for a label release",
+              "You have a vision but not the time or skills to finish it",
+              "You\u2019re serious about your music career and need results",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: 12, marginBottom: 14, alignItems: "flex-start" }}>
+                <span style={{ color: CYAN, fontWeight: 700, fontSize: 18, lineHeight: 1.4, flexShrink: 0 }}>&#10003;</span>
+                <span style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.8)" }}>{item}</span>
               </div>
-              <div
-                style={{ ...body, maxWidth: 560, margin: "0 auto" }}
-              >
-                Every track I produce is built to the same level as my
-                MTGD & MOBLACK releases.
-              </div>
-            </div>
-
-            {(() => {
-              const rows = [
-                { steven: "Named artist with label releases", marketplace: "No name, no face, no proof", marketplacePositive: false },
-                { steven: "Played by Hugel & Claptone", marketplace: "Unknown who plays their tracks", marketplacePositive: false },
-                { steven: "Beatport Top 10 \u2014 verified", marketplace: "No chart history", marketplacePositive: false },
-                { steven: "Work directly with the producer", marketplace: "Platform middleman", marketplacePositive: false },
-                { steven: "NDA + full copyright transfer", marketplace: "NDA + full copyright transfer", marketplacePositive: true },
-                { steven: "Afro House, Afro Latin, Indie Dance specialist", marketplace: "Generic EDM \u2014 all genres", marketplacePositive: false },
-              ];
-              const cellPad = isMobile ? "14px 12px" : "18px 24px";
-              const headerPad = isMobile ? "16px 12px" : "22px 24px";
-              const textStyle = { fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 12 : 14, lineHeight: 1.4 };
-              return (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    borderRadius: 10,
-                    overflow: "hidden",
-                    border: "1px solid #141420",
-                  }}
-                >
-                  {/* Header: Steven Angel */}
-                  <div style={{ background: "#04040f", padding: headerPad, borderBottom: "1px solid #141420" }}>
-                    <div style={{ ...label(CYAN) }}>Steven Angel</div>
-                  </div>
-                  {/* Header: Marketplaces */}
-                  <div style={{ background: "#020208", padding: headerPad, borderBottom: "1px solid #141420", borderLeft: "1px solid #141420" }}>
-                    <div style={{ ...label("rgba(255,255,255,0.65)") }}>Anonymous Marketplaces</div>
-                  </div>
-
-                  {/* Rows */}
-                  {rows.map((row, idx) => (
-                    <Fragment key={idx}>
-                      <div style={{
-                        background: "#04040f",
-                        padding: cellPad,
-                        borderBottom: idx < rows.length - 1 ? "1px solid #141420" : "none",
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 8,
-                      }}>
-                        <span style={{ color: CYAN, fontWeight: 700, marginTop: 1, flexShrink: 0 }}>&#10003;</span>
-                        <span style={{ ...textStyle, color: "rgba(255,255,255,0.8)" }}>{row.steven}</span>
-                      </div>
-                      <div style={{
-                        background: "#020208",
-                        padding: cellPad,
-                        borderBottom: idx < rows.length - 1 ? "1px solid #141420" : "none",
-                        borderLeft: "1px solid #141420",
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 8,
-                      }}>
-                        <span style={{
-                          color: row.marketplacePositive ? "rgba(255,255,255,0.55)" : "rgba(255,60,60,0.6)",
-                          fontWeight: 700,
-                          marginTop: 1,
-                          flexShrink: 0,
-                        }}>{row.marketplacePositive ? "\u2713" : "\u2717"}</span>
-                        <span style={{ ...textStyle, color: "rgba(255,255,255,0.5)" }}>{row.marketplace}</span>
-                      </div>
-                    </Fragment>
-                  ))}
-                </div>
-              );
-            })()}
+            ))}
           </div>
         </section>
 
-        {/* ═══ Packages Section ═══ */}
-        <section
-          style={{
-            padding: isMobile ? "40px 20px" : "60px 60px",
-            background: "#04040f",
-            borderTop: "1px solid #0d0d0d",
-          }}
-        >
-          <div style={{ maxWidth: 900, margin: "0 auto" }}>
-            <h2
-              style={{
-                ...heading(isMobile ? 28 : 44),
-                textAlign: "center",
-                marginBottom: 40,
-              }}
-            >
-              Choose Your Package
+        {/* ═══ What You Get ═══ */}
+        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+          <div style={{ maxWidth: 700, margin: "0 auto" }}>
+            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 36 }}>
+              What You <span style={{ color: CYAN }}>Get</span>
             </h2>
+            {[
+              "Original & Exclusive Track",
+              "Professionally Mixed & Mastered to hit in the club",
+              "Full arrangement \u2014 Extended Mix + Radio Edit",
+              "Stems + MIDI files",
+              "16-bit WAV Master + 24-bit Pre-Master",
+              "5\u20137 business day delivery",
+              "100% of the rights are yours",
+              "NDA included on every project",
+              "Work directly with me \u2014 not an agency or platform",
+              "Every project has potential to be signed on my label",
+            ].map((item) => (
+              <div key={item} style={{ display: "flex", gap: 12, marginBottom: 14, alignItems: "flex-start" }}>
+                <span style={{ color: CYAN, fontWeight: 700, fontSize: 18, lineHeight: 1.4, flexShrink: 0 }}>&#10003;</span>
+                <span style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.8)" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
 
-            <div
+        {/* ═══ The Process ═══ */}
+        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
+          <div style={{ maxWidth: 700, margin: "0 auto" }}>
+            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 12 }}>
+              The <span style={{ color: CYAN }}>Process</span>
+            </h2>
+            <div style={{ ...body, textAlign: "center", fontSize: 15, color: "rgba(255,255,255,0.5)", marginBottom: 36 }}>
+              Simple, Direct, And Built To Achieve Full Understanding of Your Needs
+            </div>
+            {[
+              { n: "1", text: "You send me your idea and references. We can also have a Zoom to discuss before we start working." },
+              { n: "2", text: "I make a 90-second demo of the idea. If you like it, we move on. If needed \u2014 I make a new demo until we get it right." },
+              { n: "3", text: "I move on to make the full track \u2014 3 revisions included." },
+              { n: "4", text: "Delivery: label-ready track, stems, MIDI, 16-bit WAV." },
+            ].map(({ n, text }) => (
+              <div key={n} style={{ display: "flex", gap: 16, marginBottom: 22, alignItems: "flex-start" }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%", border: `2px solid ${CYAN}`, display: "flex",
+                  alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 16, color: CYAN,
+                }}>{n}</div>
+                <span style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.8)", paddingTop: 6 }}>{text}</span>
+              </div>
+            ))}
+
+            {/* Refund guarantee */}
+            <div style={{ marginTop: 20, textAlign: "center" }}>
+              <div style={{ ...body, fontSize: isMobile ? 14 : 15, color: "rgba(255,255,255,0.55)", fontStyle: "italic" }}>
+                Not happy after multiple demos? Full refund. No questions asked.
+              </div>
+              <div style={{ ...body, fontSize: isMobile ? 12 : 13, color: "rgba(255,255,255,0.35)", marginTop: 4 }}>
+                (That's never happened — but the guarantee stands.)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ Pricing (plain text) ═══ */}
+        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
+          <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
+            <h2 style={{ ...heading(isMobile ? 28 : 44), marginBottom: 36 }}>
+              Pricing
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 28 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
+                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Demo Finishing</span>
+                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $300</span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
+                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Full Track Production</span>
+                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $800</span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
+                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Add-on: Vocal Production</span>
+                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $1,500</span>
+              </div>
+            </div>
+            <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 28 }}>
+              I take a limited number of projects each month.
+            </div>
+            <button
+              onClick={() => { window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank"); if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 300.0, currency: "USD" }); if (window.clarity) window.clarity("event", "ghostCalendlyClick"); }}
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: isMobile ? 10 : 20,
-                marginBottom: 20,
+                ...outlineBtn(CYAN, SHADOW_CYAN),
+                display: "inline-flex",
+                justifyContent: "center",
+                padding: "14px 40px",
+                fontSize: 14,
+                letterSpacing: "0.2em",
               }}
             >
-              {/* Demo Finishing */}
-              <div
-                style={{
-                  background: BG,
-                  border: "1px solid #141420",
-                  borderTop: "2px solid rgba(0,229,255,0.4)",
-                  borderRadius: 10,
-                  padding: isMobile ? "28px 16px 20px" : "32px 28px",
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: -10,
-                    left: isMobile ? 12 : 24,
-                    background: "rgba(0,229,255,0.15)",
-                    border: "1px solid " + CYAN,
-                    color: CYAN,
-                    fontFamily: "Barlow Condensed, sans-serif",
-                    fontWeight: 700,
-                    fontSize: isMobile ? 8 : 10,
-                    letterSpacing: isMobile ? "0.1em" : "0.25em",
-                    padding: "3px 10px",
-                    borderRadius: 20,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {isMobile ? "BEST ENTRY" : "BEST ENTRY POINT"}
-                </div>
-
-                <div style={{ ...heading(isMobile ? 18 : 26), marginBottom: 8 }}>
-                  Finish Your Demo
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Barlow Condensed, sans-serif",
-                    fontWeight: 900,
-                    fontSize: isMobile ? 22 : 40,
-                    color: CYAN,
-                    marginBottom: 12,
-                    lineHeight: 1.1,
-                  }}
-                >
-                  {isMobile ? <>From<br />$300</> : "Starting from $300"}
-                </div>
-                <div style={{ ...body, fontSize: isMobile ? 12 : 14, marginBottom: 20 }}>
-                  You started it &mdash; I finish it. Full arrangement polish,
-                  mix and master. Stems + NDA included.
-                </div>
-
-                <div style={{ marginBottom: 24 }}>
-                  {[
-                    "Arrangement completion",
-                    "Professional mix + master",
-                    "Mastered MP3 + WAV",
-                    "PreMaster WAV",
-                    "Stems",
-                    "NDA signed",
-                    "2 revisions included",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      style={{
-                        display: "flex",
-                        gap: 8,
-                        marginBottom: 8,
-                      }}
-                    >
-                      <span style={{ color: CYAN }}>&#10003;</span>
-                      <span
-                        style={{
-                          fontFamily: "DM Sans, sans-serif",
-                          fontSize: isMobile ? 11 : 13,
-                          color: "rgba(255,255,255,0.55)",
-                        }}
-                      >
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                  <div
-                    style={{
-                      fontFamily: "DM Sans, sans-serif",
-                      fontSize: 12,
-                      color: "rgba(255,255,255,0.5)",
-                      marginTop: 8,
-                    }}
-                  >
-                    &#9201; Delivery: 3&ndash;5 business days
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank")}
-                  style={{
-                    ...outlineBtn(CYAN, SHADOW_CYAN),
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "100%",
-                    marginTop: "auto",
-                    fontSize: isMobile ? 11 : 14,
-                    letterSpacing: isMobile ? "0.08em" : "0.2em",
-                    padding: isMobile ? "12px 8px" : "14px 32px",
-                  }}
-                >
-                  {isMobile ? "BOOK FREE CALL →" : "Book A Free Consultation →"}
-                </button>
-              </div>
-
-              {/* Full Production */}
-              <div
-                style={{
-                  background: "linear-gradient(135deg,#0a0a20,#0d0418)",
-                  border: "2px solid " + PURPLE,
-                  borderTop: "2px solid " + PURPLE,
-                  borderRadius: 10,
-                  padding: isMobile ? "28px 16px 20px" : "32px 28px",
-                  position: "relative",
-                  boxShadow: "0 0 40px rgba(187,134,252,0.1)",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: -10,
-                    left: isMobile ? 12 : 24,
-                    background: `linear-gradient(90deg,${PURPLE},${CYAN})`,
-                    color: "#000",
-                    fontFamily: "Barlow Condensed, sans-serif",
-                    fontWeight: 700,
-                    fontSize: isMobile ? 8 : 10,
-                    letterSpacing: isMobile ? "0.1em" : "0.25em",
-                    padding: "3px 10px",
-                    borderRadius: 20,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  MOST POPULAR
-                </div>
-
-                <div style={{ ...heading(isMobile ? 18 : 26), marginBottom: 8 }}>
-                  Full Production
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Barlow Condensed, sans-serif",
-                    fontWeight: 900,
-                    fontSize: isMobile ? 22 : 40,
-                    color: PURPLE,
-                    marginBottom: 12,
-                    lineHeight: 1.1,
-                  }}
-                >
-                  {isMobile ? <>From<br />$800</> : "Starting from $800"}
-                </div>
-                <div style={{ ...body, fontSize: isMobile ? 12 : 14, marginBottom: 20 }}>
-                  Full Afro House ghost production from scratch &mdash; label
-                  ready. Afro Latin House and Indie Dance also available. 100%
-                  yours.
-                </div>
-
-                <div style={{ marginBottom: 24 }}>
-                  {[
-                    "Full track production",
-                    "Extended Edit + Radio Edit",
-                    "Stems + MIDI files",
-                    "Professional mix + master",
-                    "Mastered WAV + MP3",
-                    "PreMaster WAV",
-                    "NDA + full copyright transfer",
-                    "3 revisions included",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      style={{
-                        display: "flex",
-                        gap: 8,
-                        marginBottom: 8,
-                      }}
-                    >
-                      <span style={{ color: PURPLE }}>&#10003;</span>
-                      <span
-                        style={{
-                          fontFamily: "DM Sans, sans-serif",
-                          fontSize: isMobile ? 11 : 13,
-                          color: "rgba(255,255,255,0.55)",
-                        }}
-                      >
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                  <div
-                    style={{
-                      fontFamily: "DM Sans, sans-serif",
-                      fontSize: 12,
-                      color: "rgba(255,255,255,0.5)",
-                      marginTop: 8,
-                    }}
-                  >
-                    &#9201; Delivery: 7 business days
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank")}
-                  style={{
-                    ...outlineBtn(PURPLE, SHADOW_PURPLE),
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "100%",
-                    background: PURPLE,
-                    color: "#000",
-                    marginTop: "auto",
-                    fontSize: isMobile ? 11 : 14,
-                    letterSpacing: isMobile ? "0.08em" : "0.2em",
-                    padding: isMobile ? "12px 8px" : "14px 32px",
-                  }}
-                >
-                  {isMobile ? "BOOK FREE CALL →" : "Book A Free Consultation →"}
-                </button>
-              </div>
-            </div>
-
-            {/* Vocal production upsell */}
-            <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: 14,
-                  color: "rgba(255,255,255,0.45)",
-                  marginBottom: 8,
-                }}
-              >
-                Need a Full Original Song with Vocals?{" "}
-                <span style={{ color: CYAN, fontWeight: 600 }}>
-                  From $1,500
-                </span>{" "}
-                &mdash;{" "}
-                <a
-                  href={WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={fireWhatsAppConversion}
-                  style={{ color: CYAN, textDecoration: "underline" }}
-                >
-                  ask me
-                </a>
-                .
-              </div>
-              <div
-                style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: 12,
-                  color: "rgba(255,255,255,0.5)",
-                  fontStyle: "italic",
-                }}
-              >
-                Final price confirmed after hearing your project.
-              </div>
-            </div>
+              Book a Free Consultation
+            </button>
           </div>
         </section>
 
@@ -1948,12 +1706,6 @@ function GhostPage() {
                 {[
                   ["Your name", "name", "text", true],
                   ["Your email", "email", "email", true],
-                  [
-                    "Reference track link (YouTube, Spotify, SoundCloud)",
-                    "reference",
-                    "text",
-                    false,
-                  ],
                 ].map(([placeholder, name, type, isRequired]) => (
                   <input
                     key={name}
@@ -1974,31 +1726,10 @@ function GhostPage() {
                   />
                 ))}
 
-                <select
-                  name="genre"
-                  aria-label="Genre"
-                  style={{
-                    background: "#08080f",
-                    border: "1px solid #1a1a2e",
-                    borderRadius: 6,
-                    padding: "14px 16px",
-                    color: "rgba(255,255,255,0.6)",
-                    fontFamily: "DM Sans, sans-serif",
-                    fontSize: 14,
-                    outline: "none",
-                  }}
-                >
-                  <option value="">Your genre / style (optional)</option>
-                  <option>Afro House</option>
-                  <option>Afro Latin House</option>
-                  <option>Indie Dance</option>
-                  <option>Other</option>
-                </select>
-
                 <textarea
                   name="message"
-                  placeholder="Message (optional)"
-                  rows={3}
+                  placeholder="Tell me about your track"
+                  rows={4}
                   style={{
                     background: "#08080f",
                     border: "1px solid #1a1a2e",
@@ -2020,7 +1751,7 @@ function GhostPage() {
                     fontSize: 15,
                   }}
                 >
-                  Send My Request
+                  Send Your Idea
                 </button>
               </form>
 
@@ -2107,12 +1838,12 @@ function GhostPage() {
             marginBottom: 8,
           }}
         >
-          Looking for production lessons?{" "}
+          Looking for Ableton templates or courses?{" "}
           <a
-            href="/"
+            href="/shop"
             style={{ color: CYAN, textDecoration: "underline" }}
           >
-            Visit the full site &rarr;
+            Visit the Shop &rarr;
           </a>
         </div>
         <div

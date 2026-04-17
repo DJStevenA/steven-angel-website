@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { AuthProvider } from "./shop/AuthContext.jsx";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
+const Lessons = lazy(() => import("./Lessons.jsx"));
 const Sign = lazy(() => import("./Sign.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
@@ -26,14 +27,16 @@ function PageTitle() {
     if (isShopSubPage) return;
 
     const titles = {
-      "/": "Ghost Producer · Afro House & Indie Dance | Steven Angel",
+      "/": "Steven Angel — Afro House DJ, Producer & Ableton Mentor",
       "/ghost": "Afro House & Tech House Ghost Producer | Steven Angel",
+      "/lessons": "Ableton Lessons by a Moblack & MTGD Artist | Steven Angel",
       "/sign": "Ghost Production Agreement | Steven Angel",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
     };
     const descriptions = {
-      "/": "Steven Angel — professional ghost producer. Afro House, Indie Dance & Tech House. Released on Moblack, MTGD, Sony.",
+      "/": "DJ, ghost producer and Ableton mentor. Released on Moblack, MTGD & Sony. Played by Hugel & Claptone at Pacha Ibiza. Ghost production, lessons and templates.",
       "/ghost": "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.",
+      "/lessons": "1-on-1 Ableton lessons from a producer released on Moblack, MTGD & Sony. Afro House, Latin House, Tech House & Indie Dance. From $30 intro session.",
       "/sign": "Sign your ghost production agreement with Steven Angel.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
     };
@@ -55,6 +58,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/ghost" element={<Ghost />} />
+            <Route path="/lessons" element={<Lessons />} />
             <Route path="/sign" element={<Sign />} />
             <Route path="/shop" element={<ShopPage />} />
             {/* Auth routes — must come BEFORE /shop/:slug so they're not treated as product slugs */}
