@@ -654,8 +654,8 @@ function GhostPage() {
         rel="noreferrer"
         style={{
           position: "fixed",
-          top: 20,
-          right: 20,
+          bottom: 24,
+          right: 24,
           zIndex: 999,
           display: "flex",
           alignItems: "center",
