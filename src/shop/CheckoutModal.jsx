@@ -54,6 +54,9 @@ export default function CheckoutModal({ product, onClose }) {
   });
   const [status, setStatus] = useState("idle"); // idle | success | error
   const [errorMsg, setErrorMsg] = useState(null);
+  // Guest checkout flow (no account)
+  const [guestMode, setGuestMode] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -96,8 +99,14 @@ export default function CheckoutModal({ product, onClose }) {
 
   const handleSuccess = (purchase) => {
     setStatus("success");
-    // Small delay so user sees "Payment successful!" then redirect
+    // Small delay so user sees "Payment successful!" then redirect.
+    // Guest users don't have a login yet — stay on the page and show the
+    // success screen; email with download + set-password link is on its way.
     setTimeout(() => {
+      if (guestMode) {
+        // No redirect — success screen stays visible until the user closes.
+        return;
+      }
       navigate("/shop/account");
     }, 1800);
   };
@@ -283,84 +292,79 @@ export default function CheckoutModal({ product, onClose }) {
         </div>
 
         {/* ─── Not logged in ─── */}
-        {!authLoading && !user && (
+        {!authLoading && !user && !guestMode && (
           <div>
-            <div
-              style={{
-                padding: 20,
-                border: `1px solid rgba(${accentRgba},0.3)`,
-                borderRadius: 10,
-                background: `rgba(${accentRgba},0.05)`,
-                marginBottom: 20,
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "Barlow Condensed, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 15,
-                  color: "#fff",
-                  marginBottom: 8,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Sign in to continue
+            <div style={{ padding: 20, border: `1px solid rgba(${accentRgba},0.3)`, borderRadius: 10, background: `rgba(${accentRgba},0.05)`, marginBottom: 20 }}>
+              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                Checkout options
               </div>
-              <div
-                style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.65)",
-                  lineHeight: 1.6,
-                }}
-              >
-                Your account lets you re-download your purchases anytime.
-                No credit card info stored — payment is via PayPal.
+              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
+                Buy now as a guest (just email) — or sign in if you already have an account. Either way your files arrive by email.
               </div>
             </div>
+            <button
+              onClick={() => setGuestMode(true)}
+              style={{ display: "block", width: "100%", padding: "14px 20px", background: accentColor, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", textDecoration: "none", border: "none", borderRadius: 8, marginBottom: 10, cursor: "pointer" }}
+            >
+              Buy as Guest
+            </button>
             <Link
               to={`/shop/login?redirect=/shop/${product.slug}`}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "14px 20px",
-                background: accentColor,
-                color: "#000",
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 800,
-                fontSize: 14,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                textAlign: "center",
-                textDecoration: "none",
-                borderRadius: 8,
-                marginBottom: 10,
-              }}
+              style={{ display: "block", width: "100%", padding: "14px 20px", background: "transparent", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.25)", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", textDecoration: "none", borderRadius: 8, marginBottom: 10 }}
             >
               Sign In
             </Link>
             <Link
               to={`/shop/signup?redirect=/shop/${product.slug}`}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "14px 20px",
-                background: "transparent",
-                color: "rgba(255,255,255,0.85)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 700,
-                fontSize: 13,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                textAlign: "center",
-                textDecoration: "none",
-                borderRadius: 8,
-              }}
+              style={{ display: "block", width: "100%", padding: "12px 20px", background: "transparent", color: "rgba(255,255,255,0.55)", fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 12, textAlign: "center", textDecoration: "none" }}
             >
-              Create Account
+              Or create a full account
             </Link>
+          </div>
+        )}
+
+        {/* ─── Guest checkout mode (email + PayPal) ─── */}
+        {!authLoading && !user && guestMode && (
+          <div>
+            <div style={{ padding: 16, border: `1px solid rgba(${accentRgba},0.3)`, borderRadius: 10, background: `rgba(${accentRgba},0.05)`, marginBottom: 18 }}>
+              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, color: accentColor, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.15em" }}>
+                Guest Checkout
+              </div>
+              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
+                After payment you'll get an email with your download + a link to set a password.
+              </div>
+            </div>
+            <label style={{ display: "block", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginBottom: 6 }}>
+              Your Email
+            </label>
+            <input
+              type="email"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, padding: "12px 14px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none", marginBottom: 14, boxSizing: "border-box" }}
+            />
+            {guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail) ? (
+              <>
+                <div style={{ marginBottom: 10 }}>
+                  <CheckoutButton product={product} couponCode={couponCode} guestEmail={guestEmail} onSuccess={handleSuccess} onError={handleError} />
+                </div>
+                <button
+                  onClick={() => { setGuestMode(false); setGuestEmail(""); }}
+                  style={{ display: "block", width: "100%", padding: "8px", background: "transparent", color: "rgba(255,255,255,0.5)", border: "none", fontFamily: "DM Sans, sans-serif", fontSize: 12, cursor: "pointer" }}
+                >
+                  ← Back to options
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => { setGuestMode(false); setGuestEmail(""); }}
+                style={{ display: "block", width: "100%", padding: "12px", background: "transparent", color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, fontFamily: "DM Sans, sans-serif", fontSize: 13, cursor: "pointer" }}
+              >
+                Cancel
+              </button>
+            )}
           </div>
         )}
 

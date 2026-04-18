@@ -60,10 +60,14 @@ function loadPayPalSdk(clientId, mode) {
   return promise;
 }
 
-export default function CheckoutButton({ product, couponCode, onSuccess, onError }) {
+export default function CheckoutButton({ product, couponCode, guestEmail, onSuccess, onError }) {
   const { token, apiBase } = useAuth();
   const containerRef = useRef(null);
   const couponRef = useRef(couponCode);
+  // When running in guest mode, we get a short-lived JWT from /checkout/guest-start
+  // and use it for the /checkout/capture call. Stored in a ref so it survives
+  // between createOrder and onApprove.
+  const guestTokenRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -107,21 +111,23 @@ export default function CheckoutButton({ product, couponCode, onSuccess, onError
 
           createOrder: async () => {
             try {
-              const res = await fetch(`${apiBase}/shop/checkout/create`, {
+              const isGuest = !!guestEmail;
+              const endpoint = isGuest ? "/shop/checkout/guest-start" : "/shop/checkout/create";
+              const headers = { "Content-Type": "application/json" };
+              if (!isGuest && token) headers.Authorization = `Bearer ${token}`;
+              const body = isGuest
+                ? { productId: product.id, email: guestEmail, couponCode: couponRef.current || null }
+                : { productId: product.id, couponCode: couponRef.current || null };
+              const res = await fetch(`${apiBase}${endpoint}`, {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                  productId: product.id,
-                  couponCode: couponRef.current || null,
-                }),
+                headers,
+                body: JSON.stringify(body),
               });
               const data = await res.json();
               if (!res.ok) {
                 throw new Error(data.error || "Failed to create order");
               }
+              if (isGuest && data.token) guestTokenRef.current = data.token;
               return data.orderId;
             } catch (err) {
               const msg = err.message || "Failed to create order";
@@ -133,11 +139,14 @@ export default function CheckoutButton({ product, couponCode, onSuccess, onError
 
           onApprove: async (data) => {
             try {
+              // Use the guest JWT (from /checkout/guest-start) if in guest mode,
+              // otherwise use the logged-in user's token.
+              const captureToken = guestTokenRef.current || token;
               const res = await fetch(`${apiBase}/shop/checkout/capture`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
+                  Authorization: `Bearer ${captureToken}`,
                 },
                 body: JSON.stringify({ orderId: data.orderID }),
               });
