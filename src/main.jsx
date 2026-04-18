@@ -12,9 +12,11 @@ const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
 const LoginPage = lazy(() => import("./shop/LoginPage.jsx"));
 const SignupPage = lazy(() => import("./shop/SignupPage.jsx"));
 const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
+const ForgotPage = lazy(() => import("./shop/ForgotPage.jsx"));
+const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
 
 // Reserved shop subpaths that should NOT be treated as product slugs
-const SHOP_RESERVED_PATHS = new Set(["login", "signup", "account"]);
+const SHOP_RESERVED_PATHS = new Set(["login", "signup", "account", "forgot", "reset"]);
 
 // Dynamic page title + meta description per route (SEO)
 // Note: ProductPage and auth pages set their own title/meta/canonical via useEffect.
@@ -76,6 +78,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/shop/login" element={<LoginPage />} />
             <Route path="/shop/signup" element={<SignupPage />} />
             <Route path="/shop/account" element={<AccountPage />} />
+            <Route path="/shop/forgot" element={<ForgotPage />} />
+            <Route path="/shop/reset" element={<ResetPage />} />
             <Route path="/shop/:slug" element={<ProductPage />} />
             {/* Catch-all — any unknown URL (e.g. /fallover, typos, stale links) redirects to home */}
             <Route path="*" element={<Navigate to="/" replace />} />

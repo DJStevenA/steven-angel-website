@@ -252,6 +252,13 @@ export default function LoginPage() {
               </div>
             )}
 
+            {/* Forgot password link */}
+            <div style={{ textAlign: "right", marginTop: 6, marginBottom: 4 }}>
+              <Link to="/shop/forgot" style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>
+                Forgot password?
+              </Link>
+            </div>
+
             {/* Submit button */}
             <button
               type="submit"
