@@ -28,7 +28,8 @@ export default function GhostCatalog({ isMobile }) {
     fetch(`${API_BASE}/ghost/tracks`)
       .then((r) => r.json())
       .then((data) => {
-        setTracks(Array.isArray(data) ? data : data.tracks || []);
+        const raw = Array.isArray(data) ? data : data.tracks || [];
+        setTracks(raw.filter((t) => !String(t.id || "").startsWith("test-")));
         setLoading(false);
       })
       .catch(() => {

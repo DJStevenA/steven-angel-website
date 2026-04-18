@@ -422,6 +422,9 @@ function GhostPage() {
         sameAs: [
           "https://steven-angel.com/",
           "https://steven-angel.com/ghost",
+          "https://www.instagram.com/theangels_tlv/",
+          "https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz",
+          "https://www.beatport.com/artist/the-angels-il/913642",
         ],
       },
       areaServed: "Worldwide",
@@ -1315,6 +1318,95 @@ function GhostPage() {
             >
               Book a Free Consultation
             </button>
+          </div>
+        </section>
+
+        {/* ═══ Email Capture — between Consultation and Samples ═══ */}
+        <section
+          style={{
+            padding: isMobile ? "28px 20px" : "40px 60px",
+            background: "#06060c",
+            borderTop: "1px solid #0d0d0d",
+          }}
+        >
+          <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
+            <div style={{
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+              fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
+              color: CYAN, marginBottom: 10,
+            }}>
+              Not Ready Yet?
+            </div>
+            <div style={{
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900,
+              fontSize: isMobile ? 22 : 28, lineHeight: 1.15, marginBottom: 8,
+              letterSpacing: "0.02em",
+            }}>
+              Get free production tips & new track drops
+            </div>
+            <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.55)", marginBottom: 18 }}>
+              One email a month. No spam.
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const form = e.target;
+                const email = form.email.value.trim();
+                if (!email) return;
+                const btn = form.querySelector("button");
+                if (btn) { btn.disabled = true; btn.textContent = "Sending..."; }
+                fetch("https://ghost-backend-production-adb6.up.railway.app/contact", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ name: "Newsletter", email, message: "Ghost page email capture", source: "ghost-page-newsletter" }),
+                })
+                  .then((r) => r.json())
+                  .then((d) => {
+                    if (d.success) {
+                      form.reset();
+                      if (btn) { btn.disabled = false; btn.textContent = "Subscribed ✓"; }
+                      if (window.clarity) {
+                        window.clarity("event", "ghostEmailCapture");
+                        window.clarity("set", "conversion_type", "lead_newsletter");
+                        window.clarity("set", "product", "ghost_page_newsletter");
+                        window.clarity("set", "value", "10");
+                      }
+                      if (window.gtag) window.gtag("event", "sign_up", { event_category: "newsletter", event_label: "ghost_page", value: 10, currency: "USD" });
+                    } else {
+                      if (btn) { btn.disabled = false; btn.textContent = "Try Again"; }
+                    }
+                  })
+                  .catch(() => {
+                    if (btn) { btn.disabled = false; btn.textContent = "Try Again"; }
+                  });
+              }}
+              style={{ display: "flex", gap: 8, flexDirection: isMobile ? "column" : "row" }}
+            >
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="your@email.com"
+                style={{
+                  flex: 1, background: "#08080f", border: "1px solid #1a1a2e",
+                  borderRadius: 6, padding: "12px 16px", color: "#fff",
+                  fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  background: `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+                  color: "#000", border: "none", borderRadius: 6,
+                  padding: isMobile ? "12px 18px" : "12px 24px",
+                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900,
+                  fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase",
+                  cursor: "pointer", whiteSpace: "nowrap",
+                }}
+              >
+                Get Tips
+              </button>
+            </form>
           </div>
         </section>
 

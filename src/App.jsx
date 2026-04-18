@@ -171,7 +171,8 @@ export default function App() {
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
                 Part of the Afro / Latin House duo{" "}
                 <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none" }}>The Angels</a>
-                {" "}— 15M+ streams
+                {" "}— 15M+ streams ·{" "}
+                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none" }}>Beatport</a>
               </div>
 
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.55)", fontStyle: "italic", marginTop: 4 }}>
