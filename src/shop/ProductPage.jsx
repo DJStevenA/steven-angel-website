@@ -858,7 +858,7 @@ export default function ProductPage() {
             to="/"
             style={{ color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}
           >
-            stevenangel.com
+            steven-angel.com
           </Link>
         </span>
       </footer>

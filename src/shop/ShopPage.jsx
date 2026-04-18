@@ -389,7 +389,7 @@ export default function ShopPage() {
         >
           © 2026 Steven Angel ·{" "}
           <a href="/" style={{ color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}>
-            stevenangel.com
+            steven-angel.com
           </a>
         </span>
       </footer>

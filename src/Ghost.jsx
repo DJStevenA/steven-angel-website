@@ -800,7 +800,7 @@ function GhostPage() {
                   color: "#000",
                   fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
                   fontSize: isMobile ? 12 : 15, letterSpacing: "0.15em", textTransform: "uppercase",
-                  padding: isMobile ? "13px 18px" : "16px 28px", borderRadius: 50, border: "none",
+                  padding: isMobile ? "13px 18px" : "16px 28px", borderRadius: 50, border: `2px solid ${CYAN}`,
                   cursor: "pointer", textDecoration: "none",
                   boxShadow: "0 0 24px rgba(187,134,252,0.45)",
                   whiteSpace: "nowrap",
@@ -1897,7 +1897,7 @@ function GhostPage() {
               textDecoration: "underline",
             }}
           >
-            stevenangel.com
+            steven-angel.com
           </a>
         </span>
       </footer>
