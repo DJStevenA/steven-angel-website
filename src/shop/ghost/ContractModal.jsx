@@ -13,6 +13,23 @@ const API_BASE = "https://ghost-backend-production-adb6.up.railway.app";
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
 
+const sdkCache = new Map();
+function loadPayPalSdk(clientId, mode) {
+  const cacheKey = `${clientId}-${mode}`;
+  if (sdkCache.has(cacheKey)) return sdkCache.get(cacheKey);
+  const promise = new Promise((resolve, reject) => {
+    if (window.paypal && window.__paypalLoadedClientId === cacheKey) return resolve(window.paypal);
+    const script = document.createElement("script");
+    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture&disable-funding=credit,card`;
+    script.async = true;
+    script.onload = () => window.paypal ? (window.__paypalLoadedClientId = cacheKey, resolve(window.paypal)) : reject(new Error("PayPal SDK undefined"));
+    script.onerror = () => { sdkCache.delete(cacheKey); reject(new Error("Failed to load PayPal SDK")); };
+    document.body.appendChild(script);
+  });
+  sdkCache.set(cacheKey, promise);
+  return promise;
+}
+
 export default function ContractModal({ track, onClose }) {
   const { user, token, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -52,43 +69,56 @@ export default function ContractModal({ track, onClose }) {
   // Render PayPal buttons when step becomes "paypal"
   useEffect(() => {
     if (step !== "paypal" || !paypalRef.current || paypalRendered.current) return;
-    if (!window.paypal) return;
     paypalRendered.current = true;
 
-    window.paypal.Buttons({
-      style: { layout: "vertical", color: "gold", shape: "rect", label: "pay" },
-      createOrder: async () => {
-        const res = await fetch(`${API_BASE}/ghost/checkout/create`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ trackId: track.id, contractSignedAt }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to create order");
-        return data.orderId;
-      },
-      onApprove: async (data) => {
-        try {
-          const res = await fetch(`${API_BASE}/ghost/checkout/capture`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({ orderId: data.orderID }),
-          });
-          const result = await res.json();
-          if (!res.ok) throw new Error(result.error || "Capture failed");
-          setDownloadUrl(result.downloadUrl);
-          setStep("success");
-          if (window.clarity) window.clarity("event", "ghostTrackPurchased");
-          if (window.gtag) window.gtag("event", "purchase", { currency: "USD", value: track.price_usd, items: [{ id: track.id, name: track.name }] });
-        } catch (err) {
-          setPaypalError(err.message);
-        }
-      },
-      onError: (err) => {
-        setPaypalError("Payment failed. Please try again.");
-        console.error("[ghost] PayPal error:", err);
-      },
-    }).render(paypalRef.current);
+    async function renderPayPal() {
+      try {
+        const configRes = await fetch(`${API_BASE}/shop/config`);
+        const config = await configRes.json();
+        const paypal = await loadPayPalSdk(config.paypalClientId, config.paypalMode);
+        if (!paypalRef.current) return;
+
+        paypal.Buttons({
+          style: { layout: "vertical", color: "gold", shape: "rect", label: "pay" },
+          createOrder: async () => {
+            const res = await fetch(`${API_BASE}/ghost/checkout/create`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({ trackId: track.id, contractSignedAt }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to create order");
+            return data.orderId;
+          },
+          onApprove: async (data) => {
+            try {
+              const res = await fetch(`${API_BASE}/ghost/checkout/capture`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                body: JSON.stringify({ orderId: data.orderID }),
+              });
+              const result = await res.json();
+              if (!res.ok) throw new Error(result.error || "Capture failed");
+              setDownloadUrl(result.downloadUrl);
+              setStep("success");
+              if (window.clarity) window.clarity("event", "ghostTrackPurchased");
+              if (window.gtag) window.gtag("event", "purchase", { currency: "USD", value: track.price_usd, items: [{ id: track.id, name: track.name }] });
+            } catch (err) {
+              setPaypalError(err.message);
+            }
+          },
+          onError: (err) => {
+            setPaypalError("Payment failed. Please try again.");
+            console.error("[ghost] PayPal error:", err);
+          },
+        }).render(paypalRef.current);
+      } catch (err) {
+        setPaypalError("Could not load payment. Please refresh and try again.");
+        console.error("[ghost] PayPal load error:", err);
+      }
+    }
+
+    renderPayPal();
   }, [step, token, track, contractSignedAt]);
 
   const handleSign = async () => {
