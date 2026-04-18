@@ -824,25 +824,6 @@ function GhostPage() {
               </button>
             </div>
 
-            {/* Listen CTA */}
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
-              <button
-                onClick={() => { const el = document.getElementById("audio-samples"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  background: "transparent", color: "rgba(255,255,255,0.45)",
-                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600,
-                  fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
-                  padding: "8px 20px", borderRadius: 50, border: "1px solid rgba(255,255,255,0.15)",
-                  cursor: "pointer",
-                }}
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)">
-                  <polygon points="5,3 19,12 5,21" />
-                </svg>
-                Listen To My Work
-              </button>
-            </div>
           </div>
         </section>
 
