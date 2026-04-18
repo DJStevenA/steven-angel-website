@@ -122,6 +122,21 @@
       }
     </style>
 
+    <!-- iOS Safari polyfill: audio elements don't have webkitEnterFullscreen.
+         Clarity (and some iOS internals) try to call it on <audio> elements,
+         causing "webkitEnterFullscreen is not a function" in 25% of sessions. -->
+    <script>
+      (function() {
+        try {
+          if (typeof HTMLAudioElement !== 'undefined' &&
+              typeof HTMLAudioElement.prototype.webkitEnterFullscreen === 'undefined') {
+            HTMLAudioElement.prototype.webkitEnterFullscreen = function() {};
+            HTMLAudioElement.prototype.webkitExitFullscreen = function() {};
+          }
+        } catch(e) {}
+      })();
+    </script>
+
     <!-- Google Analytics + Ads (async, non-blocking) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KTRD05NY5B"></script>
     <script>
