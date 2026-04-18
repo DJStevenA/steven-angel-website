@@ -110,6 +110,118 @@ const fireWhatsAppConversion = () => {
   if (window.clarity) window.clarity("event", "lessonWhatsAppClick");
 };
 
+/* ═══════════════════════════════════════════════════════════
+   LessonModules — 3 expandable curriculum cards
+   ═══════════════════════════════════════════════════════════ */
+const MODULES = [
+  {
+    id: "production",
+    icon: "🎹",
+    title: "MODULE 1",
+    subtitle: "PRODUCTION",
+    hook: "Build tracks from scratch — the workflow that gets signed.",
+    items: [
+      "DAW fundamentals (Ableton focus)",
+      "Sound design, arrangement & groove",
+      "Genre-specific workflows — Afro House, Melodic, Indie Dance",
+      "Hands-on: build a full track from scratch",
+    ],
+    clarityEvent: "module_expand_production",
+  },
+  {
+    id: "mixing",
+    icon: "🎚️",
+    title: "MODULE 2",
+    subtitle: "MIXING",
+    hook: "Make your tracks sound pro — EQ, compression, space.",
+    items: [
+      "EQ, compression & saturation — the essentials",
+      "Mix bus processing",
+      "Spatial placement — reverb, delay, stereo field",
+      "Reference-track mixing workflow",
+    ],
+    clarityEvent: "module_expand_mixing",
+  },
+  {
+    id: "mastering",
+    icon: "💿",
+    title: "MODULE 3",
+    subtitle: "MASTERING",
+    hook: "Release-ready loudness for Beatport, Spotify & beyond.",
+    items: [
+      "Loudness, dynamics & stereo imaging",
+      "Prepping for streaming platforms (Spotify, Beatport)",
+      "Genre-specific mastering targets",
+      "Self-mastering vs outsourcing — when to do what",
+    ],
+    clarityEvent: "module_expand_mastering",
+  },
+];
+
+function LessonModules({ isMobile }) {
+  const [openModules, setOpenModules] = useState([]);
+
+  const toggle = (id, clarityEvent) => {
+    setOpenModules((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
+    if (window.clarity) window.clarity("event", clarityEvent);
+    if (window.gtag) window.gtag("event", clarityEvent);
+  };
+
+  return (
+    <section id="curriculum" style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+        <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN, textAlign: "center", marginBottom: 10 }}>WHAT YOU LEARN</div>
+        <h2 style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 28 : 40, textTransform: "uppercase", color: "#fff", textAlign: "center", marginBottom: isMobile ? 28 : 40 }}>
+          THE <span style={{ color: CYAN }}>CURRICULUM</span>
+        </h2>
+
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: isMobile ? 14 : 20 }}>
+          {MODULES.map(({ id, icon, title, subtitle, hook, items, clarityEvent }) => {
+            const isOpen = openModules.includes(id);
+            return (
+              <div
+                key={id}
+                style={{ background: "#08081a", border: `1px solid ${isOpen ? CYAN : "rgba(255,255,255,0.08)"}`, borderRadius: 12, overflow: "hidden", transition: "border-color 0.2s" }}
+              >
+                {/* Card header — always visible, tap to expand */}
+                <button
+                  onClick={() => toggle(id, clarityEvent)}
+                  style={{ width: "100%", background: "none", border: "none", cursor: "pointer", padding: isMobile ? "24px 20px" : "28px 24px", textAlign: "left", display: "flex", flexDirection: "column", gap: 8, minHeight: 44 }}
+                  aria-expanded={isOpen}
+                >
+                  <div style={{ fontSize: 28 }}>{icon}</div>
+                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN }}>{title}</div>
+                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 22 : 24, textTransform: "uppercase", color: "#fff" }}>{subtitle}</div>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>{hook}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", color: CYAN, marginTop: 4 }}>
+                    {isOpen ? "▲ Close" : "▼ What's Inside"}
+                  </div>
+                </button>
+
+                {/* Expandable content */}
+                {isOpen && (
+                  <div style={{ padding: isMobile ? "0 20px 24px" : "0 24px 28px", borderTop: "1px solid rgba(0,229,255,0.1)" }}>
+                    <ul style={{ margin: "16px 0 0", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+                      {items.map((item) => (
+                        <li key={item} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontFamily: "DM Sans, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.5 }}>
+                          <span style={{ color: CYAN, flexShrink: 0, marginTop: 2 }}>✓</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Lessons() {
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
   const [formStatus, setFormStatus] = useState(null);
@@ -204,6 +316,52 @@ export default function Lessons() {
             </div>
           </div>
         </section>
+
+        {/* ═══ 2-CTA ROW ═══ */}
+        <section style={{ padding: isMobile ? "40px 20px" : "56px 60px", background: "#02020e", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+          <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 16 : 24 }}>
+
+            {/* CTA 1 — Explore Curriculum (Primary) */}
+            <div style={{ background: "linear-gradient(135deg, #04040f, #0a0a1a)", border: `2px solid ${CYAN}`, borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10, boxShadow: "0 0 32px rgba(0,229,255,0.07)" }}>
+              <div style={{ fontSize: 28 }}>📖</div>
+              <div style={{ ...label(CYAN), fontSize: 10 }}>CURRICULUM</div>
+              <div style={{ ...heading(isMobile ? 22 : 26), color: "#fff", lineHeight: 1.15 }}>EXPLORE<br />CURRICULUM</div>
+              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, flex: 1 }}>See what you'll learn — Production, Mixing &amp; Mastering modules.</div>
+              <button
+                onClick={() => {
+                  if (window.clarity) window.clarity("event", "cta_lessons_explore_click");
+                  if (window.gtag) window.gtag("event", "cta_lessons_explore_click");
+                  const el = document.getElementById("curriculum");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg,${CYAN},#00b8d4)`, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "14px 24px", borderRadius: 6, border: "none", cursor: "pointer", marginTop: 8, minHeight: 44 }}
+              >
+                View Modules
+              </button>
+            </div>
+
+            {/* CTA 2 — Book Instruction (Secondary) */}
+            <div style={{ background: "#04040f", border: `1px solid rgba(187,134,252,0.25)`, borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ fontSize: 28 }}>📅</div>
+              <div style={{ ...label(PURPLE), fontSize: 10 }}>DIRECT BOOKING</div>
+              <div style={{ ...heading(isMobile ? 22 : 26), color: "#fff", lineHeight: 1.15 }}>BOOK<br />INSTRUCTION</div>
+              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, flex: 1 }}>Skip ahead — talk to me directly. First lesson from $30.</div>
+              <a
+                href={CALENDLY_INTRO}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => { if (window.clarity) window.clarity("event", "cta_lessons_book_click"); if (window.gtag) window.gtag("event", "cta_lessons_book_click"); fireIntroClick(); }}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", border: `2px solid ${PURPLE}`, color: PURPLE, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 24px", borderRadius: 6, textDecoration: "none", marginTop: 8, minHeight: 44, background: "transparent" }}
+              >
+                Open Calendly
+              </a>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ═══ CURRICULUM — 3 MODULE CARDS ═══ */}
+        <LessonModules isMobile={isMobile} />
 
         {/* ═══ ABOUT STEVEN ═══ */}
         <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>

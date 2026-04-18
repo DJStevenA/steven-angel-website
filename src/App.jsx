@@ -131,6 +131,74 @@ export default function App() {
           </div>
         </section>
 
+        {/* ══════ TRUST BAR ══════ */}
+        <div style={{ background: "#04040f", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "14px 24px", textAlign: "center" }}>
+          <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 12 : 14, color: "rgba(255,255,255,0.5)", letterSpacing: "0.04em" }}>
+            Played by <span style={{ color: "rgba(255,255,255,0.9)" }}>Claptone, Hugel, Francis Mercier</span>
+            <span style={{ margin: "0 14px", color: "rgba(255,255,255,0.2)" }}>|</span>
+            Released on <span style={{ color: "rgba(255,255,255,0.9)" }}>Sony, Moblack, MTGD, Godeeva</span>
+          </div>
+        </div>
+
+        {/* ══════ SERVICES — "What I Do" ══════ */}
+        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000" }}>
+          <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+            <div style={{ ...label(cyan), textAlign: "center", marginBottom: 10 }}>CHOOSE YOUR PATH</div>
+            <h2 style={{ ...heading(isMobile ? 28 : 40), textAlign: "center", color: "#fff", marginBottom: isMobile ? 32 : 48 }}>
+              WHAT <span style={{ color: cyan }}>I DO</span>
+            </h2>
+
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: isMobile ? 16 : 24 }}>
+
+              {/* Ghost Card — Primary emphasis */}
+              <div style={{ background: "linear-gradient(135deg, #04040f, #0a0a1a)", border: `2px solid ${cyan}`, borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10, boxShadow: `0 0 32px rgba(0,229,255,0.08)` }}>
+                <div style={{ fontSize: 32 }}>👻</div>
+                <div style={{ ...label(cyan), fontSize: 10 }}>PREMIUM SERVICE</div>
+                <div style={{ ...heading(isMobile ? 20 : 22), color: "#fff", lineHeight: 1.2 }}>GHOST PRODUCTION<br />&amp; DEMO FINISHING</div>
+                <div style={{ ...body, fontSize: 14, flex: 1, color: "rgba(255,255,255,0.6)" }}>For artists who need Label-Ready tracks — Afro House, Tech House, Indie Dance.</div>
+                <Link
+                  to="/ghost"
+                  onClick={() => { if (window.clarity) window.clarity("event", "cta_home_ghost_click"); if (window.gtag) window.gtag("event", "cta_home_ghost_click"); }}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg,${cyan},#00b8d4)`, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "14px 24px", borderRadius: 6, textDecoration: "none", marginTop: 8, minHeight: 44 }}
+                >
+                  Get Your Track
+                </Link>
+              </div>
+
+              {/* Lessons Card */}
+              <div style={{ background: "#04040f", border: `1px solid rgba(187,134,252,0.25)`, borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ fontSize: 32 }}>🎓</div>
+                <div style={{ ...label(purple), fontSize: 10 }}>MENTORSHIP</div>
+                <div style={{ ...heading(isMobile ? 20 : 22), color: "#fff", lineHeight: 1.2 }}>PRODUCTION, MIX<br />&amp; MASTERING LESSONS</div>
+                <div style={{ ...body, fontSize: 14, flex: 1, color: "rgba(255,255,255,0.6)" }}>For producers who want to master it themselves — 1-on-1 Ableton mentorship.</div>
+                <Link
+                  to="/lessons"
+                  onClick={() => { if (window.clarity) window.clarity("event", "cta_home_lessons_click"); if (window.gtag) window.gtag("event", "cta_home_lessons_click"); }}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", border: `2px solid ${purple}`, color: purple, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 24px", borderRadius: 6, textDecoration: "none", marginTop: 8, minHeight: 44, background: "transparent" }}
+                >
+                  Start Learning
+                </Link>
+              </div>
+
+              {/* Shop Card */}
+              <div style={{ background: "#04040f", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ fontSize: 32 }}>🛒</div>
+                <div style={{ ...label("rgba(255,255,255,0.45)"), fontSize: 10 }}>SELF-STUDY</div>
+                <div style={{ ...heading(isMobile ? 20 : 22), color: "#fff", lineHeight: 1.2 }}>TEMPLATES &amp;<br />MASTERCLASS SHOP</div>
+                <div style={{ ...body, fontSize: 14, flex: 1, color: "rgba(255,255,255,0.6)" }}>For producers building their toolkit — Ableton templates, sample packs &amp; more.</div>
+                <Link
+                  to="/shop"
+                  onClick={() => { if (window.clarity) window.clarity("event", "cta_home_shop_click"); if (window.gtag) window.gtag("event", "cta_home_shop_click"); }}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.7)", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 24px", borderRadius: 6, textDecoration: "none", marginTop: 8, minHeight: 44, background: "transparent" }}
+                >
+                  Browse Shop
+                </Link>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* ══════ 2. BIO — About Steven ══════ */}
         <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 48, alignItems: "center" }}>
