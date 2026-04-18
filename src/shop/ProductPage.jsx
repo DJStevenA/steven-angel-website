@@ -22,6 +22,8 @@ import {
   getProductSpecs,
 } from "./products.js";
 import CheckoutModal from "./CheckoutModal.jsx";
+import Nav from "../Nav.jsx";
+import Footer from "../Footer.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -312,22 +314,7 @@ export default function ProductPage() {
           `${product.name} — ${product.genre} Ableton Template by Steven Angel`}
       </h1>
 
-      {/* Top Logo Bar */}
-      <div style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}>
-        <Link
-          to="/"
-          style={{
-            fontFamily: "Barlow Condensed, sans-serif",
-            fontWeight: 900,
-            fontSize: 22,
-            letterSpacing: "0.1em",
-            textDecoration: "none",
-            color: "#fff",
-          }}
-        >
-          STEVEN <span style={{ color: CYAN }}>ANGEL</span>
-        </Link>
-      </div>
+      <Nav />
 
       {/* Breadcrumb */}
       <nav
@@ -844,31 +831,7 @@ export default function ProductPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer
-        style={{
-          padding: "28px 40px",
-          background: "#02020a",
-          borderTop: "1px solid #0d0d18",
-          textAlign: "center",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "DM Sans, sans-serif",
-            fontSize: 12,
-            color: "rgba(255,255,255,0.6)",
-          }}
-        >
-          © 2026 Steven Angel ·{" "}
-          <Link
-            to="/"
-            style={{ color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}
-          >
-            steven-angel.com
-          </Link>
-        </span>
-      </footer>
+      <Footer />
 
       {/* Checkout Modal — opens when user clicks Buy Now */}
       {checkoutOpen && (

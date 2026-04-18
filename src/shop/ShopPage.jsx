@@ -6,6 +6,7 @@ import DiscountPopup from "./DiscountPopup.jsx";
 import CheckoutModal from "./CheckoutModal.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import GhostCatalog from "./ghost/GhostCatalog.jsx";
+import Footer from "../Footer.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -358,41 +359,7 @@ export default function ShopPage() {
         )}
       </main>
 
-      {/* ═══ Footer ═══ */}
-      <footer
-        style={{
-          padding: "28px 40px",
-          background: "#02020a",
-          borderTop: "1px solid #0d0d18",
-          textAlign: "center",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "DM Sans, sans-serif",
-            fontSize: 12,
-            color: "rgba(255,255,255,0.5)",
-            marginBottom: 8,
-          }}
-        >
-          Looking for ghost production?{" "}
-          <a href="/ghost" style={{ color: CYAN, textDecoration: "none" }}>
-            Visit the Ghost page
-          </a>
-        </div>
-        <span
-          style={{
-            fontFamily: "DM Sans, sans-serif",
-            fontSize: 12,
-            color: "rgba(255,255,255,0.6)",
-          }}
-        >
-          © 2026 Steven Angel ·{" "}
-          <a href="/" style={{ color: "rgba(255,255,255,0.8)", textDecoration: "underline" }}>
-            steven-angel.com
-          </a>
-        </span>
-      </footer>
+      <Footer />
 
       {/* ═══ Support Widget ═══ */}
       <SupportWidget />

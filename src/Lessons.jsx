@@ -8,6 +8,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav.jsx";
+import Footer from "./Footer.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -466,22 +467,7 @@ export default function Lessons() {
         </section>
       </main>
 
-      {/* ═══ FOOTER ═══ */}
-      <footer style={{ padding: "28px 40px", background: "#02020a", borderTop: "1px solid #0d0d18", textAlign: "center" }}>
-        <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 11 : 13, color: "rgba(255,255,255,0.6)", marginBottom: 8 }}>
-          Looking for ghost production?{" "}
-          <Link to="/ghost" style={{ color: CYAN, textDecoration: "underline" }}>steven-angel.com/ghost</Link>
-          {" "}&middot;{" "}
-          Looking for Ableton templates?{" "}
-          <Link to="/shop" style={{ color: CYAN, textDecoration: "underline" }}>Visit the Shop</Link>
-        </div>
-        <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>
-          Afro House Production Mentor | Moblack &middot; MTGD &middot; Godeeva | Online Worldwide
-        </div>
-        <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.55)" }}>
-          &copy; 2026 Steven Angel
-        </span>
-      </footer>
+      <Footer />
     </div>
   );
 }
