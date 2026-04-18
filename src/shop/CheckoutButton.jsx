@@ -149,6 +149,19 @@ export default function CheckoutButton({ product, couponCode, onSuccess, onError
               if (window.clarity) {
                 window.clarity("event", "purchaseComplete");
                 window.clarity("set", "purchaseProduct", product?.name || "unknown");
+                window.clarity("set", "conversion_type", "purchase_shop");
+                window.clarity("set", "product", product?.name || "unknown");
+                window.clarity("set", "value", String(product?.price || 0));
+              }
+              if (window.gtag && product) {
+                window.gtag("event", "purchase", {
+                  event_category: "shop",
+                  event_label: product.name,
+                  transaction_id: data.orderID,
+                  value: product.price,
+                  currency: "USD",
+                  items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1 }],
+                });
               }
               if (onSuccess) onSuccess(json.purchase);
             } catch (err) {

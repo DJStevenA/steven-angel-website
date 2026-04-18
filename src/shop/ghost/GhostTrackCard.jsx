@@ -73,6 +73,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
         window.dispatchEvent(new CustomEvent("ghostTrackPlay", { detail: { trackId: track.id } }));
         audioRef.current.play();
         setPlaying(true);
+        if (window.gtag) window.gtag("event", "select_content", { event_category: "catalog_preview", event_label: track.name, content_type: "ghost_track" });
       }
     }
   };
@@ -273,7 +274,17 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
           </div>
 
           <button
-            onClick={() => !isSold && onBuy(track)}
+            onClick={() => {
+              if (isSold) return;
+              if (window.gtag) window.gtag("event", "begin_checkout", {
+                event_category: "ghost_catalog",
+                event_label: track.name,
+                value: track.price_eur,
+                currency: "EUR",
+                items: [{ item_id: track.id, item_name: track.name, item_category: track.genre, price: track.price_eur, quantity: 1 }],
+              });
+              onBuy(track);
+            }}
             disabled={isSold}
             style={{
               padding: isMobile ? "10px 18px" : "11px 22px",

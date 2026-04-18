@@ -90,24 +90,21 @@ const CALENDLY_6HR = "https://calendly.com/dj-steven-angel/3hr-production-lesson
 
 const fireCalendlyConversion = () => {
   if (window.gtag) {
-    window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 120.0, currency: "USD" });
-    window.gtag("event", "generate_lead", { event_category: "booking", event_label: "lesson_full" });
+    window.gtag("event", "book_appointment", { event_category: "calendly", event_label: "lessons", value: 120, currency: "USD" });
   }
   if (window.clarity) window.clarity("event", "lessonCalendlyClick");
 };
 
 const fireIntroClick = () => {
   if (window.gtag) {
-    window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 30.0, currency: "USD" });
-    window.gtag("event", "generate_lead", { event_category: "booking", event_label: "lesson_intro" });
+    window.gtag("event", "sign_up", { event_category: "lessons", event_label: "free_trial_$30", value: 30, currency: "USD" });
   }
   if (window.clarity) window.clarity("event", "lessonStudioSessionClick");
 };
 
 const fireWhatsAppConversion = () => {
   if (window.gtag) {
-    window.gtag("event", "conversion", { send_to: "AW-999991173/b8BYCIHTmJIcEIXP6twD", value: 120.0, currency: "USD" });
-    window.gtag("event", "contact", { event_category: "whatsapp", event_label: "lessons_page" });
+    window.gtag("event", "contact", { event_category: "whatsapp", event_label: "lessons", value: 50, currency: "USD" });
   }
   if (window.clarity) window.clarity("event", "lessonWhatsAppClick");
 };
@@ -424,7 +421,13 @@ export default function Lessons() {
                       if (d.success) {
                         setFormStatus("sent");
                         form.reset();
-                        if (window.clarity) window.clarity("event", "lessonFormSubmit");
+                        if (window.clarity) {
+                          window.clarity("event", "lessonFormSubmit");
+                          window.clarity("set", "conversion_type", "lead_lessons_contact");
+                          window.clarity("set", "product", "lessons_contact");
+                          window.clarity("set", "value", "80");
+                        }
+                        if (window.gtag) window.gtag("event", "generate_lead", { event_category: "form", event_label: "lessons_contact", value: 80, currency: "USD" });
                       } else {
                         setFormStatus("error");
                       }

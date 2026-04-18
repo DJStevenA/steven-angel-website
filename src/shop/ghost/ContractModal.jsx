@@ -101,8 +101,20 @@ export default function ContractModal({ track, onClose }) {
               if (!res.ok) throw new Error(result.error || "Capture failed");
               setDownloadUrl(result.downloadUrl);
               setStep("success");
-              if (window.clarity) window.clarity("event", "ghostTrackPurchased");
-              if (window.gtag) window.gtag("event", "purchase", { currency: "USD", value: track.price_usd, items: [{ id: track.id, name: track.name }] });
+              if (window.clarity) {
+                window.clarity("event", "ghostTrackPurchased");
+                window.clarity("set", "conversion_type", "purchase_ghost");
+                window.clarity("set", "product", track.name);
+                window.clarity("set", "value", String(track.price_eur));
+              }
+              if (window.gtag) window.gtag("event", "purchase", {
+                event_category: "ghost_catalog",
+                event_label: track.name,
+                transaction_id: data.orderID,
+                value: track.price_eur,
+                currency: "EUR",
+                items: [{ item_id: track.id, item_name: track.name, item_category: track.genre, price: track.price_eur, quantity: 1 }],
+              });
             } catch (err) {
               setPaypalError(err.message);
             }

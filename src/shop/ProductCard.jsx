@@ -52,7 +52,10 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
   if (!playing) {
     return (
       <button
-        onClick={() => setPlaying(true)}
+        onClick={() => {
+          setPlaying(true);
+          if (window.gtag) window.gtag("event", "select_content", { event_category: "product_preview", event_label: product.name, content_type: "template" });
+        }}
         style={{
           display: "flex",
           alignItems: "center",

@@ -1,11 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 
-/* ─── Google Ads conversion helper ─── */
+/* ─── WhatsApp click tracker (GA4 only; Ads imports via Option B) ─── */
 const fireWhatsAppConversion = () => {
   if (window.gtag) {
-    window.gtag('event', 'conversion', { 'send_to': 'AW-999991173/b8BYCIHTmJIcEIXP6twD', 'value': 300.0, 'currency': 'USD' });
-    window.gtag('event', 'contact', { event_category: 'whatsapp', event_label: 'ghost_page' });
+    window.gtag('event', 'contact', { event_category: 'whatsapp', event_label: 'ghost', value: 50, currency: 'USD' });
   }
 };
 
@@ -1304,7 +1303,7 @@ function GhostPage() {
               I take a limited number of projects each month.
             </div>
             <button
-              onClick={() => { window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank"); if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-999991173/LFPzCO2VyJQBEIXP6twD", value: 300.0, currency: "USD" }); if (window.clarity) window.clarity("event", "ghostCalendlyClick"); }}
+              onClick={() => { window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank"); if (window.gtag) window.gtag("event", "book_appointment", { event_category: "calendly", event_label: "ghost_consultation", value: 300, currency: "USD" }); if (window.clarity) window.clarity("event", "ghostCalendlyClick"); }}
               style={{
                 ...outlineBtn(CYAN, SHADOW_CYAN),
                 display: "inline-flex",
@@ -1415,7 +1414,7 @@ function GhostPage() {
                                     if (a !== ev.target) a.pause();
                                   });
                                 if (window.clarity) { window.clarity("event", "ghostAudioPlay"); window.clarity("set", "audioTrack", title); }
-                                if (window.gtag) window.gtag("event", "select_content", { event_category: "audio", event_label: title });
+                                if (window.gtag) window.gtag("event", "select_content", { event_category: "catalog_preview", event_label: title, content_type: "ghost_track" });
                               }}
                             >
                               <source src={file} type="audio/mpeg" />
@@ -1448,7 +1447,7 @@ function GhostPage() {
                                     if (a !== ev.target) a.pause();
                                   });
                                 if (window.clarity) { window.clarity("event", "ghostAudioPlay"); window.clarity("set", "audioTrack", sample.title || "unknown"); }
-                                if (window.gtag) window.gtag("event", "select_content", { event_category: "audio", event_label: sample.title || "unknown" });
+                                if (window.gtag) window.gtag("event", "select_content", { event_category: "catalog_preview", event_label: sample.title || "unknown", content_type: "ghost_track" });
                               }}
                             >
                               <source
@@ -1699,16 +1698,14 @@ function GhostPage() {
                       if (d.success) {
                         alert("Message sent! I'll get back to you within 24 hours.");
                         form.reset();
-                        if (window.clarity) window.clarity("event", "ghostFormSubmit");
+                        if (window.clarity) {
+                          window.clarity("event", "ghostFormSubmit");
+                          window.clarity("set", "conversion_type", "lead_ghost_contact");
+                          window.clarity("set", "product", "ghost_contact");
+                          window.clarity("set", "value", "300");
+                        }
                         if (window.gtag) {
-                          window.gtag('event', 'conversion', {
-                            'send_to': 'AW-999991173',
-                            'value': 300,
-                            'currency': 'USD',
-                            'event_category': 'lead',
-                            'event_label': 'ghost_page_contact_form',
-                          });
-                          window.gtag('event', 'generate_lead', { event_category: 'form', event_label: 'ghost_contact' });
+                          window.gtag('event', 'generate_lead', { event_category: 'form', event_label: 'ghost_contact', value: 300, currency: 'USD' });
                         }
                       } else {
                         alert("Something went wrong. Please try WhatsApp instead.");

@@ -294,6 +294,13 @@ export default function ProductPage() {
     .slice(0, 3);
 
   const handleBuy = () => {
+    if (window.gtag) window.gtag("event", "add_to_cart", {
+      event_category: "shop",
+      event_label: product.name,
+      value: product.price,
+      currency: "USD",
+      items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1 }],
+    });
     setCheckoutOpen(true);
   };
 

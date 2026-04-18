@@ -37,14 +37,14 @@ export default function Sign() {
       if (!r.ok) throw new Error(data.error || "Failed");
       setSignedData(data);
       setStatus("signed");
+      const signValue = pkg === 'demo' ? 300 : pkg === 'full' ? 800 : 1500;
       if (window.gtag) {
-        window.gtag('event', 'conversion', {
-          'send_to': 'AW-999991173',
-          'value': pkg === 'demo' ? 300 : pkg === 'full' ? 800 : 1500,
-          'currency': 'USD',
-          'event_category': 'lead',
-          'event_label': `sign_${pkg}`,
-        });
+        window.gtag('event', 'generate_lead', { event_category: 'form', event_label: `ghost_contract_${pkg}`, value: signValue, currency: 'USD' });
+      }
+      if (window.clarity) {
+        window.clarity("set", "conversion_type", "lead_ghost_contract");
+        window.clarity("set", "product", `sign_${pkg}`);
+        window.clarity("set", "value", String(signValue));
       }
     } catch (err) {
       alert("Something went wrong: " + err.message);

@@ -425,7 +425,7 @@ function SupportWidget() {
           <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>
             Need Help?
           </div>
-          <a href={WA} target="_blank" rel="noreferrer" style={{
+          <a href={WA} target="_blank" rel="noreferrer" onClick={() => { if (window.gtag) window.gtag("event", "contact", { event_category: "whatsapp", event_label: "shop", value: 50, currency: "USD" }); }} style={{
             display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
             background: "#25D366", borderRadius: 8, textDecoration: "none",
             fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 13, color: "#fff",
