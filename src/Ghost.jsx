@@ -790,29 +790,54 @@ function GhostPage() {
               Your Vision. My Sound.
             </div>
 
+            {/* Primary CTAs */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginTop: 8 }}>
+              <a
+                href="/shop?tab=ghost"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: "linear-gradient(135deg,#BB86FC,#9b59d4)",
+                  color: "#000",
+                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                  fontSize: 15, letterSpacing: "0.2em", textTransform: "uppercase",
+                  padding: "16px 32px", borderRadius: 50, border: "none",
+                  cursor: "pointer", textDecoration: "none",
+                  boxShadow: "0 0 24px rgba(187,134,252,0.45)",
+                }}
+              >
+                Buy Ready Made Track
+              </a>
+              <button
+                onClick={() => { const el = document.getElementById("process"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: "transparent",
+                  color: CYAN,
+                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                  fontSize: 15, letterSpacing: "0.2em", textTransform: "uppercase",
+                  padding: "15px 32px", borderRadius: 50,
+                  border: `2px solid ${CYAN}`,
+                  cursor: "pointer",
+                }}
+              >
+                Order Custom Track
+              </button>
+            </div>
+
             {/* Listen CTA */}
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
               <button
                 onClick={() => { const el = document.getElementById("audio-samples"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  background: "linear-gradient(135deg,#00E5FF,#00b8d4)",
-                  color: "#000",
-                  fontFamily: "Barlow Condensed, sans-serif",
-                  fontWeight: 700,
-                  fontSize: 15,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  padding: "16px 36px",
-                  borderRadius: 50,
-                  border: "none",
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  background: "transparent", color: "rgba(255,255,255,0.45)",
+                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600,
+                  fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
+                  padding: "8px 20px", borderRadius: 50, border: "1px solid rgba(255,255,255,0.15)",
                   cursor: "pointer",
-                  boxShadow: "0 0 28px rgba(0,229,255,0.5)",
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="#000">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)">
                   <polygon points="5,3 19,12 5,21" />
                 </svg>
                 Listen To My Work
@@ -1236,7 +1261,7 @@ function GhostPage() {
         </section>
 
         {/* ═══ The Process ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
+        <section id="process" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 700, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 12 }}>
               The <span style={{ color: CYAN }}>Process</span>
