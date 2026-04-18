@@ -791,18 +791,19 @@ function GhostPage() {
             </div>
 
             {/* Primary CTAs */}
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginTop: 8 }}>
+            <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "center", gap: 10, marginTop: 8 }}>
               <a
                 href="/shop?tab=ghost"
                 style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
                   background: "linear-gradient(135deg,#BB86FC,#9b59d4)",
                   color: "#000",
                   fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
-                  fontSize: 15, letterSpacing: "0.2em", textTransform: "uppercase",
-                  padding: "16px 32px", borderRadius: 50, border: "none",
+                  fontSize: isMobile ? 12 : 15, letterSpacing: "0.15em", textTransform: "uppercase",
+                  padding: isMobile ? "13px 18px" : "16px 28px", borderRadius: 50, border: "none",
                   cursor: "pointer", textDecoration: "none",
                   boxShadow: "0 0 24px rgba(187,134,252,0.45)",
+                  whiteSpace: "nowrap",
                 }}
               >
                 Buy Ready Made Track
@@ -810,14 +811,15 @@ function GhostPage() {
               <button
                 onClick={() => { const el = document.getElementById("process"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
                 style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
                   background: "transparent",
                   color: CYAN,
                   fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
-                  fontSize: 15, letterSpacing: "0.2em", textTransform: "uppercase",
-                  padding: "15px 32px", borderRadius: 50,
+                  fontSize: isMobile ? 12 : 15, letterSpacing: "0.15em", textTransform: "uppercase",
+                  padding: isMobile ? "12px 18px" : "15px 28px", borderRadius: 50,
                   border: `2px solid ${CYAN}`,
                   cursor: "pointer",
+                  whiteSpace: "nowrap",
                 }}
               >
                 Order Custom Track
