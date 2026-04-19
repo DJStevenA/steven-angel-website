@@ -831,48 +831,6 @@ function GhostPage() {
           </div>
         </section>
 
-        {/* ═══ 2-CTA Row — Order Custom + Ready Made ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "56px 60px", background: "#02020e", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-          <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 16 : 24 }}>
-
-            {/* CTA 1 — ORDER CUSTOM (Primary) */}
-            <div style={{ background: "linear-gradient(135deg, #04040f, #0a0a1a)", border: `2px solid ${CYAN}`, borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10, boxShadow: "0 0 32px rgba(0,229,255,0.07)" }}>
-              <div style={{ fontSize: 28 }}>🎨</div>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN }}>CUSTOM TRACK</div>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 22 : 26, textTransform: "uppercase", color: "#fff", lineHeight: 1.15 }}>ORDER CUSTOM</div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, flex: 1 }}>Your vision, my production. Built from scratch to your reference &amp; brief.</div>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 28, color: CYAN, letterSpacing: "0.02em" }}>Starting $800</div>
-              <button
-                onClick={() => {
-                  if (window.clarity) window.clarity("event", "cta_ghost_order_custom_click");
-                  if (window.gtag) window.gtag("event", "cta_ghost_order_custom_click");
-                  window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank");
-                }}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", background: `linear-gradient(135deg,${CYAN},#00b8d4)`, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "14px 24px", borderRadius: 6, border: "none", cursor: "pointer", marginTop: 8, minHeight: 44 }}
-              >
-                Start the Process
-              </button>
-            </div>
-
-            {/* CTA 2 — READY-MADE (Secondary) */}
-            <div style={{ background: "#04040f", border: "1px solid rgba(187,134,252,0.25)", borderRadius: 14, padding: isMobile ? "28px 24px" : "36px 32px", display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ fontSize: 28 }}>🎵</div>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", color: PURPLE }}>INSTANT PURCHASE</div>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 22 : 26, textTransform: "uppercase", color: "#fff", lineHeight: 1.15 }}>READY-MADE<br />TRACKS</div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, flex: 1 }}>Pre-made productions ready to release. Hear before you buy.</div>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 28, color: PURPLE, letterSpacing: "0.02em" }}>From €80</div>
-              <a
-                href="/shop?tab=ghost"
-                onClick={() => { if (window.clarity) window.clarity("event", "cta_ghost_ready_made_click"); if (window.gtag) window.gtag("event", "cta_ghost_ready_made_click"); }}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", border: `2px solid ${PURPLE}`, color: PURPLE, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", padding: "12px 24px", borderRadius: 6, textDecoration: "none", marginTop: 8, minHeight: 44, background: "transparent" }}
-              >
-                Browse Catalog
-              </a>
-            </div>
-
-          </div>
-        </section>
-
         {/* ═══ About Steven ═══ */}
         <section
           style={{
