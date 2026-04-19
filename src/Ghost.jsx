@@ -1066,10 +1066,6 @@ function GhostPage() {
                 <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Full Production + Original Full Song</span>
                 <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $1,500</span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
-                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Add-on: Vocal Production</span>
-                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $1,500</span>
-              </div>
             </div>
             <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 28 }}>
               I take a limited number of projects each month.
