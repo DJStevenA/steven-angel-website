@@ -1,8 +1,10 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
 import App from "./App.jsx";
 import { AuthProvider } from "./shop/AuthContext.jsx";
+import { ShopPlayerProvider } from "./shop/ShopPlayerContext.jsx";
+import ShopStickyPlayer from "./shop/ShopStickyPlayer.jsx";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
 const Lessons = lazy(() => import("./Lessons.jsx"));
@@ -17,6 +19,20 @@ const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
 
 // Reserved shop subpaths that should NOT be treated as product slugs
 const SHOP_RESERVED_PATHS = new Set(["login", "signup", "account", "forgot", "reset"]);
+
+/**
+ * ShopLayout — wraps all /shop* routes in the player provider.
+ * The sticky player only exists within these routes; it never leaks to
+ * Home / Ghost / Lessons pages.
+ */
+function ShopLayout() {
+  return (
+    <ShopPlayerProvider>
+      <Outlet />
+      <ShopStickyPlayer />
+    </ShopPlayerProvider>
+  );
+}
 
 // Dynamic page title + meta description per route (SEO)
 // Note: ProductPage and auth pages set their own title/meta/canonical via useEffect.
@@ -73,14 +89,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/ghost" element={<Ghost />} />
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/sign" element={<Sign />} />
-            <Route path="/shop" element={<ShopPage />} />
-            {/* Auth routes — must come BEFORE /shop/:slug so they're not treated as product slugs */}
-            <Route path="/shop/login" element={<LoginPage />} />
-            <Route path="/shop/signup" element={<SignupPage />} />
-            <Route path="/shop/account" element={<AccountPage />} />
-            <Route path="/shop/forgot" element={<ForgotPage />} />
-            <Route path="/shop/reset" element={<ResetPage />} />
-            <Route path="/shop/:slug" element={<ProductPage />} />
+            {/* All /shop* routes share the ShopPlayerProvider + sticky bar */}
+            <Route element={<ShopLayout />}>
+              <Route path="/shop" element={<ShopPage />} />
+              {/* Auth routes — must come BEFORE /shop/:slug so they're not treated as product slugs */}
+              <Route path="/shop/login" element={<LoginPage />} />
+              <Route path="/shop/signup" element={<SignupPage />} />
+              <Route path="/shop/account" element={<AccountPage />} />
+              <Route path="/shop/forgot" element={<ForgotPage />} />
+              <Route path="/shop/reset" element={<ResetPage />} />
+              <Route path="/shop/:slug" element={<ProductPage />} />
+            </Route>
             {/* Catch-all — any unknown URL (e.g. /fallover, typos, stale links) redirects to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

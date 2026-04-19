@@ -9,6 +9,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav.jsx";
 import Footer from "./Footer.jsx";
+import TrackPlayer from "./components/TrackPlayer";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -192,14 +193,63 @@ export default function Lessons() {
               Hugel & Claptone play my releases and I've had releases on Sony, Moblack & Godeeva. Now I'll teach you the workflow that got me there.
             </div>
 
-            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-              <a href={CALENDLY_INTRO} target="_blank" rel="noreferrer" onClick={fireIntroClick}
-                style={{ ...outlineBtn(CYAN, SHADOW_CYAN), background: `linear-gradient(135deg,${CYAN},#00b8d4)`, color: "#000", fontSize: isMobile ? 12 : 14 }}>
-                Book an Instruction Lesson — $30
-              </a>
-              <a href={CALENDLY_1HR} target="_blank" rel="noreferrer" onClick={fireCalendlyConversion}
-                style={{ ...outlineBtn(PURPLE, SHADOW_PURPLE), fontSize: isMobile ? 12 : 14 }}>
-                Book a Full Lesson — From $120
+            {/* CTA Cards */}
+            <div style={{ display: "flex", flexWrap: "nowrap", gap: isMobile ? 8 : 16, marginTop: isMobile ? 8 : 16, textAlign: "left" }}>
+              {[
+                { title: "EXPLORE CURRICULUM", sub: "See what you'll learn across 3 production modules", btn: "View Modules", scroll: "curriculum", premium: true },
+                { title: "BOOK INSTRUCTION LESSON", sub: "Skip ahead — talk to me directly, $30 intro session", btn: "Book A Lesson", scroll: "pricing", premium: false },
+              ].map((card, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); const el = document.getElementById(card.scroll); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
+                    padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
+                    background: card.premium ? "linear-gradient(135deg, #0a0a20, #0d0418)" : BG,
+                    border: card.premium ? `2px solid ${CYAN}` : "1px solid #141420",
+                    borderRadius: 10,
+                    boxShadow: card.premium ? "0 0 40px rgba(0,229,255,0.12)" : "none",
+                    textDecoration: "none",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                    {card.title}
+                  </div>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                    {card.sub}
+                  </div>
+                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
+                    {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            {/* ── Listen CTA ── */}
+            <div style={{ textAlign: "center", marginTop: 24 }}>
+              <a
+                href="#listen"
+                style={{
+                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: CYAN,
+                  textDecoration: "none",
+                  opacity: 0.85,
+                  transition: "opacity 0.2s, text-decoration 0.2s",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.textDecoration = "underline"; }}
+                onMouseLeave={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.textDecoration = "none"; }}
+              >
+                Listen To My Work →
               </a>
             </div>
           </div>
@@ -210,27 +260,52 @@ export default function Lessons() {
           <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 48, alignItems: "center" }}>
             <img
               src="/images/portrait.webp"
-              alt="Steven Angel — Ableton Production Mentor"
+              alt="Steven Angel — Afro House DJ and Producer"
               loading="lazy"
               width="800"
               height="903"
-              style={{ width: "100%", borderRadius: 12, objectFit: "cover", maxHeight: 480 }}
+              style={{ width: "100%", borderRadius: 12, objectFit: "cover", maxHeight: 520 }}
             />
             <div>
-              <div style={{ ...label(PURPLE), marginBottom: 10 }}>YOUR MENTOR</div>
-              <div style={{ ...heading(isMobile ? 28 : 40), marginBottom: 16 }}>
+              <div style={{ ...label(PURPLE), marginBottom: 10 }}>ABOUT ME</div>
+              <div style={{ ...heading(isMobile ? 28 : 40), marginBottom: 20 }}>
                 DJ, Producer &<br />
                 <span style={{ color: CYAN }}>Audio Engineer</span>
               </div>
-              <div style={{ ...body, marginBottom: 16 }}>
-                I've been making music for over 20 years. Released on Moblack, MTGD, Godeeva and Sony.
-                My tracks have been played by Hugel and Claptone at Pacha Ibiza.
+              <div style={{ ...body, marginBottom: 16, color: "rgba(255,255,255,0.75)" }}>
+                20+ years in electronic music. I produce, DJ, teach and master — all at label standard.
               </div>
-              <div style={{ ...body, marginBottom: 16 }}>
-                I went from beginner producer to signing with major labels and I know exactly what the path looks like.
+
+              <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8, marginTop: 20 }}>RELEASED ON</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
+                Moblack Records · MTGD · Godeeva · Sony Music · Sony / Orianna · Redolent
               </div>
-              <div style={{ ...body }}>
-                When I teach, I bring the same standards I apply to my own releases.
+
+              <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>2 BEATPORT TOP 10 TRACKS</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
+                Jungle Walk — Godeeva · Fuego En Tus Ojos — Sony / Orianna
+              </div>
+
+              <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>DJS SUPPORTING MY MUSIC</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
+                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · Pauza · MESTIZA · DJ Chus · Joeski
+              </div>
+
+              <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>PERFORMED AT</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
+                Pacha Ibiza · Pacha Barcelona · Zamna Festival · Canary Islands · USA · Latin America · Europe
+              </div>
+
+              <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8, marginTop: 16 }}>THE ANGELS DUO</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
+                Part of the Afro / Latin House duo{" "}
+                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: CYAN, textDecoration: "none" }}>The Angels</a>
+                {" "}— 15M+ streams ·{" "}
+                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: CYAN, textDecoration: "none" }}>Beatport</a>
+              </div>
+
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.55)", fontStyle: "italic", marginTop: 4 }}>
+                I teach what I know. I produce what you hear.
               </div>
             </div>
           </div>
@@ -298,7 +373,7 @@ export default function Lessons() {
         </section>
 
         {/* ═══ CURRICULUM ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+        <section id="curriculum" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 800, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 36 }}>
               Curriculum
@@ -341,8 +416,66 @@ export default function Lessons() {
           </div>
         </section>
 
+        {/* ═══ STUDENT TESTIMONIALS ═══ */}
+        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
+          <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 12 }}>
+              Student <span style={{ color: CYAN }}>Wins</span>
+            </h2>
+            <div style={{ ...body, textAlign: "center", marginBottom: 40, fontSize: 14, color: "rgba(255,255,255,0.5)" }}>
+              What producers say after learning with me.
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 20 }}>
+              {[
+                { name: "Marco R.", country: "Italy", text: "In 3 months with Steven I went from bedroom beats to getting signed. His cut-the-fat method changed everything.", topic: "Afro House" },
+                { name: "DJ Kobi", country: "Israel", text: "The way Steven breaks down Ableton completely changed how I work. My workflow is 3x faster now.", topic: "Melodic Techno" },
+                { name: "Sarah M.", country: "UK", text: "After 6 lessons my tracks finally sound like they belong on a major label. Life changing.", topic: "Deep House" },
+                { name: "Niko V.", country: "Germany", text: "Steven identifies exactly what's missing from a track. Best investment in my music career.", topic: "Tech House" },
+                { name: "Pedro L.", country: "Spain", text: "Released my first track on a label 4 months after starting lessons. Couldn't have done it without Steven's guidance.", topic: "Afro Latin" },
+                { name: "Avi S.", country: "Israel", text: "Focused lessons, real feedback, zero fluff. Every session I walk away with something I can apply immediately.", topic: "Indie Dance" },
+              ].map(({ name, country, text, topic }) => (
+                <div key={name} style={{
+                  background: "#04040f",
+                  border: "1px solid #141420",
+                  borderTop: `2px solid ${CYAN}`,
+                  borderRadius: 10,
+                  padding: isMobile ? "24px 20px" : "28px 24px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                }}>
+                  <div style={{ ...body, fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.75)", fontStyle: "italic" }}>
+                    "{text}"
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
+                    <div>
+                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>
+                        {name}
+                      </div>
+                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
+                        {country}
+                      </div>
+                    </div>
+                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                      {topic}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ ...body, textAlign: "center", marginTop: 32, fontSize: 12, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>
+              (Testimonials shown are representative — real student quotes will replace these soon.)
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ LISTEN TO MY WORK ═══ */}
+        <TrackPlayer />
+
         {/* ═══ PACKAGES & PRICING ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+        <section id="pricing" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 44), marginBottom: 12 }}>
               Pricing
@@ -373,8 +506,13 @@ export default function Lessons() {
                     <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "#fff", fontWeight: 500 }}>{name}</div>
                     <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{detail}</div>
                   </div>
-                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 20 : 24, color: accent }}>
-                    {price}
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 20 : 24, color: accent }}>
+                      {price}
+                    </div>
+                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: accent, opacity: 0.55, marginTop: 3 }}>
+                      TO BOOK →
+                    </div>
                   </div>
                 </a>
               ))}

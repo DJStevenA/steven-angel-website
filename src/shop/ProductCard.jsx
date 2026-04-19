@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React from "react";
+import { useShopPlayer } from "./ShopPlayerContext.jsx";
 import { Link } from "react-router-dom";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
@@ -38,68 +39,73 @@ const label = (color = CYAN) => ({
 });
 
 /**
- * AudioPlayer — minimal track preview for product cards
- *
- * Hidden until the user clicks "Play Preview". Renders a native HTML5 <audio>
- * with controls so users can scrub. Returns null if the product has no audioUrl.
+ * AudioPlayer — triggers the shop-wide sticky player via context.
+ * Returns null if the product has no audioUrl.
  */
 function AudioPlayer({ product, accentColor, accentRgba }) {
-  const [playing, setPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { playTrack, pauseTrack, currentTrack, isPlaying } = useShopPlayer();
 
   if (!product.audioUrl) return null;
 
-  if (!playing) {
-    return (
-      <button
-        onClick={() => {
-          setPlaying(true);
-          if (window.gtag) window.gtag("event", "select_content", { event_category: "product_preview", event_label: product.name, content_type: "template" });
-        }}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-          width: "100%",
-          padding: "10px 16px",
-          background: "transparent",
-          border: `1px solid rgba(${accentRgba},0.45)`,
-          borderRadius: 6,
-          fontFamily: "Barlow Condensed, sans-serif",
-          fontWeight: 700,
-          fontSize: 12,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: accentColor,
-          cursor: "pointer",
-          marginBottom: 14,
-        }}
-        aria-label="Play track preview"
-      >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill={accentColor}>
-          <path d="M8 5v14l11-7z" />
-        </svg>
-        Play Track Preview
-      </button>
-    );
-  }
+  const isThisTrack = currentTrack && currentTrack.id === product.id;
+  const isThisPlaying = isThisTrack && isPlaying;
+
+  const handleClick = () => {
+    if (isThisPlaying) {
+      pauseTrack();
+    } else {
+      if (window.gtag) window.gtag("event", "select_content", { event_category: "product_preview", event_label: product.name, content_type: "template" });
+      playTrack({
+        id: product.id,
+        title: product.name,
+        subtitle: product.genre ? `${product.genre} · ${product.daw || ""}`.replace(/ · $/, "") : product.daw || "",
+        audioUrl: product.audioUrl,
+        coverUrl: product.image || null,
+      });
+    }
+  };
 
   return (
-    <audio
-      ref={audioRef}
-      src={product.audioUrl}
-      controls
-      autoPlay
-      preload="metadata"
+    <button
+      onClick={handleClick}
       style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
         width: "100%",
+        padding: "10px 16px",
+        background: isThisPlaying ? `rgba(${accentRgba},0.12)` : "transparent",
+        border: `1px solid rgba(${accentRgba},${isThisPlaying ? "0.7" : "0.45"})`,
+        borderRadius: 6,
+        fontFamily: "Barlow Condensed, sans-serif",
+        fontWeight: 700,
+        fontSize: 12,
+        letterSpacing: "0.18em",
+        textTransform: "uppercase",
+        color: accentColor,
+        cursor: "pointer",
         marginBottom: 14,
-        filter: "invert(0.92) hue-rotate(180deg)",
+        transition: "background 0.15s, border-color 0.15s",
       }}
+      aria-label={isThisPlaying ? "Pause track preview" : "Play track preview"}
     >
-      Your browser does not support the audio element.
-    </audio>
+      {isThisPlaying ? (
+        <>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill={accentColor}>
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          </svg>
+          Pause Preview
+        </>
+      ) : (
+        <>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill={accentColor}>
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          Play Track Preview
+        </>
+      )}
+    </button>
   );
 }
 
@@ -211,7 +217,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
       </h3>
 
       {/* Headline */}
-      <div
+      <Link
+        to={`/shop/${product.slug}`}
         style={{
           fontFamily: "Barlow Condensed, sans-serif",
           fontWeight: 700,
@@ -222,15 +229,20 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           lineHeight: 1.3,
           overflowWrap: "break-word",
           wordBreak: "break-word",
+          display: "block",
+          textDecoration: "none",
         }}
       >
         {product.headline}
-      </div>
+      </Link>
 
       {/* Short description */}
-      <div style={{ ...body, fontSize: isMobile ? 12 : 13, marginBottom: 14, flexGrow: 1 }}>
+      <Link
+        to={`/shop/${product.slug}`}
+        style={{ ...body, fontSize: isMobile ? 12 : 13, marginBottom: 14, flexGrow: 1, display: "block", textDecoration: "none", color: "rgba(255,255,255,0.6)" }}
+      >
         {product.shortDescription}
-      </div>
+      </Link>
 
       {/* SEO tag pills (replaces generic trust pills — better for SEO + UX) */}
       {product.seoTags && product.seoTags.length > 0 && (
@@ -255,6 +267,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
                 padding: "3px 9px",
                 borderRadius: 20,
                 whiteSpace: "nowrap",
+                cursor: "default",
+                pointerEvents: "none",
               }}
             >
               {tag}
@@ -267,7 +281,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
       <AudioPlayer product={product} accentColor={accentColor} accentRgba={accentRgba} />
 
       {/* Price */}
-      <div
+      <Link
+        to={`/shop/${product.slug}`}
         style={{
           fontFamily: "Barlow Condensed, sans-serif",
           fontWeight: 900,
@@ -275,6 +290,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           color: accentColor,
           marginBottom: 12,
           lineHeight: 1,
+          display: "block",
+          textDecoration: "none",
         }}
       >
         ${product.price}
@@ -288,7 +305,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         >
           USD
         </span>
-      </div>
+      </Link>
 
       {/* Buy Now button */}
       <button

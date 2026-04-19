@@ -7,6 +7,14 @@ import { Link, useLocation } from "react-router-dom";
 
 const CYAN = "#00E5FF";
 
+const goBack = () => {
+  if (window.history.length > 2) {
+    window.history.back();
+  } else {
+    window.location.href = '/';
+  }
+};
+
 export default function Nav() {
   const location = useLocation();
 
@@ -25,20 +33,41 @@ export default function Nav() {
       borderBottom: "1px solid rgba(255,255,255,0.06)",
       boxSizing: "border-box",
     }}>
-      {/* Logo */}
-      <Link to="/" style={{
-        fontFamily: "Barlow Condensed, sans-serif",
-        fontWeight: 900,
-        fontSize: 20,
-        letterSpacing: "0.1em",
-        textTransform: "uppercase",
-        textDecoration: "none",
-        color: "#fff",
-        lineHeight: 1,
-        whiteSpace: "nowrap",
-      }}>
-        STEVEN <span style={{ color: CYAN }}>ANGEL</span>
-      </Link>
+      {/* Logo + back arrow */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <button
+          onClick={goBack}
+          aria-label="Go back"
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            color: CYAN,
+            fontSize: 15,
+            lineHeight: 1,
+            opacity: 0.8,
+            transition: "opacity 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity = "1"}
+          onMouseLeave={e => e.currentTarget.style.opacity = "0.8"}
+        >
+          ←
+        </button>
+        <Link to="/" style={{
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 900,
+          fontSize: 20,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          textDecoration: "none",
+          color: "#fff",
+          lineHeight: 1,
+          whiteSpace: "nowrap",
+        }}>
+          STEVEN <span style={{ color: CYAN }}>ANGEL</span>
+        </Link>
+      </div>
 
       {/* Links — hidden on mobile */}
       <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
@@ -65,24 +94,6 @@ export default function Nav() {
             {label}
           </Link>
         ))}
-
-        {/* CTA */}
-        <Link to="/ghost" style={{
-          fontFamily: "Barlow Condensed, sans-serif",
-          fontWeight: 700,
-          fontSize: 12,
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          lineHeight: 1,
-          border: `2px solid ${CYAN}`,
-          color: CYAN,
-          padding: "10px 22px",
-          borderRadius: 3,
-          textDecoration: "none",
-          whiteSpace: "nowrap",
-        }}>
-          WORK WITH ME
-        </Link>
       </div>
     </nav>
   );

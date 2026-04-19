@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import { useShopPlayer } from "../ShopPlayerContext.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -14,80 +15,64 @@ const GENRE_COLORS = {
 };
 
 export default function GhostTrackCard({ track, isMobile, onBuy }) {
-  const [playing, setPlaying] = useState(false);
+  const { playTrack, pauseTrack, seek, currentTrack, isPlaying, currentTime, duration } = useShopPlayer();
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const audioRef = useRef(null);
   const progressRef = useRef(null);
 
   const accentColor = GENRE_COLORS[track.genre] || CYAN;
   const isSold = track.sold === 1;
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const onTime = () => setCurrentTime(audio.currentTime);
-    const onMeta = () => setDuration(audio.duration || 0);
-    audio.addEventListener("timeupdate", onTime);
-    audio.addEventListener("loadedmetadata", onMeta);
-    return () => {
-      audio.removeEventListener("timeupdate", onTime);
-      audio.removeEventListener("loadedmetadata", onMeta);
-    };
-  }, [previewUrl]);
-
-  // Stop this card when another card starts playing
-  useEffect(() => {
-    const onOtherPlay = (e) => {
-      if (e.detail.trackId !== track.id && audioRef.current && playing) {
-        audioRef.current.pause();
-        setPlaying(false);
-      }
-    };
-    window.addEventListener("ghostTrackPlay", onOtherPlay);
-    return () => window.removeEventListener("ghostTrackPlay", onOtherPlay);
-  }, [playing, track.id]);
+  // Is THIS card the one currently loaded in the sticky player?
+  const isThisTrack = currentTrack && currentTrack.id === String(track.id);
+  const isThisPlaying = isThisTrack && isPlaying;
 
   const handlePlayPause = async () => {
     if (isSold) return;
 
-    if (!previewUrl) {
+    let url = previewUrl;
+
+    if (!url) {
       setLoading(true);
       try {
         const res = await fetch(`${API_BASE}/shop/media/${track.preview_key}`);
-        setPreviewUrl(res.url);
+        // fetch follows redirects; use response.url for the actual media URL
+        url = res.url;
+        setPreviewUrl(url);
       } catch {
-        setPreviewUrl(`${API_BASE}/shop/media/${track.preview_key}`);
+        url = `${API_BASE}/shop/media/${track.preview_key}`;
+        setPreviewUrl(url);
       } finally {
         setLoading(false);
       }
     }
 
-    if (audioRef.current) {
-      if (playing) {
-        audioRef.current.pause();
-        setPlaying(false);
-      } else {
-        window.dispatchEvent(new CustomEvent("ghostTrackPlay", { detail: { trackId: track.id } }));
-        audioRef.current.play();
-        setPlaying(true);
-        if (window.gtag) window.gtag("event", "select_content", { event_category: "catalog_preview", event_label: track.name, content_type: "ghost_track" });
-      }
+    if (isThisPlaying) {
+      pauseTrack();
+    } else {
+      if (window.gtag) window.gtag("event", "select_content", { event_category: "catalog_preview", event_label: track.name, content_type: "ghost_track" });
+      playTrack({
+        id: String(track.id),
+        title: track.name,
+        subtitle: track.genre || "Ghost Track",
+        audioUrl: url,
+        coverUrl: `/shop/ghost-${track.id}-cover.webp`,
+      });
     }
   };
 
   const handleSeek = (e) => {
-    if (!audioRef.current || !duration) return;
+    if (!isThisTrack || !duration) return;
     const rect = progressRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const ratio = Math.max(0, Math.min(1, x / rect.width));
-    audioRef.current.currentTime = ratio * duration;
-    setCurrentTime(ratio * duration);
+    seek(ratio * duration);
   };
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  // Use context time/duration for this card when active; zero otherwise
+  const cardCurrentTime = isThisTrack ? currentTime : 0;
+  const cardDuration = isThisTrack ? duration : 0;
+  const progress = cardDuration > 0 ? (cardCurrentTime / cardDuration) * 100 : 0;
 
   const fmt = (s) => {
     if (!s || isNaN(s)) return "0:00";
@@ -95,8 +80,6 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
     const sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, "0")}`;
   };
-
-  const coverPath = `/shop/ghost-${track.id}-cover.webp`;
 
   return (
     <div
@@ -140,7 +123,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
       {/* Cover image */}
       <div style={{ position: "relative", aspectRatio: "11/6", background: "#0a0a14", overflow: "hidden" }}>
         <img
-          src={coverPath}
+          src={`/shop/ghost-${track.id}-cover.webp`}
           alt={track.name}
           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           onError={(e) => { e.target.style.display = "none"; }}
@@ -155,19 +138,19 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
               border: "none", cursor: "pointer", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}
-            aria-label={playing ? "Pause" : "Play preview"}
+            aria-label={isThisPlaying ? "Pause" : "Play preview"}
           >
             <div style={{
               width: 44, height: 44, borderRadius: "50%",
               background: "rgba(0,0,0,0.7)", border: `2px solid ${accentColor}`,
               display: "flex", alignItems: "center", justifyContent: "center",
               backdropFilter: "blur(4px)",
-              opacity: playing ? 1 : 0.85,
+              opacity: isThisPlaying ? 1 : 0.85,
               transition: "opacity 0.15s",
             }}>
               {loading ? (
                 <span style={{ color: accentColor, fontSize: 12 }}>…</span>
-              ) : playing ? (
+              ) : isThisPlaying ? (
                 <span style={{ color: accentColor, fontSize: 16, letterSpacing: "-1px" }}>⏸</span>
               ) : (
                 <span style={{ color: accentColor, fontSize: 16, marginLeft: 2 }}>▶</span>
@@ -176,8 +159,8 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
           </button>
         )}
 
-        {/* Progress bar — bottom of image, visible when loaded */}
-        {previewUrl && !isSold && (
+        {/* Progress bar — bottom of image, visible when this track is active */}
+        {isThisTrack && !isSold && (
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 3 }}>
             {/* Time display */}
             <div style={{
@@ -186,8 +169,8 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
               fontFamily: "DM Sans, sans-serif", fontSize: 10,
               color: "rgba(255,255,255,0.6)",
             }}>
-              <span>{fmt(currentTime)}</span>
-              <span>{fmt(duration)}</span>
+              <span>{fmt(cardCurrentTime)}</span>
+              <span>{fmt(cardDuration)}</span>
             </div>
             {/* Seekable bar */}
             <div
@@ -217,17 +200,6 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
           </div>
         )}
       </div>
-
-      {/* Hidden audio element */}
-      {previewUrl && (
-        <audio
-          ref={audioRef}
-          src={previewUrl}
-          onEnded={() => { setPlaying(false); setCurrentTime(0); }}
-          onPause={() => setPlaying(false)}
-          style={{ display: "none" }}
-        />
-      )}
 
       {/* Card body */}
       <div style={{ padding: isMobile ? "14px 16px 18px" : "16px 20px 20px" }}>

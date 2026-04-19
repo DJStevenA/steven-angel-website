@@ -14,7 +14,7 @@
  * features list, no file size, no Wi-Fi warnings.
  */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import {
   getProductBySlug,
@@ -24,6 +24,7 @@ import {
 import CheckoutModal from "./CheckoutModal.jsx";
 import Nav from "../Nav.jsx";
 import Footer from "../Footer.jsx";
+import { useShopPlayer } from "./ShopPlayerContext.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -71,64 +72,6 @@ const visuallyHidden = {
   whiteSpace: "nowrap",
   border: 0,
 };
-
-/* ─── AudioPlayer — minimal track preview (matches ProductCard) ─── */
-function AudioPlayer({ product, accentColor, accentRgba }) {
-  const [playing, setPlaying] = useState(false);
-  const audioRef = useRef(null);
-
-  if (!product.audioUrl) return null;
-
-  if (!playing) {
-    return (
-      <button
-        onClick={() => setPlaying(true)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-          width: "100%",
-          padding: "12px 18px",
-          background: "transparent",
-          border: `1px solid rgba(${accentRgba},0.45)`,
-          borderRadius: 6,
-          fontFamily: "Barlow Condensed, sans-serif",
-          fontWeight: 700,
-          fontSize: 13,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: accentColor,
-          cursor: "pointer",
-          marginBottom: 18,
-        }}
-        aria-label="Play track preview"
-      >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill={accentColor}>
-          <path d="M8 5v14l11-7z" />
-        </svg>
-        Play Track Preview
-      </button>
-    );
-  }
-
-  return (
-    <audio
-      ref={audioRef}
-      src={product.audioUrl}
-      controls
-      autoPlay
-      preload="metadata"
-      style={{
-        width: "100%",
-        marginBottom: 18,
-        filter: "invert(0.92) hue-rotate(180deg)",
-      }}
-    >
-      Your browser does not support the audio element.
-    </audio>
-  );
-}
 
 /* ─── SpecLine — single key:value row ─── */
 function SpecLine({ label: lbl, value, accentRgba }) {
@@ -216,6 +159,7 @@ function SpecList({ title, items, accentColor }) {
 export default function ProductPage() {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
+  const { playTrack, pauseTrack, currentTrack, isPlaying } = useShopPlayer();
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -601,12 +545,56 @@ export default function ProductPage() {
                 Instant email delivery · Lifetime re-downloads · Royalty-free
               </div>
 
-              {/* Audio preview */}
-              <AudioPlayer
-                product={product}
-                accentColor={accentColor}
-                accentRgba={accentRgba}
-              />
+              {/* Audio preview — plays through the sticky player */}
+              {product.audioUrl && (() => {
+                const isThisTrack = currentTrack?.id === product.id;
+                const isThisPlaying = isThisTrack && isPlaying;
+                return (
+                  <button
+                    onClick={() => {
+                      if (isThisPlaying) {
+                        pauseTrack();
+                      } else {
+                        playTrack({
+                          id: product.id,
+                          title: product.name,
+                          subtitle: `${product.category || product.genre || "Afro House"} · Ableton Live 12`,
+                          audioUrl: product.audioUrl,
+                          coverUrl: product.image,
+                        });
+                      }
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 10,
+                      width: "100%",
+                      padding: "12px 18px",
+                      background: "transparent",
+                      border: `1px solid rgba(${accentRgba},0.45)`,
+                      borderRadius: 6,
+                      fontFamily: "Barlow Condensed, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 13,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: accentColor,
+                      cursor: "pointer",
+                      marginBottom: 18,
+                    }}
+                    aria-label={isThisPlaying ? "Pause track preview" : "Play track preview"}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill={accentColor}>
+                      {isThisPlaying
+                        ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+                        : <path d="M8 5v14l11-7z" />
+                      }
+                    </svg>
+                    {isThisPlaying ? "Pause Preview" : "Play Track Preview"}
+                  </button>
+                );
+              })()}
 
               {/* SEO tags pills (replaces generic trust pills) */}
               {product.seoTags && product.seoTags.length > 0 && (
@@ -630,6 +618,8 @@ export default function ProductPage() {
                         border: `1px solid rgba(${accentRgba},0.2)`,
                         padding: "5px 12px",
                         borderRadius: 20,
+                        cursor: "default",
+                        pointerEvents: "none",
                       }}
                     >
                       {tag}

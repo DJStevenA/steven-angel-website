@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import TrackPlayer from "./components/TrackPlayer";
 import { Link } from "react-router-dom";
 
 /* ── Lazy YouTube embed component ── */
@@ -55,19 +56,12 @@ export default function App() {
 
   /* ── data ── */
   const testimonials = [
-    { n: "Marco R.", f: "Italy",   t: "In 3 months with Steven I went from bedroom beats to getting signed. His cut-the-fat method is everything.", g: "Afro House" },
-    { n: "DJ Kobi",  f: "Israel",  t: "The way Steven breaks down Ableton completely changed how I work. My workflow is 3x faster.", g: "Melodic Techno" },
+    { n: "Marco R.", f: "Italy",   t: "In 3 months with Steven I went from bedroom beats to getting signed. His cut-the-fat method changed everything.", g: "Afro House" },
+    { n: "DJ Kobi",  f: "Israel",  t: "The way Steven breaks down Ableton completely changed how I work. My workflow is 3x faster now.", g: "Melodic Techno" },
     { n: "Sarah M.", f: "UK",      t: "After 6 lessons my tracks finally sound like they belong on a major label. Life changing.", g: "Deep House" },
-    { n: "Niko V.",  f: "Germany", t: "Steven identifies exactly what is missing from a track. Best investment in my music career.", g: "Tech House" },
-  ];
-
-  const flags = { Italy: "\u{1F1EE}\u{1F1F9}", Israel: "\u{1F1EE}\u{1F1F1}", UK: "\u{1F1EC}\u{1F1E7}", Germany: "\u{1F1E9}\u{1F1EA}" };
-
-  const audioTracks = [
-    { file: "/audio/maria-maria.mp3", title: "Maria Maria", genre: "Afro House" },
-    { file: "/audio/tequila.mp3", title: "Tequila", genre: "Afro Latin House" },
-    { file: "/audio/body-moving.mp3", title: "Body Moving", genre: "Tech House" },
-    { file: "/audio/indie-dance-disco-vibe.mp3", title: "Disco Vibe", genre: "Indie Dance" },
+    { n: "Niko V.",  f: "Germany", t: "Steven identifies exactly what's missing from a track. Best investment in my music career.", g: "Tech House" },
+    { n: "Pedro L.", f: "Spain",   t: "Released my first track on a label 4 months after starting lessons. Couldn't have done it without Steven's guidance.", g: "Afro Latin" },
+    { n: "Avi S.",   f: "Israel",  t: "Focused lessons, real feedback, zero fluff. Every session I walk away with something I can apply immediately.", g: "Indie Dance" },
   ];
 
   /* ═══════════════════════  RENDER  ═══════════════════════ */
@@ -76,8 +70,19 @@ export default function App() {
 
       {/* ── NAV ── */}
       <nav style={{ position: "sticky", top: 0, zIndex: 100, display: "flex", justifyContent: "space-between", alignItems: "center", height: 64, padding: "0 48px", background: "rgba(0,0,0,0.9)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(255,255,255,0.06)", boxSizing: "border-box" }}>
-        <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1 }}>
-          STEVEN <span style={{ color: cyan }}>ANGEL</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button
+            onClick={() => { if (window.history.length > 2) { window.history.back(); } else { window.location.href = '/'; } }}
+            aria-label="Go back"
+            style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: cyan, fontSize: 15, lineHeight: 1, opacity: 0.8, transition: "opacity 0.2s" }}
+            onMouseEnter={e => e.currentTarget.style.opacity = "1"}
+            onMouseLeave={e => e.currentTarget.style.opacity = "0.8"}
+          >
+            ←
+          </button>
+          <Link to="/" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1, textDecoration: "none", color: "#fff" }}>
+            STEVEN <span style={{ color: cyan }}>ANGEL</span>
+          </Link>
         </div>
         <div style={{ display: isMobile ? "none" : "flex", gap: 32, alignItems: "center" }}>
           {[
@@ -90,15 +95,12 @@ export default function App() {
             </Link>
           ))}
         </div>
-        <Link to="/ghost" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", lineHeight: 1, border: "2px solid " + cyan, color: cyan, padding: "10px 22px", borderRadius: 3, textDecoration: "none", whiteSpace: "nowrap" }}>
-          WORK WITH ME
-        </Link>
       </nav>
 
       <main>
 
         {/* ══════ 1. HERO ══════ */}
-        <section style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", overflow: "hidden", padding: isMobile ? "0 16px" : "0 24px" }}>
+        <section style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", overflow: "hidden", padding: isMobile ? "80px 16px 60px" : "120px 24px 80px" }}>
           <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
             <img
               src="/images/dj-hero.webp"
@@ -115,18 +117,121 @@ export default function App() {
           <div style={{ position: "relative", zIndex: 10, maxWidth: 820 }}>
             <div style={{ ...label(), marginBottom: 20 }}>DJ · Producer · Ableton Mentor</div>
 
-            <h1 style={{ ...heading("clamp(64px,10vw,130px)"), marginBottom: 12, letterSpacing: "0.06em", background: `linear-gradient(90deg, ${cyan}, ${purple})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <h1 style={{ ...heading("clamp(56px,9vw,120px)"), marginBottom: 12, letterSpacing: "0.06em", background: `linear-gradient(90deg, ${cyan}, ${purple})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               STEVEN ANGEL
             </h1>
 
             <div style={{ width: 80, height: 2, background: `linear-gradient(90deg, ${cyan}, ${purple})`, margin: "0 auto 20px" }} />
 
-            <h2 style={{ ...heading(isMobile ? 24 : 36), marginBottom: 20, color: "rgba(255,255,255,0.85)" }}>
-              Afro House · Tech House · Indie Dance
+            <h2 style={{ ...heading(isMobile ? 20 : 28), marginBottom: 12, color: "#fff", lineHeight: 1.15 }}>
+              Ghost Production, Ableton Lessons & Pro Music Tools
             </h2>
 
-            <div style={{ ...body, fontSize: 19, maxWidth: 520, margin: "0 auto", color: "rgba(255,255,255,0.75)" }}>
+            <div style={{ ...body, fontSize: isMobile ? 14 : 17, maxWidth: 600, margin: "0 auto 14px", color: "rgba(255,255,255,0.75)", letterSpacing: "0.02em" }}>
+              Afro House · Tech House · Indie Dance Production
+            </div>
+
+            <div style={{ ...body, fontSize: isMobile ? 13 : 15, maxWidth: 520, margin: "0 auto", color: "rgba(255,255,255,0.55)", fontStyle: "italic" }}>
               Played by Hugel & Claptone at Pacha Ibiza
+            </div>
+
+            {/* ── Hero CTA Cards ── */}
+            <div style={{
+              display: "flex",
+              flexWrap: "nowrap",
+              gap: isMobile ? 8 : 16,
+              marginTop: isMobile ? 32 : 48,
+              width: isMobile ? "100%" : "110%",
+              marginLeft: isMobile ? 0 : "-5%",
+            }}>
+              {[
+                { title: "GHOST PRODUCTION & DEMO FINISHING", sub: "For artists who need Label-Ready tracks", btn: "Get Your Track", to: "/ghost", premium: true },
+                { title: "PRODUCTION, MIX & MASTERING LESSONS", sub: "For producers who want to master it themselves", btn: "Start Learning", to: "/lessons", premium: false },
+                { title: "TEMPLATES & MASTERCLASS SHOP", sub: "For producers building their toolkit", btn: "Browse Shop", to: "/shop", premium: false },
+              ].map((card, i) => (
+                <Link
+                  key={i}
+                  to={card.to}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
+                    padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
+                    background: card.premium
+                      ? "linear-gradient(135deg, #0a0a20, #0d0418)"
+                      : "#04040f",
+                    border: card.premium
+                      ? `2px solid ${cyan}`
+                      : "1px solid #141420",
+                    borderRadius: 10,
+                    boxShadow: card.premium
+                      ? "0 0 40px rgba(0,229,255,0.12)"
+                      : "none",
+                    textDecoration: "none",
+                    color: "#fff",
+                    cursor: "pointer",
+                    textAlign: "left",
+                  }}
+                >
+                  <div style={{
+                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontWeight: 800,
+                    fontSize: isMobile ? 12 : 16,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.03em",
+                    color: card.premium ? cyan : "#fff",
+                    lineHeight: 1.2,
+                  }}>
+                    {card.title}
+                  </div>
+                  <div style={{
+                    fontFamily: "DM Sans, sans-serif",
+                    fontSize: isMobile ? 10 : 13,
+                    color: "rgba(255,255,255,0.55)",
+                    lineHeight: 1.4,
+                    flex: 1,
+                  }}>
+                    {card.sub}
+                  </div>
+                  <div style={{
+                    marginTop: isMobile ? 6 : 12,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontWeight: 700,
+                    fontSize: isMobile ? 10 : 13,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: card.premium ? cyan : "rgba(255,255,255,0.6)",
+                  }}>
+                    {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* ── Listen CTA ── */}
+            <div style={{ textAlign: "center", marginTop: 24 }}>
+              <a
+                href="#listen"
+                style={{
+                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: cyan,
+                  textDecoration: "none",
+                  opacity: 0.85,
+                  transition: "opacity 0.2s, text-decoration 0.2s",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.textDecoration = "underline"; }}
+                onMouseLeave={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.textDecoration = "none"; }}
+              >
+                Listen To My Work →
+              </a>
             </div>
           </div>
         </section>
@@ -154,12 +259,17 @@ export default function App() {
 
               <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8, marginTop: 20 }}>RELEASED ON</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
-                Moblack Records · MTGD (Hugel's label) · Godeeva · Sony Music
+                Moblack Records · MTGD · Godeeva · Sony Music · Sony / Orianna · Redolent
+              </div>
+
+              <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>2 BEATPORT TOP 10 TRACKS</div>
+              <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
+                Jungle Walk — Godeeva · Fuego En Tus Ojos — Sony / Orianna
               </div>
 
               <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>DJS SUPPORTING MY MUSIC</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
-                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · DJ Chus · Joeski
+                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · Pauza · MESTIZA · DJ Chus · Joeski
               </div>
 
               <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>PERFORMED AT</div>
@@ -249,72 +359,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ══════ 3. MUSIC — "My releases." ══════ */}
-        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
-          <div style={{ maxWidth: 800, margin: "0 auto" }}>
-            <h2 style={{ ...heading(isMobile ? 28 : 36), textAlign: "center", marginBottom: 8 }}>
-              MY <span style={{ color: cyan }}>RELEASES & PRODUCTION WORK.</span>
-            </h2>
-            <div style={{ ...body, textAlign: "center", marginBottom: 32 }}>
-              Original releases on MTGD, Moblack, Godeeva and more.
-            </div>
-
-            {/* Horizontal scroll row — swipeable on mobile */}
-            <div style={{ display: "flex", gap: 14, overflowX: "auto", paddingBottom: 8, scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
-              {audioTracks.map(({ file, title, genre }) => (
-                <div key={file} style={{ background: "#04040f", border: "1px solid #141420", borderRadius: 8, padding: "16px 20px", minWidth: isMobile ? "80vw" : 280, flex: "0 0 auto", scrollSnapAlign: "start" }}>
-                  <div style={{ ...label(cyan), fontSize: 10, marginBottom: 4 }}>{genre}</div>
-                  <div style={{ ...heading(15), color: "rgba(255,255,255,0.8)", marginBottom: 10 }}>{title}</div>
-                  <audio controls preload="none" controlsList="nodownload" style={{ width: "100%", accentColor: cyan }}>
-                    <source src={file} type="audio/mpeg" />
-                  </audio>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════ 4. SERVICES — "Work with me." ══════ */}
-        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
-          <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 40 }}>
-              WORK WITH <span style={{ background: `linear-gradient(90deg, ${cyan}, ${purple})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>ME.</span>
-            </h2>
-
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 20 }}>
-              {[
-                { title: "Ghost Production", line: "I produce your track. You own it.", to: "/ghost", accent: cyan },
-                { title: "1-on-1 Lessons", line: "Learn the system I used to get signed.", to: "/lessons", accent: purple },
-                { title: "Templates & Courses", line: "Download and start building today.", to: "/shop", accent: cyan },
-              ].map(({ title, line, to, accent }) => (
-                <Link key={to} to={to} style={{ textDecoration: "none", color: "inherit" }}>
-                  <div style={{
-                    background: "#000",
-                    border: `1px solid ${accent}33`,
-                    borderTop: `2px solid ${accent}`,
-                    borderRadius: 10,
-                    padding: isMobile ? "28px 20px" : "36px 28px",
-                    textAlign: "center",
-                    transition: "box-shadow 0.3s",
-                  }}>
-                    <div style={{ ...heading(isMobile ? 20 : 24), color: accent, marginBottom: 12 }}>{title}</div>
-                    <div style={{ ...body, fontSize: 14, marginBottom: 20 }}>{line}</div>
-                    <div style={{
-                      fontFamily: "Barlow Condensed, sans-serif",
-                      fontWeight: 700,
-                      fontSize: 13,
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: accent,
-                    }}>
-                      {to === "/ghost" ? "See How It Works" : to === "/lessons" ? "See Packages" : "Visit the Shop"} &rarr;
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ══════ 3. MUSIC — "Listen to my work." ══════ */}
+        <TrackPlayer />
 
         {/* ══════ 5. LESSON DEMO ══════ */}
         <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
@@ -357,25 +403,155 @@ export default function App() {
         <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 1060, margin: "0 auto" }}>
             <div style={{ ...label(purple), marginBottom: 12, textAlign: "center" }}>WHAT THEY SAY</div>
-            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 40 }}>STUDENTS &amp; CLIENTS</h2>
+            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 12 }}>WHAT CLIENTS &amp; STUDENTS SAY</h2>
+            <div style={{ ...body, textAlign: "center", marginBottom: 40, fontSize: 14, color: "rgba(255,255,255,0.5)" }}>
+              From ghost production clients to students — real results.
+            </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,1fr)", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", gap: 20 }}>
               {testimonials.map(({ n, f, t, g }) => (
-                <div key={n} style={{ background: "#04040f", border: "1px solid #141420", borderRadius: 8, padding: "24px 24px" }}>
-                  <div style={{ ...body, fontSize: 14, fontStyle: "italic", marginBottom: 14, color: "rgba(255,255,255,0.7)" }}>"{t}"</div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div key={n} style={{
+                  background: "#04040f",
+                  border: "1px solid #141420",
+                  borderTop: `2px solid ${cyan}`,
+                  borderRadius: 10,
+                  padding: isMobile ? "24px 20px" : "28px 24px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                }}>
+                  <div style={{ ...body, fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.75)", fontStyle: "italic" }}>
+                    "{t}"
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
                     <div>
-                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{n}</div>
-                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.5)" }}>{flags[f] || ""} {f} · {g}</div>
+                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>{n}</div>
+                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{f}</div>
+                    </div>
+                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                      {g}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+
+            <div style={{ ...body, textAlign: "center", marginTop: 32, fontSize: 12, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>
+              (Testimonials shown are representative — real quotes will replace these soon.)
+            </div>
           </div>
         </section>
 
       </main>
+
+      {/* ══════ CONTACT ══════ */}
+      <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ ...heading(isMobile ? 28 : 40), marginBottom: 12 }}>
+            LET'S <span style={{ color: cyan }}>TALK.</span>
+          </h2>
+          <div style={{ ...body, marginBottom: 32, color: "rgba(255,255,255,0.65)" }}>
+            Got a question or want to collaborate? Drop your details or message me on WhatsApp.
+          </div>
+
+          {/* WhatsApp Button */}
+          <a
+            href="https://wa.me/972523561353"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              background: "#1a7a42",
+              color: "#fff",
+              fontFamily: "Barlow Condensed, sans-serif",
+              fontWeight: 700,
+              fontSize: 15,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              padding: "16px 32px",
+              borderRadius: 50,
+              textDecoration: "none",
+              boxShadow: "0 0 32px rgba(37,211,102,0.4)",
+              marginBottom: 32,
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L.057 23.882a.5.5 0 00.61.61l6.163-1.529A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.626 0 11.999 0zm.001 21.818a9.818 9.818 0 01-5.012-1.374l-.36-.214-3.724.924.942-3.626-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818S21.818 6.58 21.818 12c0 5.421-4.398 9.818-9.818 9.818z"/>
+            </svg>
+            WhatsApp Me
+          </a>
+
+          {/* Divider: OR */}
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, color: "rgba(255,255,255,0.3)", fontSize: 12, letterSpacing: "0.2em" }}>
+            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
+            OR
+            <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
+          </div>
+
+          {/* Name + Email Form */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.target;
+              const data = Object.fromEntries(new FormData(form));
+              const btn = form.querySelector("button");
+              if (btn) { btn.disabled = true; btn.textContent = "Sending..."; }
+              fetch("https://ghost-backend-production-adb6.up.railway.app/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: data.name, email: data.email, message: "Homepage contact form", source: "home-contact" }),
+              })
+                .then((r) => r.ok ? r.json() : Promise.reject(r))
+                .then(() => {
+                  if (btn) { btn.textContent = "Thanks! I'll be in touch."; btn.style.background = cyan; btn.style.color = "#000"; }
+                  form.reset();
+                })
+                .catch(() => {
+                  if (btn) { btn.disabled = false; btn.textContent = "Try Again"; }
+                });
+            }}
+            style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 420, margin: "0 auto" }}
+          >
+            <input
+              name="name"
+              type="text"
+              placeholder="Your name"
+              required
+              style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }}
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Your email"
+              required
+              style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }}
+            />
+            <button
+              type="submit"
+              style={{
+                background: `linear-gradient(135deg, ${cyan}, #00b8d4)`,
+                color: "#000",
+                fontFamily: "Barlow Condensed, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                padding: "14px 28px",
+                borderRadius: 50,
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 0 28px rgba(0,229,255,0.5)",
+                marginTop: 4,
+              }}
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </section>
 
       {/* ══════ 8. FOOTER ══════ */}
       <footer style={{ padding: "28px 48px", borderTop: "1px solid #0d0d0d", textAlign: "center" }}>

@@ -7,6 +7,7 @@ import CheckoutModal from "./CheckoutModal.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import GhostCatalog from "./ghost/GhostCatalog.jsx";
 import Footer from "../Footer.jsx";
+import { useShopPlayer } from "./ShopPlayerContext.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -49,6 +50,7 @@ export default function ShopPage() {
   const products = getOrderedProducts();
   const { user, loading: authLoading } = useAuth();
   const location = useLocation();
+  const { currentTrack } = useShopPlayer();
 
   const params = new URLSearchParams(location.search);
   const activeTab = params.get("tab") === "ghost" ? "ghost" : "shop";
@@ -74,7 +76,7 @@ export default function ShopPage() {
   };
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", color: "#fff" }}>
+    <div style={{ background: BG, minHeight: "100vh", color: "#fff", paddingBottom: currentTrack ? (isMobile ? 64 : 72) : 0 }}>
       {/* Welcome discount popup (shows once per visitor) */}
       <DiscountPopup />
 
@@ -130,20 +132,43 @@ export default function ShopPage() {
           gap: 12,
         }}
       >
-        <Link
-          to="/"
-          style={{
-            fontFamily: "Barlow Condensed, sans-serif",
-            fontWeight: 900,
-            fontSize: 20,
-            letterSpacing: "0.1em",
-            textDecoration: "none",
-            color: "#fff",
-            whiteSpace: "nowrap",
-          }}
-        >
-          STEVEN <span style={{ color: CYAN }}>ANGEL</span>
-        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button
+            onClick={() => {
+              if (window.history.length > 2) window.history.back();
+              else window.location.href = "/";
+            }}
+            aria-label="Go back"
+            style={{
+              background: "transparent",
+              border: "none",
+              color: CYAN,
+              fontSize: 15,
+              cursor: "pointer",
+              padding: 0,
+              lineHeight: 1,
+              opacity: 0.8,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = 1; }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = 0.8; }}
+          >
+            ←
+          </button>
+          <Link
+            to="/"
+            style={{
+              fontFamily: "Barlow Condensed, sans-serif",
+              fontWeight: 900,
+              fontSize: 20,
+              letterSpacing: "0.1em",
+              textDecoration: "none",
+              color: "#fff",
+              whiteSpace: "nowrap",
+            }}
+          >
+            STEVEN <span style={{ color: CYAN }}>ANGEL</span>
+          </Link>
+        </div>
 
         {/* Nav links — hidden on small mobile */}
         {!isMobile && (
@@ -301,7 +326,7 @@ export default function ShopPage() {
         {activeTab === "shop" && (
           <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 8, padding: isMobile ? "0 16px 30px" : "0 60px 40px", maxWidth: 1000, margin: "0 auto" }}>
             {["Afro House Templates", "Melodic Techno Templates", "Ableton Live Projects", "Hugel Style", "Keinemusik Style", "Solomun Style", "Artbat Style", "Sample Packs", "Online Masterclass", "Royalty-Free"].map((text) => (
-              <span key={text} style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: 11, padding: "5px 12px", border: "1px solid rgba(0,229,255,0.18)", borderRadius: 20, color: "rgba(255,255,255,0.65)", background: "rgba(0,229,255,0.04)" }}>
+              <span key={text} style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(255,255,255,0.35)" }}>
                 {text}
               </span>
             ))}
@@ -377,11 +402,16 @@ export default function ShopPage() {
 
 function SupportWidget() {
   const [open, setOpen] = useState(false);
+  const { currentTrack } = useShopPlayer();
   const WA = "https://wa.me/972523561353?text=Hi%20Steven%2C%20I%20have%20a%20question%20about%20the%20shop.";
   const MAIL = "mailto:hello@steven-angel.com?subject=Shop%20Support";
 
+  // Lift the widget above the sticky player when it's visible
+  const isMobileWidget = typeof window !== "undefined" ? window.innerWidth < 600 : false;
+  const playerHeight = currentTrack ? (isMobileWidget ? 64 : 72) : 0;
+
   return (
-    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 9000, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
+    <div style={{ position: "fixed", bottom: 24 + playerHeight, right: 24, zIndex: 9000, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10, transition: "bottom 0.25s ease-out" }}>
       {open && (
         <div style={{
           background: "#0d0d1a", border: "1px solid rgba(0,229,255,0.2)",
