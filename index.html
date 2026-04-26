@@ -144,7 +144,10 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('set', { transport_type: 'beacon' });
-      gtag('config', 'G-KTRD05NY5B');
+      gtag('config', 'G-KTRD05NY5B', {
+        allow_ad_personalization_signals: true,
+        allow_google_signals: true,
+      });
       gtag('config', 'AW-999991173'); // Conversion tracking ID (not the customer ID 7337381163)
     </script>
 

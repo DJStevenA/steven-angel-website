@@ -97,3 +97,11 @@ export const trackVideoPreview = (action, params = {}) => {
 export const trackPageView = (params = {}) => {
   trackEvent('page_view', params);
 };
+
+export const trackScrollDepth = (percent, page_category) => {
+  trackEvent('scroll_depth', { percent, page_category });
+};
+
+export const trackTimeOnPage = (seconds, page_category) => {
+  trackEvent('time_on_page', { seconds, page_category });
+};

@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import { trackWhatsAppLead } from "./lib/analytics/events";
+import { useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
 /* ─── Color Constants ─── */
 const CYAN = "#00E5FF";
@@ -327,6 +328,10 @@ function GhostPage() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [openFaq, setOpenFaq] = useState(null);
   const [howItWorksPackage, setHowItWorksPackage] = useState(null);
+
+  // Remarketing signals
+  useScrollDepth("ghost");
+  useTimeOnPage("ghost");
 
   const openHowItWorks = (pkg) => {
     setHowItWorksPackage(pkg);

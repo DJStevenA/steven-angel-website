@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import TrackPlayer from "./components/TrackPlayer";
 import { Link } from "react-router-dom";
 import { trackWhatsAppLead } from "./lib/analytics/events";
+import { useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
+
+const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
 /* ── Lazy YouTube embed component ── */
 function LazyYouTube({ id, title }) {
@@ -26,6 +29,18 @@ export default function App() {
     const handler = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  // Remarketing signals
+  useScrollDepth("homepage");
+  useTimeOnPage("homepage");
+
+  // Railway keepalive — ping every 4 min to prevent cold starts
+  useEffect(() => {
+    const ping = () => fetch(`${BACKEND}/ping`, { method: "GET", mode: "no-cors" }).catch(() => {});
+    ping();
+    const id = setInterval(ping, 4 * 60 * 1000);
+    return () => clearInterval(id);
   }, []);
 
   /* ── style helpers ── */

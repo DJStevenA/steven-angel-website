@@ -11,6 +11,7 @@ import Nav from "./Nav.jsx";
 import Footer from "./Footer.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import { trackWhatsAppLead } from "./lib/analytics/events";
+import { useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -276,6 +277,10 @@ export default function Lessons() {
     window.addEventListener("resize", h);
     return () => window.removeEventListener("resize", h);
   }, []);
+
+  // Remarketing signals
+  useScrollDepth("lessons");
+  useTimeOnPage("lessons");
 
   useEffect(() => {
     if (window.clarity) window.clarity("event", "lessonPageVisit");
