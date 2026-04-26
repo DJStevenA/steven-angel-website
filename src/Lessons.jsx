@@ -538,26 +538,22 @@ export default function Lessons() {
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
 
-              {/* Modules 1–3 with More Info button */}
+              {/* Modules 1–3 — whole card is clickable, arrow in corner signals expand */}
               {MODULES.map((mod) => (
-                <div key={mod.title} style={{ background: BG, border: "1px solid #141420", borderTop: `2px solid ${mod.color}`, borderRadius: 10, padding: isMobile ? "24px 18px" : "28px 24px", display: "flex", flexDirection: "column" }}>
-                  <div style={{ ...heading(isMobile ? 16 : 20), marginBottom: 10, color: mod.color }}>{mod.title}</div>
-                  <div style={{ ...body, fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.6)", flex: 1 }}>{mod.desc}</div>
-                  <button
-                    onClick={() => setActiveModule(mod)}
-                    style={{
-                      marginTop: 16, alignSelf: "flex-start",
-                      background: "none", border: `1px solid ${mod.color}66`,
-                      borderRadius: 4, color: mod.color,
-                      fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
-                      fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                      padding: "7px 14px", cursor: "pointer",
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = mod.color; e.currentTarget.style.background = `${mod.color}11`; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${mod.color}66`; e.currentTarget.style.background = "none"; }}
-                  >
-                    More Info →
-                  </button>
+                <div
+                  key={mod.title}
+                  onClick={() => setActiveModule(mod)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setActiveModule(mod); }}
+                  style={{ background: BG, border: "1px solid #141420", borderTop: `2px solid ${mod.color}`, borderRadius: 10, padding: isMobile ? "24px 18px" : "28px 24px", position: "relative", cursor: "pointer", transition: "border-color 0.2s, box-shadow 0.2s" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${mod.color}66`; e.currentTarget.style.boxShadow = `0 0 20px ${mod.color}18`; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#141420"; e.currentTarget.style.boxShadow = "none"; }}
+                >
+                  {/* Expand arrow — top-right corner */}
+                  <span style={{ position: "absolute", top: 14, right: 16, color: `${mod.color}99`, fontSize: 18, lineHeight: 1, pointerEvents: "none" }}>⌄</span>
+                  <div style={{ ...heading(isMobile ? 16 : 20), marginBottom: 10, color: mod.color, paddingRight: 24 }}>{mod.title}</div>
+                  <div style={{ ...body, fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.6)" }}>{mod.desc}</div>
                 </div>
               ))}
 
