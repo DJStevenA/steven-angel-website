@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TrackPlayer from "./components/TrackPlayer";
 import { Link } from "react-router-dom";
+import { trackWhatsAppLead } from "./lib/analytics/events";
 
 /* ── Lazy YouTube embed component ── */
 function LazyYouTube({ id, title }) {
@@ -459,6 +460,7 @@ export default function App() {
             href="https://wa.me/972523561353"
             target="_blank"
             rel="noreferrer"
+            onClick={() => { trackWhatsAppLead('GP', 'homepage_contact'); if (window.clarity) window.clarity("event", "homepageWhatsAppClick"); }}
             style={{
               display: "inline-flex",
               alignItems: "center",

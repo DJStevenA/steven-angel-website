@@ -12,39 +12,41 @@ const BG_ALT  = "#04040f";
 /* ─────────────────────────────────────────────
    Track data
 ───────────────────────────────────────────── */
+const MEDIA_BASE = "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio";
+
 const TRACKS = [
   // Afro Latin (5)
-  { id: "el-barrio",         title: "El Barrio",          genre: "Afro Latin",  file: "/audio/el-barrio.mp3",               support: "Supported by Claptone, Hugel, Roger Sanchez", label: "MTGD" },
-  { id: "la-chingada",       title: "La Chingada",        genre: "Afro Latin",  file: "/audio/la-chingada.mp3",             support: "Supported by Oscar G",                        label: "MADE IN MIAMI" },
-  { id: "fuego-en-tus-ojos", title: "Fuego En Tus Ojos",  genre: "Afro Latin",  file: "/audio/fuego-en-tus-ojos.mp3",       support: "Supported by Pauza, MESTIZA",                 label: "Sony / Orianna", badge: "Beatport Top 10" },
-  { id: "kante",             title: "Kante",               genre: "Afro Latin",  file: "/audio/kante.mp3",                   support: "Supported by DJ Chus",                        label: "REDOLENT" },
-  { id: "body-dancin",       title: "Body Dancin",         genre: "Afro Latin",  file: "/audio/body-dancin-remix.mp3",       support: "",                                            label: "" },
+  { id: "el-barrio",         title: "El Barrio",          genre: "Afro Latin",  file: `${MEDIA_BASE}/track-el-barrio.mp3`,               support: "Supported by Claptone, Hugel, Roger Sanchez", label: "MTGD" },
+  { id: "la-chingada",       title: "La Chingada",        genre: "Afro Latin",  file: `${MEDIA_BASE}/track-la-chingada.mp3`,             support: "Supported by Oscar G",                        label: "MADE IN MIAMI" },
+  { id: "fuego-en-tus-ojos", title: "Fuego En Tus Ojos",  genre: "Afro Latin",  file: `${MEDIA_BASE}/track-fuego-en-tus-ojos.mp3`,       support: "Supported by Pauza, MESTIZA",                 label: "Sony / Orianna", badge: "Beatport Top 10" },
+  { id: "kante",             title: "Kante",               genre: "Afro Latin",  file: `${MEDIA_BASE}/track-kante.mp3`,                   support: "Supported by DJ Chus",                        label: "REDOLENT" },
+  { id: "body-dancin",       title: "Body Dancin",         genre: "Afro Latin",  file: `${MEDIA_BASE}/track-body-dancin-remix.mp3`,       support: "",                                            label: "" },
 
   // Afro House (4)
-  { id: "the-way-i-like-it", title: "The Way I Like It",  genre: "Afro House",  file: "/audio/afro-house-i-like-it.mp3",    support: "with Eran Hersh",                             label: "Godeeva" },
-  { id: "jungle-walk",       title: "Jungle Walk",         genre: "Afro House",  file: "/audio/jungle-walk.mp3",             support: "Supported by Joeski, DJ Chus, Matador",       label: "Godeeva", badge: "Beatport Top 10" },
-  { id: "bebe",              title: "Bebe",                genre: "Afro House",  file: "/audio/bebe.mp3",                    support: "Supported by Francis Mercier",                label: "Deep Root Records" },
-  { id: "maria-maria",       title: "Maria Maria",         genre: "Afro House",  file: "/audio/maria-maria.mp3",             support: "",                                            label: "" },
+  { id: "the-way-i-like-it", title: "The Way I Like It",  genre: "Afro House",  file: `${MEDIA_BASE}/track-afro-house-i-like-it.mp3`,    support: "with Eran Hersh",                             label: "Godeeva" },
+  { id: "jungle-walk",       title: "Jungle Walk",         genre: "Afro House",  file: `${MEDIA_BASE}/track-jungle-walk.mp3`,             support: "Supported by Joeski, DJ Chus, Matador",       label: "Godeeva", badge: "Beatport Top 10" },
+  { id: "bebe",              title: "Bebe",                genre: "Afro House",  file: `${MEDIA_BASE}/track-bebe.mp3`,                    support: "Supported by Francis Mercier",                label: "Deep Root Records" },
+  { id: "maria-maria",       title: "Maria Maria",         genre: "Afro House",  file: `${MEDIA_BASE}/track-maria-maria.mp3`,             support: "",                                            label: "" },
 
   // Afro Tec (2)
-  { id: "mandala-remix",     title: "Mandala (Remix)",     genre: "Afro Tec",    file: "/audio/mandala-remix.mp3",           support: "",                                            label: "MoBlack" },
-  { id: "nipate-moyo",       title: "Nipate Moyo",         genre: "Afro Tec",    file: "/audio/nipate-moyo.mp3",             support: "",                                            label: "" },
+  { id: "mandala-remix",     title: "Mandala (Remix)",     genre: "Afro Tec",    file: `${MEDIA_BASE}/track-mandala-remix.mp3`,           support: "",                                            label: "MoBlack" },
+  { id: "nipate-moyo",       title: "Nipate Moyo",         genre: "Afro Tec",    file: `${MEDIA_BASE}/track-nipate-moyo.mp3`,             support: "",                                            label: "" },
 
   // Tech House (1)
-  { id: "body-moving",       title: "Body Moving",         genre: "Tech House",  file: "/audio/body-moving.mp3",             support: "",                                            label: "" },
+  { id: "body-moving",       title: "Body Moving",         genre: "Tech House",  file: `${MEDIA_BASE}/track-body-moving.mp3`,             support: "",                                            label: "" },
 
   // Indie Dance (2)
-  { id: "disco-vibe",        title: "Disco Vibe",          genre: "Indie Dance", file: "/audio/indie-dance-disco-vibe.mp3",  support: "",                                            label: "" },
-  { id: "indie-dance-hard",  title: "Indie Dance Hard",    genre: "Indie Dance", file: "/audio/indie-dance-hard.mp3",        support: "",                                            label: "" },
+  { id: "disco-vibe",        title: "Disco Vibe",          genre: "Indie Dance", file: `${MEDIA_BASE}/track-indie-dance-disco-vibe.mp3`,  support: "",                                            label: "" },
+  { id: "indie-dance-hard",  title: "Indie Dance Hard",    genre: "Indie Dance", file: `${MEDIA_BASE}/track-indie-dance-hard.mp3`,        support: "",                                            label: "" },
 
   // Mastering (2)
   {
     id: "la-cantadora",
     title: "Dole & Kom — La Cantadora",
     genre: "Mastering",
-    file: "/audio/la-cantadora-master.mp3",
-    preMasterFile: "/audio/la-cantadora-premaster.mp3",
-    masterFile: "/audio/la-cantadora-master.mp3",
+    file: `${MEDIA_BASE}/track-la-cantadora-master.mp3`,
+    preMasterFile: `${MEDIA_BASE}/track-la-cantadora-premaster.mp3`,
+    masterFile: `${MEDIA_BASE}/track-la-cantadora-master.mp3`,
     support: "Feat. Cristina Escamilla Garces",
     label: "HMWL",
     hasComparison: true,
@@ -53,9 +55,9 @@ const TRACKS = [
     id: "hernan-cattaneo",
     title: "Hernan Cattaneo & Kevin Di Serna",
     genre: "Mastering",
-    file: "/audio/hernan-cattaneo-master.mp3",
-    preMasterFile: "/audio/hernan-cattaneo-premaster.mp3",
-    masterFile: "/audio/hernan-cattaneo-master.mp3",
+    file: `${MEDIA_BASE}/track-hernan-cattaneo-master.mp3`,
+    preMasterFile: `${MEDIA_BASE}/track-hernan-cattaneo-premaster.mp3`,
+    masterFile: `${MEDIA_BASE}/track-hernan-cattaneo-master.mp3`,
     support: "",
     label: "",
     hasComparison: true,

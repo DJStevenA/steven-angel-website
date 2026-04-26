@@ -1,13 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 import TrackPlayer from "./components/TrackPlayer";
-
-/* ─── WhatsApp click tracker (GA4 only; Ads imports via Option B) ─── */
-const fireWhatsAppConversion = () => {
-  if (window.gtag) {
-    window.gtag('event', 'contact', { event_category: 'whatsapp', event_label: 'ghost', value: 50, currency: 'USD' });
-  }
-};
+import { trackWhatsAppLead } from "./lib/analytics/events";
 
 /* ─── Color Constants ─── */
 const CYAN = "#00E5FF";
@@ -601,7 +595,7 @@ function GhostPage() {
       {/* ═══ Fixed WhatsApp Button ═══ */}
       <a
         href={WHATSAPP_LINK}
-        onClick={() => { fireWhatsAppConversion(); if (window.clarity) window.clarity("event", "ghostWhatsAppClick"); }}
+        onClick={() => { trackWhatsAppLead('GP', 'ghost_floating'); if (window.clarity) window.clarity("event", "ghostWhatsAppClick"); }}
         target="_blank"
         rel="noreferrer"
         style={{
@@ -1458,7 +1452,7 @@ function GhostPage() {
                   href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={fireWhatsAppConversion}
+                  onClick={() => trackWhatsAppLead('GP', 'ghost_contact')}
                   style={{
                     display: "flex",
                     alignItems: "center",

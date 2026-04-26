@@ -125,6 +125,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
         <img
           src={`/shop/ghost-${track.id}-cover.webp`}
           alt={track.name}
+          loading="lazy"
           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           onError={(e) => { e.target.style.display = "none"; }}
         />
