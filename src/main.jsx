@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import { AuthProvider } from "./shop/AuthContext.jsx";
 import { ShopPlayerProvider } from "./shop/ShopPlayerContext.jsx";
 import ShopStickyPlayer from "./shop/ShopStickyPlayer.jsx";
+import { trackPageView } from "./lib/analytics/events";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
 const Lessons = lazy(() => import("./Lessons.jsx"));
@@ -40,7 +41,10 @@ function ShopLayout() {
 function PageTitle() {
   const location = useLocation();
   useEffect(() => {
-    // Skip override for any /shop/<something> page — they handle SEO themselves
+    // Phase 3: fire page_view on every SPA route change (use path+location only — no title to avoid racing per-page useEffects)
+    trackPageView({ page_path: location.pathname, page_location: window.location.href });
+
+    // Skip meta-tag override for any /shop/<something> page — they handle SEO themselves
     const isShopSubPage = location.pathname.startsWith("/shop/") && location.pathname !== "/shop";
     if (isShopSubPage) return;
 

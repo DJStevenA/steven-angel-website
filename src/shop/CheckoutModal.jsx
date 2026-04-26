@@ -18,6 +18,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext.jsx";
 import CheckoutButton from "./CheckoutButton.jsx";
+import { trackBeginCheckout } from "../lib/analytics/events";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -74,9 +75,7 @@ export default function CheckoutModal({ product, onClose }) {
       window.clarity("set", "checkoutProduct", product.name);
       window.clarity("upgrade", "checkout");
     }
-    if (window.gtag) {
-      window.gtag("event", "begin_checkout", { event_category: "shop", event_label: product.name, value: product.price, currency: product.currency || "USD" });
-    }
+    trackBeginCheckout(product);
   }, [product]);
 
   // Lock body scroll while modal is open

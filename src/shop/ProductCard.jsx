@@ -1,6 +1,7 @@
 import React from "react";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
 import { Link } from "react-router-dom";
+import { trackSelectItem, trackAudioPreview } from "../lib/analytics/events";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -54,10 +55,12 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
     if (isThisPlaying) {
       pauseTrack();
     } else {
-      if (window.gtag) window.gtag("event", "select_content", { event_category: "product_preview", event_label: product.name, content_type: "template" });
+      trackSelectItem(product);
+      trackAudioPreview('click', { product_id: product.id, track_name: product.name, genre: product.genre });
       playTrack({
         id: product.id,
         title: product.name,
+        genre: product.genre,
         subtitle: product.genre ? `${product.genre} · ${product.daw || ""}`.replace(/ · $/, "") : product.daw || "",
         audioUrl: product.audioUrl,
         coverUrl: product.image || null,

@@ -23,6 +23,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "./AuthContext.jsx";
+import { trackAddPaymentInfo, trackPurchase } from "../lib/analytics/events";
 
 // Module-level cache so the SDK is loaded at most once per client ID
 const sdkCache = new Map();
@@ -139,6 +140,8 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
 
           onApprove: async (data) => {
             try {
+              // GA4: add_payment_info fires at moment user approves payment in PayPal
+              if (product) trackAddPaymentInfo(product);
               // Use the guest JWT (from /checkout/guest-start) if in guest mode,
               // otherwise use the logged-in user's token.
               const captureToken = guestTokenRef.current || token;
@@ -162,16 +165,7 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
                 window.clarity("set", "product", product?.name || "unknown");
                 window.clarity("set", "value", String(product?.price || 0));
               }
-              if (window.gtag && product) {
-                window.gtag("event", "purchase", {
-                  event_category: "shop",
-                  event_label: product.name,
-                  transaction_id: data.orderID,
-                  value: product.price,
-                  currency: "USD",
-                  items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1 }],
-                });
-              }
+              if (product) trackPurchase(product, { transaction_id: data.orderID });
               if (onSuccess) onSuccess(json.purchase);
             } catch (err) {
               const msg = err.message || "Payment capture failed";

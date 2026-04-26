@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getOrderedProducts } from "./products.js";
 import ProductCard from "./ProductCard.jsx";
@@ -8,6 +8,7 @@ import { useAuth } from "./AuthContext.jsx";
 import GhostCatalog from "./ghost/GhostCatalog.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
+import { trackWhatsAppLead, trackViewItemList } from "../lib/analytics/events";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -64,6 +65,14 @@ export default function ShopPage() {
   // Clarity: track shop page visit
   useEffect(() => {
     if (window.clarity) window.clarity("event", "shopVisit");
+  }, []);
+
+  // GA4 view_item_list — fire once on mount (StrictMode guard)
+  const viewItemListFired = useRef(false);
+  useEffect(() => {
+    if (viewItemListFired.current) return;
+    viewItemListFired.current = true;
+    trackViewItemList(products, 'shop');
   }, []);
 
   useEffect(() => {
@@ -422,7 +431,7 @@ function SupportWidget() {
           <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>
             Need Help?
           </div>
-          <a href={WA} target="_blank" rel="noreferrer" onClick={() => { if (window.gtag) window.gtag("event", "contact", { event_category: "whatsapp", event_label: "shop", value: 50, currency: "USD" }); }} style={{
+          <a href={WA} target="_blank" rel="noreferrer" onClick={() => trackWhatsAppLead("SH", "shop_help")} style={{
             display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
             background: "#25D366", borderRadius: 8, textDecoration: "none",
             fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 13, color: "#fff",

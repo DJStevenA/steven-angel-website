@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { trackAudioPreview } from "../lib/analytics/events";
 
 /* ─────────────────────────────────────────────
    Brand tokens
@@ -142,6 +143,11 @@ export default function TrackPlayer({
   const [duration,    setDuration]    = useState(0);
   const [isSeeking,   setIsSeeking]   = useState(false);
 
+  /* ── Phase 2: audio preview tracking ── */
+  // Use refs so event handlers avoid stale closures (effect re-runs only on isSeeking change)
+  const audioThresholds   = useRef(new Set()); // thresholds fired for the active track
+  const activeTrackData   = useRef(null);      // { id, title, genre } of active track
+
   /* ── UI state ── */
   const [activeGenre, setActiveGenre] = useState(
     GENRES.includes(defaultGenre) ? defaultGenre : GENRES[0]
@@ -162,10 +168,38 @@ export default function TrackPlayer({
 
     const onTimeUpdate = () => {
       if (!isSeeking) setCurrentTime(audio.currentTime);
+      // Phase 2: O(1) threshold checks
+      const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+      const td = activeTrackData.current;
+      if (td) {
+        const marks = [['25', 0.25], ['50', 0.5], ['75', 0.75]];
+        for (const [label, threshold] of marks) {
+          if (pct >= threshold && !audioThresholds.current.has(label)) {
+            audioThresholds.current.add(label);
+            trackAudioPreview(label, { track_id: td.id, track_name: td.title, genre: td.genre });
+          }
+        }
+      }
     };
     const onDurationChange = () => setDuration(audio.duration || 0);
-    const onEnded          = () => { setIsPlaying(false); setCurrentTime(0); };
-    const onPlay           = () => setIsPlaying(true);
+    const onEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+      const td = activeTrackData.current;
+      if (td && !audioThresholds.current.has('complete')) {
+        audioThresholds.current.add('complete');
+        trackAudioPreview('complete', { track_id: td.id, track_name: td.title, genre: td.genre });
+      }
+      audioThresholds.current = new Set();
+    };
+    const onPlay = () => {
+      setIsPlaying(true);
+      const td = activeTrackData.current;
+      if (td && !audioThresholds.current.has('start')) {
+        audioThresholds.current.add('start');
+        trackAudioPreview('start', { track_id: td.id, track_name: td.title, genre: td.genre });
+      }
+    };
     const onPause          = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate",      onTimeUpdate);
@@ -198,7 +232,9 @@ export default function TrackPlayer({
       return;
     }
 
-    // load new track
+    // load new track — reset threshold Set for the incoming track
+    audioThresholds.current = new Set();
+    activeTrackData.current = { id: track.id, title: track.title, genre: track.genre };
     audio.src = track.file;
     audio.currentTime = 0;
     setCurrentTime(0);
@@ -225,7 +261,11 @@ export default function TrackPlayer({
       return;
     }
 
-    // Load the chosen version
+    // Load the chosen version; reset thresholds when switching tracks
+    if (activeId !== track.id) {
+      audioThresholds.current = new Set();
+      activeTrackData.current = { id: track.id, title: track.title, genre: track.genre };
+    }
     audio.src = src;
     audio.currentTime = 0;
     setCurrentTime(0);

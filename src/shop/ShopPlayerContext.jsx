@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useRef, useState, useCallback, useEffect } from "react";
+import { trackAudioPreview } from "../lib/analytics/events";
 
 /**
  * ShopPlayerContext — single audio engine for the Shop sticky player.
@@ -23,16 +24,50 @@ export function ShopPlayerProvider({ children }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
+  // Phase 2: audio preview threshold tracking (refs avoid stale closures in once-mounted effect)
+  const audioThresholds = useRef(new Set());
+  const activeTrackData = useRef(null);
+
   // Wire up audio element listeners once on mount
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const onTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const onTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      // O(1) threshold checks
+      const pct = audio.duration ? audio.currentTime / audio.duration : 0;
+      const td = activeTrackData.current;
+      if (td) {
+        const marks = [['25', 0.25], ['50', 0.5], ['75', 0.75]];
+        for (const [label, threshold] of marks) {
+          if (pct >= threshold && !audioThresholds.current.has(label)) {
+            audioThresholds.current.add(label);
+            trackAudioPreview(label, { track_id: td.id, track_name: td.title, genre: td.genre });
+          }
+        }
+      }
+    };
     const onLoadedMeta = () => setDuration(audio.duration || 0);
-    const onEnded = () => { setIsPlaying(false); setCurrentTime(0); };
+    const onEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+      const td = activeTrackData.current;
+      if (td && !audioThresholds.current.has('complete')) {
+        audioThresholds.current.add('complete');
+        trackAudioPreview('complete', { track_id: td.id, track_name: td.title, genre: td.genre });
+      }
+      audioThresholds.current = new Set();
+    };
     const onPause = () => setIsPlaying(false);
-    const onPlay = () => setIsPlaying(true);
+    const onPlay = () => {
+      setIsPlaying(true);
+      const td = activeTrackData.current;
+      if (td && !audioThresholds.current.has('start')) {
+        audioThresholds.current.add('start');
+        trackAudioPreview('start', { track_id: td.id, track_name: td.title, genre: td.genre });
+      }
+    };
 
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("loadedmetadata", onLoadedMeta);
@@ -59,7 +94,9 @@ export function ShopPlayerProvider({ children }) {
       return;
     }
 
-    // Different track — switch
+    // Different track — switch; CRITICAL: reset threshold Set before new track loads
+    audioThresholds.current = new Set();
+    activeTrackData.current = { id: track.id, title: track.title, genre: track.genre };
     audio.pause();
     audio.src = track.audioUrl;
     audio.currentTime = 0;

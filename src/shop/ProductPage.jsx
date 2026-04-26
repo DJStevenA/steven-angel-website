@@ -14,7 +14,7 @@
  * features list, no file size, no Wi-Fi warnings.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import {
   getProductBySlug,
@@ -25,6 +25,7 @@ import CheckoutModal from "./CheckoutModal.jsx";
 import Nav from "../Nav.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
+import { trackViewItem, trackAddToCart, trackVideoPreview } from "../lib/analytics/events";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -180,6 +181,14 @@ export default function ProductPage() {
     window.clarity("set", "productPrice", String(product.price));
   }, [product]);
 
+  // GA4 view_item — once per product slug (StrictMode guard)
+  const viewItemFiredFor = useRef(null);
+  useEffect(() => {
+    if (!product || viewItemFiredFor.current === product.id) return;
+    viewItemFiredFor.current = product.id;
+    trackViewItem(product);
+  }, [product]);
+
   // Set dynamic page title + meta description + canonical + JSON-LD
   useEffect(() => {
     if (!product) return;
@@ -239,14 +248,33 @@ export default function ProductPage() {
     .filter((p) => p.id !== product.id)
     .slice(0, 3);
 
+  // Video preview threshold tracking (Phase 2)
+  const videoThresholds = useRef(new Set());
+  const handleVideoPlay = () => {
+    trackVideoPreview('play', { product_id: product.id, product_name: product.name, genre: product.genre });
+  };
+  const handleVideoTimeUpdate = (e) => {
+    const { currentTime, duration } = e.target;
+    if (!duration) return;
+    const pct = currentTime / duration;
+    const marks = [['25', 0.25], ['50', 0.5], ['75', 0.75]];
+    for (const [label, threshold] of marks) {
+      if (pct >= threshold && !videoThresholds.current.has(label)) {
+        videoThresholds.current.add(label);
+        trackVideoPreview(label, { product_id: product.id, product_name: product.name, genre: product.genre });
+      }
+    }
+  };
+  const handleVideoEnded = () => {
+    if (!videoThresholds.current.has('complete')) {
+      videoThresholds.current.add('complete');
+      trackVideoPreview('complete', { product_id: product.id, product_name: product.name, genre: product.genre });
+    }
+    videoThresholds.current = new Set();
+  };
+
   const handleBuy = () => {
-    if (window.gtag) window.gtag("event", "add_to_cart", {
-      event_category: "shop",
-      event_label: product.name,
-      value: product.price,
-      currency: "USD",
-      items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: 1 }],
-    });
+    trackAddToCart(product);
     setCheckoutOpen(true);
   };
 
@@ -338,6 +366,9 @@ export default function ProductPage() {
                       autoPlay
                       playsInline
                       preload="metadata"
+                      onPlay={handleVideoPlay}
+                      onTimeUpdate={handleVideoTimeUpdate}
+                      onEnded={handleVideoEnded}
                       style={{
                         position: "absolute",
                         inset: 0,
