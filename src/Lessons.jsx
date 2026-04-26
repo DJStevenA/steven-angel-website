@@ -115,9 +115,161 @@ const fireContactWhatsAppClick = () => {
   if (window.clarity) window.clarity("event", "lessonWhatsAppClick");
 };
 
+/* ─────────────────────────────────────────────
+   Curriculum module data
+───────────────────────────────────────────── */
+const MODULES = [
+  {
+    num: 1,
+    title: "Module 1 — Software",
+    desc: "Ableton interface, workflow, built-in plugins, arrangement basics. Working with MIDI/Audio, loops & one-shots. Genre-relevant sounds from lesson 1.",
+    points: [
+      ["Working with MIDI", "Timing, playing, drawing notes — how to turn an idea into sound"],
+      ["Working with Audio", "Recording, cutting, warping — working with real audio files"],
+      ["Pattern, Grid & Quantize", "The foundation of every groove — how to lock things in tight"],
+      ["One Shots & Loops", "The difference, when to use each, and how to stay organised"],
+      ["Ableton Built-in Plugins", "Simpler, Sampler, Drum Rack, Wavetable — what each tool does"],
+      ["External Plugins", "Splice, Serum, FabFilter, Waves — connecting, managing, updating"],
+      ["Correct Saving Workflow", "Folders, Collect All and Save — never lose a project again"],
+      ["Export", "WAV, MP3, Stems — correct export for every platform"],
+    ],
+    color: CYAN,
+  },
+  {
+    num: 2,
+    title: "Module 2 — Music Theory",
+    desc: "How to write music in scale (on key), build chords, match bass to chords and melody. Take a small musical idea and turn it into a full-length arrangement.",
+    points: [
+      ["Note Names", "Do Re Mi and the English system — a foundation every producer needs"],
+      ["Scales & Chords", "Major, Minor, Modes — how to build harmony that works on the dancefloor"],
+      ["Melodies, Harmonies & Counterpoint", "Adding a layer that connects without clashing"],
+      ["Stretching a Short Melodic Idea into a Full Arrangement", "From 4 bars to a complete track — variation and development techniques"],
+      ["Matching Melody to Chords & Bass", "How to make all three layers sit naturally together"],
+      ["Chord Progressions That Feel Right", "What works, what doesn't, and why"],
+    ],
+    color: CYAN,
+  },
+  {
+    num: 3,
+    title: "Module 3 — Styling, Sound Design, Mix & Mastering",
+    desc: "Advanced drum programming, synth & bass layering, mix & mastering — this is the stage we make the track CRISP for the club!",
+    points: [
+      ["Drum Sound Design", "Selecting kicks, snares and hi-hats by genre — the right palette for your sound"],
+      ["Drum Layering", "Transient shaping, layering techniques — why your kick isn't punching yet"],
+      ["Synth Layering", "Building rich, wide sounds layer by layer"],
+      ["Mix", "EQ, compressor, depth — every channel in its place, no clashing frequencies"],
+      ["Advanced Processing", "Saturation, Sidechain, Stereo Width, Mid/Side — the tricks that change everything"],
+      ["Club-Ready Sound", "Making a track sound big and loud on any system, in any room"],
+      ["Mastering", "Loudness, Limiting, Reference Tracks — Beatport & Spotify ready"],
+    ],
+    color: CYAN,
+  },
+];
+
+/* ─────────────────────────────────────────────
+   Module Detail Modal
+───────────────────────────────────────────── */
+function ModuleModal({ module, onClose }) {
+  // Close on Escape key
+  React.useEffect(() => {
+    const handler = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  // Prevent body scroll while open
+  React.useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 2000,
+        background: "rgba(0,0,0,0.82)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "20px",
+        backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#04040f",
+          border: `1px solid ${module.color}33`,
+          borderTop: `3px solid ${module.color}`,
+          borderRadius: 12,
+          padding: "32px 28px",
+          maxWidth: 560,
+          width: "100%",
+          maxHeight: "85vh",
+          overflowY: "auto",
+          position: "relative",
+          boxShadow: `0 0 60px ${module.color}22`,
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute", top: 16, right: 16,
+            background: "none", border: "none", cursor: "pointer",
+            color: "rgba(255,255,255,0.4)", fontSize: 22, lineHeight: 1,
+            padding: "4px 8px",
+            transition: "color 0.2s",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "#fff"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.4)"; }}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
+        {/* Title */}
+        <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, textTransform: "uppercase", letterSpacing: "0.04em", color: module.color, marginBottom: 20, paddingRight: 32, lineHeight: 1.2 }}>
+          {module.title}
+        </div>
+
+        {/* Points */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {module.points.map(([label, detail]) => (
+            <div key={label} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+              <span style={{ color: module.color, fontWeight: 700, fontSize: 16, flexShrink: 0, marginTop: 1 }}>›</span>
+              <div>
+                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.05em", color: "#fff", textTransform: "uppercase" }}>{label}</div>
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5, marginTop: 2 }}>{detail}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid #141420" }}>
+          <a
+            href="#pricing"
+            onClick={onClose}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+              fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "#000", background: `linear-gradient(135deg,${CYAN},#00b8d4)`,
+              padding: "12px 24px", borderRadius: 6, textDecoration: "none",
+            }}
+          >
+            Book a Lesson →
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Lessons() {
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
   const [formStatus, setFormStatus] = useState(null);
+  const [activeModule, setActiveModule] = useState(null);
 
   useEffect(() => {
     const h = () => setIsMobile(window.innerWidth < 768);
@@ -377,28 +529,47 @@ export default function Lessons() {
         </section>
 
         {/* ═══ CURRICULUM ═══ */}
+        {activeModule && <ModuleModal module={activeModule} onClose={() => setActiveModule(null)} />}
+
         <section id="curriculum" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 800, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 36 }}>
               Curriculum
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
-              {[
-                { title: "Module 1 — Software", desc: "Ableton interface, workflow, built-in plugins, arrangement basics. Working with MIDI/Audio, loops & one-shots. Genre-relevant sounds from lesson 1.", color: CYAN },
-                { title: "Module 2 — Music Theory", desc: "How to write music in scale (on key), build chords, match bass to chords and melody. Take a small musical idea and turn it into a full-length arrangement.", color: CYAN },
-                { title: "Module 3 — Styling, Sound Design, Mix & Mastering", desc: "Advanced drum programming, synth & bass layering, mix & mastering \u2014 this is the stage we make the track CRISP for the club!", color: CYAN },
-                { title: "Full Journey (1+2+3)", desc: "Complete path from zero to release-ready. Best value.", color: PURPLE, badge: "BEST VALUE" },
-              ].map(({ title, desc, color, badge }) => (
-                <div key={title} style={{ background: BG, border: `1px solid ${badge ? PURPLE : "#141420"}`, borderTop: `2px solid ${color}`, borderRadius: 10, padding: isMobile ? "24px 18px" : "28px 24px", position: "relative" }}>
-                  {badge && (
-                    <div style={{ position: "absolute", top: -10, left: 20, background: `linear-gradient(90deg,${PURPLE},${CYAN})`, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.25em", padding: "3px 10px", borderRadius: 20 }}>
-                      {badge}
-                    </div>
-                  )}
-                  <div style={{ ...heading(isMobile ? 16 : 20), marginBottom: 10, color }}>{title}</div>
-                  <div style={{ ...body, fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.6)" }}>{desc}</div>
+
+              {/* Modules 1–3 with More Info button */}
+              {MODULES.map((mod) => (
+                <div key={mod.title} style={{ background: BG, border: "1px solid #141420", borderTop: `2px solid ${mod.color}`, borderRadius: 10, padding: isMobile ? "24px 18px" : "28px 24px", display: "flex", flexDirection: "column" }}>
+                  <div style={{ ...heading(isMobile ? 16 : 20), marginBottom: 10, color: mod.color }}>{mod.title}</div>
+                  <div style={{ ...body, fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.6)", flex: 1 }}>{mod.desc}</div>
+                  <button
+                    onClick={() => setActiveModule(mod)}
+                    style={{
+                      marginTop: 16, alignSelf: "flex-start",
+                      background: "none", border: `1px solid ${mod.color}66`,
+                      borderRadius: 4, color: mod.color,
+                      fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+                      fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+                      padding: "7px 14px", cursor: "pointer",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = mod.color; e.currentTarget.style.background = `${mod.color}11`; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${mod.color}66`; e.currentTarget.style.background = "none"; }}
+                  >
+                    More Info →
+                  </button>
                 </div>
               ))}
+
+              {/* Full Journey card — no modal */}
+              <div style={{ background: BG, border: `1px solid ${PURPLE}`, borderTop: `2px solid ${PURPLE}`, borderRadius: 10, padding: isMobile ? "24px 18px" : "28px 24px", position: "relative" }}>
+                <div style={{ position: "absolute", top: -10, left: 20, background: `linear-gradient(90deg,${PURPLE},${CYAN})`, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.25em", padding: "3px 10px", borderRadius: 20 }}>
+                  BEST VALUE
+                </div>
+                <div style={{ ...heading(isMobile ? 16 : 20), marginBottom: 10, color: PURPLE }}>Full Journey (1+2+3)</div>
+                <div style={{ ...body, fontSize: isMobile ? 13 : 14, color: "rgba(255,255,255,0.6)" }}>Complete path from zero to release-ready. Best value.</div>
+              </div>
+
             </div>
           </div>
         </section>
