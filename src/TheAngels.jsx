@@ -345,15 +345,32 @@ export default function TheAngels() {
           </div>
           <div style={{
             position: "relative",
-            aspectRatio: "9/16",
+            aspectRatio: isMobile ? "9/16" : "16/9",
             borderRadius: 16,
             overflow: "hidden",
             background: "#0a0a14",
             border: `1px solid ${CYAN}33`,
-            maxWidth: isMobile ? "100%" : 420,
+            maxWidth: isMobile ? "100%" : 880,
             margin: "0 auto",
             boxShadow: `0 0 60px ${CYAN}22`,
           }}>
+            {/* Desktop only: blurred backdrop fills the landscape sides */}
+            {!isMobile && (
+              <video
+                src={SPAZIO_MIAMI_VIDEO}
+                autoPlay muted loop playsInline preload="metadata"
+                aria-hidden="true"
+                style={{
+                  position: "absolute", inset: 0,
+                  width: "100%", height: "100%",
+                  objectFit: "cover",
+                  filter: "blur(40px) brightness(0.5)",
+                  transform: "scale(1.25)",
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+            {/* Foreground: vertical reel on mobile (cover), centered on desktop (contain) */}
             <video
               src={SPAZIO_MIAMI_VIDEO}
               autoPlay
@@ -362,7 +379,14 @@ export default function TheAngels() {
               playsInline
               controls
               preload="metadata"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: isMobile ? "cover" : "contain",
+                display: "block",
+              }}
             />
           </div>
         </div>
