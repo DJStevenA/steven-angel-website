@@ -166,7 +166,7 @@ function VideoPlayer({ src, yt, caption, thumb }) {
   const captionEl = (
     <div
       style={{
-        fontFamily: "DM Sans, sans-serif",
+        fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
         fontSize: 12,
         color: "rgba(0,229,255,0.7)",
         marginTop: 8,
@@ -277,7 +277,7 @@ const WhatsAppIcon = ({ size = 16, fill = "#fff" }) => (
 
 /* ─── Style Helpers ─── */
 const heading = (fontSize) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 900,
   fontSize,
   letterSpacing: "0.04em",
@@ -287,14 +287,14 @@ const heading = (fontSize) => ({
 });
 
 const body = {
-  fontFamily: "DM Sans, sans-serif",
+  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
   fontSize: 15,
   color: "rgba(255,255,255,0.55)",
   lineHeight: 1.7,
 };
 
 const label = (color = CYAN) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 11,
   letterSpacing: "0.3em",
@@ -309,7 +309,7 @@ const outlineBtn = (color, shadow) => ({
   background: "transparent",
   border: "2px solid " + color,
   color,
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 14,
   letterSpacing: "0.2em",
@@ -452,7 +452,7 @@ function GhostPage() {
           >
             <div
               style={{
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 900,
                 fontSize: 24,
                 letterSpacing: "0.05em",
@@ -464,7 +464,7 @@ function GhostPage() {
 
             <div
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: isMobile ? 11 : 13,
                 color: "rgba(255,255,255,0.6)",
                 marginBottom: 32,
@@ -515,7 +515,7 @@ function GhostPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 900,
                     fontSize: 15,
                     flexShrink: 0,
@@ -526,7 +526,7 @@ function GhostPage() {
                 <div>
                   <div
                     style={{
-                      fontFamily: "Barlow Condensed, sans-serif",
+                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                       fontWeight: 700,
                       fontSize: 15,
                       marginBottom: 4,
@@ -536,7 +536,7 @@ function GhostPage() {
                   </div>
                   <div
                     style={{
-                      fontFamily: "DM Sans, sans-serif",
+                      fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                       fontSize: isMobile ? 11 : 13,
                       color: "rgba(255,255,255,0.5)",
                       lineHeight: 1.6,
@@ -561,7 +561,7 @@ function GhostPage() {
                 border: "none",
                 borderRadius: 8,
                 padding: "16px",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 900,
                 fontSize: 15,
                 letterSpacing: "0.1em",
@@ -581,7 +581,7 @@ function GhostPage() {
                 color: "rgba(255,255,255,0.6)",
                 borderRadius: 8,
                 padding: "12px",
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: isMobile ? 11 : 13,
                 cursor: "pointer",
               }}
@@ -614,7 +614,7 @@ function GhostPage() {
           gap: 8,
           background: "#1a7a42",
           color: "#fff",
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: isMobile ? 11 : 13,
           letterSpacing: "0.15em",
@@ -704,7 +704,7 @@ function GhostPage() {
 
             <h2
               style={{
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: isMobile ? 20 : 28,
                 letterSpacing: "0.1em",
@@ -717,7 +717,7 @@ function GhostPage() {
             {/* Specializing line */}
             <div
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: isMobile ? 12 : 14,
                 color: "rgba(255,255,255,0.45)",
                 letterSpacing: "0.08em",
@@ -733,7 +733,7 @@ function GhostPage() {
             {/* Tagline above CTA */}
             <div
               style={{
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: isMobile ? 18 : 24,
                 letterSpacing: "0.1em",
@@ -769,13 +769,13 @@ function GhostPage() {
                     cursor: "pointer",
                   }}
                 >
-                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
                     {card.title}
                   </div>
-                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                  <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
                     {card.sub}
                   </div>
-                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
+                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
                     {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
                   </div>
                 </a>
@@ -787,7 +787,7 @@ function GhostPage() {
               <a
                 href="#listen"
                 style={{
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: 13,
                   letterSpacing: "0.2em",
@@ -952,7 +952,7 @@ function GhostPage() {
             />
             <div
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: isMobile ? 11 : 13,
                 color: "rgba(255,255,255,0.5)",
                 marginTop: 12,
@@ -1029,7 +1029,7 @@ function GhostPage() {
                 <div style={{
                   width: 36, height: 36, borderRadius: "50%", border: `2px solid ${CYAN}`, display: "flex",
                   alignItems: "center", justifyContent: "center", flexShrink: 0,
-                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 16, color: CYAN,
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 16, color: CYAN,
                 }}>{n}</div>
                 <span style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.8)", paddingTop: 6 }}>{text}</span>
               </div>
@@ -1056,15 +1056,15 @@ function GhostPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 28 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
                 <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Demo Finishing</span>
-                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $300</span>
+                <span style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $300</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
                 <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Full Track Production</span>
-                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $800</span>
+                <span style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $800</span>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
                 <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Full Production + Original Full Song</span>
-                <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $1,500</span>
+                <span style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $1,500</span>
               </div>
             </div>
             <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 28 }}>
@@ -1089,10 +1089,10 @@ function GhostPage() {
         {/* ═══ Lead Capture (replaces newsletter) ═══ */}
         <section style={{ padding: isMobile ? "40px 20px" : "56px 60px", background: "#06060c", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 500, margin: "0 auto", textAlign: "center" }}>
-            <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN, marginBottom: 10 }}>
+            <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN, marginBottom: 10 }}>
               Contact Us
             </div>
-            <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 22 : 28, lineHeight: 1.15, marginBottom: 20, letterSpacing: "0.02em" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: isMobile ? 22 : 28, lineHeight: 1.15, marginBottom: 20, letterSpacing: "0.02em" }}>
               Leave Your Details
             </div>
             <form
@@ -1124,21 +1124,21 @@ function GhostPage() {
                 type="text"
                 placeholder="Your name"
                 required
-                style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "13px 14px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }}
+                style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "13px 14px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }}
               />
               <input
                 name="email"
                 type="email"
                 placeholder="Your email"
                 required
-                style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "13px 14px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }}
+                style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "13px 14px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }}
               />
               <button
                 type="submit"
                 style={{
                   background: `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
                   color: "#000",
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: 13,
                   letterSpacing: "0.2em",
@@ -1206,14 +1206,14 @@ function GhostPage() {
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
                     <div>
-                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>
+                      <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>
                         {name}
                       </div>
-                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
+                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
                         {country}
                       </div>
                     </div>
-                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
                       {topic}
                     </div>
                   </div>
@@ -1271,7 +1271,7 @@ function GhostPage() {
                 >
                   <span
                     style={{
-                      fontFamily: "Barlow Condensed, sans-serif",
+                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                       fontWeight: 700,
                       fontSize: 17,
                       letterSpacing: "0.04em",
@@ -1396,7 +1396,7 @@ function GhostPage() {
                       borderRadius: 6,
                       padding: "14px 16px",
                       color: "#fff",
-                      fontFamily: "DM Sans, sans-serif",
+                      fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                       fontSize: 14,
                       outline: "none",
                     }}
@@ -1413,7 +1413,7 @@ function GhostPage() {
                     borderRadius: 6,
                     padding: "14px 16px",
                     color: "#fff",
-                    fontFamily: "DM Sans, sans-serif",
+                    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                     fontSize: 14,
                     outline: "none",
                     resize: "vertical",
@@ -1467,7 +1467,7 @@ function GhostPage() {
                     gap: 12,
                     background: "#1a7a42",
                     color: "#fff",
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 700,
                     fontSize: 15,
                     letterSpacing: "0.15em",
@@ -1483,7 +1483,7 @@ function GhostPage() {
 
                 <div
                   style={{
-                    fontFamily: "DM Sans, sans-serif",
+                    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                     fontSize: 12,
                     color: "rgba(255,255,255,0.55)",
                   }}
@@ -1509,7 +1509,7 @@ function GhostPage() {
       >
         <div
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: isMobile ? 11 : 13,
             color: "rgba(255,255,255,0.6)",
             marginBottom: 8,
@@ -1525,7 +1525,7 @@ function GhostPage() {
         </div>
         <div
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 12,
             color: "rgba(255,255,255,0.5)",
             marginBottom: 6,
@@ -1536,7 +1536,7 @@ function GhostPage() {
         </div>
         <span
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 12,
             color: "rgba(255,255,255,0.55)",
           }}

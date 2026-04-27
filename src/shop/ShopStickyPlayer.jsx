@@ -124,7 +124,7 @@ export default function ShopStickyPlayer() {
   };
 
   const titleStyle = {
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 700,
     fontSize: isMobile ? 13 : 14,
     letterSpacing: "0.04em",
@@ -137,7 +137,7 @@ export default function ShopStickyPlayer() {
   };
 
   const subtitleStyle = {
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontSize: isMobile ? 10 : 11,
     color: "rgba(255,255,255,0.5)",
     whiteSpace: "nowrap",
@@ -172,7 +172,7 @@ export default function ShopStickyPlayer() {
   };
 
   const timeStyle = {
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontSize: isMobile ? 9 : 10,
     color: "rgba(255,255,255,0.45)",
     whiteSpace: "nowrap",

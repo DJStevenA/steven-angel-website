@@ -19,7 +19,7 @@ const BG_ALT = "#04040f";
 
 /* ─── Style Helpers ─── */
 const heading = (fontSize) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 900,
   fontSize,
   letterSpacing: "0.04em",
@@ -29,14 +29,14 @@ const heading = (fontSize) => ({
 });
 
 const body = {
-  fontFamily: "DM Sans, sans-serif",
+  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
   fontSize: 15,
   color: "rgba(255,255,255,0.6)",
   lineHeight: 1.7,
 };
 
 const label = (color = CYAN) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 11,
   letterSpacing: "0.3em",
@@ -172,7 +172,7 @@ export default function ShopPage() {
           <Link
             to="/"
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 900,
               fontSize: 20,
               letterSpacing: "0.1em",
@@ -189,7 +189,7 @@ export default function ShopPage() {
         {!isMobile && (
           <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
             {[{ label: "Ghost", to: "/ghost" }, { label: "Lessons", to: "/lessons" }, { label: "Shop", to: "/shop" }].map(({ label, to }) => (
-              <Link key={to} to={to} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: to === "/shop" ? CYAN : "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+              <Link key={to} to={to} style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: to === "/shop" ? CYAN : "rgba(255,255,255,0.6)", textDecoration: "none" }}>
                 {label}
               </Link>
             ))}
@@ -207,7 +207,7 @@ export default function ShopPage() {
               background: user ? "rgba(0,229,255,0.08)" : "transparent",
               border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.2)"}`,
               color: user ? CYAN : "rgba(255,255,255,0.85)",
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: isMobile ? 11 : 12,
               letterSpacing: "0.18em",
@@ -240,7 +240,7 @@ export default function ShopPage() {
                   Ghost Tracks<br />
                   <span style={{ color: PURPLE }}>For Sale</span>
                 </div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 16 : 22, letterSpacing: "0.08em", color: "rgba(255,255,255,0.7)", marginBottom: 28 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 16 : 22, letterSpacing: "0.08em", color: "rgba(255,255,255,0.7)", marginBottom: 28 }}>
                   Exclusive · One Buyer Only · Full Rights Transfer
                 </div>
                 <div style={{ ...body, maxWidth: 580, margin: "0 auto" }}>
@@ -256,7 +256,7 @@ export default function ShopPage() {
                   Ableton Templates &<br />
                   <span style={{ color: CYAN }}>Afro House Masterclass</span>
                 </div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 16 : 22, letterSpacing: "0.08em", color: "rgba(255,255,255,0.7)", marginBottom: 28 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 16 : 22, letterSpacing: "0.08em", color: "rgba(255,255,255,0.7)", marginBottom: 28 }}>
                   Real Sessions From a Signed Artist · Instant Download
                 </div>
                 <div style={{ ...body, maxWidth: 640, margin: "0 auto" }}>
@@ -272,10 +272,13 @@ export default function ShopPage() {
         </section>
 
         {/* ═══ Trust Badges ═══ */}
+        {/* min-height reserves space so badges don't shove content (was 0.254 CLS culprit on /shop) */}
         <div style={{
           display: "flex", justifyContent: "center", gap: isMobile ? 16 : 32,
           padding: isMobile ? "0 16px 24px" : "0 60px 28px",
           flexWrap: "wrap",
+          minHeight: isMobile ? 64 : 36,
+          alignItems: "center",
         }}>
           {[
             { icon: "🔒", stat: "100%", text: "Secure Payments" },
@@ -284,11 +287,11 @@ export default function ShopPage() {
           ].map(({ icon, stat, text }) => (
             <div key={text} style={{
               display: "flex", alignItems: "center", gap: 8,
-              fontFamily: "DM Sans, sans-serif", fontSize: 12,
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12,
               color: "rgba(255,255,255,0.5)",
             }}>
               <span style={{ fontSize: 14 }}>{icon}</span>
-              <span style={{ color: CYAN, fontWeight: 700, fontFamily: "Barlow Condensed, sans-serif", fontSize: 13, letterSpacing: "0.05em" }}>{stat}</span>
+              <span style={{ color: CYAN, fontWeight: 700, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontSize: 13, letterSpacing: "0.05em" }}>{stat}</span>
               <span>{text}</span>
             </div>
           ))}
@@ -315,7 +318,7 @@ export default function ShopPage() {
                 style={{
                   padding: isMobile ? "8px 14px" : "9px 22px",
                   borderRadius: 6,
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700, fontSize: isMobile ? 12 : 13,
                   letterSpacing: "0.15em", textTransform: "uppercase",
                   textDecoration: "none", whiteSpace: "nowrap",
@@ -341,7 +344,7 @@ export default function ShopPage() {
         {activeTab === "shop" && (
           <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 8, padding: isMobile ? "0 16px 30px" : "0 60px 40px", maxWidth: 1000, margin: "0 auto" }}>
             {["Afro House Templates", "Melodic Techno Templates", "Ableton Live Projects", "Hugel Style", "Keinemusik Style", "Solomun Style", "Artbat Style", "Sample Packs", "Online Masterclass", "Royalty-Free"].map((text) => (
-              <span key={text} style={{ fontFamily: "DM Sans, sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(255,255,255,0.35)" }}>
+              <span key={text} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(255,255,255,0.35)" }}>
                 {text}
               </span>
             ))}
@@ -377,7 +380,6 @@ export default function ShopPage() {
               <Link
                 to="/mix-mastering"
                 style={{
-                  display: "block",
                   textDecoration: "none",
                   padding: isMobile ? "28px 24px" : "40px 48px",
                   background: "linear-gradient(135deg, rgba(0,229,255,0.12) 0%, rgba(187,134,252,0.12) 100%), #04040f",
@@ -403,20 +405,20 @@ export default function ShopPage() {
               >
                 <div style={{ flex: 1 }}>
                   <div style={{
-                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11,
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11,
                     letterSpacing: "0.3em", textTransform: "uppercase", color: "#00E5FF", marginBottom: 8,
                   }}>
                     Mix &amp; Master Services
                   </div>
                   <div style={{
-                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 24 : 32,
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: isMobile ? 24 : 32,
                     textTransform: "uppercase", letterSpacing: "0.02em", color: "#fff",
                     lineHeight: 1.1, marginBottom: 8,
                   }}>
                     Get Your Track Club Ready
                   </div>
                   <div style={{
-                    fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 14 : 15,
+                    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 14 : 15,
                     color: "rgba(255,255,255,0.7)", lineHeight: 1.6,
                   }}>
                     Professional mastering from <strong style={{ color: "#00E5FF" }}>$35</strong>. Trusted by Hernan Cattaneo &amp; Dole &amp; Kom. 3-day turnaround, 16-bit WAV + HQ MP3.
@@ -426,7 +428,7 @@ export default function ShopPage() {
                   padding: isMobile ? "12px 24px" : "14px 28px",
                   background: "linear-gradient(135deg, #00E5FF, #BB86FC)",
                   color: "#000", borderRadius: 8,
-                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
                   fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase",
                   whiteSpace: "nowrap",
                 }}>
@@ -451,10 +453,10 @@ export default function ShopPage() {
                   { num: "3", title: "Lifetime Access", desc: "Create a free account to re-download anytime. No expiry, no limits." },
                 ].map((step) => (
                   <div key={step.num} style={{ textAlign: "center" }}>
-                    <div style={{ width: 48, height: 48, borderRadius: "50%", background: `linear-gradient(135deg, ${CYAN}, #00b8d4)`, color: "#000", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 20, margin: "0 auto 16px" }}>
+                    <div style={{ width: 48, height: 48, borderRadius: "50%", background: `linear-gradient(135deg, ${CYAN}, #00b8d4)`, color: "#000", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 20, margin: "0 auto 16px" }}>
                       {step.num}
                     </div>
-                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: "0.05em", marginBottom: 8, color: "#fff" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: "0.05em", marginBottom: 8, color: "#fff" }}>
                       {step.title}
                     </div>
                     <div style={{ ...body, fontSize: 13 }}>{step.desc}</div>
@@ -501,13 +503,13 @@ function SupportWidget() {
           gap: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
           minWidth: 200,
         }}>
-          <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>
+          <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>
             Need Help?
           </div>
           <a href={WA} target="_blank" rel="noreferrer" onClick={() => trackWhatsAppLead("SH", "shop_help")} style={{
             display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
             background: "#25D366", borderRadius: 8, textDecoration: "none",
-            fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 13, color: "#fff",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 600, fontSize: 13, color: "#fff",
           }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.106 1.51 5.833L.057 23.054a.75.75 0 00.92.92l5.222-1.453A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 01-4.98-1.366l-.357-.214-3.706 1.032 1.032-3.706-.214-.357A9.75 9.75 0 1112 21.75z"/></svg>
             WhatsApp
@@ -516,7 +518,7 @@ function SupportWidget() {
             display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
             background: "rgba(0,229,255,0.1)", border: "1px solid rgba(0,229,255,0.25)",
             borderRadius: 8, textDecoration: "none",
-            fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 13, color: "#00E5FF",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 600, fontSize: 13, color: "#00E5FF",
           }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             hello@steven-angel.com

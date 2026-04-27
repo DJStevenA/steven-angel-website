@@ -84,7 +84,7 @@ export default function SignupPage() {
     border: "1px solid rgba(255,255,255,0.12)",
     borderRadius: 6,
     padding: "12px 14px",
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontSize: 14,
     color: "#fff",
     marginBottom: 16,
@@ -94,7 +94,7 @@ export default function SignupPage() {
 
   const labelStyle = {
     display: "block",
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 700,
     fontSize: 11,
     letterSpacing: "0.2em",
@@ -117,7 +117,7 @@ export default function SignupPage() {
         <Link
           to="/"
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 900,
             fontSize: 22,
             letterSpacing: "0.1em",
@@ -152,7 +152,7 @@ export default function SignupPage() {
         >
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.3em",
@@ -166,7 +166,7 @@ export default function SignupPage() {
           </div>
           <h1
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 900,
               fontSize: isMobile ? 30 : 38,
               letterSpacing: "0.04em",
@@ -181,7 +181,7 @@ export default function SignupPage() {
           </h1>
           <p
             style={{
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 13,
               color: "rgba(255,255,255,0.6)",
               textAlign: "center",
@@ -244,7 +244,7 @@ export default function SignupPage() {
             {error && (
               <div
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize: 12,
                   color: "#ff6b6b",
                   marginTop: 4,
@@ -270,7 +270,7 @@ export default function SignupPage() {
                 border: "none",
                 borderRadius: 6,
                 padding: "14px 28px",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 800,
                 fontSize: 14,
                 letterSpacing: "0.18em",
@@ -289,7 +289,7 @@ export default function SignupPage() {
           <div
             style={{
               textAlign: "center",
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 12,
               color: "rgba(255,255,255,0.5)",
               lineHeight: 1.7,

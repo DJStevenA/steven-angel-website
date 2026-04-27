@@ -78,7 +78,7 @@ export default function LoginPage() {
         <Link
           to="/"
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 900,
             fontSize: 22,
             letterSpacing: "0.1em",
@@ -114,7 +114,7 @@ export default function LoginPage() {
           {/* Heading */}
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.3em",
@@ -128,7 +128,7 @@ export default function LoginPage() {
           </div>
           <h1
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 900,
               fontSize: isMobile ? 30 : 38,
               letterSpacing: "0.04em",
@@ -143,7 +143,7 @@ export default function LoginPage() {
           </h1>
           <p
             style={{
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 13,
               color: "rgba(255,255,255,0.6)",
               textAlign: "center",
@@ -160,7 +160,7 @@ export default function LoginPage() {
             <label
               style={{
                 display: "block",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: 11,
                 letterSpacing: "0.2em",
@@ -184,7 +184,7 @@ export default function LoginPage() {
                 border: "1px solid rgba(255,255,255,0.12)",
                 borderRadius: 6,
                 padding: "12px 14px",
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 14,
                 color: "#fff",
                 marginBottom: 18,
@@ -199,7 +199,7 @@ export default function LoginPage() {
             <label
               style={{
                 display: "block",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: 11,
                 letterSpacing: "0.2em",
@@ -222,7 +222,7 @@ export default function LoginPage() {
                 border: "1px solid rgba(255,255,255,0.12)",
                 borderRadius: 6,
                 padding: "12px 14px",
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 14,
                 color: "#fff",
                 marginBottom: 8,
@@ -237,7 +237,7 @@ export default function LoginPage() {
             {error && (
               <div
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize: 12,
                   color: "#ff6b6b",
                   marginTop: 8,
@@ -254,7 +254,7 @@ export default function LoginPage() {
 
             {/* Forgot password link */}
             <div style={{ textAlign: "right", marginTop: 6, marginBottom: 4 }}>
-              <Link to="/shop/forgot" style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>
+              <Link to="/shop/forgot" style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>
                 Forgot password?
               </Link>
             </div>
@@ -271,7 +271,7 @@ export default function LoginPage() {
                 border: "none",
                 borderRadius: 6,
                 padding: "14px 28px",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 800,
                 fontSize: 14,
                 letterSpacing: "0.18em",
@@ -291,7 +291,7 @@ export default function LoginPage() {
           <div
             style={{
               textAlign: "center",
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 12,
               color: "rgba(255,255,255,0.5)",
               lineHeight: 1.7,

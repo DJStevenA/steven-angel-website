@@ -90,7 +90,7 @@ export default function TheAngels() {
 
   /* style helpers */
   const heading = (size) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 900,
     textTransform: "uppercase",
     lineHeight: 1,
@@ -98,14 +98,14 @@ export default function TheAngels() {
     fontSize: size,
   });
   const body = {
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontWeight: 400,
     lineHeight: 1.8,
     color: "rgba(255,255,255,0.7)",
     fontSize: 15,
   };
   const label = (color) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 700,
     fontSize: 12,
     letterSpacing: "0.35em",
@@ -204,14 +204,25 @@ export default function TheAngels() {
         position: "relative",
         overflow: "hidden",
       }}>
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: "url(/the-angels-hero.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          zIndex: 0,
-        }} />
+        {/* Hero bg as <img> (not CSS background) so HTML preload scanner finds it + fetchpriority=high boosts LCP */}
+        <img
+          src="/the-angels-hero.jpg"
+          alt=""
+          aria-hidden="true"
+          fetchpriority="high"
+          decoding="sync"
+          width="1600"
+          height="1066"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+            zIndex: 0,
+          }}
+        />
         <div style={{
           position: "absolute",
           inset: 0,
@@ -303,7 +314,7 @@ export default function TheAngels() {
             <div style={{ ...label(PURPLE), fontSize: 14, marginBottom: 18, color: PURPLE }}>Supported By</div>
             <div style={{
               display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 14 : 28,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
               fontSize: isMobile ? 18 : 24, letterSpacing: "0.08em", textTransform: "uppercase",
               color: "#fff",
             }}>
@@ -319,7 +330,7 @@ export default function TheAngels() {
             <div style={{ ...label(PURPLE), fontSize: 14, marginBottom: 18, color: PURPLE }}>Released On</div>
             <div style={{
               display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 14 : 28,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
               fontSize: isMobile ? 18 : 24, letterSpacing: "0.08em", textTransform: "uppercase",
               color: "#fff",
             }}>
@@ -514,7 +525,7 @@ export default function TheAngels() {
               color: "#000",
               borderRadius: 8,
               textDecoration: "none",
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 800,
               fontSize: isMobile ? 13 : 14,
               letterSpacing: "0.15em",
@@ -565,7 +576,7 @@ export default function TheAngels() {
                 borderRadius: 8,
                 color: "#fff",
                 fontSize: 15,
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 outline: "none",
                 transition: "border-color 0.2s",
               }}
@@ -581,7 +592,7 @@ export default function TheAngels() {
                 color: "#000",
                 border: "none",
                 borderRadius: 8,
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 800,
                 fontSize: 14,
                 letterSpacing: "0.15em",
@@ -628,7 +639,7 @@ export default function TheAngels() {
               color: "#000",
               borderRadius: 8,
               textDecoration: "none",
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 800,
               fontSize: isMobile ? 14 : 16,
               letterSpacing: "0.15em",

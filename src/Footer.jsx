@@ -9,7 +9,7 @@ const CYAN = "#00E5FF";
 export default function Footer() {
   return (
     <footer style={{ padding: "28px 40px", background: "#02020a", borderTop: "1px solid #0d0d18", textAlign: "center" }}>
-      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", marginBottom: 12 }}>
+      <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", marginBottom: 12 }}>
         Steven Angel — DJ · Producer · Mentor
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 12 }}>
@@ -22,13 +22,13 @@ export default function Footer() {
           { label: "Beatport", href: "https://www.beatport.com/artist/the-angels-il/913642" },
         ].map(({ label, to, href }) =>
           to ? (
-            <Link key={label} to={to} style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: CYAN, textDecoration: "none" }}>{label}</Link>
+            <Link key={label} to={to} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: CYAN, textDecoration: "none" }}>{label}</Link>
           ) : (
-            <a key={label} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{label}</a>
+            <a key={label} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{label}</a>
           )
         )}
       </div>
-      <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+      <span style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
         &copy; {new Date().getFullYear()} Steven Angel — All Rights Reserved
       </span>
     </footer>

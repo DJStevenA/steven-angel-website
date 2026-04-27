@@ -34,7 +34,7 @@ const BG = "#080810";
 const BG_ALT = "#04040f";
 
 const heading = (fontSize) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 900,
   fontSize,
   letterSpacing: "0.04em",
@@ -46,7 +46,7 @@ const heading = (fontSize) => ({
 });
 
 const body = {
-  fontFamily: "DM Sans, sans-serif",
+  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
   fontSize: 15,
   color: "rgba(255,255,255,0.65)",
   lineHeight: 1.7,
@@ -55,7 +55,7 @@ const body = {
 };
 
 const label = (color = CYAN) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 11,
   letterSpacing: "0.3em",
@@ -88,7 +88,7 @@ function SpecLine({ label: lbl, value, accentRgba }) {
     >
       <span
         style={{
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: 13,
           letterSpacing: "0.1em",
@@ -100,7 +100,7 @@ function SpecLine({ label: lbl, value, accentRgba }) {
       </span>
       <span
         style={{
-          fontFamily: "DM Sans, sans-serif",
+          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
           fontSize: 14,
           color: "rgba(255,255,255,0.85)",
         }}
@@ -117,7 +117,7 @@ function SpecList({ title, items, accentColor }) {
     <div style={{ marginTop: 14 }}>
       <div
         style={{
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: 12,
           letterSpacing: "0.15em",
@@ -132,7 +132,7 @@ function SpecList({ title, items, accentColor }) {
         <div
           key={i}
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 13,
             color: "rgba(255,255,255,0.7)",
             lineHeight: 1.6,
@@ -308,7 +308,7 @@ export default function ProductPage() {
           style={{
             maxWidth: 1200,
             margin: "0 auto",
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 12,
             color: "rgba(255,255,255,0.5)",
           }}
@@ -440,7 +440,7 @@ export default function ProductPage() {
                           left: 0,
                           right: 0,
                           padding: "14px 14px",
-                          fontFamily: "Barlow Condensed, sans-serif",
+                          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                           fontWeight: 700,
                           fontSize: isMobile ? 11 : 13,
                           letterSpacing: "0.05em",
@@ -470,7 +470,7 @@ export default function ProductPage() {
                       : `rgba(${accentRgba},0.15)`,
                     border: isPurple ? "none" : `1px solid ${accentColor}`,
                     color: isPurple ? "#000" : accentColor,
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 700,
                     fontSize: 11,
                     letterSpacing: "0.2em",
@@ -501,7 +501,7 @@ export default function ProductPage() {
               {/* Subtitle / headline */}
               <div
                 style={{
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: isMobile ? 16 : 19,
                   letterSpacing: "0.04em",
@@ -527,7 +527,7 @@ export default function ProductPage() {
               >
                 <div
                   style={{
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 900,
                     fontSize: isMobile ? 38 : 48,
                     color: accentColor,
@@ -538,7 +538,7 @@ export default function ProductPage() {
                 </div>
                 <div
                   style={{
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 600,
                     fontSize: 13,
                     letterSpacing: "0.15em",
@@ -561,7 +561,7 @@ export default function ProductPage() {
                     : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
                   border: "none",
                   borderRadius: 8,
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 800,
                   fontSize: 16,
                   letterSpacing: "0.12em",
@@ -577,7 +577,7 @@ export default function ProductPage() {
 
               <div
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize: 11,
                   color: "rgba(255,255,255,0.5)",
                   textAlign: "center",
@@ -616,7 +616,7 @@ export default function ProductPage() {
                       background: "transparent",
                       border: `1px solid rgba(${accentRgba},0.45)`,
                       borderRadius: 6,
-                      fontFamily: "Barlow Condensed, sans-serif",
+                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                       fontWeight: 700,
                       fontSize: 13,
                       letterSpacing: "0.18em",
@@ -652,7 +652,7 @@ export default function ProductPage() {
                     <span
                       key={tag}
                       style={{
-                        fontFamily: "DM Sans, sans-serif",
+                        fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                         fontSize: 11,
                         fontWeight: 500,
                         color: "rgba(255,255,255,0.7)",
@@ -825,7 +825,7 @@ export default function ProductPage() {
                     </div>
                     <div
                       style={{
-                        fontFamily: "Barlow Condensed, sans-serif",
+                        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                         fontWeight: 800,
                         fontSize: 18,
                         color: pAccent,
@@ -847,7 +847,7 @@ export default function ProductPage() {
                   padding: "12px 28px",
                   border: `1px solid ${CYAN}`,
                   borderRadius: 6,
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: 13,
                   letterSpacing: "0.15em",

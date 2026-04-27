@@ -53,15 +53,15 @@ export default function Sign() {
   };
 
   const s = {
-    page:   { background: BG, minHeight: "100vh", color: "#fff", fontFamily: "DM Sans, sans-serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" },
+    page:   { background: BG, minHeight: "100vh", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" },
     box:    { maxWidth: 680, width: "100%", background: "#07070f", border: "1px solid #1a1a2e", borderRadius: 12, padding: "48px 40px" },
-    title:  { fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 32, letterSpacing: "0.05em", marginBottom: 4 },
+    title:  { fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 32, letterSpacing: "0.05em", marginBottom: 4 },
     label:  { fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6, display: "block" },
     clause: { marginBottom: 16 },
     ctitle: { fontWeight: 700, fontSize: 13, marginBottom: 2 },
     ctext:  { fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.6 },
-    input:  { width: "100%", background: "#0b0b18", border: "1px solid #1a1a2e", borderRadius: 6, padding: "12px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none", boxSizing: "border-box" },
-    btn:    { width: "100%", background: C, color: "#000", border: "none", borderRadius: 6, padding: "16px", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 16, letterSpacing: "0.1em", cursor: "pointer", marginTop: 8 },
+    input:  { width: "100%", background: "#0b0b18", border: "1px solid #1a1a2e", borderRadius: 6, padding: "12px 16px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none", boxSizing: "border-box" },
+    btn:    { width: "100%", background: C, color: "#000", border: "none", borderRadius: 6, padding: "16px", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 16, letterSpacing: "0.1em", cursor: "pointer", marginTop: 8 },
   };
 
   const clauses = [
@@ -112,7 +112,7 @@ export default function Sign() {
 
         {/* Sign Section */}
         <div style={{ borderTop: "1px solid #1a1a2e", paddingTop: 32 }}>
-          <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Sign the Agreement</div>
+          <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Sign the Agreement</div>
           <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>After signing you'll be redirected to complete payment via PayPal.</div>
 
           <div style={{ marginBottom: 16 }}>
@@ -148,7 +148,7 @@ export default function Sign() {
                     href={`${API}/download-pdf/${signedData.pdfToken}`}
                     target="_blank"
                     rel="noreferrer"
-                    style={{ display: "block", background: C, color: "#000", borderRadius: 6, padding: "12px 16px", textDecoration: "none", fontSize: 13, fontWeight: 700, textAlign: "center", marginBottom: 8, fontFamily: "Barlow Condensed, sans-serif", letterSpacing: "0.08em" }}
+                    style={{ display: "block", background: C, color: "#000", borderRadius: 6, padding: "12px 16px", textDecoration: "none", fontSize: 13, fontWeight: 700, textAlign: "center", marginBottom: 8, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", letterSpacing: "0.08em" }}
                   >
                     DOWNLOAD CONTRACT (PDF) ↓
                   </a>
@@ -158,7 +158,7 @@ export default function Sign() {
                     href={signedData.uploadUrl}
                     target="_blank"
                     rel="noreferrer"
-                    style={{ display: "block", background: "#1a1a2e", border: `1px solid ${P}`, color: P, borderRadius: 6, padding: "12px 16px", textDecoration: "none", fontSize: 13, fontWeight: 700, textAlign: "center", marginBottom: 8, fontFamily: "Barlow Condensed, sans-serif", letterSpacing: "0.08em" }}
+                    style={{ display: "block", background: "#1a1a2e", border: `1px solid ${P}`, color: P, borderRadius: 6, padding: "12px 16px", textDecoration: "none", fontSize: 13, fontWeight: 700, textAlign: "center", marginBottom: 8, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", letterSpacing: "0.08em" }}
                   >
                     YOUR DROPBOX FOLDER →
                   </a>

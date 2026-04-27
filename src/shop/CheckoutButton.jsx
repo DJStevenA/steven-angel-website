@@ -224,7 +224,7 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
         <div
           style={{
             padding: "12px 0",
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 13,
             color: "rgba(255,255,255,0.5)",
             textAlign: "center",
@@ -242,7 +242,7 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
             background: "rgba(255,80,80,0.08)",
             border: "1px solid rgba(255,80,80,0.4)",
             borderRadius: 6,
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 12,
             color: "#ff8080",
           }}

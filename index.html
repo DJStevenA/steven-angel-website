@@ -27,11 +27,20 @@
     <!-- Preload LCP hero image -->
     <link rel="preload" as="image" type="image/webp" href="/images/dj-hero-ghost.webp" />
 
-    <!-- DNS prefetch for third-party domains -->
+    <!-- Preload critical fonts (Barlow 800 = LCP H1, DM Sans 400 = body) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/htxwl3i-jcgchyj8vi-l6oo_au7b47b1z3bwuymbyro.woff2" crossorigin="anonymous" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/rp2yp2ywxg089urii5-g4vlh9vod8cmcqbu0-k6z9mxg.woff2" crossorigin="anonymous" />
+
+    <!-- Preconnect to critical 3rd-party origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
+    <link rel="preconnect" href="https://ghost-backend-production-adb6.up.railway.app" crossorigin />
+
+    <!-- DNS prefetch for non-critical 3rd-party domains -->
     <link rel="dns-prefetch" href="https://www.youtube.com" />
     <link rel="dns-prefetch" href="https://img.youtube.com" />
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="https://www.clarity.ms" />
+    <link rel="dns-prefetch" href="https://scripts.clarity.ms" />
 
     <!-- Schema.org Person -->
     <script type="application/ld+json">
@@ -55,23 +64,27 @@
     <!-- Reset + Self-hosted fonts -->
     <style>
       *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; background: #000; font-family: 'DM Sans', -apple-system, sans-serif; }
+      html, body { margin: 0; padding: 0; background: #000; font-family: 'DM Sans', 'DM Sans Fallback', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+      /* ─── Size-adjusted fallback fonts (kill CLS during font swap) ─── */
       @font-face {
-        font-family: 'Outfit';
-        font-style: normal;
-        font-weight: 300;
-        font-display: swap;
-        src: url(/fonts/outfit-300.woff2) format('woff2');
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        font-family: 'DM Sans Fallback';
+        src: local('Arial');
+        size-adjust: 100.06%;
+        ascent-override: 92.57%;
+        descent-override: 24.16%;
+        line-gap-override: 0%;
       }
       @font-face {
-        font-family: 'Outfit';
-        font-style: normal;
-        font-weight: 800;
-        font-display: swap;
-        src: url(/fonts/outfit-800.woff2) format('woff2');
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        font-family: 'Barlow Condensed Fallback';
+        src: local('Arial Narrow'), local('Arial');
+        size-adjust: 88%;
+        ascent-override: 92.5%;
+        descent-override: 22.6%;
+        line-gap-override: 0%;
       }
+
+      /* ─── Real fonts (font-display: swap, fallback shows instantly) ─── */
       @font-face {
         font-family: 'Barlow Condensed';
         font-style: normal;
@@ -107,15 +120,7 @@
       @font-face {
         font-family: 'DM Sans';
         font-style: normal;
-        font-weight: 400;
-        font-display: swap;
-        src: url(/fonts/rp2yp2ywxg089urii5-g4vlh9vod8cmcqbu0-k6z9mxg.woff2) format('woff2');
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-      }
-      @font-face {
-        font-family: 'DM Sans';
-        font-style: normal;
-        font-weight: 500;
+        font-weight: 400 500;
         font-display: swap;
         src: url(/fonts/rp2yp2ywxg089urii5-g4vlh9vod8cmcqbu0-k6z9mxg.woff2) format('woff2');
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -137,9 +142,9 @@
       })();
     </script>
 
-    <!-- Google Analytics + Ads (async, non-blocking) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KTRD05NY5B"></script>
+    <!-- Google Analytics + Ads (DEFERRED — library loads after page load to free up main thread) -->
     <script>
+      // Stub gtag() so app code can queue events before library loads
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -149,6 +154,23 @@
         allow_google_signals: true,
       });
       gtag('config', 'AW-999991173'); // Conversion tracking ID (not the customer ID 7337381163)
+
+      // Defer GTM library load until after window.load (saves ~1.7s TBT on mobile)
+      // dataLayer events queued before this fires will replay automatically.
+      (function() {
+        function loadGtm() {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KTRD05NY5B';
+          document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') {
+          // Page already loaded (e.g. SPA route change) — load immediately
+          loadGtm();
+        } else {
+          window.addEventListener('load', loadGtm, { once: true });
+        }
+      })();
     </script>
 
   </head>
@@ -175,13 +197,25 @@
     </form>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Microsoft Clarity -->
+    <!-- Microsoft Clarity (DEFERRED — loads after window.load + 1s buffer to keep main thread free) -->
     <script type="text/javascript">
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window,document,"clarity","script","w5o1l2p0bt");
+      // Stub clarity() so app code can queue calls before library loads
+      window.clarity = window.clarity || function(){(window.clarity.q=window.clarity.q||[]).push(arguments)};
+
+      (function() {
+        function loadClarity() {
+          (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window,document,"clarity","script","w5o1l2p0bt");
+        }
+        if (document.readyState === 'complete') {
+          setTimeout(loadClarity, 1000);
+        } else {
+          window.addEventListener('load', function() { setTimeout(loadClarity, 1000); }, { once: true });
+        }
+      })();
     </script>
   </body>
 </html>

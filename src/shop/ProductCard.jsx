@@ -10,7 +10,7 @@ const BG_ALT = "#04040f";
 
 /* ─── Style Helpers ─── */
 const heading = (fontSize) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 900,
   fontSize,
   letterSpacing: "0.04em",
@@ -22,7 +22,7 @@ const heading = (fontSize) => ({
 });
 
 const body = {
-  fontFamily: "DM Sans, sans-serif",
+  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
   fontSize: 14,
   color: "rgba(255,255,255,0.6)",
   lineHeight: 1.6,
@@ -31,7 +31,7 @@ const body = {
 };
 
 const label = (color = CYAN) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 11,
   letterSpacing: "0.3em",
@@ -81,7 +81,7 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
         background: isThisPlaying ? `rgba(${accentRgba},0.12)` : "transparent",
         border: `1px solid rgba(${accentRgba},${isThisPlaying ? "0.7" : "0.45"})`,
         borderRadius: 6,
-        fontFamily: "Barlow Condensed, sans-serif",
+        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
         fontWeight: 700,
         fontSize: 12,
         letterSpacing: "0.18em",
@@ -161,7 +161,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
               : `rgba(${accentRgba},0.15)`,
             border: isPurple ? "none" : `1px solid ${accentColor}`,
             color: isPurple ? "#000" : accentColor,
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 700,
             fontSize: isMobile ? 9 : 10,
             letterSpacing: isMobile ? "0.12em" : "0.2em",
@@ -189,9 +189,12 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           src={product.image}
           alt={product.name}
           loading="lazy"
+          width="1324"
+          height="722"
           style={{
             width: "100%",
             height: "auto",
+            aspectRatio: "1324/722",
             display: "block",
             borderRadius: 6,
           }}
@@ -223,7 +226,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
       <Link
         to={`/shop/${product.slug}`}
         style={{
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: isMobile ? 13 : 14,
           color: accentColor,
@@ -261,7 +264,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
             <span
               key={tag}
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 10,
                 fontWeight: 500,
                 color: "rgba(255,255,255,0.65)",
@@ -287,7 +290,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
       <Link
         to={`/shop/${product.slug}`}
         style={{
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 900,
           fontSize: isMobile ? 32 : 38,
           color: accentColor,
@@ -324,7 +327,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           border: "none",
           borderRadius: 50,
           padding: isMobile ? "13px 20px" : "15px 28px",
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: isMobile ? 13 : 14,
           letterSpacing: "0.18em",

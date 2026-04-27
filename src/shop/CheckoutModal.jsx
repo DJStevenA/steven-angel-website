@@ -153,7 +153,7 @@ export default function CheckoutModal({ product, onClose }) {
         >
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.3em",
@@ -166,7 +166,7 @@ export default function CheckoutModal({ product, onClose }) {
           </div>
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 900,
               fontSize: isMobile ? 30 : 38,
               textTransform: "uppercase",
@@ -180,7 +180,7 @@ export default function CheckoutModal({ product, onClose }) {
           </div>
           <div
             style={{
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 15,
               color: "rgba(255,255,255,0.7)",
               lineHeight: 1.6,
@@ -249,7 +249,7 @@ export default function CheckoutModal({ product, onClose }) {
         {/* Header label */}
         <div
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 700,
             fontSize: 11,
             letterSpacing: "0.3em",
@@ -264,7 +264,7 @@ export default function CheckoutModal({ product, onClose }) {
         {/* Product name */}
         <div
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 900,
             fontSize: isMobile ? 24 : 28,
             textTransform: "uppercase",
@@ -280,7 +280,7 @@ export default function CheckoutModal({ product, onClose }) {
         {/* Headline */}
         <div
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 13,
             color: "rgba(255,255,255,0.6)",
             lineHeight: 1.5,
@@ -294,28 +294,28 @@ export default function CheckoutModal({ product, onClose }) {
         {!authLoading && !user && !guestMode && (
           <div>
             <div style={{ padding: 20, border: `1px solid rgba(${accentRgba},0.3)`, borderRadius: 10, background: `rgba(${accentRgba},0.05)`, marginBottom: 20 }}>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Checkout options
               </div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
+              <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
                 Buy now as a guest (just email) — or sign in if you already have an account. Either way your files arrive by email.
               </div>
             </div>
             <button
               onClick={() => setGuestMode(true)}
-              style={{ display: "block", width: "100%", padding: "14px 20px", background: accentColor, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", textDecoration: "none", border: "none", borderRadius: 8, marginBottom: 10, cursor: "pointer" }}
+              style={{ display: "block", width: "100%", padding: "14px 20px", background: accentColor, color: "#000", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", textDecoration: "none", border: "none", borderRadius: 8, marginBottom: 10, cursor: "pointer" }}
             >
               Buy as Guest
             </button>
             <Link
               to={`/shop/login?redirect=/shop/${product.slug}`}
-              style={{ display: "block", width: "100%", padding: "14px 20px", background: "transparent", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.25)", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", textDecoration: "none", borderRadius: 8, marginBottom: 10 }}
+              style={{ display: "block", width: "100%", padding: "14px 20px", background: "transparent", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.25)", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", textDecoration: "none", borderRadius: 8, marginBottom: 10 }}
             >
               Sign In
             </Link>
             <Link
               to={`/shop/signup?redirect=/shop/${product.slug}`}
-              style={{ display: "block", width: "100%", padding: "12px 20px", background: "transparent", color: "rgba(255,255,255,0.55)", fontFamily: "DM Sans, sans-serif", fontWeight: 600, fontSize: 12, textAlign: "center", textDecoration: "none" }}
+              style={{ display: "block", width: "100%", padding: "12px 20px", background: "transparent", color: "rgba(255,255,255,0.55)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 600, fontSize: 12, textAlign: "center", textDecoration: "none" }}
             >
               Or create a full account
             </Link>
@@ -326,14 +326,14 @@ export default function CheckoutModal({ product, onClose }) {
         {!authLoading && !user && guestMode && (
           <div>
             <div style={{ padding: 16, border: `1px solid rgba(${accentRgba},0.3)`, borderRadius: 10, background: `rgba(${accentRgba},0.05)`, marginBottom: 18 }}>
-              <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, color: accentColor, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.15em" }}>
+              <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, color: accentColor, marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.15em" }}>
                 Guest Checkout
               </div>
-              <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
+              <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
                 After payment you'll get an email with your download + a link to set a password.
               </div>
             </div>
-            <label style={{ display: "block", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginBottom: 6 }}>
+            <label style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.7)", marginBottom: 6 }}>
               Your Email
             </label>
             <input
@@ -342,7 +342,7 @@ export default function CheckoutModal({ product, onClose }) {
               onChange={(e) => setGuestEmail(e.target.value)}
               placeholder="you@example.com"
               autoComplete="email"
-              style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, padding: "12px 14px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none", marginBottom: 14, boxSizing: "border-box" }}
+              style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, padding: "12px 14px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none", marginBottom: 14, boxSizing: "border-box" }}
             />
             {guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail) ? (
               <>
@@ -351,7 +351,7 @@ export default function CheckoutModal({ product, onClose }) {
                 </div>
                 <button
                   onClick={() => { setGuestMode(false); setGuestEmail(""); }}
-                  style={{ display: "block", width: "100%", padding: "8px", background: "transparent", color: "rgba(255,255,255,0.5)", border: "none", fontFamily: "DM Sans, sans-serif", fontSize: 12, cursor: "pointer" }}
+                  style={{ display: "block", width: "100%", padding: "8px", background: "transparent", color: "rgba(255,255,255,0.5)", border: "none", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, cursor: "pointer" }}
                 >
                   ← Back to options
                 </button>
@@ -359,7 +359,7 @@ export default function CheckoutModal({ product, onClose }) {
             ) : (
               <button
                 onClick={() => { setGuestMode(false); setGuestEmail(""); }}
-                style={{ display: "block", width: "100%", padding: "12px", background: "transparent", color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, fontFamily: "DM Sans, sans-serif", fontSize: 13, cursor: "pointer" }}
+                style={{ display: "block", width: "100%", padding: "12px", background: "transparent", color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, cursor: "pointer" }}
               >
                 Cancel
               </button>
@@ -373,7 +373,7 @@ export default function CheckoutModal({ product, onClose }) {
             style={{
               padding: "20px 0",
               textAlign: "center",
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 13,
               color: "rgba(255,255,255,0.55)",
             }}
@@ -389,7 +389,7 @@ export default function CheckoutModal({ product, onClose }) {
             <label
               style={{
                 display: "block",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: 11,
                 letterSpacing: "0.2em",
@@ -413,7 +413,7 @@ export default function CheckoutModal({ product, onClose }) {
                 background: "#06060f",
                 border: "1px solid rgba(255,255,255,0.15)",
                 borderRadius: 6,
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 14,
                 color: "#fff",
                 letterSpacing: "0.1em",
@@ -436,7 +436,7 @@ export default function CheckoutModal({ product, onClose }) {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize: 13,
                   color: "rgba(255,255,255,0.6)",
                   marginBottom: 6,
@@ -450,7 +450,7 @@ export default function CheckoutModal({ product, onClose }) {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    fontFamily: "DM Sans, sans-serif",
+                    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                     fontSize: 13,
                     color: accentColor,
                     marginBottom: 6,
@@ -468,7 +468,7 @@ export default function CheckoutModal({ product, onClose }) {
                   paddingTop: 8,
                   marginTop: 6,
                   borderTop: "1px solid rgba(255,255,255,0.1)",
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
@@ -497,7 +497,7 @@ export default function CheckoutModal({ product, onClose }) {
                   background: "rgba(255,80,80,0.08)",
                   border: "1px solid rgba(255,80,80,0.4)",
                   borderRadius: 6,
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize: 12,
                   color: "#ff8080",
                 }}
@@ -509,7 +509,7 @@ export default function CheckoutModal({ product, onClose }) {
             <div
               style={{
                 marginTop: 16,
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 10,
                 color: "rgba(255,255,255,0.4)",
                 textAlign: "center",

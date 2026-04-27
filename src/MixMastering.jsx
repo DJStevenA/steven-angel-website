@@ -161,14 +161,14 @@ function ABComparison({ example, isMobile }) {
       padding: isMobile ? 16 : 20,
     }}>
       <div style={{
-        fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
         fontSize: isMobile ? 18 : 22, textTransform: "uppercase",
         letterSpacing: "0.04em", color: "#fff", marginBottom: 4,
       }}>
         {example.title}
       </div>
       <div style={{
-        fontFamily: "DM Sans, sans-serif", fontSize: 12,
+        fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12,
         color: "rgba(255,255,255,0.5)", marginBottom: 16,
       }}>
         {example.label}
@@ -220,7 +220,7 @@ function ABComparison({ example, isMobile }) {
               background: mode === opt.id ? `linear-gradient(135deg, ${CYAN}, ${PURPLE})` : "transparent",
               color: mode === opt.id ? "#000" : "rgba(255,255,255,0.7)",
               border: "none", borderRadius: 6,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700,
               fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase",
               cursor: "pointer",
               transition: "all 0.15s",
@@ -253,7 +253,7 @@ export default function MixMastering() {
 
   /* style helpers */
   const heading = (size) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 900,
     textTransform: "uppercase",
     lineHeight: 1,
@@ -261,14 +261,14 @@ export default function MixMastering() {
     fontSize: size,
   });
   const body = {
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontWeight: 400,
     lineHeight: 1.7,
     color: "rgba(255,255,255,0.7)",
     fontSize: 15,
   };
   const label = (color) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 700,
     fontSize: 12,
     letterSpacing: "0.35em",
@@ -346,7 +346,7 @@ export default function MixMastering() {
           {/* Labels strip — mastered tracks released on */}
           <div style={{ marginBottom: 36 }}>
             <div style={{
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700,
               fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
               color: CYAN, marginBottom: 10,
             }}>
@@ -354,7 +354,7 @@ export default function MixMastering() {
             </div>
             <div style={{
               display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 10 : 18,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
               fontSize: isMobile ? 14 : 17, letterSpacing: "0.1em", textTransform: "uppercase",
               color: "rgba(255,255,255,0.85)",
             }}>
@@ -395,13 +395,13 @@ export default function MixMastering() {
                   cursor: "pointer",
                 }}
               >
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
                   {card.title}
                 </div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
                   {card.sub}
                 </div>
-                <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
+                <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
                   {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
                 </div>
               </a>
@@ -618,7 +618,7 @@ export default function MixMastering() {
                     padding: "12px 18px",
                     background: `linear-gradient(135deg, ${CYAN}, ${PURPLE})`,
                     color: "#000", border: "none", borderRadius: 8,
-                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
                     fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase",
                     cursor: bookingState[pkg.id] === "loading" ? "wait" : "pointer",
                     opacity: bookingState[pkg.id] === "loading" ? 0.6 : 1,
@@ -664,7 +664,7 @@ export default function MixMastering() {
                   width: "100%", padding: "20px 0", background: "transparent",
                   border: "none", cursor: "pointer", textAlign: "left",
                   display: "flex", justifyContent: "space-between", alignItems: "center",
-                  color: "#fff", fontFamily: "Barlow Condensed, sans-serif",
+                  color: "#fff", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700, fontSize: isMobile ? 16 : 18,
                   letterSpacing: "0.02em",
                 }}
@@ -700,7 +700,7 @@ export default function MixMastering() {
               style={{
                 padding: "14px 28px", background: "#1a7a42", color: "#fff",
                 borderRadius: 8, textDecoration: "none",
-                fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
                 fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase",
               }}
             >
@@ -711,7 +711,7 @@ export default function MixMastering() {
               style={{
                 padding: "14px 28px", background: "transparent", color: "#fff",
                 border: "1px solid rgba(255,255,255,0.25)", borderRadius: 8,
-                textDecoration: "none", fontFamily: "Barlow Condensed, sans-serif",
+                textDecoration: "none", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase",
               }}
             >
@@ -753,7 +753,7 @@ export default function MixMastering() {
           gap: 8,
           background: "#1a7a42",
           color: "#fff",
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: isMobile ? 11 : 13,
           letterSpacing: "0.15em",

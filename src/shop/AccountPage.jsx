@@ -111,7 +111,7 @@ export default function AccountPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "DM Sans, sans-serif",
+          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
           fontSize: 13,
           color: "rgba(255,255,255,0.5)",
         }}
@@ -143,7 +143,7 @@ export default function AccountPage() {
         <Link
           to="/"
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 900,
             fontSize: 22,
             letterSpacing: "0.1em",
@@ -160,7 +160,7 @@ export default function AccountPage() {
             background: "transparent",
             border: "1px solid rgba(255,255,255,0.2)",
             color: "rgba(255,255,255,0.7)",
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 700,
             fontSize: 11,
             letterSpacing: "0.18em",
@@ -184,7 +184,7 @@ export default function AccountPage() {
           {/* Welcome banner */}
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.3em",
@@ -197,7 +197,7 @@ export default function AccountPage() {
           </div>
           <h1
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 900,
               fontSize: isMobile ? 32 : 44,
               letterSpacing: "0.04em",
@@ -211,7 +211,7 @@ export default function AccountPage() {
           </h1>
           <p
             style={{
-              fontFamily: "DM Sans, sans-serif",
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize: 14,
               color: "rgba(255,255,255,0.55)",
               marginBottom: 40,
@@ -223,7 +223,7 @@ export default function AccountPage() {
           {/* Purchases section */}
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               letterSpacing: "0.3em",
@@ -238,7 +238,7 @@ export default function AccountPage() {
           {purchasesLoading && (
             <div
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 13,
                 color: "rgba(255,255,255,0.5)",
                 padding: "20px 0",
@@ -251,7 +251,7 @@ export default function AccountPage() {
           {purchasesError && (
             <div
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 13,
                 color: "#ff6b6b",
                 padding: "12px 16px",
@@ -268,7 +268,7 @@ export default function AccountPage() {
           {downloadError && (
             <div
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 13,
                 color: "#ff6b6b",
                 padding: "12px 16px",
@@ -294,7 +294,7 @@ export default function AccountPage() {
             >
               <p
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize: 14,
                   color: "rgba(255,255,255,0.6)",
                   margin: "0 0 18px",
@@ -314,7 +314,7 @@ export default function AccountPage() {
                   textDecoration: "none",
                   padding: "12px 24px",
                   borderRadius: 6,
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: 13,
                   letterSpacing: "0.18em",
@@ -357,7 +357,7 @@ export default function AccountPage() {
                     <div style={{ flexGrow: 1, minWidth: 0 }}>
                       <div
                         style={{
-                          fontFamily: "Barlow Condensed, sans-serif",
+                          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                           fontWeight: 800,
                           fontSize: 17,
                           letterSpacing: "0.04em",
@@ -370,7 +370,7 @@ export default function AccountPage() {
                       </div>
                       <div
                         style={{
-                          fontFamily: "DM Sans, sans-serif",
+                          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                           fontSize: 11,
                           color: "rgba(255,255,255,0.5)",
                         }}
@@ -410,7 +410,7 @@ export default function AccountPage() {
                           border: "none",
                           borderRadius: 6,
                           padding: "10px 22px",
-                          fontFamily: "Barlow Condensed, sans-serif",
+                          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                           fontWeight: 800,
                           fontSize: 12,
                           letterSpacing: "0.18em",
@@ -427,7 +427,7 @@ export default function AccountPage() {
                     ) : (
                       <span
                         style={{
-                          fontFamily: "DM Sans, sans-serif",
+                          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                           fontSize: 11,
                           color: "rgba(255,255,255,0.4)",
                           fontStyle: "italic",
@@ -448,7 +448,7 @@ export default function AccountPage() {
             <Link
               to="/shop"
               style={{
-                fontFamily: "DM Sans, sans-serif",
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 12,
                 color: "rgba(255,255,255,0.5)",
                 textDecoration: "none",

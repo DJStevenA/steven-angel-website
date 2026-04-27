@@ -21,7 +21,7 @@ const SHADOW_PURPLE = "0 0 24px rgba(187,134,252,0.35)";
 const WHATSAPP_LINK = "https://wa.me/972523561353?text=Hi%20Steven%2C%20I%E2%80%99m%20interested%20in%20Ableton%20lessons";
 
 const heading = (sz) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 900,
   fontSize: sz,
   letterSpacing: "0.04em",
@@ -31,14 +31,14 @@ const heading = (sz) => ({
 });
 
 const body = {
-  fontFamily: "DM Sans, sans-serif",
+  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
   fontSize: 15,
   color: "rgba(255,255,255,0.65)",
   lineHeight: 1.7,
 };
 
 const label = (c = CYAN) => ({
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 11,
   letterSpacing: "0.3em",
@@ -51,7 +51,7 @@ const outlineBtn = (color, shadow) => ({
   alignItems: "center",
   justifyContent: "center",
   gap: 8,
-  fontFamily: "Barlow Condensed, sans-serif",
+  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
   fontWeight: 700,
   fontSize: 14,
   letterSpacing: "0.2em",
@@ -229,7 +229,7 @@ function ModuleModal({ module, onClose }) {
         </button>
 
         {/* Title */}
-        <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 22, textTransform: "uppercase", letterSpacing: "0.04em", color: module.color, marginBottom: 20, paddingRight: 32, lineHeight: 1.2 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, textTransform: "uppercase", letterSpacing: "0.04em", color: module.color, marginBottom: 20, paddingRight: 32, lineHeight: 1.2 }}>
           {module.title}
         </div>
 
@@ -239,8 +239,8 @@ function ModuleModal({ module, onClose }) {
             <div key={label} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
               <span style={{ color: module.color, fontWeight: 700, fontSize: 16, flexShrink: 0, marginTop: 1 }}>›</span>
               <div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.05em", color: "#fff", textTransform: "uppercase" }}>{label}</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5, marginTop: 2 }}>{detail}</div>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.05em", color: "#fff", textTransform: "uppercase" }}>{label}</div>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5, marginTop: 2 }}>{detail}</div>
               </div>
             </div>
           ))}
@@ -253,7 +253,7 @@ function ModuleModal({ module, onClose }) {
             onClick={onClose}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700,
               fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase",
               color: "#000", background: `linear-gradient(135deg,${CYAN},#00b8d4)`,
               padding: "12px 24px", borderRadius: 6, textDecoration: "none",
@@ -306,7 +306,7 @@ export default function Lessons() {
           gap: 8,
           background: "#1a7a42",
           color: "#fff",
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 700,
           fontSize: isMobile ? 11 : 13,
           letterSpacing: "0.15em",
@@ -380,13 +380,13 @@ export default function Lessons() {
                     cursor: "pointer",
                   }}
                 >
-                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
                     {card.title}
                   </div>
-                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                  <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
                     {card.sub}
                   </div>
-                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
+                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
                     {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
                   </div>
                 </a>
@@ -398,7 +398,7 @@ export default function Lessons() {
               <a
                 href="#listen"
                 style={{
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: 13,
                   letterSpacing: "0.2em",
@@ -507,7 +507,7 @@ export default function Lessons() {
                 { yt: "You watch", sa: "You build \u2014 from lesson 1" },
               ];
               const cellPad = isMobile ? "14px 12px" : "18px 24px";
-              const textStyle = { fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 12 : 14, lineHeight: 1.4 };
+              const textStyle = { fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 12 : 14, lineHeight: 1.4 };
               return (
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderRadius: 10, overflow: "hidden", border: "1px solid #141420" }}>
                   <div style={{ background: "#04040f", padding: cellPad, borderBottom: "1px solid #141420" }}>
@@ -565,7 +565,7 @@ export default function Lessons() {
 
               {/* Full Journey card — no modal */}
               <div style={{ background: BG, border: `1px solid ${PURPLE}`, borderTop: `2px solid ${PURPLE}`, borderRadius: 10, padding: isMobile ? "24px 18px" : "28px 24px", position: "relative" }}>
-                <div style={{ position: "absolute", top: -10, left: 20, background: `linear-gradient(90deg,${PURPLE},${CYAN})`, color: "#000", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.25em", padding: "3px 10px", borderRadius: 20 }}>
+                <div style={{ position: "absolute", top: -10, left: 20, background: `linear-gradient(90deg,${PURPLE},${CYAN})`, color: "#000", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: "0.25em", padding: "3px 10px", borderRadius: 20 }}>
                   BEST VALUE
                 </div>
                 <div style={{ ...heading(isMobile ? 16 : 20), marginBottom: 10, color: PURPLE }}>Full Journey (1+2+3)</div>
@@ -627,14 +627,14 @@ export default function Lessons() {
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
                     <div>
-                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>
+                      <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>
                         {name}
                       </div>
-                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
+                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
                         {country}
                       </div>
                     </div>
-                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
                       {topic}
                     </div>
                   </div>
@@ -684,10 +684,10 @@ export default function Lessons() {
                     <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{detail}</div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 20 : 24, color: accent }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: isMobile ? 20 : 24, color: accent }}>
                       {price}
                     </div>
-                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: accent, opacity: 0.55, marginTop: 3 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: accent, opacity: 0.55, marginTop: 3 }}>
                       TO BOOK →
                     </div>
                   </div>
@@ -758,10 +758,10 @@ export default function Lessons() {
                   ["Your email", "email", "email", true],
                 ].map(([placeholder, name, type, req]) => (
                   <input key={name} name={name} type={type} placeholder={placeholder} required={req}
-                    style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }} />
+                    style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }} />
                 ))}
                 <textarea name="message" placeholder="Tell me about your goals" rows={4}
-                  style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none", resize: "vertical" }} />
+                  style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none", resize: "vertical" }} />
                 <button type="submit" style={{ ...outlineBtn(CYAN, SHADOW_CYAN), justifyContent: "center", fontSize: 15, width: "100%" }}>
                   Send Message
                 </button>
@@ -773,7 +773,7 @@ export default function Lessons() {
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20, background: BG, border: "1px solid #141420", borderRadius: 10, padding: "40px 28px", textAlign: "center" }}>
                 <div style={{ ...heading(20), color: "rgba(255,255,255,0.7)" }}>Prefer to Chat Directly?</div>
                 <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer" onClick={fireContactWhatsAppClick}
-                  style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 15, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 28px", borderRadius: 50, textDecoration: "none", boxShadow: "0 0 20px rgba(37,211,102,0.3)" }}>
+                  style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#25D366", color: "#fff", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 15, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 28px", borderRadius: 50, textDecoration: "none", boxShadow: "0 0 20px rgba(37,211,102,0.3)" }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.917 1.044 5.591 2.778 7.667L.96 23.487l3.96-1.04C6.835 23.47 9.342 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.418 0-4.658-.694-6.558-1.893l-.376-.225-2.348.616.627-2.29-.247-.393C1.894 16.072 1.2 14.102 1.2 12 1.2 6.038 6.038 1.2 12 1.2S22.8 6.038 22.8 12 17.962 22 12 22z"/></svg>
                   WhatsApp Me Directly
                 </a>

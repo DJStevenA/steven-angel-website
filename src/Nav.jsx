@@ -55,7 +55,7 @@ export default function Nav() {
           ←
         </button>
         <Link to="/" style={{
-          fontFamily: "Barlow Condensed, sans-serif",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
           fontWeight: 900,
           fontSize: 20,
           letterSpacing: "0.1em",
@@ -80,7 +80,7 @@ export default function Nav() {
             key={to}
             to={to}
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 600,
               fontSize: 13,
               letterSpacing: "0.22em",

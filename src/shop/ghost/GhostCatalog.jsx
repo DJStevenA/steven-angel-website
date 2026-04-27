@@ -65,28 +65,28 @@ export default function GhostCatalog({ isMobile }) {
       {/* Section header */}
       <div style={{ textAlign: "center", marginBottom: isMobile ? 28 : 40 }}>
         <div style={{
-          fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700,
           fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
           color: PURPLE, marginBottom: 12,
         }}>
           Ghost Catalog
         </div>
         <div style={{
-          fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900,
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900,
           fontSize: isMobile ? 28 : 40, textTransform: "uppercase",
           letterSpacing: "0.04em", color: "#fff", lineHeight: 1.1, marginBottom: 12,
         }}>
           Exclusive Ghost Tracks
         </div>
         <div style={{
-          fontFamily: "DM Sans, sans-serif", fontSize: 14,
+          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14,
           color: "rgba(255,255,255,0.55)", maxWidth: 560, margin: "0 auto",
         }}>
           Each track sold once. Full copyright transfer. NDA included. Once it's gone, it's gone.
         </div>
         {!loading && total > 0 && (
           <div style={{
-            marginTop: 12, fontFamily: "DM Sans, sans-serif", fontSize: 12,
+            marginTop: 12, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12,
             color: available > 0 ? CYAN : "rgba(255,255,255,0.35)",
           }}>
             {available} of {total} tracks still available
@@ -113,7 +113,7 @@ export default function GhostCatalog({ isMobile }) {
                   : "1px solid rgba(255,255,255,0.12)",
                 background: isActive ? `${CYAN}18` : "transparent",
                 color: isActive ? CYAN : "rgba(255,255,255,0.5)",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700, fontSize: 11, letterSpacing: "0.2em",
                 textTransform: "uppercase", cursor: "pointer",
                 transition: "all 0.15s",
@@ -127,14 +127,14 @@ export default function GhostCatalog({ isMobile }) {
 
       {/* Loading */}
       {loading && (
-        <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.4)", fontFamily: "DM Sans, sans-serif", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
           Loading catalog…
         </div>
       )}
 
       {/* Error */}
       {error && (
-        <div style={{ textAlign: "center", padding: "60px 0", color: "#ff8080", fontFamily: "DM Sans, sans-serif", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "60px 0", color: "#ff8080", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
           {error}
         </div>
       )}
@@ -143,7 +143,7 @@ export default function GhostCatalog({ isMobile }) {
       {!loading && !error && (
         <>
           {filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,0.3)", fontFamily: "DM Sans, sans-serif", fontSize: 14 }}>
+            <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,0.3)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
               No tracks in this genre.
             </div>
           ) : (
@@ -177,7 +177,7 @@ export default function GhostCatalog({ isMobile }) {
           maxWidth: 680, margin: `${isMobile ? 32 : 44}px auto 0`,
         }}>
           <span style={{ color: PURPLE, fontSize: 18, flexShrink: 0 }}>⚠</span>
-          <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
+          <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
             <strong style={{ color: "rgba(255,255,255,0.8)" }}>Exclusive sale only.</strong> Each track is sold to one buyer. After purchase it's permanently removed from this catalog and will never be sold, licensed, or credited to Steven Angel again. A full exclusivity agreement is signed before payment.
           </div>
         </div>

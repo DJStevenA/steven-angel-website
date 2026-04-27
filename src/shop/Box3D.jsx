@@ -362,7 +362,7 @@ export default function Box3D({ product, isPurple, accentColor, accentRgba, isMo
         >
           <div
             style={{
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 900,
               fontSize: 11,
               letterSpacing: "0.3em",
@@ -424,7 +424,7 @@ export default function Box3D({ product, isPurple, accentColor, accentRgba, isMo
               left: 0,
               right: 0,
               textAlign: "center",
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 8,
               letterSpacing: "0.25em",
@@ -450,7 +450,7 @@ export default function Box3D({ product, isPurple, accentColor, accentRgba, isMo
           >
             <div
               style={{
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 900,
                 fontSize: isMobile ? 22 : 28,
                 letterSpacing: "0.02em",
@@ -486,7 +486,7 @@ export default function Box3D({ product, isPurple, accentColor, accentRgba, isMo
             />
             <div
               style={{
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: 9,
                 letterSpacing: "0.25em",

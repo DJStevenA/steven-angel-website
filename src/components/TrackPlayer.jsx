@@ -329,7 +329,7 @@ export default function TrackPlayer({
      Style helpers (matches project conventions)
   ═══════════════════════════════════════════ */
   const heading = (size) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 900,
     textTransform: "uppercase",
     lineHeight: 1.1,
@@ -339,7 +339,7 @@ export default function TrackPlayer({
   });
 
   const bodyText = {
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontWeight: 400,
     fontSize: 15,
     color: "rgba(255,255,255,0.55)",
@@ -347,7 +347,7 @@ export default function TrackPlayer({
   };
 
   const labelStyle = {
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 700,
     fontSize: 11,
     letterSpacing: "0.3em",
@@ -426,7 +426,7 @@ export default function TrackPlayer({
         {activeGenre === "Mastering" && (
           <div
             style={{
-              fontFamily:   "DM Sans, sans-serif",
+              fontFamily:   "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize:     isMobile ? 11 : 12,
               color:        "rgba(255,255,255,0.38)",
               fontStyle:    "italic",
@@ -505,7 +505,7 @@ function GenreTab({ genre, isActive, isMobile, onClick }) {
   const [hovered, setHovered] = useState(false);
 
   const base = {
-    fontFamily:      "Barlow Condensed, sans-serif",
+    fontFamily:      "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight:      700,
     fontSize:        isMobile ? 12 : 13,
     letterSpacing:   "0.18em",
@@ -616,7 +616,7 @@ function TrackRow({
           ) : (
             <span
               style={{
-                fontFamily:  "Barlow Condensed, sans-serif",
+                fontFamily:  "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight:  700,
                 fontSize:    isMobile ? 11 : 12,
                 color:       "rgba(255,255,255,0.35)",
@@ -644,7 +644,7 @@ function TrackRow({
         >
           <span
             style={{
-              fontFamily:  "Barlow Condensed, sans-serif",
+              fontFamily:  "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight:  700,
               fontSize:    isMobile ? 14 : 16,
               color:       isActive ? CYAN : "#fff",
@@ -682,7 +682,7 @@ function TrackRow({
             {track.support && (
               <span
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize:   isMobile ? 10 : 11,
                   color:      "rgba(255,255,255,0.38)",
                   lineHeight: 1.4,
@@ -699,7 +699,7 @@ function TrackRow({
       {!isMobile && !track.hasComparison && (
         <span
           style={{
-            fontFamily:    "Barlow Condensed, sans-serif",
+            fontFamily:    "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight:    700,
             fontSize:      10,
             letterSpacing: "0.22em",
@@ -764,7 +764,7 @@ function ComparisonButton({ label, sublabel, isActive, isPlaying, isMobile, onCl
         display:        "flex",
         alignItems:     "center",
         gap:            isMobile ? 4 : 5,
-        fontFamily:     "Barlow Condensed, sans-serif",
+        fontFamily:     "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
         fontWeight:     700,
         fontSize:       isMobile ? 10 : 11,
         letterSpacing:  "0.18em",
@@ -798,7 +798,7 @@ function LabelPill({ text, isMobile }) {
   return (
     <span
       style={{
-        fontFamily:    "Barlow Condensed, sans-serif",
+        fontFamily:    "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
         fontWeight:    600,
         fontSize:      isMobile ? 9 : 10,
         letterSpacing: "0.12em",
@@ -826,7 +826,7 @@ function BeatportBadge({ text, isMobile }) {
   return (
     <span
       style={{
-        fontFamily:    "Barlow Condensed, sans-serif",
+        fontFamily:    "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
         fontWeight:    700,
         fontSize:      isMobile ? 9 : 10,
         letterSpacing: "0.25em",
@@ -885,7 +885,7 @@ function MiniPlayer({
             alignItems:     "center",
             gap:            12,
             color:          "rgba(255,255,255,0.25)",
-            fontFamily:     "Barlow Condensed, sans-serif",
+            fontFamily:     "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight:     600,
             fontSize:       12,
             letterSpacing:  "0.2em",
@@ -943,7 +943,7 @@ function MiniPlayer({
             <div style={{ flex: 1, minWidth: 0 }}>
               <div
                 style={{
-                  fontFamily:    "Barlow Condensed, sans-serif",
+                  fontFamily:    "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight:    700,
                   fontSize:      isMobile ? 14 : 16,
                   color:         "#fff",
@@ -957,7 +957,7 @@ function MiniPlayer({
                 {track.hasComparison && activeComparisonVersion && (
                   <span
                     style={{
-                      fontFamily:    "DM Sans, sans-serif",
+                      fontFamily:    "'DM Sans', 'DM Sans Fallback', sans-serif",
                       fontWeight:    400,
                       fontSize:      isMobile ? 10 : 11,
                       color:         CYAN,
@@ -975,7 +975,7 @@ function MiniPlayer({
               {track.genre && (
                 <div
                   style={{
-                    fontFamily:    "Barlow Condensed, sans-serif",
+                    fontFamily:    "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight:    600,
                     fontSize:      10,
                     letterSpacing: "0.22em",
@@ -992,7 +992,7 @@ function MiniPlayer({
             {/* Time display */}
             <div
               style={{
-                fontFamily:    "Barlow Condensed, sans-serif",
+                fontFamily:    "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight:    600,
                 fontSize:      isMobile ? 12 : 13,
                 letterSpacing: "0.06em",

@@ -46,7 +46,7 @@ export default function App() {
 
   /* ── style helpers ── */
   const heading = (size) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 900,
     textTransform: "uppercase",
     lineHeight: 1,
@@ -55,7 +55,7 @@ export default function App() {
   });
 
   const body = {
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontWeight: 400,
     lineHeight: 1.8,
     color: "rgba(255,255,255,0.58)",
@@ -63,7 +63,7 @@ export default function App() {
   };
 
   const label = (color) => ({
-    fontFamily: "Barlow Condensed, sans-serif",
+    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
     fontWeight: 700,
     fontSize: 12,
     letterSpacing: "0.35em",
@@ -97,7 +97,7 @@ export default function App() {
           >
             ←
           </button>
-          <Link to="/" style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1, textDecoration: "none", color: "#fff" }}>
+          <Link to="/" style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1, textDecoration: "none", color: "#fff" }}>
             STEVEN <span style={{ color: cyan }}>ANGEL</span>
           </Link>
         </div>
@@ -107,7 +107,7 @@ export default function App() {
             { label: "Lessons", to: "/lessons" },
             { label: "Shop", to: "/shop" },
           ].map(({ label: lbl, to }) => (
-            <Link key={lbl} to={to} style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", lineHeight: 1 }}>
+            <Link key={lbl} to={to} style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", lineHeight: 1 }}>
               {lbl}
             </Link>
           ))}
@@ -192,7 +192,7 @@ export default function App() {
                   }}
                 >
                   <div style={{
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 800,
                     fontSize: isMobile ? 12 : 16,
                     textTransform: "uppercase",
@@ -203,7 +203,7 @@ export default function App() {
                     {card.title}
                   </div>
                   <div style={{
-                    fontFamily: "DM Sans, sans-serif",
+                    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                     fontSize: isMobile ? 10 : 13,
                     color: "rgba(255,255,255,0.55)",
                     lineHeight: 1.4,
@@ -216,7 +216,7 @@ export default function App() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 6,
-                    fontFamily: "Barlow Condensed, sans-serif",
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 700,
                     fontSize: isMobile ? 10 : 13,
                     letterSpacing: "0.15em",
@@ -234,7 +234,7 @@ export default function App() {
               <a
                 href="#listen"
                 style={{
-                  fontFamily: "Barlow Condensed, sans-serif",
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
                   fontSize: 13,
                   letterSpacing: "0.2em",
@@ -322,8 +322,8 @@ export default function App() {
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20, marginBottom: 28 }}>
               {/* Hugel */}
               <div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>HUGEL — LIVE SET</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>Steven Angel's tracks supported by top DJs</div>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>HUGEL — LIVE SET</div>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>Steven Angel's tracks supported by top DJs</div>
                 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
                   <LazyYouTube id="tPYhltoFTZo" title="Hugel Live Set" />
                 </div>
@@ -331,8 +331,8 @@ export default function App() {
 
               {/* ARTBAT */}
               <div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: cyan, marginBottom: 4 }}>ARTBAT — LIVE SET</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: cyan, marginBottom: 4 }}>ARTBAT — LIVE SET</div>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>
                   <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>La Cantadora</span> — Mastered by Steven Angel · Played by ARTBAT
                 </div>
                 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.07)", background: "#111" }}>
@@ -343,10 +343,10 @@ export default function App() {
 
               {/* The Angels */}
               <div style={{ gridColumn: isMobile ? "1" : "1 / -1" }}>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: purple, marginBottom: 4 }}>THE ANGELS — LIVE SUPPORT</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>Steven Angel tracks supported live</div>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.2em", color: purple, marginBottom: 4 }}>THE ANGELS — LIVE SUPPORT</div>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 10 }}>Steven Angel tracks supported live</div>
                 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(187,134,252,0.2)" }}>
-                  <video src="/the-angels-support-v2.mov" controls playsInline preload="none" poster="/images/angels-thumb.webp"
+                  <video src="/the-angels-support-v2.mp4" controls playsInline preload="none" poster="/images/angels-thumb.webp"
                     style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
               </div>
@@ -355,11 +355,11 @@ export default function App() {
             {/* Hernan Cattaneo quote */}
             <div style={{ padding: isMobile ? "24px 20px" : "28px 40px", background: "linear-gradient(135deg, #08081a, #100a20)", border: "1px solid rgba(187,134,252,0.25)", borderLeft: "4px solid " + purple, borderRadius: 8, display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", gap: 24, marginBottom: 28 }}>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 22, fontWeight: 400, color: "#fff", lineHeight: 1.4, fontStyle: "italic", marginBottom: 8 }}>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 22, fontWeight: 400, color: "#fff", lineHeight: 1.4, fontStyle: "italic", marginBottom: 8 }}>
                   "Sounds really good!!"
                 </div>
-                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: 16, color: "#fff", letterSpacing: "0.05em" }}>HERNAN CATTANEO</div>
-                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", marginTop: 2 }}>Legendary DJ & Producer · On Steven Angel mastering work</div>
+                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 16, color: "#fff", letterSpacing: "0.05em" }}>HERNAN CATTANEO</div>
+                <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", marginTop: 2 }}>Legendary DJ & Producer · On Steven Angel mastering work</div>
               </div>
               <div style={{ width: isMobile ? "100%" : 320, flexShrink: 0, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(187,134,252,0.2)", boxShadow: "0 4px 20px rgba(0,0,0,0.4)" }}>
                 <img src="/images/hernan-email.webp" alt="Email from Hernan Cattaneo saying Sounds really good" loading="lazy" width="320" height="240" style={{ width: "100%", height: "auto", display: "block" }} />
@@ -395,7 +395,7 @@ export default function App() {
 
             <div style={{ textAlign: "center" }}>
               <Link to="/lessons" style={{
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: 14,
                 letterSpacing: "0.2em",
@@ -442,10 +442,10 @@ export default function App() {
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
                     <div>
-                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>{n}</div>
-                      <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{f}</div>
+                      <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>{n}</div>
+                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{f}</div>
                     </div>
-                    <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
                       {g}
                     </div>
                   </div>
@@ -483,7 +483,7 @@ export default function App() {
               gap: 10,
               background: "#1a7a42",
               color: "#fff",
-              fontFamily: "Barlow Condensed, sans-serif",
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 700,
               fontSize: 15,
               letterSpacing: "0.15em",
@@ -539,21 +539,21 @@ export default function App() {
               type="text"
               placeholder="Your name"
               required
-              style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }}
+              style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }}
             />
             <input
               name="email"
               type="email"
               placeholder="Your email"
               required
-              style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "DM Sans, sans-serif", fontSize: 14, outline: "none" }}
+              style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "14px 16px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }}
             />
             <button
               type="submit"
               style={{
                 background: `linear-gradient(135deg, ${cyan}, #00b8d4)`,
                 color: "#000",
-                fontFamily: "Barlow Condensed, sans-serif",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 700,
                 fontSize: 14,
                 letterSpacing: "0.2em",
@@ -574,7 +574,7 @@ export default function App() {
 
       {/* ══════ 8. FOOTER ══════ */}
       <footer style={{ padding: "28px 48px", borderTop: "1px solid #0d0d0d", textAlign: "center" }}>
-        <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", marginBottom: 12 }}>
+        <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", marginBottom: 12 }}>
           Steven Angel — DJ · Producer · Mentor
         </div>
         <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 12 }}>
@@ -587,13 +587,13 @@ export default function App() {
             { label: "Beatport", href: "https://www.beatport.com/artist/the-angels-il/913642" },
           ].map(({ label: lbl, to, href }) =>
             to ? (
-              <Link key={lbl} to={to} style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: cyan, textDecoration: "none" }}>{lbl}</Link>
+              <Link key={lbl} to={to} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: cyan, textDecoration: "none" }}>{lbl}</Link>
             ) : (
-              <a key={lbl} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "DM Sans, sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{lbl}</a>
+              <a key={lbl} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{lbl}</a>
             )
           )}
         </div>
-        <span style={{ fontFamily: "DM Sans, sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+        <span style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
           &copy; {new Date().getFullYear()} Steven Angel — All Rights Reserved
         </span>
       </footer>

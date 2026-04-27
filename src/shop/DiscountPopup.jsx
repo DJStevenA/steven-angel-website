@@ -126,7 +126,7 @@ export default function DiscountPopup() {
         {/* Top label */}
         <div
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 700,
             fontSize: 11,
             letterSpacing: "0.3em",
@@ -141,7 +141,7 @@ export default function DiscountPopup() {
         {/* Headline */}
         <div
           style={{
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 900,
             fontSize: isMobile ? 32 : 40,
             letterSpacing: "0.04em",
@@ -159,7 +159,7 @@ export default function DiscountPopup() {
         {/* Subtext */}
         <div
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 14,
             color: "rgba(255,255,255,0.65)",
             lineHeight: 1.6,
@@ -181,7 +181,7 @@ export default function DiscountPopup() {
             border: `2px dashed ${CYAN}`,
             borderRadius: 10,
             padding: "18px 20px",
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 900,
             fontSize: isMobile ? 24 : 28,
             letterSpacing: "0.3em",
@@ -197,7 +197,7 @@ export default function DiscountPopup() {
         </button>
         <div
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 11,
             color: copied ? "#4CAF50" : "rgba(255,255,255,0.4)",
             marginBottom: 24,
@@ -227,7 +227,7 @@ export default function DiscountPopup() {
             border: "none",
             borderRadius: 50,
             padding: "16px 32px",
-            fontFamily: "Barlow Condensed, sans-serif",
+            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight: 700,
             fontSize: 14,
             letterSpacing: "0.18em",
@@ -242,7 +242,7 @@ export default function DiscountPopup() {
         {/* Tiny disclaimer */}
         <div
           style={{
-            fontFamily: "DM Sans, sans-serif",
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 10,
             color: "rgba(255,255,255,0.35)",
             marginTop: 16,

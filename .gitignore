@@ -4,8 +4,12 @@ dist
 .env.local
 .DS_Store
 *.log
-public/the-angels-support-v2.mov
+# the-angels-support-v2.mov was 64MB — replaced by compressed .mp4 (10MB, tracked) on 2026-04-27
 public/images/hugel claptone tuhubnail/
 public/images/pacha-ibiza-thumb-1.jpg
 public/images/pacha-ibiza-thumb-2.jpg
 public/images/pacha-ibiza-thumb-3.jpg
+# Lighthouse JSON outputs (created during speed test runs)
+lh-*.json
+# Briefs are agent-specific instructions, not site code (per ACP §5.5)
+briefs/
