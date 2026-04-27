@@ -21,20 +21,31 @@ export default function Sign() {
 
   const [clientName,  setClientName]  = useState("");
   const [clientEmail, setClientEmail] = useState("");
+  const [couponCode,  setCouponCode]  = useState("");
+  const [couponError, setCouponError] = useState(null);
   const [status,      setStatus]      = useState("ready");
   const [signedData,  setSignedData]  = useState(null);
 
   const handleSign = async () => {
     if (!clientName.trim() || !clientEmail.trim()) return alert("Please fill in your name and email.");
     setStatus("signing");
+    setCouponError(null);
     try {
       const r = await fetch(`${API}/sign-first`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ package: pkg, clientName, clientEmail }),
+        body: JSON.stringify({ package: pkg, clientName, clientEmail, couponCode: couponCode.trim() || undefined }),
       });
       const data = await r.json();
-      if (!r.ok) throw new Error(data.error || "Failed");
+      if (!r.ok) {
+        // Surface coupon errors inline rather than an alert
+        if (data.error && (data.error.toLowerCase().includes("coupon") || data.error.toLowerCase().includes("first-time"))) {
+          setCouponError(data.error);
+          setStatus("ready");
+          return;
+        }
+        throw new Error(data.error || "Failed");
+      }
       setSignedData(data);
       setStatus("signed");
       const signValue = pkg === 'demo' ? 300 : pkg === 'full' ? 800 : 1500;
@@ -123,6 +134,26 @@ export default function Sign() {
           <div style={{ marginBottom: 24 }}>
             <label style={s.label}>Your Email (to receive a copy)</label>
             <input style={s.input} type="email" value={clientEmail} onChange={e => setClientEmail(e.target.value)} placeholder="your@email.com" />
+          </div>
+
+          <div style={{ marginBottom: 24 }}>
+            <label style={s.label}>Discount Code (optional)</label>
+            <input
+              style={s.input}
+              type="text"
+              value={couponCode}
+              onChange={e => { setCouponCode(e.target.value.toUpperCase()); setCouponError(null); }}
+              placeholder="GHOST25"
+              autoComplete="off"
+            />
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 6 }}>
+              Have a code from our newsletter? Enter it here.
+            </div>
+            {couponError && (
+              <div style={{ marginTop: 8, padding: "10px 14px", background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.35)", borderRadius: 6, fontSize: 12, color: "#ff8080" }}>
+                {couponError}
+              </div>
+            )}
           </div>
 
           {/* Signature Preview */}
