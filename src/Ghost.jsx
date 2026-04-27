@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 import TrackPlayer from "./components/TrackPlayer";
+import GhostDiscountPopup from "./GhostDiscountPopup.jsx";
 import { trackWhatsAppLead } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
@@ -1497,6 +1498,8 @@ function GhostPage() {
           </div>
         </section>
       </main>
+
+      <GhostDiscountPopup />
 
       {/* ═══ Footer ═══ */}
       <footer

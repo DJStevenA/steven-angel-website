@@ -4,23 +4,22 @@ import React, { useState, useEffect, useRef } from "react";
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
 
-const STORAGE_KEY = "shop_discount_popup_seen";
+const STORAGE_KEY = "ghost_discount_popup_seen";
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
 const FALLBACK_COUPONS = [
-  { code: "WELCOME50", percentOff: 50, scope: "shop", description: "50% off your first shop purchase" },
   { code: "GHOST25", percentOff: 25, scope: "ghost", description: "25% off your first ghost track" },
 ];
 
 /**
- * DiscountPopup
+ * GhostDiscountPopup
  * - Shows once per visitor (uses localStorage)
  * - Triggers after 30 seconds OR scroll past 50% page height (whichever first)
- * - Email + optional name form → POST to /shop/newsletter
- * - On success: reveals 2 coupon cards (WELCOME50 + GHOST25)
+ * - Email + optional name form → POST to /ghost/newsletter
+ * - On success: reveals GHOST25 coupon card
  * - Graceful degradation if backend is down
  */
-export default function DiscountPopup() {
+export default function GhostDiscountPopup() {
   const [visible, setVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [coupons, setCoupons] = useState([]);
@@ -49,8 +48,10 @@ export default function DiscountPopup() {
       setVisible(true);
     };
 
+    // 30s timer — not 2s, ghost page has higher purchase intent
     const timer = setTimeout(trigger, 30000);
 
+    // Scroll past 50% page height
     const onScroll = () => {
       const scrolled = window.scrollY + window.innerHeight;
       const total = document.documentElement.scrollHeight;
@@ -77,10 +78,10 @@ export default function DiscountPopup() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${BACKEND}/shop/newsletter`, {
+      const res = await fetch(`${BACKEND}/ghost/newsletter`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, source: "shop_popup" }),
+        body: JSON.stringify({ email, name, source: "ghost_popup" }),
         signal: AbortSignal.timeout(15000),
       });
       const data = await res.json().catch(() => ({}));
@@ -90,12 +91,12 @@ export default function DiscountPopup() {
           : FALLBACK_COUPONS
       );
     } catch {
-      // Graceful degradation — backend may be down but codes still work
+      // Graceful degradation — backend may be down but code still works
       setCoupons(FALLBACK_COUPONS);
     }
 
     if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "newsletter_signup", { source: "shop_popup" });
+      window.gtag("event", "newsletter_signup", { source: "ghost_popup" });
     }
 
     setLoading(false);
@@ -130,19 +131,19 @@ export default function DiscountPopup() {
         alignItems: "center",
         justifyContent: "center",
         padding: "20px",
-        animation: "dpFadeIn 0.3s ease-out",
+        animation: "gdpFadeIn 0.3s ease-out",
       }}
     >
       <style>{`
-        @keyframes dpFadeIn {
+        @keyframes gdpFadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        @keyframes dpSlideUp {
+        @keyframes gdpSlideUp {
           from { transform: translateY(40px); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
-        .dp-input {
+        .gdp-input {
           width: 100%;
           box-sizing: border-box;
           background: rgba(255,255,255,0.06);
@@ -155,10 +156,10 @@ export default function DiscountPopup() {
           outline: none;
           transition: border-color 0.2s;
         }
-        .dp-input:focus {
+        .gdp-input:focus {
           border-color: rgba(0,229,255,0.6);
         }
-        .dp-input::placeholder {
+        .gdp-input::placeholder {
           color: rgba(255,255,255,0.35);
         }
       `}</style>
@@ -170,12 +171,12 @@ export default function DiscountPopup() {
           border: `2px solid ${CYAN}`,
           borderRadius: 16,
           padding: isMobile ? "36px 24px 28px" : "48px 40px 36px",
-          maxWidth: 480,
+          maxWidth: 460,
           width: "100%",
           textAlign: "center",
           position: "relative",
           boxShadow: `0 0 80px rgba(0,229,255,0.25), 0 0 200px rgba(187,134,252,0.15)`,
-          animation: "dpSlideUp 0.4s ease-out",
+          animation: "gdpSlideUp 0.4s ease-out",
         }}
       >
         {/* Close button */}
@@ -213,7 +214,7 @@ export default function DiscountPopup() {
                 marginBottom: 12,
               }}
             >
-              Your Coupons
+              Your Coupon
             </div>
             <div
               style={{
@@ -227,7 +228,7 @@ export default function DiscountPopup() {
               }}
             >
               You're In.{" "}
-              <span style={{ color: CYAN }}>Both Discounts</span> Unlocked.
+              <span style={{ color: CYAN }}>25% Off</span> Unlocked.
             </div>
 
             {/* Coupon cards */}
@@ -265,7 +266,7 @@ export default function DiscountPopup() {
                         letterSpacing: "0.08em",
                       }}
                     >
-                      {c.scope === "ghost" ? "Ghost Production" : "Shop"}
+                      Ghost Production
                     </span>
                   </div>
                   <button
@@ -276,10 +277,10 @@ export default function DiscountPopup() {
                       background: "rgba(0,229,255,0.08)",
                       border: `2px dashed ${CYAN}`,
                       borderRadius: 10,
-                      padding: "14px 20px",
+                      padding: "18px 20px",
                       fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                       fontWeight: 900,
-                      fontSize: isMobile ? 22 : 26,
+                      fontSize: isMobile ? 24 : 30,
                       letterSpacing: "0.3em",
                       color: CYAN,
                       cursor: "pointer",
@@ -328,7 +329,11 @@ export default function DiscountPopup() {
             <button
               onClick={() => {
                 close();
-                const grid = document.querySelector('[data-shop-grid="true"]');
+                // Scroll to ghost catalog tracks grid
+                const grid =
+                  document.querySelector('[data-ghost-catalog="true"]') ||
+                  document.querySelector('[data-shop-grid="true"]') ||
+                  document.getElementById("listen");
                 if (grid) grid.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
               style={{
@@ -350,7 +355,7 @@ export default function DiscountPopup() {
                 boxShadow: "0 0 28px rgba(0,229,255,0.5)",
               }}
             >
-              Browse the Shop →
+              Browse Tracks →
             </button>
           </>
         ) : (
@@ -368,7 +373,7 @@ export default function DiscountPopup() {
                 marginBottom: 12,
               }}
             >
-              Welcome Offer
+              Exclusive Offer
             </div>
 
             {/* Headline */}
@@ -384,8 +389,9 @@ export default function DiscountPopup() {
                 marginBottom: 12,
               }}
             >
-              Get <span style={{ color: CYAN }}>50% Off</span> +{" "}
-              <span style={{ color: PURPLE }}>25% Off Ghost</span>
+              Get <span style={{ color: CYAN }}>25% Off</span>
+              <br />
+              Your First Ghost Track
             </div>
 
             {/* Subhead */}
@@ -398,7 +404,7 @@ export default function DiscountPopup() {
                 marginBottom: 22,
               }}
             >
-              Sign up to unlock both coupons
+              Sign up to unlock your discount
             </div>
 
             <form
@@ -406,7 +412,7 @@ export default function DiscountPopup() {
               style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}
             >
               <input
-                className="dp-input"
+                className="gdp-input"
                 type="email"
                 placeholder="Your email address"
                 value={email}
@@ -415,7 +421,7 @@ export default function DiscountPopup() {
                 autoComplete="email"
               />
               <input
-                className="dp-input"
+                className="gdp-input"
                 type="text"
                 placeholder="Your name (optional)"
                 value={name}
@@ -447,7 +453,7 @@ export default function DiscountPopup() {
                   transition: "opacity 0.2s",
                 }}
               >
-                {loading ? "Sending…" : "Get My Coupons"}
+                {loading ? "Sending…" : "Get My Coupon"}
               </button>
             </form>
 
