@@ -9,6 +9,7 @@ import { trackPageView } from "./lib/analytics/events";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
 const Lessons = lazy(() => import("./Lessons.jsx"));
+const TheAngels = lazy(() => import("./TheAngels.jsx"));
 const Sign = lazy(() => import("./Sign.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
@@ -52,6 +53,7 @@ function PageTitle() {
       "/": "Steven Angel — Afro House DJ, Producer & Ableton Mentor",
       "/ghost": "Afro House & Tech House Ghost Producer | Steven Angel",
       "/lessons": "Ableton Lessons by a Moblack & MTGD Artist | Steven Angel",
+      "/the-angels": "The Angels — Afro / Latin House Duo | EPK",
       "/sign": "Ghost Production Agreement | Steven Angel",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
     };
@@ -59,6 +61,7 @@ function PageTitle() {
       "/": "DJ, ghost producer and Ableton mentor. Released on Moblack, MTGD & Sony. Played by Hugel & Claptone at Pacha Ibiza. Ghost production, lessons and templates.",
       "/ghost": "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.",
       "/lessons": "1-on-1 Ableton lessons from a producer released on Moblack, MTGD & Sony. Afro House, Latin House, Tech House & Indie Dance. From $30 intro session.",
+      "/the-angels": "The Angels — Afro / Latin House / Tribal duo. 10M+ streams, Beatport Top 10. Played by Hugel, Claptone, Sofi Tukker. Released on MTGD, Moblack, Sony.",
       "/sign": "Sign your ghost production agreement with Steven Angel.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
     };
@@ -92,6 +95,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/" element={<App />} />
             <Route path="/ghost" element={<Ghost />} />
             <Route path="/lessons" element={<Lessons />} />
+            <Route path="/the-angels" element={<TheAngels />} />
             <Route path="/sign" element={<Sign />} />
             {/* All /shop* routes share the ShopPlayerProvider + sticky bar */}
             <Route element={<ShopLayout />}>
