@@ -162,15 +162,31 @@ export default function TheAngels() {
 
       {/* ═══ HERO ═══ */}
       <section style={{
-        minHeight: isMobile ? "auto" : "85vh",
+        minHeight: isMobile ? "auto" : "92vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         padding: isMobile ? "60px 24px 80px" : "80px 48px",
-        background: "radial-gradient(circle at 50% 30%, rgba(0,229,255,0.08) 0%, transparent 60%), #000",
         position: "relative",
+        overflow: "hidden",
       }}>
-        <div style={{ textAlign: "center", maxWidth: 720, width: "100%" }}>
+        {/* Background photo */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "url(/the-angels-hero.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: 0,
+        }} />
+        {/* Dark gradient overlay so text stays readable */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.95) 100%), radial-gradient(circle at 50% 30%, rgba(0,229,255,0.12) 0%, transparent 60%)",
+          zIndex: 1,
+        }} />
+        <div style={{ textAlign: "center", maxWidth: 720, width: "100%", position: "relative", zIndex: 2 }}>
           <img
             src="/the-angels-logo.png"
             alt="The Angels logo"
@@ -210,38 +226,67 @@ export default function TheAngels() {
         padding: isMobile ? "60px 24px" : "100px 48px",
         borderTop: "1px solid rgba(255,255,255,0.06)",
       }}>
-        <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ ...label(CYAN), marginBottom: 16 }}>About</div>
-          <h2 style={{ ...heading(isMobile ? 32 : 44), color: "#fff", marginBottom: 32 }}>
-            10M+ Streams. Beatport Top 10. Played Worldwide.
-          </h2>
-          <p style={{ ...body, fontSize: isMobile ? 15 : 17, marginBottom: 32 }}>
-            Producers of the hit "Chama Cha Trumpeta" (with Idd Aziz), heavily supported by HUGEL, Claptone, Sofi Tukker, Curol, Dj Chus and many more. Over 10 million streams across various platforms — including 7 million on Spotify with 50K monthly listeners. Constantly featured on Beatport's Afro House Top 10 charts, with collaborations and remixes alongside Floyd Lavine, Pipi Ciez, PAUZA, Band & Dos. Performances at ADE, Boho Miami, Somewhere Nowhere (NY), Spazio (WP), Bonbonniere (Tulum) and Nomad (Lisbon).
-          </p>
-
-          {/* Stats */}
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: isMobile ? 16 : 32,
-            marginTop: 48,
-            paddingTop: 32,
-            borderTop: "1px solid rgba(255,255,255,0.06)",
+            gridTemplateColumns: isMobile ? "1fr" : "minmax(280px, 380px) 1fr",
+            gap: isMobile ? 32 : 56,
+            alignItems: "start",
           }}>
-            {[
-              { num: "10M+", label: "Streams" },
-              { num: "50K", label: "Monthly" },
-              { num: "25K", label: "Fans" },
-            ].map(({ num, label: lbl }) => (
-              <div key={lbl} style={{ textAlign: "center" }}>
-                <div style={{ ...heading(isMobile ? 28 : 40), color: CYAN, marginBottom: 4 }}>{num}</div>
-                <div style={{ ...label(), fontSize: 10, color: "rgba(255,255,255,0.5)" }}>{lbl}</div>
+            {/* Portrait — left col on desktop, top on mobile */}
+            <div>
+              <img
+                src="/the-angels-portrait.jpg"
+                alt="The Angels live"
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  aspectRatio: "2/3",
+                  objectFit: "cover",
+                  borderRadius: 12,
+                  border: `1px solid ${CYAN}33`,
+                  display: "block",
+                  maxWidth: isMobile ? 280 : "100%",
+                  margin: isMobile ? "0 auto" : "0",
+                }}
+              />
+            </div>
+
+            {/* Bio text + stats — right col on desktop, below on mobile */}
+            <div>
+              <div style={{ ...label(CYAN), marginBottom: 16 }}>About</div>
+              <h2 style={{ ...heading(isMobile ? 30 : 40), color: "#fff", marginBottom: 24, textAlign: isMobile ? "center" : "left" }}>
+                10M+ Streams. Beatport Top 10. Played Worldwide.
+              </h2>
+              <p style={{ ...body, fontSize: isMobile ? 15 : 16, textAlign: isMobile ? "center" : "left" }}>
+                Producers of the hit "Chama Cha Trumpeta" (with Idd Aziz), heavily supported by HUGEL, Claptone, Sofi Tukker, Curol, Dj Chus and many more. Over 10 million streams across various platforms — including 7 million on Spotify with 50K monthly listeners. Constantly featured on Beatport's Afro House Top 10 charts, with collaborations and remixes alongside Floyd Lavine, Pipi Ciez, PAUZA, Band & Dos. Performances at ADE, Boho Miami, Somewhere Nowhere (NY), Spazio (WP), Bonbonniere (Tulum) and Nomad (Lisbon).
+              </p>
+
+              {/* Stats */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: isMobile ? 16 : 24,
+                marginTop: 36,
+                paddingTop: 28,
+                borderTop: "1px solid rgba(255,255,255,0.06)",
+              }}>
+                {[
+                  { num: "10M+", label: "Streams" },
+                  { num: "50K", label: "Monthly" },
+                  { num: "25K", label: "Fans" },
+                ].map(({ num, label: lbl }) => (
+                  <div key={lbl} style={{ textAlign: "center" }}>
+                    <div style={{ ...heading(isMobile ? 26 : 36), color: CYAN, marginBottom: 4 }}>{num}</div>
+                    <div style={{ ...label(), fontSize: 10, color: "rgba(255,255,255,0.5)" }}>{lbl}</div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* Supporters */}
-          <div style={{ marginTop: 48 }}>
+          {/* Supporters + Labels strips — full width below the 2-col block */}
+          <div style={{ marginTop: 56, textAlign: "center" }}>
             <div style={{ ...label(PURPLE), marginBottom: 12 }}>Supported by</div>
             <div style={{
               display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 12 : 20,
@@ -261,8 +306,7 @@ export default function TheAngels() {
             </div>
           </div>
 
-          {/* Labels */}
-          <div style={{ marginTop: 32 }}>
+          <div style={{ marginTop: 32, textAlign: "center" }}>
             <div style={{ ...label(PURPLE), marginBottom: 12 }}>Released on</div>
             <div style={{
               display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 12 : 20,
