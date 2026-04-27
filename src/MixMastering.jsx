@@ -339,8 +339,31 @@ export default function MixMastering() {
             Mix &amp; Mastering for Afro House, Melodic Techno &amp; Electronic — Mastered to Label Standard
           </div>
 
-          <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 36 }}>
+          <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 24 }}>
             Hernan Cattaneo and Dole &amp; Kom trust me with their masters. From $35 with a 3-day turnaround.
+          </div>
+
+          {/* Labels strip — mastered tracks released on */}
+          <div style={{ marginBottom: 36 }}>
+            <div style={{
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
+              fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
+              color: CYAN, marginBottom: 10,
+            }}>
+              Mastered Tracks Released On
+            </div>
+            <div style={{
+              display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 10 : 18,
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+              fontSize: isMobile ? 14 : 17, letterSpacing: "0.1em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.85)",
+            }}>
+              <span>Moblack</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>Godeeva</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>MTGD</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>Sony</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>HMWL</span>
+            </div>
           </div>
 
           {/* CTA Cards (Lessons-style) */}
