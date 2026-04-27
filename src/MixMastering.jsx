@@ -10,6 +10,7 @@ import Footer from "./Footer.jsx";
 import { Link } from "react-router-dom";
 import { trackWhatsAppLead } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
+import MixMasteringPopup from "./MixMasteringPopup.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -735,6 +736,8 @@ export default function MixMastering() {
       </section>
 
       <Footer />
+
+      <MixMasteringPopup />
 
       {/* ═══ Floating WhatsApp ═══ */}
       <a

@@ -11,6 +11,7 @@ const Ghost = lazy(() => import("./Ghost.jsx"));
 const Lessons = lazy(() => import("./Lessons.jsx"));
 const TheAngels = lazy(() => import("./TheAngels.jsx"));
 const MixMastering = lazy(() => import("./MixMastering.jsx"));
+const MixMasteringUpload = lazy(() => import("./MixMasteringUpload.jsx"));
 const Sign = lazy(() => import("./Sign.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
@@ -100,7 +101,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/the-angels" element={<TheAngels />} />
             <Route path="/mix-mastering" element={<MixMastering />} />
-            <Route path="/mix-mastering/upload" element={<MixMastering />} />
+            <Route path="/mix-mastering/upload" element={<MixMasteringUpload />} />
             <Route path="/mastering" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/mix" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/mix-master" element={<Navigate to="/mix-mastering" replace />} />
