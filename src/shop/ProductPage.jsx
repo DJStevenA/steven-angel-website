@@ -174,8 +174,13 @@ export default function ProductPage() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // Remarketing signals
-  usePageView("shop_product");
+  // Remarketing signals — pass product details for dynamic remarketing audiences
+  usePageView(
+    "shop_product",
+    product
+      ? { product_id: product.slug, product_name: product.name, product_price: product.price }
+      : undefined
+  );
   useScrollDepth("shop_product");
   useTimeOnPage("shop_product");
 

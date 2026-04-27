@@ -6,18 +6,23 @@ import { useEffect, useRef } from 'react';
 import { trackPageView, trackScrollDepth, trackTimeOnPage } from './events';
 
 /**
- * Fires a single page_view event with page_category on mount.
- * Used to power "visitors of /lessons", "visitors of /ghost" remarketing audiences.
- * @param {string} page_category  e.g. 'homepage', 'ghost', 'lessons', 'shop'
+ * Fires a single page_view event with page_category (+ optional extras) on mount.
+ * Used to power "visitors of /lessons", "viewed product X" remarketing audiences.
+ * @param {string} page_category  e.g. 'homepage', 'ghost', 'lessons', 'shop', 'shop_product'
+ * @param {object} [extras]       extra params (e.g. product_id, product_name, product_price)
  */
-export function usePageView(page_category) {
+export function usePageView(page_category, extras) {
+  // Stable JSON key so the effect re-fires when extras actually change
+  const extrasKey = extras ? JSON.stringify(extras) : '';
   useEffect(() => {
     trackPageView({
       page_category,
       page_path: typeof window !== 'undefined' ? window.location.pathname : '',
       page_title: typeof document !== 'undefined' ? document.title : '',
+      ...(extras || {}),
     });
-  }, [page_category]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page_category, extrasKey]);
 }
 
 /**
