@@ -77,7 +77,7 @@ const PACKAGES = [
     bullets: [
       "Up to 30 stems in",
       "Full mix from scratch + master",
-      "16-bit WAV + HQ MP3 320kbps",
+      "Premaster 24-bit WAV + 16-bit WAV + HQ MP3 320kbps",
       "2 revisions included",
     ],
   },
@@ -91,7 +91,7 @@ const PACKAGES = [
     bullets: [
       "30 to 100 stems in",
       "Full mix + master for full productions",
-      "16-bit WAV + HQ MP3 320kbps",
+      "Premaster 24-bit WAV + 16-bit WAV + HQ MP3 320kbps",
       "2 revisions included",
     ],
   },
@@ -316,131 +316,103 @@ export default function MixMastering() {
     <div style={{ background: "#000", color: "#fff", overflowX: "hidden" }}>
       <Nav />
 
-      {/* ═══ HERO ═══ */}
-      <section style={{
-        minHeight: isMobile ? "auto" : "78vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: isMobile ? "60px 24px 80px" : "80px 48px",
-        background: "radial-gradient(circle at 50% 30%, rgba(0,229,255,0.1) 0%, transparent 60%), #000",
-        position: "relative",
-      }}>
-        <div style={{ textAlign: "center", maxWidth: 880, width: "100%" }}>
-          <div style={{ ...label(CYAN), marginBottom: 18 }}>Mix · Mastering</div>
-          <h1 style={{
-            ...heading(isMobile ? 48 : 80),
-            background: `linear-gradient(135deg, ${CYAN}, ${PURPLE})`,
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            marginBottom: 20,
-          }}>
-            Get Your Track Club Ready
+      {/* ═══ HERO (matching Lessons / site standard) ═══ */}
+      <section style={{ padding: isMobile ? "60px 20px 50px" : "100px 60px 80px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <img
+          src="/images/dj-hero.webp"
+          alt="Steven Angel — Mix & Mastering Engineer"
+          fetchpriority="high"
+          width="800"
+          height="1200"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }}
+        />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.78)" }} />
+
+        <div style={{ maxWidth: 800, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <h1 style={{ ...heading(isMobile ? 32 : 60), marginBottom: 16 }}>
+            Get Your Track
+            <br />
+            <span style={{ color: CYAN }}>Club Ready</span>
           </h1>
-          <p style={{ ...body, fontSize: isMobile ? 16 : 19, maxWidth: 700, margin: "0 auto 18px" }}>
-            Mix &amp; mastering for Afro House, Melodic Techno &amp; Electronic Music.
-            Mastered to label standard.
-          </p>
-          <div style={{
-            display: "inline-block", padding: "8px 16px",
-            background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
-            borderRadius: 999, marginBottom: 36,
-            fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
-            fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase",
-            color: "rgba(255,255,255,0.85)",
-          }}>
-            Trusted by <span style={{ color: CYAN }}>Hernan Cattaneo</span> &amp; <span style={{ color: PURPLE }}>Dole &amp; Kom</span>
+
+          <div style={{ ...body, fontSize: isMobile ? 16 : 19, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
+            Mix &amp; Mastering for Afro House, Melodic Techno &amp; Electronic — Mastered to Label Standard
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
-            <button
-              onClick={scrollToPricing}
-              style={{
-                padding: isMobile ? "14px 28px" : "16px 36px",
-                background: `linear-gradient(135deg, ${CYAN}, ${PURPLE})`,
-                color: "#000", border: "none", borderRadius: 8,
-                fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
-                fontSize: isMobile ? 14 : 15, letterSpacing: "0.15em", textTransform: "uppercase",
-                cursor: "pointer", boxShadow: `0 4px 16px ${CYAN}40`,
-              }}
-            >
-              See Packages
-            </button>
+          <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 36 }}>
+            Hernan Cattaneo and Dole &amp; Kom trust me with their masters. From $35 with a 3-day turnaround.
+          </div>
+
+          {/* CTA Cards (Lessons-style) */}
+          <div style={{ display: "flex", flexWrap: "nowrap", gap: isMobile ? 8 : 16, marginTop: isMobile ? 8 : 16, textAlign: "left" }}>
+            {[
+              { title: "SEE PACKAGES", sub: "From $35 mastering · Mix + Master from $150 · 4 tiers", btn: "View Pricing", scroll: "pricing", premium: true },
+              { title: "TALK ON WHATSAPP", sub: "Not sure which package fits? Quick reply — usually 5 min", btn: "Message Steven", whatsapp: true, premium: false },
+            ].map((card, i) => {
+              const baseStyle = {
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
+                background: card.premium ? "linear-gradient(135deg, #0a0a20, #0d0418)" : "#000",
+                border: card.premium ? `2px solid ${CYAN}` : "1px solid #141420",
+                borderRadius: 10,
+                boxShadow: card.premium ? "0 0 40px rgba(0,229,255,0.12)" : "none",
+                textDecoration: "none",
+                color: "#fff",
+                cursor: "pointer",
+              };
+              const handle = (e) => {
+                if (card.scroll) {
+                  e.preventDefault();
+                  const el = document.getElementById(card.scroll);
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                } else if (card.whatsapp) {
+                  trackWhatsAppLead("MM", "mix_master_hero");
+                }
+              };
+              const inner = (
+                <>
+                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                    {card.title}
+                  </div>
+                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                    {card.sub}
+                  </div>
+                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
+                    {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
+                  </div>
+                </>
+              );
+              return card.whatsapp ? (
+                <a key={i} href={BOOKING_WHATSAPP} target="_blank" rel="noopener noreferrer" onClick={handle} style={baseStyle}>{inner}</a>
+              ) : (
+                <a key={i} href="#" onClick={handle} style={baseStyle}>{inner}</a>
+              );
+            })}
+          </div>
+
+          {/* Listen CTA */}
+          <div style={{ textAlign: "center", marginTop: 24 }}>
             <a
-              href={BOOKING_WHATSAPP}
-              target="_blank" rel="noopener noreferrer"
-              onClick={() => trackWhatsAppLead("MM", "mix_master_hero")}
+              href="#examples"
+              onClick={(e) => { e.preventDefault(); document.getElementById("examples")?.scrollIntoView({ behavior: "smooth" }); }}
               style={{
-                padding: isMobile ? "14px 28px" : "16px 36px",
-                background: "transparent", color: "#fff",
-                border: `1px solid rgba(255,255,255,0.25)`,
-                borderRadius: 8, textDecoration: "none",
-                fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
-                fontSize: isMobile ? 14 : 15, letterSpacing: "0.15em", textTransform: "uppercase",
+                fontFamily: "Barlow Condensed, sans-serif",
+                fontWeight: 700,
+                fontSize: 13,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: CYAN,
+                textDecoration: "none",
+                opacity: 0.85,
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.textDecoration = "underline"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.textDecoration = "none"; }}
             >
-              Ask on WhatsApp
+              Hear Before / After →
             </a>
-          </div>
-
-          <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.45)", marginTop: 24 }}>
-            3-day delivery · 2 revisions included · Secure file upload after payment
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ THIS IS FOR YOU IF ═══ */}
-      <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ ...label(PURPLE), marginBottom: 14 }}>This Is For You If</div>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-            gap: isMobile ? 20 : 32,
-            marginTop: 32,
-          }}>
-            {[
-              "You finished a track but it sounds quiet next to commercial releases",
-              "You want a mix that translates from earbuds to club PA",
-              "You need label-ready quality without a $500+ studio bill",
-            ].map((t, i) => (
-              <div key={i} style={{
-                padding: 24, background: "#04040f",
-                border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12,
-                ...body, fontSize: isMobile ? 15 : 16,
-                color: "rgba(255,255,255,0.85)",
-              }}>
-                {t}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ MIX VS MASTER ═══ */}
-      <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <div style={{ ...label(CYAN), marginBottom: 12 }}>The Quick Difference</div>
-            <h2 style={{ ...heading(isMobile ? 28 : 36), color: "#fff" }}>Mix vs Mastering</h2>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: 16 }}>
-            {[
-              { t: "Mastering only", d: "Stereo file in → loud, polished stereo file out.", w: "Use when your track is already mixed." },
-              { t: "Stem Mastering", d: "5–10 stems in → balanced and mastered.", w: "Use when the mix needs minor tweaks (vocal louder / kick punchier)." },
-              { t: "Mix + Master", d: "All stems in → full mix from scratch + master.", w: "Use when bouncing a demo from Ableton." },
-            ].map((b, i) => (
-              <div key={i} style={{
-                padding: 20, background: "#04040f",
-                border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12,
-              }}>
-                <div style={{ ...heading(20), color: CYAN, marginBottom: 10 }}>{b.t}</div>
-                <div style={{ ...body, marginBottom: 8, color: "rgba(255,255,255,0.85)" }}>{b.d}</div>
-                <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{b.w}</div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -581,14 +553,91 @@ export default function MixMastering() {
         </div>
       </section>
 
-      {/* ═══ EXAMPLES ═══ */}
+      {/* ═══ HERNAN CATTANEO EMAIL ═══ */}
       <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
+          <div style={{ ...label(CYAN), marginBottom: 12 }}>Played By</div>
+          <h2 style={{ ...heading(isMobile ? 30 : 40), color: "#fff", marginBottom: 8 }}>Hernan Cattaneo</h2>
+          <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)", marginBottom: 28 }}>
+            Sudbeat · Argentina · Legendary progressive house DJ
+          </div>
+          <img
+            src="/images/hernan-email.webp"
+            alt="Email from Hernan Cattaneo"
+            loading="lazy"
+            style={{
+              width: "100%", maxWidth: 640, height: "auto",
+              borderRadius: 12,
+              border: `1px solid ${CYAN}33`,
+              display: "block", margin: "0 auto",
+              boxShadow: `0 0 40px rgba(0,229,255,0.1)`,
+            }}
+          />
+        </div>
+      </section>
+
+      {/* ═══ ARTBAT VIDEO ═══ */}
+      <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
+            <div style={{ ...label(PURPLE), marginBottom: 12 }}>Played By</div>
+            <h2 style={{ ...heading(isMobile ? 30 : 40), color: "#fff", marginBottom: 8 }}>
+              Artbat Drops "La Cantadora"
+            </h2>
+            <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)" }}>
+              The Dole &amp; Kom track Steven mastered, played live by Artbat.
+            </div>
+          </div>
+          <div style={{
+            position: "relative",
+            aspectRatio: isMobile ? "9/16" : "16/9",
+            borderRadius: 16,
+            overflow: "hidden",
+            background: "#0a0a14",
+            border: `1px solid ${PURPLE}33`,
+            maxWidth: isMobile ? "100%" : 880,
+            margin: "0 auto",
+            boxShadow: `0 0 60px rgba(187,134,252,0.18)`,
+          }}>
+            {!isMobile && (
+              <video
+                src={`${VIDEO_BASE}/the-angels-artbat-la-cantadora.mp4`}
+                autoPlay muted loop playsInline preload="metadata"
+                aria-hidden="true"
+                style={{
+                  position: "absolute", inset: 0,
+                  width: "100%", height: "100%",
+                  objectFit: "cover",
+                  filter: "blur(40px) brightness(0.5)",
+                  transform: "scale(1.25)",
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+            <video
+              src={`${VIDEO_BASE}/the-angels-artbat-la-cantadora.mp4`}
+              autoPlay muted loop playsInline controls preload="metadata"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: isMobile ? "cover" : "contain",
+                display: "block",
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ A/B PLAYER ═══ */}
+      <section id="examples" style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 36 }}>
             <div style={{ ...label(CYAN), marginBottom: 12 }}>Hear It Yourself</div>
             <h2 style={{ ...heading(isMobile ? 30 : 40), color: "#fff", marginBottom: 12 }}>Before / After</h2>
             <p style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
-              Toggle between the original mix and the master.
+              Toggle between the pre-master and the final master on real client tracks.
             </p>
           </div>
 
@@ -599,82 +648,6 @@ export default function MixMastering() {
             {EXAMPLES.map((ex) => (
               <ABComparison key={ex.id} example={ex} isMobile={isMobile} />
             ))}
-          </div>
-
-          {/* Artbat playing La Cantadora */}
-          <div style={{ marginTop: 36 }}>
-            <div style={{ textAlign: "center", marginBottom: 16 }}>
-              <div style={{ ...label(PURPLE), marginBottom: 8 }}>Artbat in the wild</div>
-              <h3 style={{ ...heading(isMobile ? 22 : 28), color: "#fff" }}>
-                Artbat playing "La Cantadora"
-              </h3>
-              <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 6 }}>
-                The Dole &amp; Kom track Steven mastered, dropped by Artbat live.
-              </div>
-            </div>
-            <div style={{
-              position: "relative", aspectRatio: "9/16",
-              maxWidth: isMobile ? "100%" : 320,
-              margin: "0 auto",
-              borderRadius: 12, overflow: "hidden",
-              background: "#0a0a14", border: `1px solid ${PURPLE}33`,
-            }}>
-              <video
-                src={`${VIDEO_BASE}/the-angels-artbat-la-cantadora.mp4`}
-                controls muted playsInline preload="metadata"
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ TRUST ═══ */}
-      <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)", background: "radial-gradient(circle at 50% 50%, rgba(0,229,255,0.04) 0%, transparent 60%)" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ ...label(CYAN), marginBottom: 14 }}>Mastering Credits</div>
-          <h2 style={{ ...heading(isMobile ? 30 : 40), color: "#fff", marginBottom: 28 }}>
-            Trusted by Producers Who Get Played Worldwide
-          </h2>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-            gap: isMobile ? 20 : 24, marginBottom: 40,
-          }}>
-            {[
-              { name: "Hernan Cattaneo", info: "Sudbeat · Argentina · Legendary progressive house DJ", color: CYAN },
-              { name: "Dole & Kom", info: "HMWL · Watergate · Innervisions · German melodic house", color: PURPLE },
-            ].map((c) => (
-              <div key={c.name} style={{
-                padding: 24, background: "#04040f",
-                border: `1px solid ${c.color}33`, borderRadius: 12,
-              }}>
-                <div style={{ ...heading(isMobile ? 22 : 28), color: "#fff", marginBottom: 8 }}>
-                  {c.name}
-                </div>
-                <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.6)" }}>
-                  {c.info}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-            <div style={{ ...label(PURPLE), fontSize: 11, marginBottom: 12 }}>Tracks Released On</div>
-            <div style={{
-              display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 12 : 24,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
-              fontSize: isMobile ? 14 : 17, letterSpacing: "0.1em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.75)",
-            }}>
-              <span>Moblack</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
-              <span>MTGD</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
-              <span>Godeeva</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
-              <span>Sony</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
-              <span>Ultra</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
-              <span>305 Made in Miami</span>
-            </div>
           </div>
         </div>
       </section>
