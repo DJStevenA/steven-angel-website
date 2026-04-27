@@ -299,34 +299,34 @@ export default function TheAngels() {
             </div>
           </div>
 
-          <div style={{ marginTop: 56, textAlign: "center" }}>
-            <div style={{ ...label(PURPLE), marginBottom: 12 }}>Supported by</div>
+          <div style={{ marginTop: 64, textAlign: "center", paddingTop: 32, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <div style={{ ...label(PURPLE), fontSize: 14, marginBottom: 18, color: PURPLE }}>Supported By</div>
             <div style={{
-              display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 12 : 20,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
-              fontSize: isMobile ? 14 : 16, letterSpacing: "0.15em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.65)",
+              display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 14 : 28,
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+              fontSize: isMobile ? 18 : 24, letterSpacing: "0.08em", textTransform: "uppercase",
+              color: "#fff",
             }}>
-              <span>Hugel</span><span style={{ color: CYAN }}>·</span>
-              <span>Claptone</span><span style={{ color: CYAN }}>·</span>
-              <span>Sofi Tukker</span><span style={{ color: CYAN }}>·</span>
-              <span>Dj Chus</span><span style={{ color: CYAN }}>·</span>
+              <span>Hugel</span><span style={{ color: CYAN, fontWeight: 400 }}>·</span>
+              <span>Claptone</span><span style={{ color: CYAN, fontWeight: 400 }}>·</span>
+              <span>Sofi Tukker</span><span style={{ color: CYAN, fontWeight: 400 }}>·</span>
+              <span>Dj Chus</span><span style={{ color: CYAN, fontWeight: 400 }}>·</span>
               <span>Curol</span>
             </div>
           </div>
 
-          <div style={{ marginTop: 32, textAlign: "center" }}>
-            <div style={{ ...label(PURPLE), marginBottom: 12 }}>Released on</div>
+          <div style={{ marginTop: 40, textAlign: "center" }}>
+            <div style={{ ...label(PURPLE), fontSize: 14, marginBottom: 18, color: PURPLE }}>Released On</div>
             <div style={{
-              display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 12 : 20,
-              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700,
-              fontSize: isMobile ? 14 : 16, letterSpacing: "0.15em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.65)",
+              display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 14 : 28,
+              fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+              fontSize: isMobile ? 18 : 24, letterSpacing: "0.08em", textTransform: "uppercase",
+              color: "#fff",
             }}>
-              <span>Godeeva</span><span style={{ color: PURPLE }}>·</span>
-              <span>MTGD</span><span style={{ color: PURPLE }}>·</span>
-              <span>Moblack</span><span style={{ color: PURPLE }}>·</span>
-              <span>Sony</span><span style={{ color: PURPLE }}>·</span>
+              <span>Godeeva</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>MTGD</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>Moblack</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
+              <span>Sony</span><span style={{ color: PURPLE, fontWeight: 400 }}>·</span>
               <span>Redolent</span>
             </div>
           </div>
@@ -472,21 +472,6 @@ export default function TheAngels() {
                 onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
               >
                 <img src={src} alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                <div style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(135deg, rgba(0,229,255,0) 0%, rgba(187,134,252,0.4) 100%)",
-                  opacity: 0,
-                  transition: "opacity 0.2s",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-                onMouseLeave={(e) => e.currentTarget.style.opacity = "0"}
-                >
-                  <InstagramIcon size={32} />
-                </div>
               </a>
             ))}
           </div>
