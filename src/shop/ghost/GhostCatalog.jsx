@@ -25,17 +25,32 @@ export default function GhostCatalog({ isMobile }) {
   const [buyTrack, setBuyTrack] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_BASE}/ghost/tracks`)
-      .then((r) => r.json())
+    // Hard 10s timeout via AbortController — Railway edge can hold a request
+    // open for 30+s when upstream is dead, leaving users stuck on "Loading…".
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    fetch(`${API_BASE}/ghost/tracks`, { signal: controller.signal })
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then((data) => {
+        clearTimeout(timeoutId);
         const raw = Array.isArray(data) ? data : data.tracks || [];
         setTracks(raw.filter((t) => !String(t.id || "").startsWith("test-")));
         setLoading(false);
       })
       .catch(() => {
+        clearTimeout(timeoutId);
         setError("Could not load tracks. Please refresh.");
         setLoading(false);
       });
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
 
   const filtered = activeGenre === "All"

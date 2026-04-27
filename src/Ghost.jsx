@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import { trackWhatsAppLead } from "./lib/analytics/events";
-import { useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
+import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
 /* ─── Color Constants ─── */
 const CYAN = "#00E5FF";
@@ -330,6 +330,7 @@ function GhostPage() {
   const [howItWorksPackage, setHowItWorksPackage] = useState(null);
 
   // Remarketing signals
+  usePageView("ghost");
   useScrollDepth("ghost");
   useTimeOnPage("ghost");
 
@@ -1105,6 +1106,7 @@ function GhostPage() {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ name: data.name, email: data.email, message: "Ghost page lead capture", source: "ghost-page-lead" }),
+                  signal: AbortSignal.timeout(15000),
                 })
                   .then((r) => r.ok ? r.json() : Promise.reject(r))
                   .then(() => {
@@ -1344,6 +1346,7 @@ function GhostPage() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
+                    signal: AbortSignal.timeout(15000),
                   })
                     .then((r) => r.json())
                     .then((d) => {

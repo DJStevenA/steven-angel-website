@@ -1,9 +1,24 @@
 /**
- * Analytics hooks — scroll depth + time-on-page remarketing signals.
+ * Analytics hooks — page_view + scroll depth + time-on-page remarketing signals.
  * Fires GA4 custom events used to build Google Ads remarketing audiences.
  */
 import { useEffect, useRef } from 'react';
-import { trackScrollDepth, trackTimeOnPage } from './events';
+import { trackPageView, trackScrollDepth, trackTimeOnPage } from './events';
+
+/**
+ * Fires a single page_view event with page_category on mount.
+ * Used to power "visitors of /lessons", "visitors of /ghost" remarketing audiences.
+ * @param {string} page_category  e.g. 'homepage', 'ghost', 'lessons', 'shop'
+ */
+export function usePageView(page_category) {
+  useEffect(() => {
+    trackPageView({
+      page_category,
+      page_path: typeof window !== 'undefined' ? window.location.pathname : '',
+      page_title: typeof document !== 'undefined' ? document.title : '',
+    });
+  }, [page_category]);
+}
 
 /**
  * Fires scroll_depth events at 25 / 50 / 75 / 100 % thresholds.

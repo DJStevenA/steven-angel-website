@@ -26,6 +26,7 @@ import Nav from "../Nav.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
 import { trackViewItem, trackAddToCart, trackVideoPreview } from "../lib/analytics/events";
+import { usePageView, useScrollDepth, useTimeOnPage } from "../lib/analytics/hooks";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -172,6 +173,11 @@ export default function ProductPage() {
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, []);
+
+  // Remarketing signals
+  usePageView("shop_product");
+  useScrollDepth("shop_product");
+  useTimeOnPage("shop_product");
 
   // Clarity: track product page view
   useEffect(() => {

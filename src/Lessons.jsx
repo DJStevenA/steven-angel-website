@@ -11,7 +11,7 @@ import Nav from "./Nav.jsx";
 import Footer from "./Footer.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import { trackWhatsAppLead } from "./lib/analytics/events";
-import { useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
+import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -279,6 +279,7 @@ export default function Lessons() {
   }, []);
 
   // Remarketing signals
+  usePageView("lessons");
   useScrollDepth("lessons");
   useTimeOnPage("lessons");
 
@@ -730,6 +731,7 @@ export default function Lessons() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
+                    signal: AbortSignal.timeout(15000),
                   })
                     .then((r) => r.json())
                     .then((d) => {

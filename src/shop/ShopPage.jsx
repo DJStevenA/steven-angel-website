@@ -9,6 +9,7 @@ import GhostCatalog from "./ghost/GhostCatalog.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
 import { trackWhatsAppLead, trackViewItemList } from "../lib/analytics/events";
+import { usePageView, useScrollDepth, useTimeOnPage } from "../lib/analytics/hooks";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -55,6 +56,11 @@ export default function ShopPage() {
 
   const params = new URLSearchParams(location.search);
   const activeTab = params.get("tab") === "ghost" ? "ghost" : "shop";
+
+  // Remarketing signals — distinct page_category per tab
+  usePageView(activeTab === "ghost" ? "shop_ghost" : "shop");
+  useScrollDepth(activeTab === "ghost" ? "shop_ghost" : "shop");
+  useTimeOnPage(activeTab === "ghost" ? "shop_ghost" : "shop");
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768);

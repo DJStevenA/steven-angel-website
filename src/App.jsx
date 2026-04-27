@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TrackPlayer from "./components/TrackPlayer";
 import { Link } from "react-router-dom";
 import { trackWhatsAppLead } from "./lib/analytics/events";
-import { useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
+import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
@@ -32,6 +32,7 @@ export default function App() {
   }, []);
 
   // Remarketing signals
+  usePageView("homepage");
   useScrollDepth("homepage");
   useTimeOnPage("homepage");
 
@@ -520,6 +521,7 @@ export default function App() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: data.name, email: data.email, message: "Homepage contact form", source: "home-contact" }),
+                signal: AbortSignal.timeout(15000),
               })
                 .then((r) => r.ok ? r.json() : Promise.reject(r))
                 .then(() => {
