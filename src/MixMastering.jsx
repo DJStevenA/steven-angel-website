@@ -370,178 +370,46 @@ export default function MixMastering() {
           <div style={{ display: "flex", flexWrap: "nowrap", gap: isMobile ? 8 : 16, marginTop: isMobile ? 8 : 16, textAlign: "left" }}>
             {[
               { title: "SEE PACKAGES", sub: "From $35 mastering · Mix + Master from $150 · 4 tiers", btn: "View Pricing", scroll: "pricing", premium: true },
-              { title: "TALK ON WHATSAPP", sub: "Not sure which package fits? Quick reply — usually 5 min", btn: "Message Steven", whatsapp: true, premium: false },
-            ].map((card, i) => {
-              const baseStyle = {
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: 6,
-                padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
-                background: card.premium ? "linear-gradient(135deg, #0a0a20, #0d0418)" : "#000",
-                border: card.premium ? `2px solid ${CYAN}` : "1px solid #141420",
-                borderRadius: 10,
-                boxShadow: card.premium ? "0 0 40px rgba(0,229,255,0.12)" : "none",
-                textDecoration: "none",
-                color: "#fff",
-                cursor: "pointer",
-              };
-              const handle = (e) => {
-                if (card.scroll) {
+              { title: "LISTEN TO MY WORK", sub: "Hear the Hernan Cattaneo + Dole & Kom masters before / after", btn: "Hear Examples", scroll: "examples", premium: false },
+            ].map((card, i) => (
+              <a
+                key={i}
+                href="#"
+                onClick={(e) => {
                   e.preventDefault();
                   const el = document.getElementById(card.scroll);
                   if (el) el.scrollIntoView({ behavior: "smooth" });
-                } else if (card.whatsapp) {
-                  trackWhatsAppLead("MM", "mix_master_hero");
-                }
-              };
-              const inner = (
-                <>
-                  <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
-                    {card.title}
-                  </div>
-                  <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
-                    {card.sub}
-                  </div>
-                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
-                    {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
-                  </div>
-                </>
-              );
-              return card.whatsapp ? (
-                <a key={i} href={BOOKING_WHATSAPP} target="_blank" rel="noopener noreferrer" onClick={handle} style={baseStyle}>{inner}</a>
-              ) : (
-                <a key={i} href="#" onClick={handle} style={baseStyle}>{inner}</a>
-              );
-            })}
-          </div>
-
-          {/* Listen CTA */}
-          <div style={{ textAlign: "center", marginTop: 24 }}>
-            <a
-              href="#examples"
-              onClick={(e) => { e.preventDefault(); document.getElementById("examples")?.scrollIntoView({ behavior: "smooth" }); }}
-              style={{
-                fontFamily: "Barlow Condensed, sans-serif",
-                fontWeight: 700,
-                fontSize: 13,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: CYAN,
-                textDecoration: "none",
-                opacity: 0.85,
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.textDecoration = "underline"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.textDecoration = "none"; }}
-            >
-              Hear Before / After →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ PRICING ═══ */}
-      <section id="pricing" style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ ...label(CYAN), marginBottom: 12 }}>Packages</div>
-            <h2 style={{ ...heading(isMobile ? 32 : 44), color: "#fff", marginBottom: 12 }}>Pick What You Need</h2>
-            <p style={{ ...body, maxWidth: 560, margin: "0 auto" }}>
-              All packages deliver a 16-bit WAV master + 320kbps MP3, with 2 revisions included.
-            </p>
-          </div>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
-            gap: isMobile ? 16 : 20,
-          }}>
-            {PACKAGES.map((pkg) => (
-              <div
-                key={pkg.id}
+                }}
                 style={{
-                  padding: isMobile ? "24px 20px" : "28px 24px",
-                  background: "linear-gradient(180deg, #0a0a14, #04040f)",
-                  border: `1px solid rgba(0,229,255,0.18)`,
-                  borderRadius: 14,
-                  display: "flex", flexDirection: "column",
-                  position: "relative",
-                  transition: "transform 0.15s, box-shadow 0.15s, border-color 0.15s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.borderColor = `${CYAN}55`;
-                  e.currentTarget.style.boxShadow = `0 8px 32px rgba(0,229,255,0.12)`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.borderColor = "rgba(0,229,255,0.18)";
-                  e.currentTarget.style.boxShadow = "none";
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                  padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
+                  background: card.premium ? "linear-gradient(135deg, #0a0a20, #0d0418)" : "#000",
+                  border: card.premium ? `2px solid ${CYAN}` : "1px solid #141420",
+                  borderRadius: 10,
+                  boxShadow: card.premium ? "0 0 40px rgba(0,229,255,0.12)" : "none",
+                  textDecoration: "none",
+                  color: "#fff",
+                  cursor: "pointer",
                 }}
               >
-                <div style={{ ...heading(22), color: "#fff", marginBottom: 8 }}>{pkg.name}</div>
-                <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 14 }}>
-                  {pkg.stems} · {pkg.delivery}
+                <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                  {card.title}
                 </div>
-
-                <div style={{
-                  ...heading(isMobile ? 36 : 44),
-                  color: CYAN,
-                  marginBottom: 16,
-                  letterSpacing: "0.01em",
-                }}>
-                  ${pkg.price}
+                <div style={{ fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                  {card.sub}
                 </div>
-
-                <ul style={{
-                  listStyle: "none", padding: 0, margin: "0 0 20px",
-                  display: "flex", flexDirection: "column", gap: 8, flex: 1,
-                }}>
-                  {pkg.bullets.map((b, i) => (
-                    <li key={i} style={{
-                      ...body, fontSize: 13, paddingLeft: 18, position: "relative",
-                      color: "rgba(255,255,255,0.8)",
-                    }}>
-                      <span style={{ position: "absolute", left: 0, color: CYAN }}>✓</span>
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={() => handleBook(pkg)}
-                  disabled={bookingState[pkg.id] === "loading"}
-                  style={{
-                    padding: "12px 18px",
-                    background: `linear-gradient(135deg, ${CYAN}, ${PURPLE})`,
-                    color: "#000", border: "none", borderRadius: 8,
-                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
-                    fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase",
-                    cursor: bookingState[pkg.id] === "loading" ? "wait" : "pointer",
-                    opacity: bookingState[pkg.id] === "loading" ? 0.6 : 1,
-                  }}
-                >
-                  {bookingState[pkg.id] === "loading" ? "..." : `Book — $${pkg.price}`}
-                </button>
-                {bookingState[pkg.id] === "error" && (
-                  <div style={{ ...body, color: "#ff6b6b", fontSize: 12, marginTop: 8, textAlign: "center" }}>
-                    Couldn't start checkout. Try again or message on WhatsApp.
-                  </div>
-                )}
-              </div>
+                <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
+                  {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
+                </div>
+              </a>
             ))}
-          </div>
-
-          <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.45)", textAlign: "center", marginTop: 28 }}>
-            Up-front payment via secure checkout. Files delivered within turnaround time once received. Need more than 100 stems?{" "}
-            <a href={BOOKING_WHATSAPP} target="_blank" rel="noopener noreferrer"
-              onClick={() => trackWhatsAppLead("MM", "mix_master_pricing_overflow")}
-              style={{ color: CYAN, textDecoration: "underline" }}>
-              Contact Steven
-            </a>.
           </div>
         </div>
       </section>
+
 
       {/* ═══ HOW IT WORKS ═══ */}
       <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
@@ -675,6 +543,109 @@ export default function MixMastering() {
         </div>
       </section>
 
+      {/* ═══ PRICING ═══ */}
+      <section id="pricing" style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ ...label(CYAN), marginBottom: 12 }}>Packages</div>
+            <h2 style={{ ...heading(isMobile ? 32 : 44), color: "#fff", marginBottom: 12 }}>Pick What You Need</h2>
+            <p style={{ ...body, maxWidth: 560, margin: "0 auto" }}>
+              All packages deliver a 16-bit WAV master + 320kbps MP3, with 2 revisions included.
+            </p>
+          </div>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(4, 1fr)",
+            gap: isMobile ? 16 : 20,
+          }}>
+            {PACKAGES.map((pkg) => (
+              <div
+                key={pkg.id}
+                style={{
+                  padding: isMobile ? "24px 20px" : "28px 24px",
+                  background: "linear-gradient(180deg, #0a0a14, #04040f)",
+                  border: `1px solid rgba(0,229,255,0.18)`,
+                  borderRadius: 14,
+                  display: "flex", flexDirection: "column",
+                  position: "relative",
+                  transition: "transform 0.15s, box-shadow 0.15s, border-color 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.borderColor = `${CYAN}55`;
+                  e.currentTarget.style.boxShadow = `0 8px 32px rgba(0,229,255,0.12)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.borderColor = "rgba(0,229,255,0.18)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <div style={{ ...heading(22), color: "#fff", marginBottom: 8 }}>{pkg.name}</div>
+                <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 14 }}>
+                  {pkg.stems} · {pkg.delivery}
+                </div>
+
+                <div style={{
+                  ...heading(isMobile ? 36 : 44),
+                  color: CYAN,
+                  marginBottom: 16,
+                  letterSpacing: "0.01em",
+                }}>
+                  ${pkg.price}
+                </div>
+
+                <ul style={{
+                  listStyle: "none", padding: 0, margin: "0 0 20px",
+                  display: "flex", flexDirection: "column", gap: 8, flex: 1,
+                }}>
+                  {pkg.bullets.map((b, i) => (
+                    <li key={i} style={{
+                      ...body, fontSize: 13, paddingLeft: 18, position: "relative",
+                      color: "rgba(255,255,255,0.8)",
+                    }}>
+                      <span style={{ position: "absolute", left: 0, color: CYAN }}>✓</span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handleBook(pkg)}
+                  disabled={bookingState[pkg.id] === "loading"}
+                  style={{
+                    padding: "12px 18px",
+                    background: `linear-gradient(135deg, ${CYAN}, ${PURPLE})`,
+                    color: "#000", border: "none", borderRadius: 8,
+                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                    fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase",
+                    cursor: bookingState[pkg.id] === "loading" ? "wait" : "pointer",
+                    opacity: bookingState[pkg.id] === "loading" ? 0.6 : 1,
+                  }}
+                >
+                  {bookingState[pkg.id] === "loading" ? "..." : `Book — $${pkg.price}`}
+                </button>
+                {bookingState[pkg.id] === "error" && (
+                  <div style={{ ...body, color: "#ff6b6b", fontSize: 12, marginTop: 8, textAlign: "center" }}>
+                    Couldn't start checkout. Try again or message on WhatsApp.
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.45)", textAlign: "center", marginTop: 28 }}>
+            Up-front payment via secure checkout. Files delivered within turnaround time once received. Need more than 100 stems?{" "}
+            <a href={BOOKING_WHATSAPP} target="_blank" rel="noopener noreferrer"
+              onClick={() => trackWhatsAppLead("MM", "mix_master_pricing_overflow")}
+              style={{ color: CYAN, textDecoration: "underline" }}>
+              Contact Steven
+            </a>.
+          </div>
+        </div>
+      </section>
+
       {/* ═══ FAQ ═══ */}
       <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ maxWidth: 760, margin: "0 auto" }}>
@@ -764,6 +735,40 @@ export default function MixMastering() {
       </section>
 
       <Footer />
+
+      {/* ═══ Floating WhatsApp ═══ */}
+      <a
+        href={BOOKING_WHATSAPP}
+        onClick={() => { trackWhatsAppLead("MM", "mix_master_floating"); }}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Message Steven on WhatsApp"
+        style={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+          zIndex: 999,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          background: "#1a7a42",
+          color: "#fff",
+          fontFamily: "Barlow Condensed, sans-serif",
+          fontWeight: 700,
+          fontSize: isMobile ? 11 : 13,
+          letterSpacing: "0.15em",
+          padding: "10px 20px",
+          borderRadius: 50,
+          textDecoration: "none",
+          boxShadow: "0 4px 20px rgba(37,211,102,0.5)",
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.106 1.51 5.833L.057 23.054a.75.75 0 00.92.92l5.222-1.453A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 01-4.98-1.366l-.357-.214-3.706 1.032 1.032-3.706-.214-.357A9.75 9.75 0 1112 21.75z"/>
+        </svg>
+        WhatsApp
+      </a>
     </div>
   );
 }
