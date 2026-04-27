@@ -370,6 +370,73 @@ export default function ShopPage() {
           </section>
         )}
 
+        {/* ═══ Mix & Mastering cross-promote (templates tab only) ═══ */}
+        {activeTab === "shop" && (
+          <section style={{ padding: isMobile ? "0 20px 60px" : "0 60px 80px" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <Link
+                to="/mix-mastering"
+                style={{
+                  display: "block",
+                  textDecoration: "none",
+                  padding: isMobile ? "28px 24px" : "40px 48px",
+                  background: "linear-gradient(135deg, rgba(0,229,255,0.12) 0%, rgba(187,134,252,0.12) 100%), #04040f",
+                  border: "1px solid rgba(0,229,255,0.3)",
+                  borderRadius: 14,
+                  display: "flex",
+                  flexDirection: isMobile ? "column" : "row",
+                  alignItems: isMobile ? "flex-start" : "center",
+                  justifyContent: "space-between",
+                  gap: isMobile ? 18 : 32,
+                  transition: "transform 0.15s, border-color 0.15s, box-shadow 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.borderColor = "rgba(0,229,255,0.5)";
+                  e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,229,255,0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.borderColor = "rgba(0,229,255,0.3)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 700, fontSize: 11,
+                    letterSpacing: "0.3em", textTransform: "uppercase", color: "#00E5FF", marginBottom: 8,
+                  }}>
+                    Mix &amp; Master Services
+                  </div>
+                  <div style={{
+                    fontFamily: "Barlow Condensed, sans-serif", fontWeight: 900, fontSize: isMobile ? 24 : 32,
+                    textTransform: "uppercase", letterSpacing: "0.02em", color: "#fff",
+                    lineHeight: 1.1, marginBottom: 8,
+                  }}>
+                    Get Your Track Club Ready
+                  </div>
+                  <div style={{
+                    fontFamily: "DM Sans, sans-serif", fontSize: isMobile ? 14 : 15,
+                    color: "rgba(255,255,255,0.7)", lineHeight: 1.6,
+                  }}>
+                    Professional mastering from <strong style={{ color: "#00E5FF" }}>$35</strong>. Trusted by Hernan Cattaneo &amp; Dole &amp; Kom. 3-day turnaround, 16-bit WAV + HQ MP3.
+                  </div>
+                </div>
+                <div style={{
+                  padding: isMobile ? "12px 24px" : "14px 28px",
+                  background: "linear-gradient(135deg, #00E5FF, #BB86FC)",
+                  color: "#000", borderRadius: 8,
+                  fontFamily: "Barlow Condensed, sans-serif", fontWeight: 800,
+                  fontSize: 13, letterSpacing: "0.15em", textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                }}>
+                  Master My Track →
+                </div>
+              </Link>
+            </div>
+          </section>
+        )}
+
         {/* ═══ FAQ / Trust Section (templates tab only) ═══ */}
         {activeTab === "shop" && (
           <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG_ALT, borderTop: "1px solid #0d0d0d" }}>
