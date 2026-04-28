@@ -4,7 +4,7 @@
  * Electronic Press Kit for Steven Angel's duo "The Angels".
  * Single-page: Hero, Bio, Set (Miami), Two Videos, Instagram, Newsletter, Contact.
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Nav from "./Nav.jsx";
 import Footer from "./Footer.jsx";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
@@ -47,15 +47,92 @@ const InstagramIcon = ({ size = 22 }) => (
   </svg>
 );
 
+/**
+ * LazyYouTube — facade pattern.
+ * Renders only a poster + play button until the user clicks. Avoids loading
+ * ~800KB of YouTube player JS/CSS on initial page load.
+ */
 function LazyYouTube({ id, title }) {
+  const [activated, setActivated] = useState(false);
+  if (activated) {
+    return (
+      <iframe
+        src={`https://www.youtube.com/embed/${id}?autoplay=1`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+      />
+    );
+  }
   return (
-    <iframe
-      src={`https://www.youtube.com/embed/${id}`}
-      title={title}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-      loading="lazy"
-      style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+    <button
+      type="button"
+      onClick={() => setActivated(true)}
+      aria-label={`Play ${title}`}
+      style={{
+        position: "absolute", inset: 0,
+        padding: 0, margin: 0, border: "none", cursor: "pointer",
+        backgroundImage: `url("https://i.ytimg.com/vi/${id}/hqdefault.jpg")`,
+        backgroundSize: "cover", backgroundPosition: "center",
+        backgroundColor: "#000",
+      }}
+    >
+      <span aria-hidden="true" style={{
+        position: "absolute", top: "50%", left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 68, height: 48,
+        background: "rgba(0,0,0,0.75)", borderRadius: 12,
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <span style={{
+          width: 0, height: 0,
+          borderTop: "12px solid transparent",
+          borderBottom: "12px solid transparent",
+          borderLeft: "20px solid white",
+          marginLeft: 4,
+        }} />
+      </span>
+    </button>
+  );
+}
+
+/**
+ * LazyAutoVideo — same API as <video src={...} autoPlay …> but only sets
+ * `src` + `preload="metadata"` once the element scrolls within 200px of the
+ * viewport. Below that, src is undefined and preload="none", so the browser
+ * never starts the download. Saves multi-MB on initial load when the video
+ * is below the fold.
+ */
+function LazyAutoVideo({ src, ...rest }) {
+  const ref = useRef(null);
+  const [load, setLoad] = useState(false);
+  useEffect(() => {
+    if (load) return;
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setLoad(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setLoad(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [load]);
+  return (
+    <video
+      ref={ref}
+      {...rest}
+      src={load ? src : undefined}
+      preload={load ? "metadata" : "none"}
     />
   );
 }
@@ -70,18 +147,9 @@ export default function TheAngels() {
     return () => window.removeEventListener("resize", h);
   }, []);
 
-  // Inject Instagram embed script for any <blockquote class="instagram-media"> on page
-  useEffect(() => {
-    const existing = document.querySelector('script[src="//www.instagram.com/embed.js"]');
-    if (existing) {
-      if (window.instgrm?.Embeds?.process) window.instgrm.Embeds.process();
-      return;
-    }
-    const s = document.createElement("script");
-    s.src = "//www.instagram.com/embed.js";
-    s.async = true;
-    document.body.appendChild(s);
-  }, []);
+  // (Removed Instagram embed.js loader — no <blockquote class="instagram-media">
+  //  exists on this page; the section is a 4-image grid linking to the profile.
+  //  Loading embed.js was dead weight, ~33KB + main-thread cost.)
 
   // Remarketing
   usePageView("the-angels");
@@ -367,9 +435,9 @@ export default function TheAngels() {
           }}>
             {/* Desktop only: blurred backdrop fills the landscape sides */}
             {!isMobile && (
-              <video
+              <LazyAutoVideo
                 src={SPAZIO_MIAMI_VIDEO}
-                autoPlay muted loop playsInline preload="metadata"
+                autoPlay muted loop playsInline
                 aria-hidden="true"
                 style={{
                   position: "absolute", inset: 0,
@@ -382,14 +450,13 @@ export default function TheAngels() {
               />
             )}
             {/* Foreground: vertical reel on mobile (cover), centered on desktop (contain) */}
-            <video
+            <LazyAutoVideo
               src={SPAZIO_MIAMI_VIDEO}
               autoPlay
               muted
               loop
               playsInline
               controls
-              preload="metadata"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -444,7 +511,7 @@ export default function TheAngels() {
                   controls
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
               </div>
