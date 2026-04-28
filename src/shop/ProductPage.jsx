@@ -252,7 +252,10 @@ export default function ProductPage() {
   const isPurple = product.badgeColor === "purple";
   const accentColor = isPurple ? PURPLE : CYAN;
   const accentRgba = isPurple ? "187,134,252" : "0,229,255";
-  const hasVideo = !!product.previewVideoUrl;
+  const youtubeId = product.previewVideoYouTubeId || null;
+  const hasVideo = !!product.previewVideoUrl || !!youtubeId;
+  const videoThumb = product.previewVideoThumb
+    || (youtubeId ? `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg` : null);
   const specs = getProductSpecs(product);
 
   const relatedProducts = getOrderedProducts()
@@ -371,28 +374,45 @@ export default function ProductPage() {
                   onClick={() => !videoPlaying && setVideoPlaying(true)}
                 >
                   {videoPlaying ? (
-                    <video
-                      src={product.previewVideoUrl}
-                      controls
-                      autoPlay
-                      playsInline
-                      preload="metadata"
-                      onPlay={handleVideoPlay}
-                      onTimeUpdate={handleVideoTimeUpdate}
-                      onEnded={handleVideoEnded}
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: product.previewVideoAspect === "9/16" ? "contain" : "cover",
-                      }}
-                    />
+                    youtubeId ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1`}
+                        title={product.previewVideoCaption || product.name}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        onLoad={handleVideoPlay}
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                          border: "none",
+                        }}
+                      />
+                    ) : (
+                      <video
+                        src={product.previewVideoUrl}
+                        controls
+                        autoPlay
+                        playsInline
+                        preload="metadata"
+                        onPlay={handleVideoPlay}
+                        onTimeUpdate={handleVideoTimeUpdate}
+                        onEnded={handleVideoEnded}
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: product.previewVideoAspect === "9/16" ? "contain" : "cover",
+                        }}
+                      />
+                    )
                   ) : (
                     <>
-                      {product.previewVideoThumb && (
+                      {videoThumb && (
                         <img
-                          src={product.previewVideoThumb}
+                          src={videoThumb}
                           alt={product.previewVideoCaption || product.name}
                           loading="lazy"
                           style={{

@@ -151,6 +151,8 @@ export const PRODUCTS = [
     ],
     image: "/shop/balkan-boy-cover.webp",
     previewVideoUrl: null,
+    previewVideoYouTubeId: "LHKJm6HarQA",
+    previewVideoCaption: "Balkan Boy — Steven Angel",
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/balkan-boy.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/2025/Ableton Template/Balkan Boy/Balkan Boy_Ableton Template By Steven Angel.zip",
