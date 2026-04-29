@@ -18,7 +18,7 @@ const PURPLE = "#BB86FC";
 const BG = "#080810";
 const SHADOW_CYAN = "0 0 24px rgba(0,229,255,0.35)";
 const SHADOW_PURPLE = "0 0 24px rgba(187,134,252,0.35)";
-const WHATSAPP_LINK = "https://wa.me/972523561353?text=Hi%20Steven%2C%20I%E2%80%99m%20interested%20in%20Ableton%20lessons";
+const WHATSAPP_LINK = "https://wa.me/972523561353?text=" + encodeURIComponent("I'm interested in Production, Mix & Mastering Lessons");
 
 const heading = (sz) => ({
   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",

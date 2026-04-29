@@ -14,7 +14,7 @@ const BG = "#080810";
 
 /* ─── External Links ─── */
 const WHATSAPP_LINK =
-  "https://wa.me/972523561353?text=Hi%20Steven%2C%20I'm%20interested%20in%20ghost%20production.%20Here's%20my%20reference%20track%3A%20";
+  "https://wa.me/972523561353?text=" + encodeURIComponent("Hi steve, I'm interested in your Production Services.");
 
 /* ─── Shadow Colors ─── */
 const SHADOW_CYAN = "rgba(0,229,255,0.4)";

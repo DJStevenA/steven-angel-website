@@ -291,12 +291,9 @@ export default function InquiryForm({
                 autoComplete="email"
               />
 
-              {autoMessage && (
-                <div style={messagePreview}>
-                  <div style={messagePreviewLabel}>When you submit, this goes to Steven</div>
-                  <div style={{ fontStyle: "italic" }}>"{autoMessage}"</div>
-                </div>
-              )}
+              {/* Auto-message preview removed per Steven 2026-04-29 — autoMessage
+                  still travels in the POST body to /api/inquiry; just not shown
+                  to the user upfront so the form feels lighter / less wordy. */}
 
               <button type="submit" style={ctaPrimary} disabled={status === "sending"}>
                 {status === "sending" ? "Sending…" : "Send →"}

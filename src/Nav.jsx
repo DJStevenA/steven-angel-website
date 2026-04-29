@@ -73,6 +73,7 @@ export default function Nav() {
       <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
         {[
           { label: "Ghost", to: "/ghost" },
+          { label: "Mix & Master", to: "/mix-mastering" },
           { label: "Lessons", to: "/lessons" },
           { label: "Shop", to: "/shop" },
         ].map(({ label, to }) => (

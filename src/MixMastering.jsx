@@ -121,7 +121,7 @@ const FAQS = [
   },
 ];
 
-const BOOKING_WHATSAPP = "https://wa.me/972523561353?text=Hi%20Steven%2C%20I'm%20interested%20in%20mix%20%26%20mastering.";
+const BOOKING_WHATSAPP = "https://wa.me/972523561353?text=" + encodeURIComponent("I'm interested in Mix & Mastering");
 
 /* ── A/B audio comparison player ── */
 function ABComparison({ example, isMobile }) {

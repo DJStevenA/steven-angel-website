@@ -163,6 +163,7 @@ export default function App() {
             }}>
               {[
                 { title: "GHOST PRODUCTION & DEMO FINISHING", sub: "For artists who need Label-Ready tracks", btn: "Get Your Track", to: "/ghost", premium: true },
+                { title: "MIX & MASTERING", sub: "Get your track club ready — from $35", btn: "Start Mastering", to: "/mix-mastering", premium: false },
                 { title: "PRODUCTION, MIX & MASTERING LESSONS", sub: "For producers who want to master it themselves", btn: "Start Learning", to: "/lessons", premium: false },
                 { title: "TEMPLATES & MASTERCLASS SHOP", sub: "For producers building their toolkit", btn: "Browse Shop", to: "/shop", premium: false },
               ].map((card, i) => (
@@ -473,7 +474,7 @@ export default function App() {
 
           {/* WhatsApp Button */}
           <a
-            href="https://wa.me/972523561353"
+            href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi steve, I'd love to connect about your services")}
             target="_blank"
             rel="noreferrer"
             onClick={() => { trackWhatsAppLead('GP', 'homepage_contact'); if (window.clarity) window.clarity("event", "homepageWhatsAppClick"); }}
@@ -520,7 +521,7 @@ export default function App() {
               fetch("https://ghost-backend-production-adb6.up.railway.app/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: data.name, email: data.email, message: "Homepage contact form", source: "home-contact" }),
+                body: JSON.stringify({ name: data.name, email: data.email, message: "Hi Steve, I'd love to connect about your services. Reaching out from steven-angel.com.", source: "home-contact" }),
                 signal: AbortSignal.timeout(15000),
               })
                 .then((r) => r.ok ? r.json() : Promise.reject(r))
@@ -597,6 +598,41 @@ export default function App() {
           &copy; {new Date().getFullYear()} Steven Angel — All Rights Reserved
         </span>
       </footer>
+
+      {/* ═══ Floating WhatsApp ═══ */}
+      <a
+        href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi steve, I'd love to connect about your services")}
+        target="_blank"
+        rel="noreferrer"
+        onClick={() => { trackWhatsAppLead("GP", "homepage_floating"); if (window.clarity) window.clarity("event", "homepageWhatsAppFloatingClick"); }}
+        aria-label="Message on WhatsApp"
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          zIndex: 9998,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 8,
+          background: "#1a7a42",
+          color: "#fff",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+          fontWeight: 700,
+          fontSize: 13,
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          padding: "12px 18px",
+          borderRadius: 50,
+          textDecoration: "none",
+          boxShadow: "0 0 24px rgba(37,211,102,0.4)",
+        }}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.917 1.044 5.591 2.778 7.667L.96 23.487l3.96-1.04C6.835 23.47 9.342 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.418 0-4.658-.694-6.558-1.893l-.376-.225-2.348.616.627-2.29-.247-.393C1.894 16.072 1.2 14.102 1.2 12 1.2 6.038 6.038 1.2 12 1.2S22.8 6.038 22.8 12 17.962 22 12 22z" />
+        </svg>
+        WhatsApp
+      </a>
 
     </div>
   );
