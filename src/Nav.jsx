@@ -3,20 +3,31 @@
  * Homepage (App.jsx) renders its own identical inline nav; this component
  * is for every other page so the nav stays consistent site-wide.
  */
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const CYAN = "#00E5FF";
 
-const goBack = () => {
-  if (window.history.length > 2) {
-    window.history.back();
-  } else {
-    window.location.href = '/';
-  }
-};
-
 export default function Nav() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Hierarchical "up" navigation — drops the last path segment, regardless
+  // of where the user came from. Examples:
+  //   /ghost                 → /
+  //   /ghost/custom          → /ghost
+  //   /ghost/finish-demo     → /ghost
+  //   /shop/balkan-boy       → /shop
+  //   /shop/login            → /shop
+  //   /mix-mastering/upload  → /mix-mastering
+  const goUp = () => {
+    const parts = location.pathname.split("/").filter(Boolean);
+    if (parts.length <= 1) {
+      navigate("/");
+    } else {
+      parts.pop();
+      navigate("/" + parts.join("/"));
+    }
+  };
 
   return (
     <nav style={{
@@ -36,8 +47,8 @@ export default function Nav() {
       {/* Logo + back arrow */}
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <button
-          onClick={goBack}
-          aria-label="Go back"
+          onClick={goUp}
+          aria-label="Go up one level"
           style={{
             background: "none",
             border: "none",
