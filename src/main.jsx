@@ -8,6 +8,8 @@ import ShopStickyPlayer from "./shop/ShopStickyPlayer.jsx";
 import { trackPageView } from "./lib/analytics/events";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
+const GhostCustom = lazy(() => import("./GhostCustom.jsx"));
+const GhostFinishDemo = lazy(() => import("./GhostFinishDemo.jsx"));
 const Lessons = lazy(() => import("./Lessons.jsx"));
 const TheAngels = lazy(() => import("./TheAngels.jsx"));
 const MixMastering = lazy(() => import("./MixMastering.jsx"));
@@ -54,6 +56,8 @@ function PageTitle() {
     const titles = {
       "/": "Steven Angel — Afro House DJ, Producer & Ableton Mentor",
       "/ghost": "Afro House & Tech House Ghost Producer | Steven Angel",
+      "/ghost/custom": "Custom Afro House Ghost Production | Steven Angel",
+      "/ghost/finish-demo": "Demo Finishing — Afro House Ghost Production | Steven Angel",
       "/lessons": "Ableton Lessons by a Moblack & MTGD Artist | Steven Angel",
       "/the-angels": "The Angels — Afro / Latin House Duo | EPK",
       "/mix-mastering": "Professional Mix & Mastering from $35 | Steven Angel",
@@ -63,6 +67,8 @@ function PageTitle() {
     const descriptions = {
       "/": "DJ, ghost producer and Ableton mentor. Released on Moblack, MTGD & Sony. Played by Hugel & Claptone at Pacha Ibiza. Ghost production, lessons and templates.",
       "/ghost": "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.",
+      "/ghost/custom": "Custom Afro House ghost production for DJs and artists. Released on MTGD, Moblack, Godeeva. Hugel & Claptone played my work. Full track from $800 — 5-7 day delivery.",
+      "/ghost/finish-demo": "Send me your Afro House demo — get back a label-ready full track in 3-5 days. From $300. Released on MTGD, Moblack, Godeeva.",
       "/lessons": "1-on-1 Ableton lessons from a producer released on Moblack, MTGD & Sony. Afro House, Latin House, Tech House & Indie Dance. From $30 intro session.",
       "/the-angels": "The Angels — Afro / Latin House / Tribal duo. 10M+ streams, Beatport Top 10. Played by Hugel, Claptone, Sofi Tukker. Released on MTGD, Moblack, Sony.",
       "/mix-mastering": "Professional online mastering from $35. Trusted by Hernan Cattaneo & Dole & Kom. Mix + Master from $150. 3-day turnaround. Afro House, Melodic Techno, Electronic.",
@@ -97,7 +103,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Suspense fallback={<div style={{ background: "#000", minHeight: "100vh" }} />}>
           <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/ghost" element={<Ghost />} />
+            {/* /ghost shares the player provider — the catalog needs it to play previews */}
+            <Route element={<ShopLayout />}>
+              <Route path="/ghost" element={<Ghost />} />
+            </Route>
+            <Route path="/ghost/custom" element={<GhostCustom />} />
+            <Route path="/ghost/finish-demo" element={<GhostFinishDemo />} />
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/the-angels" element={<TheAngels />} />
             <Route path="/mix-mastering" element={<MixMastering />} />

@@ -6,6 +6,7 @@ export const CONVERSION_LABELS = {
   whatsapp_lead: 'Ja88CKuduZ4cEIXP6twD',   // "WhatsApp Click" conversion action
   purchase: 'tp6gCKWduZ4cEIXP6twD',          // "Shop Purchase (Templates/Masterclass)"
   begin_checkout: '5j5eCKT596IcEIXP6twD',    // "Shop Begin Checkout (Templates/Masterclass)" — created 2026-04-26
+  lead_form_submit: '',                       // "Lead Form Submit" — pending Marketing creation (brief 2026-04-29-lead-form-submit-conversion)
 };
 
 export const WHATSAPP_VALUES = {

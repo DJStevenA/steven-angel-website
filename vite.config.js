@@ -98,6 +98,10 @@ function staticSeoPages() {
       .replace(
         /<meta name="twitter:image" content="[^"]*"\s*\/>/,
         `<meta name="twitter:image" content="${replacements.ogImage}" />`
+      )
+      .replace(
+        /<link rel="preload" as="image" type="image\/webp" href="[^"]*"[^>]*\/>/,
+        `<link rel="preload" as="image" type="image/webp" href="${replacements.lcpImage || '/images/dj-hero.webp'}" fetchpriority="high" />`
       );
 
   const injectJsonLd = (html, id, schema) =>
@@ -122,6 +126,7 @@ function staticSeoPages() {
             'Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.',
           canonical: `${siteUrl}/ghost`,
           ogImage: `${siteUrl}/images/dj-hero-ghost.webp`,
+          lcpImage: '/images/dj-hero-ghost.webp', // /ghost-specific preload override
         }),
         'ghost-service-jsonld',
         JSON.parse(ghostSchema)
@@ -188,5 +193,28 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+  },
+  // Dev-only proxy: forwards Railway-bound requests through the Vite dev
+  // server so localhost previews can call the production backend without
+  // tripping its CORS allowlist (origin becomes localhost-via-proxy → no
+  // browser CORS check). Has no effect on production builds.
+  server: {
+    proxy: {
+      '/ghost/tracks': {
+        target: 'https://ghost-backend-production-adb6.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+      },
+      '/shop/media': {
+        target: 'https://ghost-backend-production-adb6.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+      },
+      '/the-angels/instagram': {
+        target: 'https://ghost-backend-production-adb6.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
   },
 })

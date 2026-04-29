@@ -2,6 +2,8 @@ import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import GhostDiscountPopup from "./GhostDiscountPopup.jsx";
+import GhostCatalog from "./shop/ghost/GhostCatalog.jsx";
+import InquiryForm from "./components/InquiryForm.jsx";
 import { trackWhatsAppLead } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
@@ -329,6 +331,7 @@ function GhostPage() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [openFaq, setOpenFaq] = useState(null);
   const [howItWorksPackage, setHowItWorksPackage] = useState(null);
+  const [inquiryFormOpen, setInquiryFormOpen] = useState(false);
 
   // Remarketing signals
   usePageView("ghost");
@@ -745,39 +748,42 @@ function GhostPage() {
               Your Vision. My Sound.
             </div>
 
-            {/* Primary CTAs — card style */}
-            <div style={{ display: "flex", flexWrap: "nowrap", gap: isMobile ? 8 : 16, marginTop: isMobile ? 24 : 36, textAlign: "left" }}>
+            {/* 3-CTA bar — Browse / Custom / Finish Demo */}
+            <div style={{ display: "flex", flexWrap: isMobile ? "wrap" : "nowrap", gap: isMobile ? 10 : 16, marginTop: isMobile ? 24 : 36, justifyContent: "center" }}>
               {[
-                { title: "BUY READY MADE TRACK", sub: "Pre-made productions ready to release under your name", btn: "Browse Catalog", href: "/shop?tab=ghost", premium: true },
-                { title: "ORDER CUSTOM TRACK", sub: "Your vision, my production — from scratch", btn: "Start The Process", scroll: "process", premium: false },
+                { title: "Browse Tracks ↓", sub: "From €39", href: "#catalog", filled: true,
+                  onClick: (e) => { e.preventDefault(); const el = document.getElementById("catalog"); if (el) el.scrollIntoView({ behavior: "smooth" }); } },
+                { title: "Custom Made →", sub: "From $800", href: "/ghost/custom" },
+                { title: "Finish My Demo →", sub: "From $300", href: "/ghost/finish-demo" },
               ].map((card, i) => (
                 <a
                   key={i}
-                  href={card.href || "#"}
-                  onClick={card.scroll ? (e) => { e.preventDefault(); const el = document.getElementById(card.scroll); if (el) el.scrollIntoView({ behavior: "smooth" }); } : undefined}
+                  href={card.href}
+                  onClick={card.onClick}
                   style={{
-                    flex: 1,
+                    flex: isMobile ? "1 1 100%" : 1,
                     display: "flex",
                     flexDirection: "column",
-                    gap: 6,
-                    padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
-                    background: card.premium ? "linear-gradient(135deg, #0a0a20, #0d0418)" : BG,
-                    border: card.premium ? `2px solid ${CYAN}` : "1px solid #141420",
+                    alignItems: "center",
+                    gap: 4,
+                    padding: isMobile ? "14px 18px" : "18px 24px",
+                    background: card.filled ? `linear-gradient(135deg, ${CYAN}, #00b8d4)` : "transparent",
+                    border: card.filled ? "none" : `2px solid ${CYAN}`,
                     borderRadius: 10,
-                    boxShadow: card.premium ? "0 0 40px rgba(0,229,255,0.12)" : "none",
+                    boxShadow: card.filled ? `0 0 28px rgba(0,229,255,0.5)` : `0 0 24px rgba(0,229,255,0.4)`,
                     textDecoration: "none",
-                    color: "#fff",
+                    color: card.filled ? "#000" : CYAN,
                     cursor: "pointer",
+                    transition: "transform 0.2s",
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
                 >
-                  <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800, fontSize: isMobile ? 12 : 16, textTransform: "uppercase", letterSpacing: "0.03em", color: card.premium ? CYAN : "#fff", lineHeight: 1.2 }}>
+                  <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 14 : 16, textTransform: "uppercase", letterSpacing: "0.15em", lineHeight: 1.1 }}>
                     {card.title}
                   </div>
-                  <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 10 : 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.4, flex: 1 }}>
+                  <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: isMobile ? 11 : 12, opacity: 0.85, fontWeight: 500 }}>
                     {card.sub}
-                  </div>
-                  <div style={{ marginTop: isMobile ? 6 : 12, display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 10 : 13, letterSpacing: "0.15em", textTransform: "uppercase", color: card.premium ? CYAN : "rgba(255,255,255,0.6)" }}>
-                    {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
                   </div>
                 </a>
               ))}
@@ -806,6 +812,22 @@ function GhostPage() {
             </div>
 
           </div>
+        </section>
+
+        {/* ═══ Catalog ═══ */}
+        <section id="catalog" style={{ padding: isMobile ? "40px 0 20px" : "60px 0 30px", background: BG, borderTop: "1px solid #0d0d0d" }}>
+          <div style={{ textAlign: "center", padding: isMobile ? "0 20px 20px" : "0 60px 30px" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN, marginBottom: 10 }}>
+              Ready-Made Tracks
+            </div>
+            <h2 style={{ ...heading(isMobile ? 28 : 40), color: "#fff", marginBottom: 8 }}>
+              Buy a Finished Track
+            </h2>
+            <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.55)", maxWidth: 540, margin: "0 auto" }}>
+              Pre-made productions ready to release under your name. NDA + 100% rights transfer included.
+            </div>
+          </div>
+          <GhostCatalog isMobile={isMobile} />
         </section>
 
         {/* ═══ About Steven ═══ */}
@@ -965,26 +987,6 @@ function GhostPage() {
           </div>
         </section>
 
-        {/* ═══ This Is For You If ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG }}>
-          <div style={{ maxWidth: 700, margin: "0 auto" }}>
-            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 36 }}>
-              This Is For You If...
-            </h2>
-            {[
-              "You want a track that cooks the dance floor",
-              "You want a track that sounds ready for a label release",
-              "You have a vision but not the time or skills to finish it",
-              "You\u2019re serious about your music career and need results",
-            ].map((item) => (
-              <div key={item} style={{ display: "flex", gap: 12, marginBottom: 14, alignItems: "flex-start" }}>
-                <span style={{ color: CYAN, fontWeight: 700, fontSize: 18, lineHeight: 1.4, flexShrink: 0 }}>&#10003;</span>
-                <span style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.8)" }}>{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* ═══ What You Get ═══ */}
         <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 700, margin: "0 auto" }}>
@@ -1011,155 +1013,82 @@ function GhostPage() {
           </div>
         </section>
 
-        {/* ═══ The Process ═══ */}
-        <section id="process" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
-          <div style={{ maxWidth: 700, margin: "0 auto" }}>
-            <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 12 }}>
-              The <span style={{ color: CYAN }}>Process</span>
-            </h2>
-            <div style={{ ...body, textAlign: "center", fontSize: 15, color: "rgba(255,255,255,0.5)", marginBottom: 36 }}>
-              Simple, Direct, And Built To Achieve Full Understanding of Your Needs
-            </div>
-            {[
-              { n: "1", text: "You send me your idea and references. We can also have a Zoom to discuss before we start working." },
-              { n: "2", text: "I make a 90-second demo of the idea. If you like it, we move on. If needed \u2014 I make a new demo until we get it right." },
-              { n: "3", text: "I move on to make the full track \u2014 3 revisions included." },
-              { n: "4", text: "Delivery: label-ready track, stems, MIDI, 16-bit WAV." },
-            ].map(({ n, text }) => (
-              <div key={n} style={{ display: "flex", gap: 16, marginBottom: 22, alignItems: "flex-start" }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: "50%", border: `2px solid ${CYAN}`, display: "flex",
-                  alignItems: "center", justifyContent: "center", flexShrink: 0,
-                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 16, color: CYAN,
-                }}>{n}</div>
-                <span style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.8)", paddingTop: 6 }}>{text}</span>
-              </div>
-            ))}
-
-            {/* Refund guarantee */}
-            <div style={{ marginTop: 20, textAlign: "center" }}>
-              <div style={{ ...body, fontSize: isMobile ? 14 : 15, color: "rgba(255,255,255,0.55)", fontStyle: "italic" }}>
-                Not happy after multiple demos? Full refund. No questions asked.
-              </div>
-              <div style={{ ...body, fontSize: isMobile ? 12 : 13, color: "rgba(255,255,255,0.35)", marginTop: 4 }}>
-                (That's never happened — but the guarantee stands.)
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ Pricing (plain text) ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: BG, borderTop: "1px solid #0d0d0d" }}>
+        {/* ═══ Talk to Steven ═══ */}
+        <section id="contact" style={{ padding: isMobile ? "50px 20px" : "70px 60px", background: "#06060c", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
-            <h2 style={{ ...heading(isMobile ? 28 : 44), marginBottom: 36 }}>
-              Pricing
-            </h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 28 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
-                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Demo Finishing</span>
-                <span style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $300</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
-                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Full Track Production</span>
-                <span style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $800</span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 20px", background: "#04040f", borderRadius: 8, border: "1px solid #141420" }}>
-                <span style={{ ...body, fontSize: 16, color: "#fff", fontWeight: 500 }}>Full Production + Original Full Song</span>
-                <span style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 22, color: CYAN }}>from $1,500</span>
-              </div>
-            </div>
-            <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 28 }}>
-              I take a limited number of projects each month.
-            </div>
-            <button
-              onClick={() => { window.open("https://calendly.com/dj-steven-angel/15-min-zoom", "_blank"); if (window.gtag) window.gtag("event", "book_appointment", { event_category: "calendly", event_label: "ghost_consultation", value: 300, currency: "USD" }); if (window.clarity) window.clarity("event", "ghostCalendlyClick"); }}
-              style={{
-                ...outlineBtn(CYAN, SHADOW_CYAN),
-                display: "inline-flex",
-                justifyContent: "center",
-                padding: "14px 40px",
-                fontSize: 14,
-                letterSpacing: "0.2em",
-              }}
-            >
-              Book a Free Consultation
-            </button>
-          </div>
-        </section>
-
-        {/* ═══ Lead Capture (replaces newsletter) ═══ */}
-        <section style={{ padding: isMobile ? "40px 20px" : "56px 60px", background: "#06060c", borderTop: "1px solid #0d0d0d" }}>
-          <div style={{ maxWidth: 500, margin: "0 auto", textAlign: "center" }}>
             <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN, marginBottom: 10 }}>
-              Contact Us
+              Get in touch
             </div>
-            <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: isMobile ? 22 : 28, lineHeight: 1.15, marginBottom: 20, letterSpacing: "0.02em" }}>
-              Leave Your Details
+            <h2 style={{ ...heading(isMobile ? 30 : 44), color: "#fff", marginBottom: 12 }}>
+              Talk to <span style={{ color: CYAN }}>Steven</span>
+            </h2>
+            <div style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.55)", marginBottom: 32 }}>
+              Got a track you want me to finish, or something custom in mind? Message me directly or leave your details — I reply within 24 hours.
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const form = e.target;
-                const data = Object.fromEntries(new FormData(form));
-                const btn = form.querySelector("button");
-                if (btn) { btn.disabled = true; btn.textContent = "Sending..."; }
-                fetch("https://ghost-backend-production-adb6.up.railway.app/contact", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ name: data.name, email: data.email, message: "Ghost page lead capture", source: "ghost-page-lead" }),
-                  signal: AbortSignal.timeout(15000),
-                })
-                  .then((r) => r.ok ? r.json() : Promise.reject(r))
-                  .then(() => {
-                    if (btn) { btn.textContent = "Thanks! I'll be in touch."; btn.style.background = CYAN; btn.style.color = "#000"; }
-                    form.reset();
-                  })
-                  .catch(() => {
-                    if (btn) { btn.disabled = false; btn.textContent = "Try Again"; }
-                  });
-              }}
-              style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 400, margin: "0 auto" }}
-            >
-              <input
-                name="name"
-                type="text"
-                placeholder="Your name"
-                required
-                style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "13px 14px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }}
-              />
-              <input
-                name="email"
-                type="email"
-                placeholder="Your email"
-                required
-                style={{ background: "#08080f", border: "1px solid #1a1a2e", borderRadius: 6, padding: "13px 14px", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14, outline: "none" }}
-              />
-              <button
-                type="submit"
+            <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", justifyContent: "center", gap: 14, maxWidth: 480, margin: "0 auto" }}>
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackWhatsAppLead("GP", "ghost_contact_section")}
                 style={{
-                  background: `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
-                  color: "#000",
+                  flex: 1,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
+                  background: "#1a7a42",
+                  color: "#fff",
                   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                   fontWeight: 700,
-                  fontSize: 13,
-                  letterSpacing: "0.2em",
+                  fontSize: 14,
+                  letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  padding: "13px 22px",
+                  padding: "14px 24px",
                   borderRadius: 50,
-                  border: "none",
-                  cursor: "pointer",
-                  boxShadow: "0 0 24px rgba(0,229,255,0.4)",
-                  marginTop: 4,
+                  textDecoration: "none",
+                  boxShadow: `0 0 32px ${SHADOW_GREEN}`,
                 }}
               >
-                Send
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.917 1.044 5.591 2.778 7.667L.96 23.487l3.96-1.04C6.835 23.47 9.342 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.418 0-4.658-.694-6.558-1.893l-.376-.225-2.348.616.627-2.29-.247-.393C1.894 16.072 1.2 14.102 1.2 12 1.2 6.038 6.038 1.2 12 1.2S22.8 6.038 22.8 12 17.962 22 12 22z" />
+                </svg>
+                Message on WhatsApp
+              </a>
+              <button
+                type="button"
+                onClick={() => setInquiryFormOpen(true)}
+                style={{
+                  flex: 1,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
+                  background: "transparent",
+                  border: `2px solid ${CYAN}`,
+                  color: CYAN,
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  padding: "14px 24px",
+                  borderRadius: 50,
+                  cursor: "pointer",
+                  boxShadow: `0 0 24px ${SHADOW_CYAN}`,
+                }}
+              >
+                Or leave details
               </button>
-            </form>
+            </div>
           </div>
         </section>
 
         {/* ═══ Audio Samples ═══ */}
-        <TrackPlayer />
+        <div id="audio">
+          <TrackPlayer />
+        </div>
 
         {/* ═══ Testimonials ═══ */}
         <section
@@ -1556,6 +1485,15 @@ function GhostPage() {
           </a>
         </span>
       </footer>
+
+      {/* InquiryForm modal — opens from Talk to Steven section */}
+      <InquiryForm
+        open={inquiryFormOpen}
+        onClose={() => setInquiryFormOpen(false)}
+        source="/ghost"
+        productLine="ghost"
+        autoMessage="Hi I'm interested in a ghost production track"
+      />
     </div>
   );
 }

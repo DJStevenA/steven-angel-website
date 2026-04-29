@@ -105,3 +105,13 @@ export const trackScrollDepth = (percent, page_category) => {
 export const trackTimeOnPage = (seconds, page_category) => {
   trackEvent('time_on_page', { seconds, page_category });
 };
+
+export const trackLeadFormSubmit = (productLine, sourcePage) => {
+  trackEvent('lead_form_submit', {
+    product_line: productLine,
+    source_page: sourcePage,
+  });
+  // Conversion fires only once Marketing creates the conversion action and
+  // populates CONVERSION_LABELS.lead_form_submit (currently empty).
+  trackConversion('lead_form_submit', { value: 50, currency: 'USD' });
+};

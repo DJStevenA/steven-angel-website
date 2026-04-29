@@ -4,7 +4,8 @@ import { useShopPlayer } from "../ShopPlayerContext.jsx";
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
 const BG_CARD = "#04040f";
-const API_BASE = "https://ghost-backend-production-adb6.up.railway.app";
+// Production: hits Railway directly. Dev: relative URL routed via vite.config.js proxy.
+const API_BASE = import.meta.env.DEV ? "" : "https://ghost-backend-production-adb6.up.railway.app";
 
 const GENRE_COLORS = {
   "Afro House": CYAN,
@@ -130,25 +131,58 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
           onError={(e) => { e.target.style.display = "none"; }}
         />
 
-        {/* Play overlay */}
+        {/* Play overlay + skip buttons (skip only visible when this track is active) */}
         {!isSold && (
-          <button
-            onClick={handlePlayPause}
-            style={{
-              position: "absolute", inset: 0, background: "transparent",
-              border: "none", cursor: "pointer", display: "flex",
-              alignItems: "center", justifyContent: "center",
-            }}
-            aria-label={isThisPlaying ? "Pause" : "Play preview"}
-          >
-            <div style={{
-              width: 44, height: 44, borderRadius: "50%",
-              background: "rgba(0,0,0,0.7)", border: `2px solid ${accentColor}`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              backdropFilter: "blur(4px)",
-              opacity: isThisPlaying ? 1 : 0.85,
-              transition: "opacity 0.15s",
-            }}>
+          <>
+            {/* Skip back 15s — circular button styled like play (left side) */}
+            {isThisTrack && (
+              <button
+                onClick={(e) => { e.stopPropagation(); seek(Math.max(0, cardCurrentTime - 15)); }}
+                aria-label="Skip back 15 seconds"
+                style={{
+                  position: "absolute",
+                  left: "16%",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  width: 44, height: 44, borderRadius: "50%",
+                  background: "rgba(0,0,0,0.7)",
+                  border: `2px solid ${accentColor}`,
+                  backdropFilter: "blur(4px)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", zIndex: 3,
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 12,
+                  color: accentColor,
+                  letterSpacing: "0.04em",
+                  transition: "transform 0.15s, opacity 0.15s",
+                  opacity: 0.92,
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(-50%) scale(1.05)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.92"; e.currentTarget.style.transform = "translateY(-50%) scale(1)"; }}
+              >
+                <span aria-hidden="true">↺ 15</span>
+              </button>
+            )}
+
+            {/* Center play/pause — circular button (always present when not sold) */}
+            <button
+              onClick={handlePlayPause}
+              style={{
+                position: "absolute",
+                left: "50%", top: "50%", transform: "translate(-50%, -50%)",
+                width: 44, height: 44, borderRadius: "50%",
+                background: "rgba(0,0,0,0.7)", border: `2px solid ${accentColor}`,
+                backdropFilter: "blur(4px)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", zIndex: 3,
+                opacity: isThisPlaying ? 1 : 0.92,
+                transition: "transform 0.15s, opacity 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translate(-50%, -50%) scale(1.05)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = isThisPlaying ? "1" : "0.92"; e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"; }}
+              aria-label={isThisPlaying ? "Pause" : "Play preview"}
+            >
               {loading ? (
                 <span style={{ color: accentColor, fontSize: 12 }}>…</span>
               ) : isThisPlaying ? (
@@ -156,8 +190,39 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
               ) : (
                 <span style={{ color: accentColor, fontSize: 16, marginLeft: 2 }}>▶</span>
               )}
-            </div>
-          </button>
+            </button>
+
+            {/* Skip forward 15s — circular button styled like play (right side) */}
+            {isThisTrack && (
+              <button
+                onClick={(e) => { e.stopPropagation(); seek(Math.min(cardDuration || 0, cardCurrentTime + 15)); }}
+                aria-label="Skip forward 15 seconds"
+                style={{
+                  position: "absolute",
+                  right: "16%",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  width: 44, height: 44, borderRadius: "50%",
+                  background: "rgba(0,0,0,0.7)",
+                  border: `2px solid ${accentColor}`,
+                  backdropFilter: "blur(4px)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", zIndex: 3,
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 12,
+                  color: accentColor,
+                  letterSpacing: "0.04em",
+                  transition: "transform 0.15s, opacity 0.15s",
+                  opacity: 0.92,
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(-50%) scale(1.05)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.92"; e.currentTarget.style.transform = "translateY(-50%) scale(1)"; }}
+              >
+                <span aria-hidden="true">15 ↻</span>
+              </button>
+            )}
+          </>
         )}
 
         {/* Progress bar — bottom of image, visible when this track is active */}

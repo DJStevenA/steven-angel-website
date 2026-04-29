@@ -331,10 +331,13 @@ export default function MixMastering() {
 
         <div style={{ maxWidth: 800, margin: "0 auto", position: "relative", zIndex: 1 }}>
           <h1 style={{ ...heading(isMobile ? 32 : 60), marginBottom: 16 }}>
-            Get Your Track
+            Afro House Mix &amp; Mastering
             <br />
-            <span style={{ color: CYAN }}>Club Ready</span>
+            <span style={{ color: CYAN }}>by Steven Angel</span>
           </h1>
+          <h2 style={{ ...heading(isMobile ? 22 : 32), marginBottom: 20, color: "rgba(255,255,255,0.85)" }}>
+            Get Your Track Club Ready
+          </h2>
 
           <div style={{ ...body, fontSize: isMobile ? 16 : 19, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
             Mix &amp; Mastering for Afro House, Melodic Techno &amp; Electronic — Mastered to Label Standard

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import GhostTrackCard from "./GhostTrackCard.jsx";
 import ContractModal from "./ContractModal.jsx";
 
-const API_BASE = "https://ghost-backend-production-adb6.up.railway.app";
+// Production: hits Railway directly. Dev: relative URL routed via vite.config.js
+// `server.proxy` so the dev server forwards the request without tripping CORS.
+const API_BASE = import.meta.env.DEV ? "" : "https://ghost-backend-production-adb6.up.railway.app";
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
 
@@ -39,10 +41,14 @@ export default function GhostCatalog({ isMobile }) {
         clearTimeout(timeoutId);
         const raw = Array.isArray(data) ? data : data.tracks || [];
         setTracks(raw.filter((t) => !String(t.id || "").startsWith("test-")));
+        setError(null);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
         clearTimeout(timeoutId);
+        // Don't surface AbortError as a user-visible error — that's StrictMode
+        // double-mount or a tab navigation, not a real failure.
+        if (err?.name === "AbortError" || controller.signal.aborted) return;
         setError("Could not load tracks. Please refresh.");
         setLoading(false);
       });

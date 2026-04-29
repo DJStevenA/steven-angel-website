@@ -153,11 +153,12 @@ const MODULES = [
   {
     num: 3,
     title: "Module 3 — Styling, Sound Design, Mix & Mastering",
-    desc: "Advanced drum programming, synth & bass layering, mix & mastering — this is the stage we make the track CRISP for the club!",
+    desc: "Advanced drum programming, synth & bass layering, synthesis with serious VSTs, mix & mastering — this is the stage we make the track CRISP for the club!",
     points: [
       ["Drum Sound Design", "Selecting kicks, snares and hi-hats by genre — the right palette for your sound"],
       ["Drum Layering", "Transient shaping, layering techniques — why your kick isn't punching yet"],
       ["Synth Layering", "Building rich, wide sounds layer by layer"],
+      ["Synthesis", "Master advanced VSTs like Serum — design your own basses, leads and pads from scratch"],
       ["Mix", "EQ, compressor, depth — every channel in its place, no clashing frequencies"],
       ["Advanced Processing", "Saturation, Sidechain, Stereo Width, Mid/Side — the tricks that change everything"],
       ["Club-Ready Sound", "Making a track sound big and loud on any system, in any room"],
@@ -540,7 +541,7 @@ export default function Lessons() {
         <section id="curriculum" style={{ padding: isMobile ? "40px 20px" : "60px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 800, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 36 }}>
-              Curriculum
+              Full Production, Mix &amp; Mastering Course
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 16 }}>
 

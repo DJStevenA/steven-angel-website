@@ -137,6 +137,126 @@ function LazyAutoVideo({ src, ...rest }) {
   );
 }
 
+/**
+ * InstagramFeedGrid — pulls @theangels_tlv recent posts from the backend
+ * (`GET /the-angels/instagram` → Meta Graph API). Renders 6 most recent posts
+ * in a 3-col grid linked to each post's permalink. On fetch failure (backend
+ * not yet deployed, network, etc.) falls back to a static 3-image grid that
+ * still links to the Instagram profile.
+ */
+function InstagramFeedGrid({ isMobile }) {
+  const INSTAGRAM_URL = "https://www.instagram.com/theangels_tlv/";
+  const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
+  // In dev, request is proxied via vite.config.js server.proxy → Railway.
+  const API = (typeof import.meta !== "undefined" && import.meta.env?.DEV) ? "" : BACKEND;
+  const [posts, setPosts] = useState(null); // null = loading, [] = error/fallback, [...] = real
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    fetch(`${API}/the-angels/instagram?limit=6`, { signal: controller.signal })
+      .then((r) => r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`)))
+      .then((data) => {
+        clearTimeout(timeoutId);
+        if (Array.isArray(data?.posts) && data.posts.length > 0) {
+          setPosts(data.posts.slice(0, 6));
+        } else {
+          setPosts([]);
+        }
+      })
+      .catch((err) => {
+        clearTimeout(timeoutId);
+        if (err?.name !== "AbortError") setPosts([]);
+      });
+    return () => { clearTimeout(timeoutId); controller.abort(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fallback content while loading or on error
+  const fallbackImages = [
+    "/the-angels-vibe.jpg",
+    "/images/stage.webp",
+    "/images/outdoor.webp",
+  ];
+
+  const cardStyle = {
+    position: "relative",
+    aspectRatio: "1/1",
+    borderRadius: 8,
+    overflow: "hidden",
+    display: "block",
+    border: "1px solid rgba(255,255,255,0.08)",
+    transition: "transform 0.2s",
+  };
+
+  // Real posts grid (3×2 = 6 posts on desktop; 3 cols × 2 rows on mobile too)
+  if (Array.isArray(posts) && posts.length > 0) {
+    return (
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+        gap: isMobile ? 8 : 12,
+        marginBottom: 32,
+      }}>
+        {posts.slice(0, isMobile ? 4 : 6).map((p) => (
+          <a
+            key={p.id}
+            href={p.permalink}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={(p.caption || "View on Instagram").slice(0, 80)}
+            style={cardStyle}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+          >
+            <img
+              src={p.mediaUrl}
+              alt=""
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              onError={(e) => { e.target.style.opacity = "0.3"; }}
+            />
+            {p.mediaType === "VIDEO" && (
+              <div aria-hidden="true" style={{
+                position: "absolute", top: 8, right: 8,
+                background: "rgba(0,0,0,0.7)", borderRadius: 4,
+                padding: "2px 6px", fontSize: 10,
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                fontWeight: 700, letterSpacing: "0.1em", color: "#fff",
+              }}>VIDEO</div>
+            )}
+          </a>
+        ))}
+      </div>
+    );
+  }
+
+  // Loading or error fallback — 3 static images
+  return (
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: isMobile ? 8 : 12,
+      marginBottom: 32,
+    }}>
+      {fallbackImages.map((src, i) => (
+        <a
+          key={i}
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View on Instagram"
+          style={cardStyle}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+        >
+          <img src={src} alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 export default function TheAngels() {
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
   const [newsletterStatus, setNewsletterStatus] = useState(null);
@@ -353,7 +473,10 @@ export default function TheAngels() {
                 15M+ Streams. Beatport Top 10. Played Worldwide.
               </h2>
               <p style={{ ...body, fontSize: isMobile ? 15 : 16, textAlign: isMobile ? "center" : "left" }}>
-                Producers of the hit "Chama Cha Trumpeta" (with Idd Aziz), heavily supported by HUGEL, Claptone, Sofi Tukker, Curol, Dj Chus and many more. Over 15 million streams across various platforms — including 7 million on Spotify with 50K monthly listeners. Constantly featured on Beatport's Afro House Top 10 charts, with collaborations and remixes alongside Floyd Lavine, Pipi Ciez, PAUZA, Band & Dos. Performances at ADE, Boho Miami, Somewhere Nowhere (NY), Spazio (WP), Bonbonniere (Tulum) and Nomad (Lisbon).
+                The Angels are a Tel Aviv-based Afro / Latin House duo whose sound moves between deep African groove and Iberian club fire. Their breakout track "Jungle Walk" hit Beatport's Afro House Top 10, while "El Barrio" — released on HUGEL's own label — was played by both HUGEL and Claptone at Ibiza. Their Latin crossover "Fuego En Tos Ojos" (Sony Mexico) earned a second Beatport Top 10, with the duo now sitting at 15M+ streams and 50K Spotify monthly listeners.
+              </p>
+              <p style={{ ...body, fontSize: isMobile ? 15 : 16, textAlign: isMobile ? "center" : "left", marginTop: 16 }}>
+                With releases on GoDeeVa, MoBlack, MTGD, Redolent and Sony, The Angels have performed at ADE, Somewhere Nowhere (NYC), Boho Miami, Bonbonniere (Tulum) and Spazio (West Palm Beach) — and continue to tour internationally in 2026.
               </p>
 
               <div style={{
@@ -516,8 +639,8 @@ export default function TheAngels() {
                 />
               </div>
               <div style={{ textAlign: "center", marginTop: 14 }}>
-                <div style={{ ...label(CYAN), marginBottom: 4 }}>Played by</div>
-                <div style={{ ...heading(20), color: "#fff" }}>The Industry</div>
+                <div style={{ ...label(CYAN), marginBottom: 4 }}>The Angels — El Barrio</div>
+                <div style={{ ...heading(20), color: "#fff" }}>Supported By Hugel &amp; Claptone</div>
               </div>
             </div>
           </div>
@@ -539,44 +662,11 @@ export default function TheAngels() {
             Behind the scenes, new releases and live moments.
           </p>
 
-          {/* Instagram profile iframe — uses Instagram's official embed via blockquote+embed.js
-              for individual posts. For a profile-feed widget we recommend Behold.so or
-              SnapWidget once Steven sets up an account. As an immediate display we render
-              a 4-photo grid linking to the profile. */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
-            gap: isMobile ? 8 : 12,
-            marginBottom: 32,
-          }}>
-            {[
-              "/the-angels-vibe.jpg",
-              "/the-angels-portrait.jpg",
-              "/the-angels-hero.jpg",
-              "/the-angels-vibe.jpg",
-            ].map((src, i) => (
-              <a
-                key={i}
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="View on Instagram"
-                style={{
-                  position: "relative",
-                  aspectRatio: "1/1",
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  display: "block",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  transition: "transform 0.2s",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
-              >
-                <img src={src} alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              </a>
-            ))}
-          </div>
+          {/* Real Instagram feed — fetched from backend /the-angels/instagram which
+              proxies the Meta Graph API (token in Railway env). Cached 1h backend-side.
+              Falls back to 3 static images if fetch fails (e.g., backend not yet deployed). */}
+          <InstagramFeedGrid isMobile={isMobile} />
+
 
           <a
             href={INSTAGRAM_URL}
