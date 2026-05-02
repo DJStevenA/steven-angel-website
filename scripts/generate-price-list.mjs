@@ -23,7 +23,11 @@ import { PRODUCTS } from "../src/shop/products.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const OUT_FILE = "/Volumes/Untitled/Dropbox/Busniees assets 2026/claude marketing/inputs/price_list.md";
+// Relative path so this works on every machine. Resolves to:
+//   <repo>/steven-angel-website-final/scripts/../../../claude marketing/inputs/price_list.md
+//   = Busniees assets 2026/claude marketing/inputs/price_list.md
+// (Both website and marketing live as siblings under "Busniees assets 2026/".)
+const OUT_FILE = path.resolve(ROOT, "..", "..", "claude marketing", "inputs", "price_list.md");
 
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
