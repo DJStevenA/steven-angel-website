@@ -16,7 +16,7 @@
 //
 // Or auto-run on every build via the package.json `prebuild` hook.
 
-import { writeFileSync } from "node:fs";
+import { writeFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PRODUCTS } from "../src/shop/products.js";
@@ -28,6 +28,15 @@ const ROOT = path.resolve(__dirname, "..");
 //   = Busniees assets 2026/claude marketing/inputs/price_list.md
 // (Both website and marketing live as siblings under "Busniees assets 2026/".)
 const OUT_FILE = path.resolve(ROOT, "..", "..", "claude marketing", "inputs", "price_list.md");
+
+// Skip silently when the marketing directory doesn't exist (Netlify CI,
+// fresh clones, etc.). The price list is a developer-side helper for the
+// marketing agent — not required for the website to build/deploy.
+// Without this guard, `prebuild` fails on Netlify → every deploy is blocked.
+if (!existsSync(path.dirname(OUT_FILE))) {
+  console.log(`[prices] Marketing dir not found at ${path.dirname(OUT_FILE)} — skipping (CI environment).`);
+  process.exit(0);
+}
 
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
