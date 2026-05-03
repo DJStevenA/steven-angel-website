@@ -302,13 +302,43 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
 
         {/* Price + BUY row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-          <div style={{
-            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900,
-            fontSize: isMobile ? 24 : 28,
-            color: isSold ? "rgba(255,255,255,0.3)" : accentColor,
-            letterSpacing: "0.02em",
-          }}>
-            €{track.price_eur}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            {/* Strikethrough original price (when on sale) */}
+            {track.original_price_eur && !isSold && (
+              <span style={{
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700,
+                fontSize: isMobile ? 16 : 18,
+                color: "rgba(255,255,255,0.4)",
+                textDecoration: "line-through",
+                letterSpacing: "0.02em",
+              }}>
+                €{track.original_price_eur}
+              </span>
+            )}
+            {/* Current price (sale price if on sale) */}
+            <div style={{
+              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900,
+              fontSize: isMobile ? 24 : 28,
+              color: isSold ? "rgba(255,255,255,0.3)" : accentColor,
+              letterSpacing: "0.02em",
+            }}>
+              €{track.price_eur}
+            </div>
+            {/* SALE badge */}
+            {track.original_price_eur && !isSold && (
+              <span style={{
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 800,
+                fontSize: 10,
+                color: "#fff",
+                background: "#ff3b5c",
+                padding: "3px 8px",
+                borderRadius: 4,
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+              }}>
+                Sale
+              </span>
+            )}
           </div>
 
           <button
