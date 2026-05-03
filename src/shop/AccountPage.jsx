@@ -101,6 +101,33 @@ export default function AccountPage() {
     }
   };
 
+  // Same as handleDownload, but for one of the product's `extras` entries
+  // (e.g. a masterclass video lesson). Uses the per-extra route, and a
+  // composite "downloadingId" so each button shows its own loading state.
+  const handleExtraDownload = async (purchase, extra) => {
+    const composite = `${purchase.id}:${extra.key}`;
+    setDownloadingId(composite);
+    setDownloadError("");
+    try {
+      const res = await fetch(
+        `${apiBase}/shop/download/${encodeURIComponent(purchase.product_id)}/extra/${encodeURIComponent(extra.key)}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to get download link");
+      }
+      if (!data.downloadUrl) {
+        throw new Error("Server returned no download URL");
+      }
+      window.open(data.downloadUrl, "_blank", "noopener");
+    } catch (err) {
+      setDownloadError(`${extra.name}: ${err.message || "Download failed"}`);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
   // Loading state
   if (loading || !user) {
     return (
@@ -352,6 +379,7 @@ export default function AccountPage() {
                       flexDirection: isMobile ? "column" : "row",
                       alignItems: isMobile ? "flex-start" : "center",
                       gap: isMobile ? 14 : 16,
+                      flexWrap: "wrap",
                     }}
                   >
                     <div style={{ flexGrow: 1, minWidth: 0 }}>
@@ -436,6 +464,85 @@ export default function AccountPage() {
                       >
                         Awaiting payment
                       </span>
+                    )}
+
+                    {/* Extras (e.g. masterclass video lessons) — paid only */}
+                    {isPaid && Array.isArray(p.extras) && p.extras.length > 0 && (
+                      <div
+                        style={{
+                          flexBasis: "100%",
+                          marginTop: 14,
+                          paddingTop: 14,
+                          borderTop: "1px solid rgba(255,255,255,0.08)",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 8,
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                            fontSize: 11,
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            color: "rgba(255,255,255,0.6)",
+                            marginBottom: 4,
+                          }}
+                        >
+                          Video Lessons ({p.extras.length})
+                        </div>
+                        {p.extras.map((extra) => {
+                          const composite = `${p.id}:${extra.key}`;
+                          const isLoading = downloadingId === composite;
+                          return (
+                            <div
+                              key={extra.key}
+                              style={{
+                                display: "flex",
+                                flexDirection: isMobile ? "column" : "row",
+                                alignItems: isMobile ? "flex-start" : "center",
+                                gap: isMobile ? 8 : 12,
+                                background: "rgba(255,255,255,0.02)",
+                                borderRadius: 6,
+                                padding: "10px 12px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  flexGrow: 1,
+                                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                                  fontSize: 13,
+                                  color: "rgba(255,255,255,0.85)",
+                                }}
+                              >
+                                {extra.name}
+                              </div>
+                              <button
+                                onClick={() => handleExtraDownload(p, extra)}
+                                disabled={isLoading}
+                                style={{
+                                  background: "transparent",
+                                  color: accent,
+                                  border: `1px solid ${accent}`,
+                                  borderRadius: 5,
+                                  padding: "6px 16px",
+                                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                                  fontWeight: 700,
+                                  fontSize: 11,
+                                  letterSpacing: "0.16em",
+                                  textTransform: "uppercase",
+                                  cursor: isLoading ? "wait" : "pointer",
+                                  whiteSpace: "nowrap",
+                                  alignSelf: isMobile ? "stretch" : "center",
+                                  opacity: isLoading ? 0.6 : 1,
+                                }}
+                              >
+                                {isLoading ? "Loading…" : "Download"}
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
                     )}
                   </div>
                 );
