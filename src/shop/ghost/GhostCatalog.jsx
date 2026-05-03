@@ -59,9 +59,18 @@ export default function GhostCatalog({ isMobile }) {
     };
   }, []);
 
+  // A track shows under a genre filter when either:
+  //   1. its primary `genre` matches exactly, OR
+  //   2. the genre is listed in its `filter_tags` (comma-separated, optional).
+  // Lets a track display e.g. "Latin Tec House" as its badge but still appear
+  // under the "Tech House" + "Afro Latin" filter buttons.
   const filtered = activeGenre === "All"
     ? tracks
-    : tracks.filter((t) => t.genre === activeGenre);
+    : tracks.filter((t) => {
+        if (t.genre === activeGenre) return true;
+        const tags = (t.filter_tags || "").split(",").map((s) => s.trim()).filter(Boolean);
+        return tags.includes(activeGenre);
+      });
 
   const available = tracks.filter((t) => !t.sold).length;
   const total = tracks.length;

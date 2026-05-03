@@ -70,7 +70,7 @@ const tracks = [
   {
     slug: "the-timbales",
     track: "The Timbales",
-    genre: "Afro Latin",
+    genre: "Latin Tec House",
     // Musical hero: a pair of chrome Latin timbales mid-strike, sparks flying
     visual: "A pair of professional Latin timbales (chrome metal cylindrical drums on a stand, with mounted cowbell and a small cymbal on top) at center-left, two wooden drum sticks captured mid-strike on the timbale heads with cyan and purple energy bursting outward from the point of impact, glowing cyan rim light around the chrome shells, sparks of percussion energy radiating outward, swirling purple and cyan smoke filling the right side of the frame, hot Latin club atmosphere with deep crimson and cyan stage lighting bleeding through, dynamic high-energy Latin Tech House percussion vibe",
   },
