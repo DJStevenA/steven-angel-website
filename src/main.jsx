@@ -40,6 +40,34 @@ function ShopLayout() {
   );
 }
 
+// SPA hash navigation — scroll to #anchor on route change with hash.
+// React Router doesn't fire native browser scroll-to-hash on programmatic
+// navigation, AND on cold loads our lazy-rendered sections often don't
+// exist yet when the browser tries the native scroll. We retry a few
+// times so async content (lazy chunks, ghost catalog fetch) gets a chance
+// to mount before we give up.
+//
+// Used by Google Ads sitelinks: /ghost#catalog, /ghost#contact,
+// /ghost#audio, https://steven-angel.com#player.
+function ScrollToHash() {
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) return;
+    const id = location.hash.slice(1);
+    let attempts = 0;
+    const tryScroll = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (attempts++ < 20) {
+        setTimeout(tryScroll, 100);
+      }
+    };
+    setTimeout(tryScroll, 50);
+  }, [location.pathname, location.hash]);
+  return null;
+}
+
 // Dynamic page title + meta description per route (SEO)
 // Note: ProductPage and auth pages set their own title/meta/canonical via useEffect.
 // We skip the override here for dynamic shop pages to avoid clobbering.
@@ -99,6 +127,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
+        <ScrollToHash />
         <PageTitle />
         <Suspense fallback={<div style={{ background: "#000", minHeight: "100vh" }} />}>
           <Routes>

@@ -378,7 +378,10 @@ export default function App() {
         </section>
 
         {/* ══════ 3. MUSIC — "Listen to my work." ══════ */}
-        <TrackPlayer />
+        {/* id="player" is the anchor for Google Ads sitelink "Steven's Releases" → steven-angel.com#player */}
+        <div id="player">
+          <TrackPlayer />
+        </div>
 
         {/* ══════ 5. LESSON DEMO ══════ */}
         <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
