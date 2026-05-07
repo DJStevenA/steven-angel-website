@@ -736,7 +736,24 @@ export default function ProductPage() {
                     <SpecList title="What You Get" items={product.specs.whatYouGet} accentColor={accentColor} />
                   )}
                   {product.specs.lessons && (
-                    <SpecList title="Lesson Topics" items={product.specs.lessons} accentColor={accentColor} />
+                    <>
+                      <SpecList title="Lesson Topics" items={product.specs.lessons} accentColor={accentColor} />
+                      <div
+                        style={{
+                          marginTop: 8,
+                          padding: "10px 12px",
+                          background: "rgba(0,229,255,0.06)",
+                          borderLeft: `3px solid ${accentColor}`,
+                          borderRadius: 4,
+                          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.75)",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        ✓ All {product.specs.lessons.length} video lessons + project file + sample pack are downloadable from your Account immediately after purchase.
+                      </div>
+                    </>
                   )}
                   {product.specs.samplePack && (
                     <SpecList title="Sample Pack" items={product.specs.samplePack} accentColor={accentColor} />
