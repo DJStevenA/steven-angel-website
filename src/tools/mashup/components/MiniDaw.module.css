@@ -1,0 +1,408 @@
+/*
+ * MiniDaw.module.css
+ * Ableton-inspired 2-track arrangement view.
+ * Dense, info-per-pixel. Barlow Condensed labels, DM Sans mono numbers.
+ * Cyan #00E5FF / Purple #BB86FC accent lanes.
+ * No emoji.
+ */
+
+/* ── Outer DAW container ─────────────────────────────────────────── */
+
+.daw {
+  background: linear-gradient(160deg, #060614, #03030c);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ── Time ruler ──────────────────────────────────────────────────── */
+
+.ruler {
+  height: 24px;
+  background: #070718;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.rulerInner {
+  position: relative;
+  height: 100%;
+  flex: 1;
+}
+
+.tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tickLabel {
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  font-family: 'DM Sans', 'DM Sans Fallback', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Loop region brackets on ruler */
+
+.loopBracketLeft,
+.loopBracketRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #00E5FF;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.loopBar {
+  position: absolute;
+  top: 0;
+  height: 3px;
+  background: rgba(0, 229, 255, 0.5);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── Lane ─────────────────────────────────────────────────────────── */
+
+.lane {
+  display: flex;
+  flex-direction: row;
+  height: 120px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.lane:last-of-type {
+  border-bottom: none;
+}
+
+/* ── Lane header strip (60px fixed) ───────────────────────────────── */
+
+.laneHeader {
+  width: 60px;
+  min-width: 60px;
+  background: #08081a;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.03);
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.laneBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.laneBadgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px currentColor;
+}
+
+.laneBadgeLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.laneRoleLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.laneDuration {
+  font-family: 'DM Sans', 'DM Sans Fallback', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 8px;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1;
+}
+
+/* Mute / solo micro buttons */
+
+.laneMuteSolo {
+  display: flex;
+  gap: 3px;
+}
+
+.microBtn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+  padding: 0;
+  line-height: 1;
+}
+
+.microBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.microBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.microBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+.microBtnMuteActive {
+  background: rgba(255, 80, 80, 0.15);
+  border-color: rgba(255, 80, 80, 0.5);
+  color: #ff5050;
+}
+
+.microBtnSoloActive {
+  background: rgba(255, 200, 0, 0.12);
+  border-color: rgba(255, 200, 0, 0.4);
+  color: #ffc800;
+}
+
+/* ── Lane content area ────────────────────────────────────────────── */
+
+.laneContent {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+/* Waveform canvas fills the content area */
+
+.waveformCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Subtle inset depth (Ableton grammar) */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Empty lane hint */
+
+.emptyHint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.emptyHint span {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Region overlay ───────────────────────────────────────────────── */
+
+.region {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid; /* color set inline */
+  border-right: 2px solid;
+  cursor: move;
+  user-select: none;
+  z-index: 5;
+  touch-action: none;
+  /* Subtle inset depth */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.region:hover {
+  filter: brightness(1.1);
+}
+
+/* Resize handles — 8px wide grab zone on each edge */
+
+.regionHandleLeft,
+.regionHandleRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 6;
+  /* Visual grab indicator */
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.04),
+    transparent
+  );
+}
+
+.regionHandleLeft {
+  left: 0;
+}
+
+.regionHandleRight {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0.04),
+    transparent
+  );
+}
+
+/* ── Playhead ─────────────────────────────────────────────────────── */
+
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  z-index: 15;
+  will-change: left;
+}
+
+/* ── Transport bar ────────────────────────────────────────────────── */
+
+.transport {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: #070718;
+  border-radius: 0 0 14px 14px;
+}
+
+/* ── Responsive — <=900px ─────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .lane {
+    height: 90px;
+  }
+
+  .ruler {
+    height: 20px;
+  }
+
+  .tickLabel {
+    font-size: 8px;
+  }
+
+  .laneHeader {
+    padding: 4px 3px;
+    gap: 3px;
+  }
+}
+
+/* ── Responsive — <=480px ─────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .lane {
+    height: 70px;
+  }
+
+  .laneHeader {
+    width: 50px;
+    min-width: 50px;
+    gap: 2px;
+    padding: 3px 2px;
+  }
+
+  .laneBadgeLabel {
+    font-size: 10px;
+  }
+
+  .laneRoleLabel {
+    font-size: 7px;
+  }
+
+  .laneDuration {
+    font-size: 7px;
+  }
+
+  .microBtn {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+  }
+
+  .tickLabel {
+    font-size: 7px;
+  }
+}
+
+/* ── Touch hit zones: expand region handles + markers on coarse pointer ── */
+
+@media (pointer: coarse) {
+  /* Region resize handles — visually 8px but touch area is 16px */
+  .regionHandleLeft,
+  .regionHandleRight {
+    width: 16px;
+  }
+
+  /* Nudge them inward so the visual border-edge aligns with the outer half */
+  .regionHandleLeft {
+    left: -4px;
+  }
+
+  .regionHandleRight {
+    right: -4px;
+  }
+
+  /* Drop marker: wider touch zone */
+  /* .marker already has padding: 0 4px — bump to 0 8px */
+  /* This selector is in DropMarker.module.css but we use a wrapper nudge here */
+}

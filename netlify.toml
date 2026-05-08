@@ -40,6 +40,27 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Canonicalize trailing-slash variants to no-slash (consolidate URL split per
+# Google Ads QS optimization 2026-05-08). Each variant was being scored
+# separately by Google Ads' LP scorer, splitting authority across mirror URLs.
+[[redirects]]
+  from = "/ghost/"
+  to = "/ghost"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ghost/custom/"
+  to = "/ghost/custom"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ghost/finish-demo/"
+  to = "/ghost/finish-demo"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

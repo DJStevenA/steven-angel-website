@@ -30,6 +30,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://steven-angel.com/privacy</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
   <!-- Per-product pages (added Phase 2.5 — long-tail SEO slugs) -->
   <url>
     <loc>https://steven-angel.com/shop/afro-house-masterclass-ableton-live-tutorial-jungle-walk</loc>

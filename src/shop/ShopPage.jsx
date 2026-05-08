@@ -253,18 +253,8 @@ export default function ShopPage() {
             ) : (
               <>
                 <div style={{ ...heading(isMobile ? 36 : 56), marginBottom: 16 }}>
-                  Ableton Templates &<br />
-                  <span style={{ color: CYAN }}>Afro House Masterclass</span>
-                </div>
-                <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 16 : 22, letterSpacing: "0.08em", color: "rgba(255,255,255,0.7)", marginBottom: 28 }}>
-                  Real Sessions From a Signed Artist · Instant Download
-                </div>
-                <div style={{ ...body, maxWidth: 640, margin: "0 auto" }}>
-                  Production templates and a video masterclass by{" "}
-                  <span style={{ color: CYAN, fontWeight: 600 }}>Steven Angel</span> — released on{" "}
-                  <span style={{ color: PURPLE, fontWeight: 600 }}>MTGD, Moblack, Godeeva, Sony</span>
-                  . The exact sessions used for tracks played by{" "}
-                  <span style={{ color: CYAN, fontWeight: 600 }}>Hugel, Claptone, and ARTBAT</span>.
+                  Ghost Productions &<br />
+                  <span style={{ color: CYAN }}>Ableton Templates</span>
                 </div>
               </>
             )}
@@ -316,10 +306,10 @@ export default function ShopPage() {
                 key={key}
                 to={to}
                 style={{
-                  padding: isMobile ? "8px 14px" : "9px 22px",
-                  borderRadius: 6,
+                  padding: isMobile ? "14px 22px" : "16px 36px",
+                  borderRadius: 8,
                   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                  fontWeight: 700, fontSize: isMobile ? 12 : 13,
+                  fontWeight: 700, fontSize: isMobile ? 15 : 17,
                   letterSpacing: "0.15em", textTransform: "uppercase",
                   textDecoration: "none", whiteSpace: "nowrap",
                   background: activeTab === key

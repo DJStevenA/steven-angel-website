@@ -15,6 +15,7 @@ const TheAngels = lazy(() => import("./TheAngels.jsx"));
 const MixMastering = lazy(() => import("./MixMastering.jsx"));
 const MixMasteringUpload = lazy(() => import("./MixMasteringUpload.jsx"));
 const Sign = lazy(() => import("./Sign.jsx"));
+const Privacy = lazy(() => import("./Privacy.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
 const LoginPage = lazy(() => import("./shop/LoginPage.jsx"));
@@ -22,6 +23,10 @@ const SignupPage = lazy(() => import("./shop/SignupPage.jsx"));
 const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
 const ForgotPage = lazy(() => import("./shop/ForgotPage.jsx"));
 const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
+
+const MashupGeneratorPage = lazy(() => import("./tools/mashup/MashupGeneratorPage.jsx"));
+const MashupCreditsPage = lazy(() => import("./tools/mashup/MashupCreditsPage.jsx"));
+const MashupJobPage = lazy(() => import("./tools/mashup/MashupJobPage.jsx"));
 
 // Reserved shop subpaths that should NOT be treated as product slugs
 const SHOP_RESERVED_PATHS = new Set(["login", "signup", "account", "forgot", "reset"]);
@@ -90,6 +95,7 @@ function PageTitle() {
       "/the-angels": "The Angels — Afro / Latin House Duo | EPK",
       "/mix-mastering": "Professional Mix & Mastering from $35 | Steven Angel",
       "/sign": "Ghost Production Agreement | Steven Angel",
+      "/privacy": "Privacy Policy — Steven Angel Marketing",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
     };
     const descriptions = {
@@ -101,6 +107,7 @@ function PageTitle() {
       "/the-angels": "The Angels — Afro / Latin House / Tribal duo. 10M+ streams, Beatport Top 10. Played by Hugel, Claptone, Sofi Tukker. Released on MTGD, Moblack, Sony.",
       "/mix-mastering": "Professional online mastering from $35. Trusted by Hernan Cattaneo & Dole & Kom. Mix + Master from $150. 3-day turnaround. Afro House, Melodic Techno, Electronic.",
       "/sign": "Sign your ghost production agreement with Steven Angel.",
+      "/privacy": "Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
     };
     const title = titles[location.pathname] || titles["/"];
@@ -122,6 +129,27 @@ function PageTitle() {
   }, [location]);
   return null;
 }
+
+// Strip Meta Ads tracking params (?fbclid, ?gclid_meta) from URL before React Router takes over.
+// Each fbclid value creates a unique URL in Google's eyes, splitting LP scoring across variants.
+// We keep the parameter for analytics attribution (already captured by gtag on page_view) but
+// remove it from the URL bar via history.replaceState so the canonical URL stays clean.
+(function stripTrackingParams() {
+  try {
+    if (!window.location.search) return;
+    const url = new URL(window.location.href);
+    const removed = [];
+    for (const param of ["fbclid", "gclid_meta", "msclkid"]) {
+      if (url.searchParams.has(param)) {
+        url.searchParams.delete(param);
+        removed.push(param);
+      }
+    }
+    if (removed.length) {
+      window.history.replaceState({}, "", url.pathname + url.search + url.hash);
+    }
+  } catch (e) { /* noop — never block render */ }
+})();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -146,6 +174,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/mix" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/mix-master" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/sign" element={<Sign />} />
+            {/* Legal — public, no login required (Meta App Review requirement for the @stevenangel.prod Instagram bot) */}
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
+            {/* AI Tools — Mashup Generator */}
+            <Route path="/tools/mashup" element={<MashupGeneratorPage />} />
+            <Route path="/tools/mashup/credits" element={<MashupCreditsPage />} />
+            <Route path="/tools/mashup/jobs/:jobId" element={<MashupJobPage />} />
             {/* All /shop* routes share the ShopPlayerProvider + sticky bar */}
             <Route element={<ShopLayout />}>
               <Route path="/shop" element={<ShopPage />} />

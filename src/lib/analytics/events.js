@@ -1,5 +1,5 @@
 import { trackEvent, trackConversion } from './gtag';
-import { WHATSAPP_VALUES } from './config';
+import { WHATSAPP_VALUES, LEAD_FORM_VALUES } from './config';
 
 const itemFromProduct = (product) => ({
   item_id: product.id,
@@ -106,12 +106,15 @@ export const trackTimeOnPage = (seconds, page_category) => {
   trackEvent('time_on_page', { seconds, page_category });
 };
 
-export const trackLeadFormSubmit = (productLine, sourcePage) => {
+export const trackLeadFormSubmit = (productLine, sourcePage, valueOverride) => {
+  const value = valueOverride ?? LEAD_FORM_VALUES[productLine] ?? LEAD_FORM_VALUES.default;
   trackEvent('lead_form_submit', {
     product_line: productLine,
     source_page: sourcePage,
+    value,
+    currency: 'USD',
   });
-  // Conversion fires only once Marketing creates the conversion action and
-  // populates CONVERSION_LABELS.lead_form_submit (currently empty).
-  trackConversion('lead_form_submit', { value: 50, currency: 'USD' });
+  // Sends to "Ghost Production - Lead" conversion action ($300) — wired 2026-05-08.
+  // Per-product action mapping can be added later by extending CONVERSION_LABELS.
+  trackConversion('lead_form_submit', { value, currency: 'USD' });
 };

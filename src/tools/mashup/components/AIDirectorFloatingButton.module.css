@@ -1,0 +1,116 @@
+/*
+ * AIDirectorFloatingButton.module.css — Phase 2E
+ *
+ * Mobile-only floating action button. Fixed bottom-right, 56x56px circular.
+ * Visible only at max-width: 900px (display: none above).
+ *
+ * No emoji.
+ */
+
+/* ── Floating button — hidden on desktop ─────────────────────────── */
+
+.floatingBtn {
+  /* Hidden above 900px — shown only on mobile via media query below */
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .floatingBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-direction: column;
+
+    /* Fixed bottom-right */
+    position: fixed;
+    bottom: 20px;
+    right: 16px;
+    z-index: 7500;
+
+    /* 56x56 circle */
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+
+    /* Cyan gradient bg */
+    background: linear-gradient(135deg, #00E5FF, #00b8d4);
+    color: #000;
+    border: none;
+    cursor: pointer;
+
+    /* Glow */
+    box-shadow:
+      0 0 20px rgba(0, 229, 255, 0.55),
+      0 4px 16px rgba(0, 0, 0, 0.5);
+
+    /* Entrance pulse: runs 3 times then stops */
+    animation: btnEntrance 0.4s ease, btnPulse 1.4s ease-in-out 0.4s 3;
+
+    transition: box-shadow 0.2s, opacity 0.2s, transform 0.15s;
+  }
+
+  .floatingBtn:hover {
+    box-shadow:
+      0 0 32px rgba(0, 229, 255, 0.8),
+      0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .floatingBtn:active {
+    transform: scale(0.93);
+  }
+
+  /* Open state — subtle active ring */
+  .floatingBtnOpen {
+    box-shadow:
+      0 0 0 3px rgba(0, 229, 255, 0.35),
+      0 0 24px rgba(0, 229, 255, 0.7),
+      0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Focus ring */
+  .floatingBtn:focus-visible {
+    outline: 2px solid #00E5FF;
+    outline-offset: 3px;
+    box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+  }
+}
+
+/* ── Label below icon ─────────────────────────────────────────────── */
+
+.btnLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 800;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #000;
+}
+
+/* ── Entrance animation ───────────────────────────────────────────── */
+
+@keyframes btnEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Subtle attention pulse — runs 3 times via animation-iteration-count on the element */
+@keyframes btnPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(0, 229, 255, 0.55),
+      0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 36px rgba(0, 229, 255, 0.85),
+      0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+}

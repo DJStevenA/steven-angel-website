@@ -1,0 +1,335 @@
+/*
+ * MashupGeneratorPage.module.css — Phase 2B page layout
+ *
+ * Wider inner container than Phase 1 to accommodate the two-column
+ * DAW + AI Director layout. Responsive: stacks vertically below 900px.
+ *
+ * No emoji.
+ */
+
+/* ── Wider inner container ────────────────────────────────────────── */
+
+.pageInnerWide {
+  position: relative;
+  z-index: 1;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+}
+
+@media (max-width: 700px) {
+  .pageInnerWide {
+    padding: 0 14px 60px;
+  }
+}
+
+/* ── 2-column layout: left (flex 1) + right (380px) ──────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1300px) {
+  .layout {
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ── Left column ─────────────────────────────────────────────────── */
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0; /* allow flex shrink */
+}
+
+/* Track panels row */
+.tracksRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .tracksRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* MiniDaw block */
+.dawBlock {
+  /* MiniDaw fills the full width of the left column */
+  width: 100%;
+}
+
+/* ── Render area ─────────────────────────────────────────────────── */
+
+.renderArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.renderHint {
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+  text-align: center;
+}
+
+/* Render button — enabled state */
+.renderBtnEnabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  background: linear-gradient(135deg, #00E5FF, #00b8d4);
+  color: #000;
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 36px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 0 32px rgba(0, 229, 255, 0.5);
+  cursor: pointer;
+  transition: opacity 0.2s, box-shadow 0.2s;
+}
+
+.renderBtnEnabled:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.65);
+}
+
+.renderBtnEnabled:disabled {
+  /* Enabled state is disabled in Phase 2B — Phase 2D wires the handler */
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* Render button — disabled state */
+.renderBtnDisabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.3);
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 36px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: not-allowed;
+}
+
+/* Render button — need-credits state */
+.renderBtnCredits {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  background: transparent;
+  border: 2px solid #BB86FC;
+  color: #BB86FC;
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 36px;
+  border-radius: 50px;
+  box-shadow: 0 0 24px rgba(187, 134, 252, 0.35);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.renderBtnCredits:hover {
+  background: rgba(187, 134, 252, 0.08);
+  box-shadow: 0 0 32px rgba(187, 134, 252, 0.5);
+}
+
+/* ── Right column — AI Director panel ────────────────────────────── */
+
+.rightCol {
+  position: sticky;
+  top: 24px;
+}
+
+.aiDirectorPanel {
+  background: #04040f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+.aiDirectorHeader {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #BB86FC;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(187, 134, 252, 0.04), transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiDirectorHeader::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #BB86FC;
+  box-shadow: 0 0 6px #BB86FC;
+}
+
+.aiDirectorBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  gap: 12px;
+  text-align: center;
+}
+
+.aiDirectorPlaceholderLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  background: rgba(187, 134, 252, 0.06);
+  border: 1px solid rgba(187, 134, 252, 0.2);
+  border-radius: 20px;
+  padding: 4px 14px;
+}
+
+.aiDirectorPlaceholderText {
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+/* Mobile: hide the right column entirely (floating button replaces it) */
+@media (max-width: 900px) {
+  .rightCol {
+    display: none;
+  }
+}
+
+/* ── Toast notification ──────────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8000;
+  background: #04040f;
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  animation: toastIn 0.25s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .toast {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    white-space: normal;
+    text-align: center;
+    bottom: 20px;
+  }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ── 480px tightening pass ───────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .pageInnerWide {
+    padding: 0 12px 72px;
+  }
+
+  .leftCol {
+    gap: 12px;
+  }
+
+  .renderArea {
+    padding: 2px 0;
+  }
+
+  /* Render buttons — full-width, slightly smaller text */
+  .renderBtnEnabled,
+  .renderBtnDisabled,
+  .renderBtnCredits {
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+}
+
+/* ── Focus-visible rings on render buttons ───────────────────────── */
+
+.renderBtnEnabled:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+.renderBtnCredits:focus-visible {
+  outline: 2px solid #BB86FC;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(187, 134, 252, 0.4);
+}

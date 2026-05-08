@@ -1,0 +1,105 @@
+/*
+ * DropMarker.module.css
+ * Red drop-flag: triangle pointing down + thin vertical line
+ * Draggable (cursor: grab / grabbing)
+ * No emoji.
+ */
+
+.marker {
+  position: absolute;
+  top: 0;
+  /* left is set via inline style */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  cursor: grab;
+  user-select: none;
+  /* Slightly expand touch/click area */
+  padding: 0 4px;
+  box-sizing: content-box;
+  touch-action: none;
+}
+
+/* Larger touch area on coarse pointer devices */
+@media (pointer: coarse) {
+  .marker {
+    padding: 0 8px;
+  }
+}
+
+/* Focus ring for keyboard nav */
+.marker:focus-visible {
+  outline: 2px solid #ff6b6b;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.markerDragging {
+  cursor: grabbing;
+  z-index: 20;
+}
+
+/* Downward-pointing triangle (8 x 12px) */
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid #ff6b6b;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 4px rgba(255, 107, 107, 0.8));
+}
+
+.markerDragging .triangle {
+  border-top-color: #ff4040;
+  filter: drop-shadow(0 0 8px rgba(255, 64, 64, 0.9));
+}
+
+/* Vertical line below triangle */
+.line {
+  width: 1px;
+  background: rgba(255, 107, 107, 0.6);
+  flex-shrink: 0;
+  margin-top: 0;
+  box-shadow: 0 0 3px rgba(255, 107, 107, 0.4);
+}
+
+.markerDragging .line {
+  background: rgba(255, 64, 64, 0.8);
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #02020a;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  border-radius: 6px;
+  padding: 5px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 30;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.tooltipTime {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 107, 107, 0.9);
+}
+
+.tooltipStrength {
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}

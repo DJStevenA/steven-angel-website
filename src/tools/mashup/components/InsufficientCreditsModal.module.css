@@ -1,0 +1,179 @@
+/*
+ * InsufficientCreditsModal.module.css
+ *
+ * 402 INSUFFICIENT_CREDITS modal overlay.
+ * Premium card style: purple border, gradient bg.
+ * No emoji.
+ */
+
+/* ── Backdrop ──────────────────────────────────────────────────────── */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  padding: 24px;
+  box-sizing: border-box;
+  /* Slight blur on content behind */
+  backdrop-filter: blur(2px);
+}
+
+/* ── Modal card ────────────────────────────────────────────────────── */
+
+.modal {
+  /* Premium card: gradient bg + purple border (per BRAND_GUIDE) */
+  background: linear-gradient(135deg, #0a0a20, #0d0418);
+  border: 2px solid #BB86FC;
+  border-radius: 14px;
+  padding: 36px 32px 28px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow:
+    0 0 40px rgba(187, 134, 252, 0.12),
+    0 24px 48px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .backdrop {
+    padding: 16px;
+  }
+
+  .modal {
+    padding: 24px 16px 20px;
+    max-width: 90vw;
+  }
+
+  .heading {
+    font-size: 20px;
+  }
+
+  .body {
+    font-size: 15px;
+  }
+
+  /* Ensure both action buttons are at least 44x44 */
+  .btnBuy,
+  .btnLater {
+    min-height: 44px;
+    padding: 12px 20px;
+  }
+}
+
+/* ── Heading ───────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1;
+  margin: 0;
+}
+
+/* ── Body ──────────────────────────────────────────────────────────── */
+
+.body {
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.balance {
+  color: #BB86FC;
+  font-weight: 500;
+}
+
+/* ── Actions ───────────────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+@media (min-width: 400px) {
+  .actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+}
+
+/* Primary — BUY MORE CREDITS */
+.btnBuy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #00E5FF, #00b8d4);
+  color: #000;
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 15px 28px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.45);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.btnBuy:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 32px rgba(0, 229, 255, 0.6);
+}
+
+.btnBuy:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 3px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+/* Outline — MAYBE LATER */
+.btnLater {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 15px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.btnLater:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.btnLater:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+}

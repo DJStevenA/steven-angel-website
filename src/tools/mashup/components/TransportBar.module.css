@@ -1,0 +1,508 @@
+/*
+ * TransportBar.module.css — DAW transport bar styles
+ *
+ * Brand tokens from BRAND_GUIDE.md:
+ *   Cyan #00E5FF — instrumental, play button fill, scrubber
+ *   Purple #BB86FC — vocal
+ *   Background Alt #04040f — panel bg
+ *   Border rgba(255,255,255,0.06) — subtle panel border
+ *   Pill buttons: border-radius 50px
+ *   Font: Barlow Condensed 700, uppercase, letter-spacing 0.2em
+ *
+ * DAW grammar: compact, dense info-per-pixel, Ableton-inspired layout.
+ */
+
+/* ── Outer container ───────────────────────────────────────────────────── */
+
+.transportBar {
+  background: #04040f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  user-select: none;
+}
+
+/* ── Scrubber row ──────────────────────────────────────────────────────── */
+
+.scrubberRow {
+  width: 100%;
+}
+
+.scrubberWrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  position: relative;
+}
+
+.scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(0, 229, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.scrubber:hover {
+  background: rgba(0, 229, 255, 0.25);
+}
+
+/* Scrubber thumb — webkit */
+.scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #00E5FF;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.scrubber::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.8);
+  transform: scale(1.2);
+}
+
+/* Scrubber thumb — firefox */
+.scrubber::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #00E5FF;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+/* Scrubber track fill — webkit (before thumb) */
+.scrubber::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+}
+
+/* Focus ring — accessibility */
+.scrubber:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ── Controls row ──────────────────────────────────────────────────────── */
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Play / Stop button ────────────────────────────────────────────────── */
+
+.playStopWrap {
+  flex-shrink: 0;
+}
+
+/* Shared base for play + stop */
+.playBtn,
+.stopBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, box-shadow 0.15s, transform 0.1s;
+  position: relative;
+}
+
+/* Play button: filled cyan */
+.playBtn {
+  background: linear-gradient(135deg, #00E5FF, #00b8d4);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+}
+
+.playBtn:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.7);
+}
+
+.playBtn:active {
+  transform: scale(0.94);
+}
+
+/* Stop button: outline cyan */
+.stopBtn {
+  background: transparent;
+  border: 2px solid #00E5FF;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+}
+
+.stopBtn:hover {
+  background: rgba(0, 229, 255, 0.06);
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.5);
+}
+
+.stopBtn:active {
+  transform: scale(0.94);
+}
+
+/* Focus rings — base (enhanced version also in the WCAG AA section below) */
+.playBtn:focus-visible,
+.stopBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 3px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+/* Play triangle icon */
+.playIcon {
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 15px solid #000;
+  margin-left: 3px; /* optical center for triangle */
+}
+
+/* Stop icon: two bars */
+.stopIcon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stopBar {
+  display: block;
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+  background: #00E5FF;
+}
+
+/* ── Vertical divider ──────────────────────────────────────────────────── */
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+/* ── Role group (Vocal / Instr) ────────────────────────────────────────── */
+
+.roleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.roleLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  /* color set inline (cyan/purple) */
+}
+
+.roleControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Volume sliders ────────────────────────────────────────────────────── */
+
+.volumeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 80px;
+}
+
+.volumeLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  /* color set inline */
+}
+
+.volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.volumeSlider:hover {
+  opacity: 0.9;
+}
+
+/* Purple track for vocal */
+.volumeSliderPurple {
+  background: linear-gradient(
+    to right,
+    rgba(187, 134, 252, 0.6) 0%,
+    rgba(187, 134, 252, 0.15) 100%
+  );
+}
+
+/* Cyan track for instr */
+.volumeSliderCyan {
+  background: linear-gradient(
+    to right,
+    rgba(0, 229, 255, 0.6) 0%,
+    rgba(0, 229, 255, 0.15) 100%
+  );
+}
+
+/* Thumb — webkit, purple */
+.volumeSliderPurple::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #BB86FC;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(187, 134, 252, 0.5);
+  transition: box-shadow 0.15s;
+}
+
+.volumeSliderPurple::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 12px rgba(187, 134, 252, 0.8);
+}
+
+/* Thumb — webkit, cyan */
+.volumeSliderCyan::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00E5FF;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+  transition: box-shadow 0.15s;
+}
+
+.volumeSliderCyan::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.8);
+}
+
+/* Thumb — Firefox, purple */
+.volumeSliderPurple::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #BB86FC;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(187, 134, 252, 0.5);
+}
+
+/* Thumb — Firefox, cyan */
+.volumeSliderCyan::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00E5FF;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.5);
+}
+
+/* Focus ring */
+.volumeSlider:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Mute / Solo pill buttons ──────────────────────────────────────────── */
+
+.muteSoloGroup {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pillBtn {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 30px;
+  text-align: center;
+}
+
+.pillBtn:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pillBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+}
+
+/* Mute active — amber tint (universal mute color across DAWs) */
+.pillBtnMuteActive {
+  background: rgba(255, 160, 0, 0.15);
+  border-color: rgba(255, 160, 0, 0.5);
+  color: #ffa000;
+  box-shadow: 0 0 8px rgba(255, 160, 0, 0.25);
+}
+
+.pillBtnMuteActive:hover {
+  background: rgba(255, 160, 0, 0.22);
+  border-color: rgba(255, 160, 0, 0.7);
+  color: #ffb020;
+}
+
+/* Solo active — cyan (instr) */
+.pillBtnSoloCyanActive {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: rgba(0, 229, 255, 0.5);
+  color: #00E5FF;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.pillBtnSoloCyanActive:hover {
+  background: rgba(0, 229, 255, 0.18);
+  border-color: #00E5FF;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+}
+
+/* Solo active — purple (vocal) */
+.pillBtnSoloPurpleActive {
+  background: rgba(187, 134, 252, 0.12);
+  border-color: rgba(187, 134, 252, 0.5);
+  color: #BB86FC;
+  box-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
+}
+
+.pillBtnSoloPurpleActive:hover {
+  background: rgba(187, 134, 252, 0.18);
+  border-color: #BB86FC;
+  box-shadow: 0 0 16px rgba(187, 134, 252, 0.4);
+}
+
+/* ── Focus rings — WCAG AA ─────────────────────────────────────────────── */
+
+.playBtn:focus-visible,
+.stopBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 3px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+.pillBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .transportBar {
+    padding: 12px 14px;
+  }
+
+  /* Scrubber gets its own full-width row (already in a .scrubberRow) */
+  .scrubberRow {
+    width: 100%;
+  }
+
+  /* Controls row wraps: volumes go below the play/mute row */
+  .controlsRow {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .roleGroup {
+    min-width: 120px;
+  }
+
+  .volumeGroup {
+    width: 68px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  /* Ensure mute/solo pill buttons meet 44x44 touch target */
+  .pillBtn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .transportBar {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  /* Play/Stop button stays 44x44 — already set above that threshold */
+  .playBtn,
+  .stopBtn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .roleGroup {
+    min-width: unset;
+    flex: 1;
+  }
+
+  .volumeGroup {
+    width: 60px;
+  }
+}
+
+@media (max-width: 400px) {
+  .controlsRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .roleGroup {
+    width: 100%;
+  }
+
+  .volumeGroup {
+    width: 100%;
+  }
+}

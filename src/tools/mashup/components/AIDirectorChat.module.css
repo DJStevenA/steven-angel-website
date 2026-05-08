@@ -1,0 +1,293 @@
+/*
+ * AIDirectorChat.module.css — Phase 2C
+ *
+ * Full-height chat panel for the right column.
+ * Fills 100% height of its container (aiDirectorPanel in MashupGeneratorPage.module.css).
+ *
+ * No emoji.
+ */
+
+/* ── Panel root — flex column, fills container ───────────────────────── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  background: transparent; /* parent aiDirectorPanel owns bg + border */
+}
+
+/* ── 1. Header ───────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.04), transparent);
+  flex-shrink: 0;
+}
+
+.headerLabel {
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #00E5FF;
+  line-height: 1;
+}
+
+/* Pulsing status dot */
+.statusDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00E5FF;
+  box-shadow: 0 0 6px #00E5FF;
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px #00E5FF; }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px #00E5FF; }
+}
+
+/* ── 2. Message scroll list ──────────────────────────────────────────── */
+
+.messageList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 14px;
+  /* Custom scrollbar — dark, minimal */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.messageList::-webkit-scrollbar {
+  width: 4px;
+}
+.messageList::-webkit-scrollbar-track {
+  background: transparent;
+}
+.messageList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+/* Empty state */
+.emptyState {
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1.6;
+  text-align: center;
+  margin: auto 0;
+  padding: 24px 8px;
+}
+
+/* ── 3. Quick-command chip row ───────────────────────────────────────── */
+
+.chipRow {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  padding: 8px 14px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  /* Hide scrollbar on chip row */
+  scrollbar-width: none;
+}
+.chipRow::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00E5FF;
+  background: rgba(0, 229, 255, 0.04);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 50px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  line-height: 1;
+}
+
+.chip:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: #00E5FF;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.25);
+}
+
+.chip:active {
+  background: rgba(0, 229, 255, 0.18);
+}
+
+/* ── 4. Input row ────────────────────────────────────────────────────── */
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px 14px;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  background: #08080f;
+  border: 1px solid #1a1a2e;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-family: 'DM Sans', 'DM Sans Fallback', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.4;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.input:focus {
+  border-color: #00E5FF;
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.2), 0 0 12px rgba(0, 229, 255, 0.12);
+}
+
+/* Send button */
+.sendBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  background: rgba(0, 229, 255, 0.06);
+  color: #00E5FF;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.sendBtn:hover:not(:disabled) {
+  background: rgba(0, 229, 255, 0.14);
+  border-color: #00E5FF;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+.sendBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.sendBtn:active:not(:disabled) {
+  background: rgba(0, 229, 255, 0.22);
+}
+
+/* Focus rings — WCAG AA */
+.sendBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+.chip:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}
+
+/* ── Modal mode: full-screen overlay ───────────────────────────── */
+
+/* Backdrop */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  background: rgba(0, 0, 0, 0.6);
+  /* Slide-up entrance for panel inside */
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+/* Full-screen panel variant */
+.panelModal {
+  position: fixed;
+  inset: 0;
+  z-index: 8001;
+  background: #080810;
+  border: none;
+  border-radius: 0;
+  min-height: 100dvh;
+  /* Fade + slide up animation */
+  animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal header — has close button on right */
+.headerModal {
+  justify-content: space-between;
+  padding: 18px 16px 14px;
+}
+
+/* Close button in modal header */
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+  box-shadow: 0 0 28px rgba(0, 229, 255, 0.4);
+}

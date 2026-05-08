@@ -4,7 +4,7 @@ import TrackPlayer from "./components/TrackPlayer";
 import GhostDiscountPopup from "./GhostDiscountPopup.jsx";
 import GhostCatalog from "./shop/ghost/GhostCatalog.jsx";
 import InquiryForm from "./components/InquiryForm.jsx";
-import { trackWhatsAppLead } from "./lib/analytics/events";
+import { trackWhatsAppLead, trackLeadFormSubmit } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 
 /* ─── Color Constants ─── */
@@ -635,8 +635,9 @@ function GhostPage() {
       <Nav />
 
       <main>
-        {/* ═══ Hero Section ═══ */}
+        {/* ═══ Hero Section (anchor: #hire — used by Google Ads STAG A "Hire Ghost Producer") ═══ */}
         <section
+          id="hire"
           style={{
             padding: isMobile ? "50px 20px 60px" : "60px 60px 70px",
             textAlign: "center",
@@ -679,30 +680,22 @@ function GhostPage() {
               GHOST PRODUCTION
             </div>
 
-            {/* Hidden H1 for SEO (visually hidden, screen-reader accessible) */}
-            <h1 style={{
-              position: "absolute",
-              width: "1px",
-              height: "1px",
-              padding: 0,
-              margin: "-1px",
-              overflow: "hidden",
-              clip: "rect(0, 0, 0, 0)",
-              whiteSpace: "nowrap",
-              border: 0,
-            }}>
-              Afro House Ghost Producer — Signed MTGD & Moblack Artist
+            {/* Visible H1 — keyword-verbatim, leads with primary keyword "Ghost Producer".
+                Replaces previous hidden H1 + role="heading" aria-level="2" pattern (Google
+                deprioritizes hidden text since 2024). */}
+            <h1 style={{ ...heading(isMobile ? 30 : 56), marginBottom: 16, background: `linear-gradient(90deg, ${CYAN}, ${PURPLE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Ghost Producer for Afro House, Tech House, Indie Dance & Latin House
             </h1>
 
-            {/* Main hero headline */}
-            <div role="heading" aria-level="2" style={{ ...heading(isMobile ? 32 : 64), marginBottom: 16, background: `linear-gradient(90deg, ${CYAN}, ${PURPLE})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            {/* Emotional sub-headline (was previously the visible heading) */}
+            <div style={{ ...heading(isMobile ? 22 : 36), marginBottom: 16, color: "#fff" }}>
               Last Night Hugel & Claptone Played My Track.
               <br />
               Want Yours To Be Next?
             </div>
 
-            {/* Sub-headline */}
-            <div style={{ ...heading(isMobile ? 18 : 28), marginBottom: 12, color: "#fff" }}>
+            {/* Service tagline */}
+            <div style={{ ...heading(isMobile ? 16 : 22), marginBottom: 12, color: "rgba(255,255,255,0.85)" }}>
               Ghost Production for DJs & Artists Who Take Their Sound Seriously
             </div>
 
@@ -830,8 +823,9 @@ function GhostPage() {
           <GhostCatalog isMobile={isMobile} />
         </section>
 
-        {/* ═══ About Steven ═══ */}
+        {/* ═══ About Steven (anchor: #afro-house — used by Google Ads STAG D) ═══ */}
         <section
+          id="afro-house"
           style={{
             padding: isMobile ? "40px 20px" : "60px 60px",
             background: BG,
@@ -898,6 +892,54 @@ function GhostPage() {
                 I teach what I know. I produce what you hear.
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ═══ Tech House Ghost Production (anchor: #tech-house — used by Google Ads STAG E) ═══ */}
+        <section
+          id="tech-house"
+          style={{
+            padding: isMobile ? "40px 20px" : "60px 60px",
+            background: BG,
+            borderTop: "1px solid #0d0d0d",
+          }}
+        >
+          <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+            <div style={{ ...label(CYAN), marginBottom: 14 }}>ALSO PRODUCING</div>
+            <h2 style={{ ...heading(isMobile ? 26 : 38), marginBottom: 14 }}>
+              Tech House Ghost Production
+            </h2>
+            <div style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.7)", maxWidth: 540, margin: "0 auto 18px" }}>
+              Driving basslines, club-ready grooves, peak-time energy. Same label-standard production
+              you hear on my Afro House work — adapted for Tech House dancefloors. Released across
+              MTGD, Moblack, Godeeva.
+            </div>
+            <div style={{ ...body, fontSize: isMobile ? 13 : 15, color: "rgba(255,255,255,0.5)", marginBottom: 24, fontStyle: "italic" }}>
+              From $300 (demo finishing) to $1,500 (full track + vocal). NDA + full copyright transfer included.
+            </div>
+            <a
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); const el = document.getElementById("contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "transparent",
+                border: `2px solid ${CYAN}`,
+                color: CYAN,
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                padding: "14px 32px",
+                borderRadius: 50,
+                textDecoration: "none",
+                boxShadow: `0 0 24px ${SHADOW_CYAN}`,
+              }}
+            >
+              Discuss Your Tech House Track →
+            </a>
           </div>
         </section>
 
@@ -1289,9 +1331,10 @@ function GhostPage() {
                           window.clarity("set", "product", "ghost_contact");
                           window.clarity("set", "value", "300");
                         }
-                        if (window.gtag) {
-                          window.gtag('event', 'generate_lead', { event_category: 'form', event_label: 'ghost_contact', value: 300, currency: 'USD' });
-                        }
+                        // Fires GA4 lead_form_submit event AND Google Ads conversion to
+                        // "Ghost Production - Lead" action ($300). Replaces previous inline
+                        // gtag() call which never reached Google Ads (label was empty until 2026-05-08).
+                        trackLeadFormSubmit('GP', '/ghost', 300);
                       } else {
                         alert("Something went wrong. Please try WhatsApp instead.");
                       }
