@@ -253,8 +253,8 @@ export default function ShopPage() {
             ) : (
               <>
                 <div style={{ ...heading(isMobile ? 36 : 56), marginBottom: 16 }}>
-                  Ghost Productions &<br />
-                  <span style={{ color: CYAN }}>Ableton Templates</span>
+                  Ableton Templates &<br />
+                  <span style={{ color: CYAN }}>Masterclass</span>
                 </div>
               </>
             )}
@@ -306,10 +306,10 @@ export default function ShopPage() {
                 key={key}
                 to={to}
                 style={{
-                  padding: isMobile ? "14px 22px" : "16px 36px",
-                  borderRadius: 8,
+                  padding: isMobile ? "8px 14px" : "9px 22px",
+                  borderRadius: 6,
                   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                  fontWeight: 700, fontSize: isMobile ? 15 : 17,
+                  fontWeight: 700, fontSize: isMobile ? 12 : 13,
                   letterSpacing: "0.15em", textTransform: "uppercase",
                   textDecoration: "none", whiteSpace: "nowrap",
                   background: activeTab === key
