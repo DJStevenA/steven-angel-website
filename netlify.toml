@@ -40,26 +40,14 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Canonicalize trailing-slash variants to no-slash (consolidate URL split per
-# Google Ads QS optimization 2026-05-08). Each variant was being scored
-# separately by Google Ads' LP scorer, splitting authority across mirror URLs.
-[[redirects]]
-  from = "/ghost/"
-  to = "/ghost"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/ghost/custom/"
-  to = "/ghost/custom"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/ghost/finish-demo/"
-  to = "/ghost/finish-demo"
-  status = 301
-  force = true
+# Note (2026-05-10): the previous /ghost/ → /ghost 301 redirects created an
+# infinite loop because Netlify's pretty-URL processing internally treats
+# /ghost as /ghost/ when matching file system folders. force=true caused the
+# rule to fire on /ghost as well, which then redirected to /ghost again.
+# Solution: remove the redirects entirely. Both /ghost and /ghost/ serve the
+# same content from dist/ghost/index.html. The canonical <link> tag in HTML
+# tells Google /ghost is the canonical version, which is enough for SEO/QS.
+# DO NOT add /ghost/* → /ghost-style redirects without testing for loops.
 
 [[redirects]]
   from = "/*"
