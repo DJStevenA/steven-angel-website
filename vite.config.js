@@ -141,7 +141,14 @@ function staticSeoPages() {
           description:
             'Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.',
           canonical: `${siteUrl}/ghost`,
-          ogImage: `${siteUrl}/images/dj-hero-ghost.webp`,
+          ogTitle: 'Steven Angel — Ghost Tracks for Afro House, Tech House & Indie Dance',
+          ogDescription:
+            'Buy ready-to-release Ghost Tracks signed on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.',
+          ogImage: `${siteUrl}/images/ghost-og.jpg`,
+          ogImageWidth: 1200,
+          ogImageHeight: 630,
+          ogImageType: 'image/jpeg',
+          ogImageAlt: 'Steven Angel — Ghost Tracks for Afro House, Tech House & Indie Dance',
           lcpImage: '/images/dj-hero-ghost.webp', // /ghost-specific preload override
         }),
         'ghost-service-jsonld',
