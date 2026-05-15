@@ -57,8 +57,19 @@ function staticSeoPages() {
   const shopDescription =
     'Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.';
 
-  const replaceMeta = (html, replacements) =>
-    html
+  const escapeAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+  const replaceMeta = (html, replacements) => {
+    const ogImageExtras = [];
+    if (replacements.ogImageWidth) ogImageExtras.push(`<meta property="og:image:width" content="${replacements.ogImageWidth}" />`);
+    if (replacements.ogImageHeight) ogImageExtras.push(`<meta property="og:image:height" content="${replacements.ogImageHeight}" />`);
+    if (replacements.ogImageType) ogImageExtras.push(`<meta property="og:image:type" content="${replacements.ogImageType}" />`);
+    if (replacements.ogImageAlt) ogImageExtras.push(`<meta property="og:image:alt" content="${escapeAttr(replacements.ogImageAlt)}" />`);
+    if (replacements.productPrice != null) ogImageExtras.push(`<meta property="product:price:amount" content="${replacements.productPrice}" />`);
+    if (replacements.productCurrency) ogImageExtras.push(`<meta property="product:price:currency" content="${replacements.productCurrency}" />`);
+    const ogImageBlock = [`<meta property="og:image" content="${replacements.ogImage}" />`, ...ogImageExtras].join('\n    ');
+
+    return html
       .replace(
         /<title>[\s\S]*?<\/title>/,
         `<title>${replacements.title}</title>`
@@ -70,6 +81,10 @@ function staticSeoPages() {
       .replace(
         /<link rel="canonical" href="[^"]*"\s*\/>/,
         `<link rel="canonical" href="${replacements.canonical}" />`
+      )
+      .replace(
+        /<meta property="og:type" content="[^"]*"\s*\/>/,
+        `<meta property="og:type" content="${replacements.ogType || 'website'}" />`
       )
       .replace(
         /<meta property="og:title" content="[^"]*"\s*\/>/,
@@ -85,7 +100,7 @@ function staticSeoPages() {
       )
       .replace(
         /<meta property="og:image" content="[^"]*"\s*\/>/,
-        `<meta property="og:image" content="${replacements.ogImage}" />`
+        ogImageBlock
       )
       .replace(
         /<meta name="twitter:title" content="[^"]*"\s*\/>/,
@@ -103,6 +118,7 @@ function staticSeoPages() {
         /<link rel="preload" as="image" type="image\/webp" href="[^"]*"[^>]*\/>/,
         `<link rel="preload" as="image" type="image/webp" href="${replacements.lcpImage || '/images/dj-hero.webp'}" fetchpriority="high" />`
       );
+  };
 
   const injectJsonLd = (html, id, schema) =>
     html.replace(
@@ -149,7 +165,12 @@ function staticSeoPages() {
 
       for (const product of PRODUCTS.filter((p) => p.enabled)) {
         const canonical = `${siteUrl}/shop/${product.slug}`;
-        const productImage = `${siteUrl}${product.image}`;
+        // Per-product 1200x630 JPG for OG (Facebook scraper renders JPG more
+        // reliably than WebP). Derived from the WebP cover path by replacing
+        // -cover.webp with -og.jpg — see public/shop/<name>-og.jpg.
+        const ogImagePath = product.image.replace(/-cover\.webp$/, '-og.jpg');
+        const ogImageUrl = `${siteUrl}${ogImagePath}`;
+        const productImageForSchema = `${siteUrl}${product.image}`;
         const productSchema = {
           '@context': 'https://schema.org/',
           '@type': 'Product',
@@ -157,7 +178,7 @@ function staticSeoPages() {
           description: product.seoDescription || product.description,
           brand: { '@type': 'Brand', name: 'Steven Angel' },
           sku: product.id,
-          image: productImage,
+          image: productImageForSchema,
           offers: {
             '@type': 'Offer',
             price: String(product.price),
@@ -172,9 +193,16 @@ function staticSeoPages() {
             title: product.seoTitle || `${product.name} | Steven Angel`,
             description: product.seoDescription || product.description,
             canonical,
+            ogType: 'product',
             ogTitle: product.seoTitle || `${product.name} | Steven Angel`,
             ogDescription: product.seoDescription || product.description,
-            ogImage: productImage,
+            ogImage: ogImageUrl,
+            ogImageWidth: 1200,
+            ogImageHeight: 630,
+            ogImageType: 'image/jpeg',
+            ogImageAlt: `${product.name} — ${product.headline}`,
+            productPrice: product.price,
+            productCurrency: product.currency,
           }),
           'product-jsonld',
           productSchema

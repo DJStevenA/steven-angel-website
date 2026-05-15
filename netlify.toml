@@ -49,6 +49,51 @@
 # tells Google /ghost is the canonical version, which is enough for SEO/QS.
 # DO NOT add /ghost/* → /ghost-style redirects without testing for loops.
 
+# Short product slug aliases → canonical SEO slug. Without these, sharing a
+# short URL like /shop/balkan-boy falls back to the SPA index.html and the
+# Facebook scraper sees the generic homepage OG tags instead of the product's.
+[[redirects]]
+  from = "/shop/afro-house-masterclass"
+  to = "/shop/afro-house-masterclass-ableton-live-tutorial-jungle-walk"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/shop/masterclass"
+  to = "/shop/afro-house-masterclass-ableton-live-tutorial-jungle-walk"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/shop/balkan-boy"
+  to = "/shop/afro-house-balkan-ableton-live-template-balkan-boy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/shop/maria-maria"
+  to = "/shop/afro-house-remix-ableton-live-template-maria-maria"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/shop/el-barrio"
+  to = "/shop/afro-house-ableton-live-template-el-barrio-mtgd"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/shop/solomun-arabian"
+  to = "/shop/melodic-techno-ableton-template-solomun-artbat-style"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/shop/mega-bundle"
+  to = "/shop/melodic-techno-afro-house-ableton-template-bundle"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
