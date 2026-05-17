@@ -3,7 +3,15 @@
   publish = "dist"
 
 [build.processing.html]
-  pretty_urls = true
+  # pretty_urls = false is intentional — matches our canonical convention
+  # (no trailing slash; static SEO HTMLs at dist/<route>/index.html declare
+  # canonical = /<route> with no slash). With pretty_urls = true, Netlify
+  # auto-301'd /ghost → /ghost/ and /shop → /shop/ and /blog → /blog/ for
+  # folders that contained an index.html, which contradicted the canonical
+  # tag and split Google Ads landing-page metrics across two URLs. Restored
+  # to false on 2026-05-17. DO NOT flip to true without checking that all
+  # canonical tags + Google Ads landing pages still match the served URL.
+  pretty_urls = false
 
 [[headers]]
   for = "/videos/*"
@@ -40,14 +48,18 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Note (2026-05-10): the previous /ghost/ → /ghost 301 redirects created an
-# infinite loop because Netlify's pretty-URL processing internally treats
-# /ghost as /ghost/ when matching file system folders. force=true caused the
-# rule to fire on /ghost as well, which then redirected to /ghost again.
-# Solution: remove the redirects entirely. Both /ghost and /ghost/ serve the
-# same content from dist/ghost/index.html. The canonical <link> tag in HTML
-# tells Google /ghost is the canonical version, which is enough for SEO/QS.
-# DO NOT add /ghost/* → /ghost-style redirects without testing for loops.
+# History (2026-05-10 → 2026-05-17):
+#   1. Tried adding explicit /ghost/ → /ghost 301 redirects to enforce the
+#      no-slash canonical. That created an infinite loop because Netlify's
+#      pretty-URL processing internally treats /ghost as /ghost/ when matching
+#      file system folders, so force=true fired on /ghost too.
+#   2. Removed the explicit redirects (b204b58) but LEFT pretty_urls = true.
+#      That made Netlify auto-301 /ghost → /ghost/ for any path whose folder
+#      contained an index.html — contradicting the canonical = /ghost tag in
+#      the static HTML and splitting Google Ads landing-page quality metrics.
+#   3. (2026-05-17, current) Restored pretty_urls = false. Both /ghost and
+#      /ghost/ now serve dist/ghost/index.html directly with no redirect.
+#      Canonical tag stays = /ghost. No redirect rules needed for this.
 
 # Short product slug aliases → canonical SEO slug. Without these, sharing a
 # short URL like /shop/balkan-boy falls back to the SPA index.html and the
