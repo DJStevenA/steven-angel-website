@@ -74,6 +74,13 @@ const tracks = [
     // Musical hero: a pair of chrome Latin timbales mid-strike, sparks flying
     visual: "A pair of professional Latin timbales (chrome metal cylindrical drums on a stand, with mounted cowbell and a small cymbal on top) at center-left, two wooden drum sticks captured mid-strike on the timbale heads with cyan and purple energy bursting outward from the point of impact, glowing cyan rim light around the chrome shells, sparks of percussion energy radiating outward, swirling purple and cyan smoke filling the right side of the frame, hot Latin club atmosphere with deep crimson and cyan stage lighting bleeding through, dynamic high-energy Latin Tech House percussion vibe",
   },
+  {
+    slug: "chico-toba",
+    track: "Chico Toba",
+    genre: "Afro Latin",
+    // Musical hero: cyber-percussion — Latin instruments (cajón + cowbell + shaker) sitting on top of a massive industrial subwoofer stack; warehouse club atmosphere, no people, no mid-strike
+    visual: "A heavy hybrid Afro Latin cyber-percussion stack at center-left in an industrial warehouse club. Bottom of the stack: a massive matte-black subwoofer cabinet with two large cyan-glowing speaker diaphragms, chrome metal frame, visible cyan and purple bass shockwave ripples emanating outward through the air. On top of the subwoofer: a wooden Peruvian-style cajón box drum (with a carved geometric Afro-Latin pattern on its front face glowing faintly in cyan), a chrome cowbell on a small stand, and a tall wooden shaker — all arranged like an altar. No drumsticks, no hands, no people anywhere in the frame. Right side of the frame: dense purple and cyan smoke, two faint laser beams cutting through the fog at an angle from above, exposed concrete pillars and steel beams in deep shadow, raw aggressive peak-time warehouse atmosphere. Dramatic crimson and cyan stage glow bleeding from above, deep bass-heavy mood, dense fog at floor level, late-night 3am club energy",
+  },
 ];
 
 async function generateOne(t) {
