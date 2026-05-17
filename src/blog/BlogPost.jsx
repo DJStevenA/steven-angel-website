@@ -115,6 +115,7 @@ export default function BlogPost() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
+  const [coverFailed, setCoverFailed] = useState(false);
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", onResize);
@@ -403,7 +404,7 @@ export default function BlogPost() {
             </div>
           </div>
 
-          {/* Cover gradient placeholder — replaced once Steven uploads a real cover */}
+          {/* Cover — real image with brand-gradient fallback */}
           <div style={{ maxWidth: 880, margin: "32px auto 0" }}>
             <div
               style={{
@@ -417,14 +418,31 @@ export default function BlogPost() {
                 overflow: "hidden",
               }}
             >
-              <div
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: `radial-gradient(circle at 25% 30%, ${CYAN}22 0%, transparent 55%), radial-gradient(circle at 78% 78%, ${PURPLE}22 0%, transparent 55%)`,
-                }}
-              />
+              {!coverFailed && (
+                <img
+                  src={`/blog/images/${post.slug}-cover.webp`}
+                  alt={`${post.title} — cover`}
+                  onError={() => setCoverFailed(true)}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              )}
+              {coverFailed && (
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: `radial-gradient(circle at 25% 30%, ${CYAN}22 0%, transparent 55%), radial-gradient(circle at 78% 78%, ${PURPLE}22 0%, transparent 55%)`,
+                  }}
+                />
+              )}
             </div>
           </div>
         </header>

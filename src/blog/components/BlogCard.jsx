@@ -1,9 +1,11 @@
 /**
  * BlogCard — single post tile rendered on the /blog index.
  *
- * Cover image area is a brand gradient placeholder until real cover art
- * lands (Steven generates these manually; see posts[].images_needed).
+ * Cover image: uses /blog/images/<slug>-cover.webp if present; falls back
+ * to brand gradient placeholder. The fallback handler swaps to the
+ * gradient if the file 404s.
  */
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { excerpt } from "../posts.js";
 
@@ -23,6 +25,8 @@ function formatDate(iso) {
 export default function BlogCard({ post }) {
   if (!post) return null;
   const subline = post.meta_description || excerpt(post, 180);
+  const coverUrl = `/blog/images/${post.slug}-cover.webp`;
+  const [coverFailed, setCoverFailed] = useState(false);
 
   return (
     <Link
@@ -47,7 +51,7 @@ export default function BlogCard({ post }) {
         e.currentTarget.style.boxShadow = "none";
       }}
     >
-      {/* Cover area — brand gradient placeholder */}
+      {/* Cover area — real image with brand-gradient fallback */}
       <div
         style={{
           position: "relative",
@@ -56,14 +60,32 @@ export default function BlogCard({ post }) {
           overflow: "hidden",
         }}
       >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: `radial-gradient(circle at 30% 30%, ${CYAN}22 0%, transparent 55%), radial-gradient(circle at 75% 75%, ${PURPLE}22 0%, transparent 55%)`,
-          }}
-        />
+        {!coverFailed && (
+          <img
+            src={coverUrl}
+            alt={`${post.title} — cover`}
+            loading="lazy"
+            onError={() => setCoverFailed(true)}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        )}
+        {coverFailed && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: `radial-gradient(circle at 30% 30%, ${CYAN}22 0%, transparent 55%), radial-gradient(circle at 75% 75%, ${PURPLE}22 0%, transparent 55%)`,
+            }}
+          />
+        )}
         <div
           style={{
             position: "absolute",
@@ -75,6 +97,7 @@ export default function BlogCard({ post }) {
             letterSpacing: "0.3em",
             textTransform: "uppercase",
             color: CYAN,
+            textShadow: "0 1px 8px rgba(0,0,0,0.7)",
           }}
         >
           THE LAB
