@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import matter from 'gray-matter'
 import { PRODUCTS } from './src/shop/products.js'
 
 // Plugin to add prefetch hints for lazy-loaded chunks
@@ -169,6 +170,133 @@ function staticSeoPages() {
       const shopDir = path.join(distDir, 'shop');
       fs.mkdirSync(shopDir, { recursive: true });
       fs.writeFileSync(path.join(shopDir, 'index.html'), shopHtml);
+
+      /* ───────── BLOG — /blog index + /blog/<slug> per-post ───────── */
+      const blogIndexTitle = 'THE LAB — Production Notes by Steven Angel';
+      const blogIndexDescription =
+        'Production notes from a Beatport Top 10 producer. Mix, mastering, and the small decisions that separate hobbyist tracks from label releases.';
+
+      // Load + parse all .md posts at build time. Filter to status: published,
+      // sort newest first (matches src/blog/posts.js).
+      const postsDir = path.resolve('src/blog/posts');
+      let blogPosts = [];
+      if (fs.existsSync(postsDir)) {
+        blogPosts = fs.readdirSync(postsDir)
+          .filter((f) => f.endsWith('.md'))
+          .map((file) => {
+            const raw = fs.readFileSync(path.join(postsDir, file), 'utf8');
+            return matter(raw).data;
+          })
+          .filter((p) => p.status === 'published')
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+
+      // /blog index
+      const blogIndexSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        name: blogIndexTitle,
+        description: blogIndexDescription,
+        url: `${siteUrl}/blog`,
+        publisher: {
+          '@type': 'Person',
+          name: 'Steven Angel',
+          url: `${siteUrl}/`,
+        },
+        blogPost: blogPosts.map((p) => ({
+          '@type': 'BlogPosting',
+          headline: p.title,
+          url: `${siteUrl}/blog/${p.slug}`,
+          datePublished: typeof p.date === 'string' ? p.date : new Date(p.date).toISOString().slice(0, 10),
+          author: { '@type': 'Person', name: 'Steven Angel' },
+        })),
+      };
+
+      const blogIndexHtml = injectJsonLd(
+        replaceMeta(html, {
+          title: blogIndexTitle,
+          description: blogIndexDescription,
+          canonical: `${siteUrl}/blog`,
+          ogType: 'website',
+          ogTitle: blogIndexTitle,
+          ogDescription: blogIndexDescription,
+          ogImage: `${siteUrl}/images/dj-hero.webp`,
+        }),
+        'blog-index-jsonld',
+        blogIndexSchema
+      );
+
+      const blogDir = path.join(distDir, 'blog');
+      fs.mkdirSync(blogDir, { recursive: true });
+      fs.writeFileSync(path.join(blogDir, 'index.html'), blogIndexHtml);
+
+      // /blog/<slug>/index.html per post
+      for (const post of blogPosts) {
+        const slug = post.slug;
+        if (!slug) continue;
+        const canonical = `${siteUrl}/blog/${slug}`;
+        const isoDate = typeof post.date === 'string'
+          ? post.date
+          : new Date(post.date).toISOString().slice(0, 10);
+
+        const ogImageUrl = `${siteUrl}/images/dj-hero.webp`;
+
+        const articleSchema = {
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: post.title,
+          description: post.meta_description || '',
+          datePublished: isoDate,
+          dateModified: isoDate,
+          author: {
+            '@type': 'Person',
+            name: 'Steven Angel',
+            url: `${siteUrl}/`,
+          },
+          publisher: {
+            '@type': 'Person',
+            name: 'Steven Angel',
+            url: `${siteUrl}/`,
+          },
+          mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+          image: ogImageUrl,
+          url: canonical,
+        };
+
+        let postHtml = injectJsonLd(
+          replaceMeta(html, {
+            title: post.title.length > 65 ? post.title.slice(0, 62) + '…' : post.title,
+            description: post.meta_description || '',
+            canonical,
+            ogType: 'article',
+            ogTitle: post.title,
+            ogDescription: post.meta_description || '',
+            ogImage: ogImageUrl,
+          }),
+          'blog-article-jsonld',
+          articleSchema
+        );
+
+        if (Array.isArray(post.faq_schema) && post.faq_schema.length > 0) {
+          const faqSchema = {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: post.faq_schema.map((item) => ({
+              '@type': 'Question',
+              name: item.q,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.a,
+              },
+            })),
+          };
+          postHtml = injectJsonLd(postHtml, 'blog-faq-jsonld', faqSchema);
+        }
+
+        const postDir = path.join(distDir, 'blog', slug);
+        fs.mkdirSync(postDir, { recursive: true });
+        fs.writeFileSync(path.join(postDir, 'index.html'), postHtml);
+      }
 
       for (const product of PRODUCTS.filter((p) => p.enabled)) {
         const canonical = `${siteUrl}/shop/${product.slug}`;

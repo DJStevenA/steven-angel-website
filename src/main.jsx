@@ -18,6 +18,8 @@ const Sign = lazy(() => import("./Sign.jsx"));
 const Privacy = lazy(() => import("./Privacy.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
+const Blog = lazy(() => import("./blog/Blog.jsx"));
+const BlogPost = lazy(() => import("./blog/BlogPost.jsx"));
 const LoginPage = lazy(() => import("./shop/LoginPage.jsx"));
 const SignupPage = lazy(() => import("./shop/SignupPage.jsx"));
 const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
@@ -85,6 +87,9 @@ function PageTitle() {
     // Skip meta-tag override for any /shop/<something> page — they handle SEO themselves
     const isShopSubPage = location.pathname.startsWith("/shop/") && location.pathname !== "/shop";
     if (isShopSubPage) return;
+    // Blog post pages set their own title/meta via useEffect in BlogPost.jsx — skip the override here
+    const isBlogPost = location.pathname.startsWith("/blog/") && location.pathname !== "/blog";
+    if (isBlogPost) return;
 
     const titles = {
       "/": "Steven Angel — Afro House DJ, Producer & Ableton Mentor",
@@ -97,6 +102,7 @@ function PageTitle() {
       "/sign": "Ghost Production Agreement | Steven Angel",
       "/privacy": "Privacy Policy — Steven Angel Marketing",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
+      "/blog": "THE LAB — Production Notes by Steven Angel",
     };
     const descriptions = {
       "/": "DJ, ghost producer and Ableton mentor. Released on Moblack, MTGD & Sony. Played by Hugel & Claptone at Pacha Ibiza. Ghost production, lessons and templates.",
@@ -109,6 +115,7 @@ function PageTitle() {
       "/sign": "Sign your ghost production agreement with Steven Angel.",
       "/privacy": "Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
+      "/blog": "Production notes from a Beatport Top 10 producer. Mix, mastering, and the small decisions that separate hobbyist tracks from label releases.",
     };
     const title = titles[location.pathname] || titles["/"];
     const desc = descriptions[location.pathname] || descriptions["/"];
@@ -174,6 +181,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/mix" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/mix-master" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/sign" element={<Sign />} />
+            {/* Blog — "THE LAB" production notes */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             {/* Legal — public, no login required (Meta App Review requirement for the @stevenangel.prod Instagram bot) */}
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />

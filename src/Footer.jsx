@@ -16,6 +16,7 @@ export default function Footer() {
         {[
           { label: "Ghost Production", to: "/ghost" },
           { label: "Lessons", to: "/lessons" },
+          { label: "The Lab", to: "/blog" },
           { label: "Shop", to: "/shop" },
           { label: "Instagram", href: "https://www.instagram.com/theangels_tlv/" },
           { label: "Spotify", href: "https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" },

@@ -105,6 +105,7 @@ export default function App() {
           {[
             { label: "Ghost", to: "/ghost" },
             { label: "Lessons", to: "/lessons" },
+            { label: "The Lab", to: "/blog" },
             { label: "Shop", to: "/shop" },
           ].map(({ label: lbl, to }) => (
             <Link key={lbl} to={to} style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", lineHeight: 1 }}>
@@ -585,6 +586,7 @@ export default function App() {
           {[
             { label: "Ghost Production", to: "/ghost" },
             { label: "Lessons", to: "/lessons" },
+            { label: "The Lab", to: "/blog" },
             { label: "Shop", to: "/shop" },
             { label: "Instagram", href: "https://www.instagram.com/theangels_tlv/" },
             { label: "Spotify", href: "https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" },

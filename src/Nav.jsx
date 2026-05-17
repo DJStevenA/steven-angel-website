@@ -86,6 +86,7 @@ export default function Nav() {
           { label: "Ghost", to: "/ghost" },
           { label: "Mix & Master", to: "/mix-mastering" },
           { label: "Lessons", to: "/lessons" },
+          { label: "The Lab", to: "/blog" },
           { label: "Shop", to: "/shop" },
         ].map(({ label, to }) => (
           <Link
