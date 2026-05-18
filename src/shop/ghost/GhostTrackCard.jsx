@@ -165,30 +165,30 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
               </button>
             )}
 
-            {/* Center play/pause — circular button (always present when not sold) */}
+            {/* Center play/pause — circular button (always present when not sold).
+                Filled accent color + black icon matches BRAND_GUIDE Primary CTA. */}
             <button
               onClick={handlePlayPause}
               style={{
                 position: "absolute",
                 left: "50%", top: "50%", transform: "translate(-50%, -50%)",
                 width: 44, height: 44, borderRadius: "50%",
-                background: "rgba(0,0,0,0.7)", border: `2px solid ${accentColor}`,
-                backdropFilter: "blur(4px)",
+                background: accentColor, border: "none",
+                boxShadow: `0 0 24px ${accentColor}66`,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 cursor: "pointer", zIndex: 3,
-                opacity: isThisPlaying ? 1 : 0.92,
-                transition: "transform 0.15s, opacity 0.15s",
+                transition: "transform 0.15s, box-shadow 0.15s",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translate(-50%, -50%) scale(1.05)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = isThisPlaying ? "1" : "0.92"; e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1.05)"; e.currentTarget.style.boxShadow = `0 0 32px ${accentColor}99`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"; e.currentTarget.style.boxShadow = `0 0 24px ${accentColor}66`; }}
               aria-label={isThisPlaying ? "Pause" : "Play preview"}
             >
               {loading ? (
-                <span style={{ color: accentColor, fontSize: 12 }}>…</span>
+                <span style={{ color: "#000", fontSize: 12, fontWeight: 700 }}>…</span>
               ) : isThisPlaying ? (
-                <span style={{ color: accentColor, fontSize: 16, letterSpacing: "-1px" }}>⏸</span>
+                <span style={{ color: "#000", fontSize: 16, letterSpacing: "-1px" }}>⏸</span>
               ) : (
-                <span style={{ color: accentColor, fontSize: 16, marginLeft: 2 }}>▶</span>
+                <span style={{ color: "#000", fontSize: 16, marginLeft: 2 }}>▶</span>
               )}
             </button>
 
