@@ -171,6 +171,90 @@ function staticSeoPages() {
       fs.mkdirSync(shopDir, { recursive: true });
       fs.writeFileSync(path.join(shopDir, 'index.html'), shopHtml);
 
+      /* ───────── SIMPLE PAGES — static meta + per-route canonical ─────────
+       * Without this loop, /lessons, /the-angels, /mix-mastering, /ghost/custom,
+       * /ghost/finish-demo, /privacy, /sign etc. all fall back to dist/index.html
+       * — which means every one of them gets the homepage's canonical (=`/`).
+       * Google then treats them as "Alternate page with proper canonical tag"
+       * and refuses to index them as themselves, and Google Ads flags any
+       * sitelink to them as "Destination mismatch" (the canonical doesn't
+       * agree with the URL the user lands on). Mirrors the titles +
+       * descriptions in src/main.jsx so the static HTML matches the SPA.
+       * Added 2026-05-18 after the GSC "Alternate page" notification +
+       * Google Ads policy disapproval surface revealed the gap. */
+      const SIMPLE_PAGES = [
+        {
+          path: '/ghost/custom',
+          title: 'Custom Afro House Ghost Production | Steven Angel',
+          description:
+            'Custom Afro House ghost production for DJs and artists. Released on MTGD, Moblack, Godeeva. Hugel & Claptone played my work. Full track from $800 — 5-7 day delivery.',
+          lcpImage: '/images/dj-hero-ghost.webp',
+          ogImage: `${siteUrl}/images/ghost-og.jpg`,
+        },
+        {
+          path: '/ghost/finish-demo',
+          title: 'Demo Finishing — Afro House Ghost Production | Steven Angel',
+          description:
+            'Send me your Afro House demo — get back a label-ready full track in 3-5 days. From $300. Released on MTGD, Moblack, Godeeva.',
+          lcpImage: '/images/dj-hero-ghost.webp',
+          ogImage: `${siteUrl}/images/ghost-og.jpg`,
+        },
+        {
+          path: '/lessons',
+          title: 'Ableton Lessons by a Moblack & MTGD Artist | Steven Angel',
+          description:
+            '1-on-1 Ableton lessons from a producer released on Moblack, MTGD & Sony. Afro House, Latin House, Tech House & Indie Dance. From $30 intro session.',
+        },
+        {
+          path: '/the-angels',
+          title: 'The Angels — Afro / Latin House Duo | EPK',
+          description:
+            'The Angels — Afro / Latin House / Tribal duo. 10M+ streams, Beatport Top 10. Played by Hugel, Claptone, Sofi Tukker. Released on MTGD, Moblack, Sony.',
+        },
+        {
+          path: '/mix-mastering',
+          title: 'Professional Mix & Mastering from $35 | Steven Angel',
+          description:
+            'Professional online mastering from $35. Trusted by Hernan Cattaneo & Dole & Kom. Mix + Master from $150. 3-day turnaround. Afro House, Melodic Techno, Electronic.',
+        },
+        {
+          path: '/privacy',
+          title: 'Privacy Policy — Steven Angel Marketing',
+          description:
+            'Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.',
+        },
+        {
+          path: '/sign',
+          title: 'Ghost Production Agreement | Steven Angel',
+          description: 'Sign your ghost production agreement with Steven Angel.',
+        },
+        {
+          path: '/mix-mastering/upload',
+          title: 'Mix & Master Upload | Steven Angel',
+          description: 'Upload your stems for mastering.',
+          noindex: true, // post-payment private page — should not be in search
+        },
+      ];
+
+      for (const page of SIMPLE_PAGES) {
+        let pageHtml = replaceMeta(html, {
+          title: page.title,
+          description: page.description,
+          canonical: `${siteUrl}${page.path}`,
+          ogImage: page.ogImage || `${siteUrl}/images/dj-hero.webp`,
+          lcpImage: page.lcpImage, // undefined → falls back to /images/dj-hero.webp inside replaceMeta
+        });
+        if (page.noindex) {
+          pageHtml = pageHtml.replace(
+            '</head>',
+            `    <meta name="robots" content="noindex,follow" />\n  </head>`
+          );
+        }
+        const pageDir = path.join(distDir, ...page.path.split('/').filter(Boolean));
+        fs.mkdirSync(pageDir, { recursive: true });
+        fs.writeFileSync(path.join(pageDir, 'index.html'), pageHtml);
+      }
+
       /* ───────── BLOG — /blog index + /blog/<slug> per-post ───────── */
       const blogIndexTitle = 'THE LAB — Production Notes by Steven Angel';
       const blogIndexDescription =
