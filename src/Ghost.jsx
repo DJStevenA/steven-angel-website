@@ -1128,7 +1128,11 @@ function GhostPage() {
         </section>
 
         {/* ═══ Audio Samples ═══ */}
+        {/* Two IDs on the same anchor: #audio (existing, "Listen / Discography"
+           label) + #player (sitelink target for "Listen / Player" CTAs).
+           Both scroll users to the TrackPlayer. Added 2026-05-18. */}
         <div id="audio">
+          <span id="player" aria-hidden="true" />
           <TrackPlayer />
         </div>
 
