@@ -224,6 +224,12 @@ function staticSeoPages() {
             'Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.',
         },
         {
+          path: '/links',
+          title: 'Steven Angel — Links · Ghost Production · Mix & Mastering · Lessons',
+          description:
+            'All Steven Angel links — Ghost Production, Mix & Mastering, Lessons, Templates, Masterclass and more. Beatport Top 10 producer based in Tel Aviv.',
+        },
+        {
           path: '/sign',
           title: 'Ghost Production Agreement | Steven Angel',
           description: 'Sign your ghost production agreement with Steven Angel.',

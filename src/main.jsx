@@ -20,6 +20,7 @@ const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
 const Blog = lazy(() => import("./blog/Blog.jsx"));
 const BlogPost = lazy(() => import("./blog/BlogPost.jsx"));
+const Links = lazy(() => import("./Links.jsx"));
 const LoginPage = lazy(() => import("./shop/LoginPage.jsx"));
 const SignupPage = lazy(() => import("./shop/SignupPage.jsx"));
 const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
@@ -103,6 +104,7 @@ function PageTitle() {
       "/privacy": "Privacy Policy — Steven Angel Marketing",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
       "/blog": "THE LAB — Production Notes by Steven Angel",
+      "/links": "Steven Angel — Links · Ghost Production · Mix & Mastering · Lessons",
     };
     const descriptions = {
       "/": "DJ, ghost producer and Ableton mentor. Released on Moblack, MTGD & Sony. Played by Hugel & Claptone at Pacha Ibiza. Ghost production, lessons and templates.",
@@ -116,6 +118,7 @@ function PageTitle() {
       "/privacy": "Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
       "/blog": "Production notes from a Beatport Top 10 producer. Mix, mastering, and the small decisions that separate hobbyist tracks from label releases.",
+      "/links": "All Steven Angel links — Ghost Production, Mix & Mastering, Lessons, Templates, Masterclass and more. Beatport Top 10 producer based in Tel Aviv.",
     };
     const title = titles[location.pathname] || titles["/"];
     const desc = descriptions[location.pathname] || descriptions["/"];
@@ -184,6 +187,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             {/* Blog — "THE LAB" production notes */}
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+
+            <Route path="/links" element={<Links />} />
+            <Route path="/link" element={<Navigate to="/links" replace />} />
+            <Route path="/bio" element={<Navigate to="/links" replace />} />
             {/* Legal — public, no login required (Meta App Review requirement for the @stevenangel.prod Instagram bot) */}
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
