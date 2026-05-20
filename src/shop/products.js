@@ -527,7 +527,7 @@ export const PRODUCTS = [
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/indie-dance-nu-disco.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/Dl BandCamp/Indie Dance  - By Steven Angel.zip",
-    fileSize: "223 MB",
+    fileSize: "182 MB",
     specs: {
       daw: "Ableton Live",
       includes: [
@@ -595,7 +595,7 @@ export const PRODUCTS = [
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/dirty-tech-house.mp3",
     dropboxPath:
       "/Ghost Tracks templates sample packs/Dl BandCamp/Dirty Tec House - By Steven Angel Project.zip",
-    fileSize: "41 MB",
+    fileSize: "39 MB",
     specs: {
       daw: "Ableton Live",
       includes: [
