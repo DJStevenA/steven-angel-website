@@ -289,8 +289,8 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </div>
       )}
 
-      {/* Audio preview player (only shown if product has audioUrl) */}
-      <AudioPlayer product={product} accentColor={accentColor} accentRgba={accentRgba} />
+      {/* Audio preview removed from grid card (2026-05-20) — Steven asked
+          for play buttons only inside the product detail page. */}
 
       {/* Price */}
       <Link

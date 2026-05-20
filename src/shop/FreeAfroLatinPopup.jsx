@@ -4,15 +4,15 @@
  * Trigger: 6 seconds after page load, OR scroll past 40% (whichever first).
  * Shows once per visitor (localStorage flag).
  *
- * Flow (mirrors the existing /shop/newsletter pattern):
+ * Flow (Steven's spec 2026-05-20):
  *   visitor submits email → POST /shop/free-pack →
  *     backend adds to Brevo list 13 ("Free Afro Latin Pack")
- *     + returns the download URL in the response
- *   → popup reveals a Download button + a copyable link
+ *     + sends the download link via Resend (transactional email)
+ *   → popup confirms "Check your inbox" — no inline download fallback
  *
- * NO email send — keeps the UX instant and independent of Resend domain
- * verification. The pack itself lives at
- * https://pack.steven-angel.com/Afro-Latin-house-sample-pack.zip
+ * REQUIRES the Resend sending domain (mail.steven-angel.com) to be
+ * verified at resend.com/domains. If not, the backend returns 502
+ * and we show an error asking the user to reach out on WhatsApp.
  *
  * 12 stems · 125 BPM · G minor — matches Steven's spec.
  */
@@ -39,7 +39,6 @@ const STEMS = [
 export default function FreeAfroLatinPopup() {
   const [visible, setVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [downloadUrl, setDownloadUrl] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -109,14 +108,15 @@ export default function FreeAfroLatinPopup() {
         body: JSON.stringify({ email: email.trim() }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok || !data.downloadUrl) {
+      if (!res.ok || !data.ok) {
         setError(data.error || "Something went wrong. Try again.");
         setLoading(false);
         return;
       }
-      setDownloadUrl(data.downloadUrl);
       setSubmitted(true);
       localStorage.setItem(STORAGE_KEY, "1");
+      // Auto-close 6 seconds after success so it doesn't linger
+      setTimeout(() => setVisible(false), 6000);
     } catch (err) {
       setError("Network error. Try again.");
     } finally {
@@ -342,73 +342,26 @@ export default function FreeAfroLatinPopup() {
             </form>
           </>
         ) : (
-          <div style={{ textAlign: "center", padding: "8px 0" }}>
-            <div
-              style={{
-                fontSize: 40,
-                marginBottom: 12,
-                color: CYAN,
-              }}
-            >
-              ✓
-            </div>
+          <div style={{ textAlign: "center", padding: "20px 0" }}>
+            <div style={{ fontSize: 44, marginBottom: 12, color: CYAN }}>✓</div>
             <h2
               style={{
                 fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight: 900,
                 fontSize: 28,
-                margin: "0 0 8px",
+                margin: "0 0 12px",
                 color: "#fff",
                 letterSpacing: "0.02em",
               }}
             >
-              Pack Ready
+              Check Your Inbox
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 13, lineHeight: 1.6, marginBottom: 20 }}>
-              Tap the button below to download your free Afro Latin House sample pack.
+            <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 14, lineHeight: 1.6 }}>
+              I just sent the download link to <strong style={{ color: CYAN }}>{email}</strong>.
             </p>
-            <a
-              href={downloadUrl}
-              download
-              onClick={() => {
-                try {
-                  window.gtag?.("event", "free_pack_download_click", {
-                    event_category: "lead_magnet",
-                    event_label: "afro_latin_free_pack",
-                  });
-                } catch (_) {}
-                // Close popup 1s after they click (give download a moment to start)
-                setTimeout(() => setVisible(false), 1000);
-              }}
-              style={{
-                display: "inline-block",
-                padding: "16px 36px",
-                background: "linear-gradient(135deg, #00E5FF, #00b8d4)",
-                color: "#000",
-                border: "none",
-                borderRadius: 50, // pill per Brand Kit
-                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                fontWeight: 700,
-                fontSize: 15,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                boxShadow: "0 0 28px rgba(0,229,255,0.5)",
-                transition: "all 0.15s",
-              }}
-            >
-              ⬇ Download the Pack
-            </a>
-            <div
-              style={{
-                fontSize: 11,
-                color: "rgba(255,255,255,0.4)",
-                marginTop: 16,
-                lineHeight: 1.5,
-              }}
-            >
-              You're also on my newsletter — production tips + new releases.
-            </div>
+            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, lineHeight: 1.6, marginTop: 12 }}>
+              If you don't see it within a minute, check your spam or promotions folder.
+            </p>
           </div>
         )}
       </div>
