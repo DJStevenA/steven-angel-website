@@ -607,7 +607,8 @@ export default function ProductPage() {
                 Instant email delivery · Lifetime re-downloads · Royalty-free
               </div>
 
-              {/* Audio preview — plays through the sticky player */}
+              {/* Audio preview — plays through the sticky player.
+                  Filled-cyan call-to-action so users see "this is the play button". */}
               {product.audioUrl && (() => {
                 const isThisTrack = currentTrack?.id === product.id;
                 const isThisPlaying = isThisTrack && isPlaying;
@@ -630,33 +631,138 @@ export default function ProductPage() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: 10,
+                      gap: 12,
                       width: "100%",
-                      padding: "12px 18px",
-                      background: "transparent",
-                      border: `1px solid rgba(${accentRgba},0.45)`,
-                      borderRadius: 6,
+                      padding: "14px 22px",
+                      background: isThisPlaying
+                        ? `rgba(${accentRgba},0.12)`
+                        : `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`,
+                      border: `1px solid ${accentColor}`,
+                      borderRadius: 50, // pill per Brand Kit
                       fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                       fontWeight: 700,
-                      fontSize: 13,
-                      letterSpacing: "0.18em",
+                      fontSize: 14,
+                      letterSpacing: "0.2em",
                       textTransform: "uppercase",
-                      color: accentColor,
+                      color: isThisPlaying ? accentColor : "#000",
                       cursor: "pointer",
-                      marginBottom: 18,
+                      marginBottom: product.audioLoops?.length ? 14 : 18,
+                      boxShadow: isThisPlaying ? "none" : `0 0 22px rgba(${accentRgba},0.4)`,
+                      transition: "all 0.15s",
                     }}
-                    aria-label={isThisPlaying ? "Pause track preview" : "Play track preview"}
+                    aria-label={isThisPlaying ? "Pause" : "Play preview"}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill={accentColor}>
-                      {isThisPlaying
-                        ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
-                        : <path d="M8 5v14l11-7z" />
-                      }
-                    </svg>
-                    {isThisPlaying ? "Pause Preview" : "Play Track Preview"}
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 22,
+                        height: 22,
+                        borderRadius: "50%",
+                        background: isThisPlaying ? accentColor : "#000",
+                      }}
+                    >
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill={isThisPlaying ? "#000" : accentColor}>
+                        {isThisPlaying
+                          ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+                          : <path d="M8 5v14l11-7z" />
+                        }
+                      </svg>
+                    </span>
+                    {isThisPlaying ? "Pause" : "Play Preview"}
                   </button>
                 );
               })()}
+
+              {/* Multi-loop player (sample packs only) — 5 individual loops
+                  with clickable play buttons. Plays via the same sticky player. */}
+              {product.audioLoops?.length > 0 && (
+                <div
+                  style={{
+                    marginBottom: 22,
+                    background: "rgba(255,255,255,0.02)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    borderRadius: 10,
+                    padding: "12px 14px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 11,
+                      letterSpacing: "0.22em",
+                      textTransform: "uppercase",
+                      color: "rgba(255,255,255,0.5)",
+                      marginBottom: 10,
+                    }}
+                  >
+                    Listen to {product.audioLoops.length} loops from the pack
+                  </div>
+                  {product.audioLoops.map((loop, idx) => {
+                    const loopId = `${product.id}__loop-${idx}`;
+                    const isThisLoop = currentTrack?.id === loopId;
+                    const isThisLoopPlaying = isThisLoop && isPlaying;
+                    return (
+                      <button
+                        key={loopId}
+                        onClick={() => {
+                          if (isThisLoopPlaying) {
+                            pauseTrack();
+                          } else {
+                            playTrack({
+                              id: loopId,
+                              title: loop.title,
+                              subtitle: product.name,
+                              audioUrl: loop.audioUrl,
+                              coverUrl: product.image,
+                            });
+                          }
+                        }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 12,
+                          width: "100%",
+                          padding: "10px 12px",
+                          background: isThisLoopPlaying ? `rgba(${accentRgba},0.10)` : "transparent",
+                          border: "none",
+                          borderRadius: 8,
+                          color: "#fff",
+                          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                          fontSize: 14,
+                          cursor: "pointer",
+                          textAlign: "left",
+                          transition: "background 0.15s",
+                        }}
+                        aria-label={isThisLoopPlaying ? `Pause ${loop.title}` : `Play ${loop.title}`}
+                      >
+                        <span
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: 28,
+                            height: 28,
+                            borderRadius: "50%",
+                            background: accentColor,
+                            flexShrink: 0,
+                          }}
+                        >
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="#000">
+                            {isThisLoopPlaying
+                              ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+                              : <path d="M8 5v14l11-7z" />
+                            }
+                          </svg>
+                        </span>
+                        <span style={{ flex: 1 }}>{loop.title}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* SEO tags pills (replaces generic trust pills) */}
               {product.seoTags && product.seoTags.length > 0 && (

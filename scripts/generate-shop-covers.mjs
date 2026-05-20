@@ -1,6 +1,11 @@
 // Generate shop product covers via Gemini 2.5 Flash Image ("Nano Banana").
-// Same VHS-box visual language as the existing 6 shop covers (balkan-boy, el-barrio, etc.).
-// Reads GEMINI_API_KEY from .env.local. Writes PNG + WebP into public/shop/.
+// Matches the existing 6 shop covers' format (landscape ~16:9, ~1324×722 for web).
+// Generates at native resolution from Nano Banana, then sharp resizes to 1324×740 WebP.
+//
+// Writes:
+//   public/shop/<slug>-cover.png      (full-res master — DO NOT delete per feedback rule)
+//   public/shop/<slug>-cover.webp     (1324×740 web)
+//   Apps/Ghost_Content/website-assets-2026-04-25/shop-covers/<slug>-cover.webp + .png (Social mirror)
 //
 // Run: node scripts/generate-shop-covers.mjs
 
@@ -12,8 +17,8 @@ import sharp from "sharp";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const OUT_DIR = path.join(ROOT, "public", "shop");
+const SOCIAL_MIRROR = "/Volumes/Untitled/Dropbox/Apps/Ghost_Content/website-assets-2026-04-25/shop-covers";
 
-// Load .env.local
 const envFile = path.join(ROOT, ".env.local");
 const envText = fs.readFileSync(envFile, "utf8");
 const envMatch = envText.match(/GEMINI_API_KEY=(.+)/);
@@ -23,26 +28,28 @@ const API_KEY = envMatch[1].trim();
 const MODEL = "gemini-2.5-flash-image";
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
-// Shop cover style template — matches existing 6 covers exactly.
-// Photoreal 3D box render, NOT illustration. Cyan rim glow. Spine on left.
-// Title + spec line baked into front face.
-const buildPrompt = ({ title, subtitle, genreTag, hero }) => `Photorealistic 3D render of a glossy black VHS/DVD case standing upright on a dark reflective surface, viewed from a slight 3/4 angle so we see both the FRONT cover and the LEFT spine. Cinematic studio lighting, pure black background (#000000), soft cyan reflection beneath the box. NOT an illustration, NOT a flat graphic — this must look like a real physical product photo of a glossy plastic case.
+// Same VHS-box visual language as the existing 6 shop covers.
+// CRITICAL: landscape composition — box on the LEFT/CENTER, atmospheric supporting
+// elements + soft cyan reflection on the surface RIGHT of the box.
+const buildPrompt = ({ title, subtitle, genreTag, hero }) => `Photorealistic 3D landscape product shot, wide cinematic landscape composition (16:9 aspect ratio), of a glossy black VHS/DVD case standing upright on a dark reflective surface, viewed from a slight 3/4 angle so we see both the FRONT cover and the LEFT spine. The box is positioned at the CENTER of the frame with empty atmospheric dark space to the left and right of it. NOT an illustration, NOT a square composition — a wide landscape product photo with the box vertical in the middle.
 
-Box has a vivid cyan neon glow (#00E5FF) rimming every edge of the case as if illuminated from inside. The box has crisp, sharp 3D form with realistic plastic specular highlights and depth.
+Cinematic studio lighting, pure near-black background (#080810), soft cyan reflection beneath the box. This must look like a real physical product photo on a reflective stage.
+
+Box has vivid cyan neon glow (#00E5FF) rimming every edge of the case as if illuminated from inside. Sharp 3D plastic specular highlights.
 
 LEFT SPINE (visible on left side of the box):
-- Vertical white sans-serif text reading "STEVEN ANGEL" rotated 90° (reading bottom-to-top)
-- Small "DVD CASE" tag near the bottom in tiny white letters
-- A small white music-note icon near the very bottom of the spine
+- Vertical white sans-serif text reading exactly "STEVEN ANGEL" rotated 90° (reading bottom-to-top)
+- Tiny white "DVD CASE" tag near the bottom
+- Tiny music-note icon at the very bottom
 
 FRONT COVER (the visible face of the box):
-- TOP-CENTER: A small rounded white/light-gray pill containing the text "${genreTag.toUpperCase()}" in black small-caps letters
-- MIDDLE (taking up the central 50% of the box): ${hero}
-- BOTTOM-CENTER (large): Bold uppercase title in pure white, condensed sans-serif (Barlow Condensed Black style): "${title.toUpperCase()}"
-- Just below title (smaller): "${subtitle}" in light gray
-- Very bottom: A cyan glowing handwritten cursive signature reading "Steven Angel"
+- TOP: small rounded white/light-gray pill containing "${genreTag.toUpperCase()}" in black small-caps
+- MIDDLE: ${hero}
+- BOTTOM-CENTER (large): Bold uppercase white condensed sans-serif title "${title.toUpperCase()}"
+- Just below title (smaller, light gray): "${subtitle}"
+- Very bottom: cyan glowing handwritten cursive signature reading exactly "Steven Angel"
 
-Surround the box with darkness — pure black background, no other objects, just the floating box with its cyan rim glow and a subtle pool of cyan light reflecting off the surface below. Wide cinematic landscape aspect ratio, the box centered slightly left-of-center, plenty of empty black space around it. Ultra high detail, photographic realism.`;
+WIDE LANDSCAPE composition with cinematic depth. The box occupies the CENTER 50-60% of the frame horizontally. Atmospheric dark space + subtle cyan particles + lens flare on the LEFT and RIGHT of the box. Soft pool of cyan light reflecting off the surface below. Ultra high detail, photographic realism. The full image should be a wide 16:9 landscape ratio — wider than it is tall.`;
 
 const products = [
   {
@@ -50,42 +57,40 @@ const products = [
     title: "Indie Dance",
     subtitle: "Nu Disco · Ableton Live Template",
     genreTag: "Indie Dance · Nu Disco",
-    // Hero: 70s/80s nu disco aesthetic — mirror ball + neon palm + retrowave grid
-    hero: "A stylized neon mirror ball glowing with cyan and warm purple light at the center, casting sharp light rays outward, surrounded by abstract neon palm tree silhouettes and a retrowave grid horizon stretching toward a setting sun in the background, geometric disco-era patterns interlaced with modern dance club energy, Hotsince 82 / Purple Disco Machine / Solomun / Adam Ten / Darco aesthetic — moody, melodic, hypnotic",
+    hero: "A stylized neon mirror ball glowing with cyan and warm purple light at the center, casting sharp light rays outward, surrounded by abstract neon palm tree silhouettes and a retrowave grid horizon stretching toward a setting sun, geometric disco-era patterns interlaced with modern dance club energy",
   },
   {
     slug: "moog-loops-samples",
     title: "Moog Loops & Samples",
     subtitle: "30 Loops · 10 One-Shots · Sample Pack",
     genreTag: "Sample Pack · Analog Bass",
-    // Hero: vintage Moog modular synth with patch cables
-    hero: "A photorealistic vintage Moog modular synthesizer at the center — wooden side panels, rows of silver knobs glowing under cyan light, multicolored patch cables looping between modules, glowing VU meters, dark studio backdrop, warm analog electricity emanating outward as cyan particles, thick fat bass waveform shapes pulsing horizontally in the background",
+    hero: "A photorealistic vintage Moog modular synthesizer at the center with wooden side panels, rows of silver knobs glowing under cyan light, multicolored patch cables looping between modules, glowing VU meters, warm analog electricity emanating outward as cyan particles, thick fat bass waveform shapes pulsing horizontally in the background",
   },
   {
     slug: "darbuka-loops",
     title: "Darbuka Loops",
     subtitle: "102 Files · 51 Loops · Sample Pack",
     genreTag: "Afro Latin · Ethnic House",
-    // Hero: darbuka with desert atmosphere
-    hero: "A photorealistic ornate brass darbuka drum at the center, intricate Middle Eastern engravings catching cyan and warm gold light, two hands hovering above it captured mid-percussion strike with cyan energy bursting from the drum head, swirling desert sand particles and atmospheric mist around it, hint of a distant moonlit dune horizon, fusion of ancient ritual percussion and modern club energy",
+    hero: "A photorealistic ornate brass darbuka drum at the center, intricate Middle Eastern engravings catching cyan and warm gold light, two hands hovering above it captured mid-percussion strike with cyan energy bursting from the drum head, swirling desert sand particles around it, distant moonlit dune horizon",
   },
   {
     slug: "dirty-tech-house",
     title: "Dirty Tech House",
     subtitle: "Ableton Live Template",
     genreTag: "Tech House",
-    // Hero: industrial warehouse tech house — Michael Bibi / Solid Grooves vibe
-    hero: "A gritty industrial warehouse club scene at the center — distorted concrete walls, a massive stack of subwoofer speakers blasting cyan bass waves outward, raw exposed pipework above, dense atmospheric smoke shot through with cyan and purple strobe lights, a single glowing 808 drum machine in the foreground with knobs catching the cyan light, Michael Bibi / Clonnee / Solid Grooves underground tech house aesthetic — raw, dirty, hypnotic, percussion-driven",
+    hero: "A gritty industrial warehouse club scene at the center with distorted concrete walls, a massive stack of subwoofer speakers blasting cyan bass waves outward, raw exposed pipework above, dense atmospheric smoke shot through with cyan and purple strobe lights, a single glowing 808 drum machine in the foreground with knobs catching the cyan light",
   },
 ];
 
 async function generateOne(product) {
-  const prompt = buildPrompt(product);
-  console.log(`\n[${product.slug}] Generating…`);
+  console.log(`\n[${product.slug}] Generating landscape cover…`);
 
   const body = {
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: { responseModalities: ["IMAGE"] },
+    contents: [{ parts: [{ text: buildPrompt(product) }] }],
+    generationConfig: {
+      responseModalities: ["IMAGE"],
+      imageConfig: { aspectRatio: "16:9" },
+    },
   };
 
   const res = await fetch(`${ENDPOINT}?key=${API_KEY}`, {
@@ -93,29 +98,45 @@ async function generateOne(product) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`[${product.slug}] API error ${res.status}: ${err}`);
+    throw new Error(`[${product.slug}] API ${res.status}: ${err}`);
   }
 
   const json = await res.json();
   const part = json?.candidates?.[0]?.content?.parts?.find((p) => p.inlineData);
-  if (!part) throw new Error(`[${product.slug}] No image in response: ${JSON.stringify(json).slice(0, 200)}`);
+  if (!part) throw new Error(`[${product.slug}] No image in response: ${JSON.stringify(json).slice(0, 300)}`);
 
-  const buf = Buffer.from(part.inlineData.data, "base64");
+  const rawBuf = Buffer.from(part.inlineData.data, "base64");
+
+  // Detect actual returned size — for telemetry
+  const meta = await sharp(rawBuf).metadata();
+  console.log(`[${product.slug}] Nano Banana returned ${meta.width}×${meta.height}`);
+
+  // Save full-res PNG master
   const pngPath = path.join(OUT_DIR, `${product.slug}-cover.png`);
-  const webpPath = path.join(OUT_DIR, `${product.slug}-cover.webp`);
+  fs.writeFileSync(pngPath, rawBuf);
 
-  fs.writeFileSync(pngPath, buf);
-  await sharp(buf).webp({ quality: 82 }).toFile(webpPath);
+  // Resize to 1324×740 WebP for the web — matches existing shop covers
+  // (existing are 1324×722-738, we standardize at 1324×740 since Nano Banana
+  // sometimes returns slightly non-16:9 results)
+  const webpPath = path.join(OUT_DIR, `${product.slug}-cover.webp`);
+  await sharp(rawBuf)
+    .resize({ width: 1324, height: 740, fit: "cover", position: "center" })
+    .webp({ quality: 82 })
+    .toFile(webpPath);
+
+  // Mirror to Social
+  fs.mkdirSync(SOCIAL_MIRROR, { recursive: true });
+  fs.copyFileSync(pngPath, path.join(SOCIAL_MIRROR, `${product.slug}-cover.png`));
+  fs.copyFileSync(webpPath, path.join(SOCIAL_MIRROR, `${product.slug}-cover.webp`));
 
   const pngSize = (fs.statSync(pngPath).size / 1024).toFixed(0);
   const webpSize = (fs.statSync(webpPath).size / 1024).toFixed(0);
-  console.log(`[${product.slug}] ✓ PNG ${pngSize}KB · WebP ${webpSize}KB`);
+  console.log(`[${product.slug}] ✓ PNG ${pngSize}KB (${meta.width}×${meta.height}) · WebP ${webpSize}KB (1324×740) · Mirrored to Social`);
 }
 
-console.log(`Generating ${products.length} shop covers in parallel via Nano Banana…`);
+console.log(`Generating ${products.length} shop covers (landscape 16:9, ~1324×740) via Nano Banana…`);
 const results = await Promise.allSettled(products.map(generateOne));
 const failed = results.filter((r) => r.status === "rejected");
 if (failed.length) {
@@ -123,4 +144,4 @@ if (failed.length) {
   failed.forEach((r) => console.error(`  - ${r.reason.message}`));
   process.exit(1);
 }
-console.log(`\n✅ All ${products.length} covers generated.`);
+console.log(`\n✅ All ${products.length} covers generated at proper aspect.`);

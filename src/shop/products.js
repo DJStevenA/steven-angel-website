@@ -663,6 +663,15 @@ export const PRODUCTS = [
     image: "/shop/darbuka-loops-cover.webp",
     previewVideoUrl: null,
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/darbuka-loops.mp3",
+    // 5 individual loops shown below the main preview on the product page,
+    // each playable via the existing ShopStickyPlayer.
+    audioLoops: [
+      { title: "Darbuka Loop 1", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/darbuka-loop-01.mp3" },
+      { title: "Darbuka Loop 2", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/darbuka-loop-02.mp3" },
+      { title: "Darbuka Loop 3", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/darbuka-loop-03.mp3" },
+      { title: "Darbuka Loop 4", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/darbuka-loop-04.mp3" },
+      { title: "Darbuka Loop 5", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/darbuka-loop-05.mp3" },
+    ],
     dropboxPath:
       "/Ghost Tracks templates sample packs/Dl BandCamp/Darbuka_Loops__1.zip",
     fileSize: "100 MB",
@@ -732,6 +741,13 @@ export const PRODUCTS = [
     image: "/shop/moog-loops-samples-cover.webp",
     previewVideoUrl: null,
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/moog-loops-samples.mp3",
+    audioLoops: [
+      { title: "Moog Bass Loop 1", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/moog-loop-01.mp3" },
+      { title: "Moog Bass Loop 2", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/moog-loop-02.mp3" },
+      { title: "Moog Bass Loop 3", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/moog-loop-03.mp3" },
+      { title: "Moog Bass Loop 4", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/moog-loop-04.mp3" },
+      { title: "Moog Bass Loop 5", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/moog-loop-05.mp3" },
+    ],
     dropboxPath:
       "/Ghost Tracks templates sample packs/Moog Sample PACK FULL BY STEVEN ANGEL.zip",
     fileSize: "72 MB",

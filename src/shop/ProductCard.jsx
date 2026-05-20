@@ -75,39 +75,45 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: 10,
+        gap: 12,
         width: "100%",
-        padding: "10px 16px",
-        background: isThisPlaying ? `rgba(${accentRgba},0.12)` : "transparent",
-        border: `1px solid rgba(${accentRgba},${isThisPlaying ? "0.7" : "0.45"})`,
-        borderRadius: 6,
+        padding: "12px 18px",
+        background: isThisPlaying
+          ? `rgba(${accentRgba},0.12)`
+          : `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`,
+        border: `1px solid ${accentColor}`,
+        borderRadius: 50, // pill per Brand Kit
         fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
         fontWeight: 700,
-        fontSize: 12,
-        letterSpacing: "0.18em",
+        fontSize: 13,
+        letterSpacing: "0.2em",
         textTransform: "uppercase",
-        color: accentColor,
+        color: isThisPlaying ? accentColor : "#000",
         cursor: "pointer",
         marginBottom: 14,
-        transition: "background 0.15s, border-color 0.15s",
+        boxShadow: isThisPlaying ? "none" : `0 0 20px rgba(${accentRgba},0.4)`,
+        transition: "all 0.15s",
       }}
-      aria-label={isThisPlaying ? "Pause track preview" : "Play track preview"}
+      aria-label={isThisPlaying ? "Pause" : "Play preview"}
     >
-      {isThisPlaying ? (
-        <>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill={accentColor}>
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-          </svg>
-          Pause Preview
-        </>
-      ) : (
-        <>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill={accentColor}>
-            <path d="M8 5v14l11-7z" />
-          </svg>
-          Play Track Preview
-        </>
-      )}
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 22,
+          height: 22,
+          borderRadius: "50%",
+          background: isThisPlaying ? accentColor : "#000",
+        }}
+      >
+        <svg width="11" height="11" viewBox="0 0 24 24" fill={isThisPlaying ? "#000" : accentColor}>
+          {isThisPlaying
+            ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+            : <path d="M8 5v14l11-7z" />}
+        </svg>
+      </span>
+      {isThisPlaying ? "Pause" : "Play Preview"}
     </button>
   );
 }
