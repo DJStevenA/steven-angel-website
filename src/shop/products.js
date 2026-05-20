@@ -752,7 +752,7 @@ export const PRODUCTS = [
     ],
     dropboxPath:
       "/Ghost Tracks templates sample packs/Moog Sample PACK FULL BY STEVEN ANGEL.zip",
-    fileSize: "72 MB",
+    fileSize: "60 MB",
     specs: {
       includes: [
         "30 Moog loops",

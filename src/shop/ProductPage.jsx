@@ -25,6 +25,7 @@ import CheckoutModal from "./CheckoutModal.jsx";
 import Nav from "../Nav.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
+import Waveform from "./Waveform.jsx";
 import { trackViewItem, trackAddToCart, trackVideoPreview } from "../lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "../lib/analytics/hooks";
 
@@ -161,7 +162,7 @@ function SpecList({ title, items, accentColor }) {
 export default function ProductPage() {
   const { slug } = useParams();
   const product = getProductBySlug(slug);
-  const { playTrack, pauseTrack, currentTrack, isPlaying } = useShopPlayer();
+  const { playTrack, pauseTrack, currentTrack, isPlaying, currentTime, duration, seek } = useShopPlayer();
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -672,6 +673,97 @@ export default function ProductPage() {
                     </span>
                     {isThisPlaying ? "Pause" : "Play Preview"}
                   </button>
+                );
+              })()}
+
+              {/* Waveform for whatever's currently playing on THIS product —
+                  the main preview OR one of the per-pack loops. One panel,
+                  switches automatically based on currentTrack. Click anywhere
+                  on the waveform to seek. Hidden until something is playing
+                  from this product. */}
+              {(() => {
+                if (!currentTrack || !currentTrack.audioUrl) return null;
+                const isMain = currentTrack.id === product.id;
+                const isLoop = typeof currentTrack.id === "string"
+                  && currentTrack.id.startsWith(`${product.id}__loop-`);
+                if (!isMain && !isLoop) return null;
+                const progress = duration > 0 ? currentTime / duration : 0;
+                const handleSeekClick = (e) => {
+                  if (!duration) return;
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = (e.clientX ?? e.touches?.[0]?.clientX ?? 0) - rect.left;
+                  const pct = Math.max(0, Math.min(1, x / rect.width));
+                  seek(pct * duration);
+                };
+                const fmt = (s) => {
+                  if (!s || isNaN(s) || s === Infinity) return "0:00";
+                  const m = Math.floor(s / 60);
+                  const sec = Math.floor(s % 60);
+                  return `${m}:${sec.toString().padStart(2, "0")}`;
+                };
+                return (
+                  <div
+                    onClick={handleSeekClick}
+                    role="slider"
+                    aria-label="Seek"
+                    aria-valuenow={Math.round(currentTime)}
+                    aria-valuemin={0}
+                    aria-valuemax={Math.round(duration)}
+                    style={{
+                      marginBottom: 18,
+                      cursor: "pointer",
+                      background: `rgba(${accentRgba},0.05)`,
+                      border: `1px solid rgba(${accentRgba},0.15)`,
+                      borderRadius: 10,
+                      padding: "10px 14px",
+                      position: "relative",
+                      userSelect: "none",
+                      touchAction: "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 6,
+                        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                        fontWeight: 700,
+                        fontSize: 10,
+                        letterSpacing: "0.22em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.55)",
+                      }}
+                    >
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, marginRight: 8 }}>
+                        {isLoop ? currentTrack.title : "Now playing"}
+                      </span>
+                      <span style={{ color: accentColor, flexShrink: 0 }}>
+                        {fmt(currentTime)} / {fmt(duration)}
+                      </span>
+                    </div>
+                    <div style={{ position: "relative", height: 44 }}>
+                      <Waveform
+                        audioUrl={currentTrack.audioUrl}
+                        progress={progress}
+                        height={44}
+                      />
+                      {/* Playhead cursor over the waveform */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          bottom: 0,
+                          left: `${progress * 100}%`,
+                          width: 2,
+                          background: "#fff",
+                          boxShadow: `0 0 6px ${accentColor}`,
+                          pointerEvents: "none",
+                          transition: "left 0.1s linear",
+                        }}
+                      />
+                    </div>
+                  </div>
                 );
               })()}
 
