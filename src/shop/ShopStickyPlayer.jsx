@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
+import Waveform from "./Waveform.jsx";
 
 const CYAN = "#00E5FF";
 const BG = "#04040f";
@@ -180,40 +181,33 @@ export default function ShopStickyPlayer() {
     lineHeight: 1,
   };
 
+  // Container for the waveform — taller than the old thin progress bar to
+  // give the visualization room. Mobile gets a slightly shorter row to keep
+  // the sticky player compact.
   const trackBgStyle = {
     flex: 1,
-    height: isMobile ? 3 : 4,
-    background: "rgba(255,255,255,0.12)",
-    borderRadius: 2,
+    height: isMobile ? 28 : 36,
+    background: "transparent",
     position: "relative",
     cursor: "pointer",
     userSelect: "none",
     touchAction: "none",
+    overflow: "hidden",
   };
 
-  const trackFillStyle = {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    height: "100%",
-    width: `${progress}%`,
-    background: `linear-gradient(90deg, ${CYAN}, #00b8d4)`,
-    borderRadius: 2,
-    pointerEvents: "none",
-  };
-
+  // Cursor line that follows the current playback position over the waveform.
+  // Renders on top of the SVG, no pointer events so the underlying div still
+  // gets the click for seek.
   const seekHandleStyle = {
     position: "absolute",
-    top: "50%",
+    top: 0,
+    bottom: 0,
     left: `${progress}%`,
-    transform: "translate(-50%, -50%)",
-    width: isMobile ? 10 : 12,
-    height: isMobile ? 10 : 12,
-    borderRadius: "50%",
+    width: 2,
     background: "#fff",
     boxShadow: `0 0 6px ${CYAN}`,
     pointerEvents: "none",
-    transition: dragging ? "none" : "left 0.25s linear",
+    transition: dragging ? "none" : "left 0.1s linear",
   };
 
   const closeBtnStyle = {
@@ -294,7 +288,9 @@ export default function ShopStickyPlayer() {
             <span style={timeStyle}>{fmt(displayTime)}</span>
           )}
 
-          {/* Seek bar */}
+          {/* Waveform seek bar — SoundCloud-style. Click/drag anywhere to seek.
+              The Waveform itself is pointer-events:none; the wrapper div owns
+              the gesture so the existing scrub logic keeps working as-is. */}
           <div
             ref={seekBarRef}
             style={trackBgStyle}
@@ -306,7 +302,11 @@ export default function ShopStickyPlayer() {
             aria-valuemin={0}
             aria-valuemax={Math.round(duration)}
           >
-            <div style={trackFillStyle} />
+            <Waveform
+              audioUrl={currentTrack.audioUrl}
+              progress={duration > 0 ? displayTime / duration : 0}
+              height={isMobile ? 28 : 36}
+            />
             <div style={seekHandleStyle} />
           </div>
 
