@@ -628,7 +628,7 @@ export const PRODUCTS = [
     headline: "Desert Percussion for Afro Latin & Ethnic House",
     seoTitle: "Darbuka Loops Sample Pack — Afro Latin / Ethnic House | Steven Angel",
     seoDescription:
-      "Darbuka percussion sample pack — 102 files, 51 loops (dry + wet). Spice up your drums with Sahara / Middle Eastern vibe. For Techno, Tech-House, EDM, Psy Trance, Afro House. $7.",
+      "Darbuka percussion sample pack — 132 files: 51 dry + 51 wet loops + 30 one-shots (Tek / Slap / Dum). Sahara vibe for Techno, Tech-House, EDM, Psy Trance, Afro House. $7.",
     price: 7,
     currency: "USD",
     badge: null,
@@ -638,8 +638,8 @@ export const PRODUCTS = [
     bpm: null,
     musicalKey: null,
     description:
-      "Looking for that desert percussion sound? This sample pack will spice up your drums and give you that Sahara vibe. Good for all EDM genres — Techno, Tech-House, EDM, Psy Trance, Afro House and more. 102 files including 51 loops (dry + wet versions) — let's get that Arabian night vibe on.",
-    shortDescription: "102 files · 51 loops (dry + wet) · royalty-free",
+      "Looking for that desert percussion sound? This sample pack will spice up your drums and give you that Sahara vibe. Good for all EDM genres — Techno, Tech-House, EDM, Psy Trance, Afro House and more. 132 files: 51 dry loops + 51 wet (FX'd) loops + 30 one-shots (Tek, Slap, Dum) — a full Darbuka toolkit for that Arabian night vibe.",
+    shortDescription: "132 files · 51 loops × 2 + 30 one-shots · royalty-free",
     keywords: [
       "darbuka sample pack",
       "darbuka loops",
@@ -654,8 +654,9 @@ export const PRODUCTS = [
       "ethnic drum loops",
     ],
     features: [
-      "102 files total",
-      "51 loops (dry + wet versions)",
+      "132 files total",
+      "51 dry + 51 wet loops",
+      "30 one-shots (Tek / Slap / Dum)",
       "100% royalty-free",
       "All WAV 24-bit",
       "For Techno, Tech-House, EDM, Psy Trance, Afro House",
@@ -674,11 +675,12 @@ export const PRODUCTS = [
     ],
     dropboxPath:
       "/Ghost Tracks templates sample packs/Dl BandCamp/Darbuka_Loops__1.zip",
-    fileSize: "100 MB",
+    fileSize: "83 MB",
     specs: {
       includes: [
         "51 dry darbuka loops",
         "51 wet darbuka loops (FX'd versions)",
+        "30 one-shots (Tek / Slap / Dum)",
         "Demo track included",
       ],
       notes: [
