@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { getOrderedProducts } from "./products.js";
 import ProductCard from "./ProductCard.jsx";
 import DiscountPopup from "./DiscountPopup.jsx";
+import FreeAfroLatinPopup from "./FreeAfroLatinPopup.jsx";
 import CheckoutModal from "./CheckoutModal.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import GhostCatalog from "./ghost/GhostCatalog.jsx";
@@ -93,7 +94,9 @@ export default function ShopPage() {
   return (
     <div style={{ background: BG, minHeight: "100vh", color: "#fff", paddingBottom: currentTrack ? (isMobile ? 64 : 72) : 0 }}>
       {/* Welcome discount popup (shows once per visitor) */}
-      <DiscountPopup />
+      {/* Lead magnet popup — replaces the old DiscountPopup. Old component
+          still imported but not rendered, kept for quick rollback if needed. */}
+      <FreeAfroLatinPopup />
 
       {/* Hidden H1 for SEO — long-tail keywords mixed in */}
       <h1
@@ -351,8 +354,11 @@ export default function ShopPage() {
         )}
 
         {/* ═══ Products Grid (templates tab) ═══ */}
+        {/* Anchors for Google Ads sitelinks: /shop#templates and /shop#demos
+            both scroll to the products grid (every card has audio preview). */}
         {activeTab === "shop" && (
-          <section style={{ padding: isMobile ? "0 16px 60px" : "0 60px 80px" }}>
+          <section id="templates" style={{ padding: isMobile ? "0 16px 60px" : "0 60px 80px", scrollMarginTop: 80 }}>
+            <span id="demos" aria-hidden="true" />
             <div style={{ maxWidth: 1200, margin: "0 auto" }} data-shop-grid="true">
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(320px, 1fr))", gap: isMobile ? 20 : 24 }}>
                 {products.map((product) => (

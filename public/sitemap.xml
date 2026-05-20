@@ -103,6 +103,31 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 4 new products added 2026-05-20 -->
+  <url>
+    <loc>https://steven-angel.com/shop/indie-dance-nu-disco-ableton-live-template</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/dirty-tech-house-ableton-live-template-michael-bibi-style</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/darbuka-loops-sample-pack-afro-latin-ethnic-house</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://steven-angel.com/shop/moog-loops-samples-analog-bass-sample-pack</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- THE LAB — blog index + per-post pages (added 2026-05-17) -->
   <url>
     <loc>https://steven-angel.com/blog</loc>
