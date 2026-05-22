@@ -1,0 +1,5 @@
+# Canonical: force non-www HTTPS (steven-angel.com)
+# Approved by Steven 2026-05-22
+https://www.steven-angel.com/*  https://steven-angel.com/:splat  301!
+http://www.steven-angel.com/*   https://steven-angel.com/:splat  301!
+http://steven-angel.com/*       https://steven-angel.com/:splat  301!
