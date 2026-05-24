@@ -1,5 +1,8 @@
 # Canonical: force non-www HTTPS (steven-angel.com)
-# Approved by Steven 2026-05-22
-https://www.steven-angel.com/*  https://steven-angel.com/:splat  301!
-http://www.steven-angel.com/*   https://steven-angel.com/:splat  301!
-http://steven-angel.com/*       https://steven-angel.com/:splat  301!
+# Approved by Steven 2026-05-22 (3 host variants)
+# Extended 2026-05-24 — block Netlify default subdomain (4th variant) to
+# prevent SEO equity split if Google ever discovers the .netlify.app URL.
+https://www.steven-angel.com/*    https://steven-angel.com/:splat  301!
+http://www.steven-angel.com/*     https://steven-angel.com/:splat  301!
+http://steven-angel.com/*         https://steven-angel.com/:splat  301!
+https://steven-angel.netlify.app/*  https://steven-angel.com/:splat  301!
