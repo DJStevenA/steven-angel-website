@@ -16,6 +16,8 @@ const MixMastering = lazy(() => import("./MixMastering.jsx"));
 const MixMasteringUpload = lazy(() => import("./MixMasteringUpload.jsx"));
 const Sign = lazy(() => import("./Sign.jsx"));
 const Privacy = lazy(() => import("./Privacy.jsx"));
+const Terms = lazy(() => import("./Terms.jsx"));
+const Refund = lazy(() => import("./Refund.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
 const Blog = lazy(() => import("./blog/Blog.jsx"));
@@ -194,6 +196,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             {/* Legal — public, no login required (Meta App Review requirement for the @stevenangel.prod Instagram bot) */}
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
+            <Route path="/refund" element={<Refund />} />
+            <Route path="/refund-policy" element={<Navigate to="/refund" replace />} />
             {/* AI Tools — Mashup Generator */}
             <Route path="/tools/mashup" element={<MashupGeneratorPage />} />
             <Route path="/tools/mashup/credits" element={<MashupCreditsPage />} />
