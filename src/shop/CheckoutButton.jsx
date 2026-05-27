@@ -165,7 +165,11 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
                 window.clarity("set", "product", product?.name || "unknown");
                 window.clarity("set", "value", String(product?.price || 0));
               }
-              if (product) trackPurchase(product, { transaction_id: data.orderID });
+              // Pass guestEmail (set on the parent guest-checkout flow) so Google can
+              // match this purchase to the ad-clicker via Enhanced Conversions.
+              // For logged-in users, guestEmail is undefined — Smart Bidding still
+              // gets the purchase signal, just without the email-hash match boost.
+              if (product) trackPurchase(product, { transaction_id: data.orderID, email: guestEmail });
               if (onSuccess) onSuccess(json.purchase);
             } catch (err) {
               const msg = err.message || "Payment capture failed";

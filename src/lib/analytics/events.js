@@ -1,4 +1,4 @@
-import { trackEvent, trackConversion } from './gtag';
+import { trackEvent, trackConversion, setEnhancedConversionsUserData } from './gtag';
 import { WHATSAPP_VALUES, LEAD_FORM_VALUES } from './config';
 
 const itemFromProduct = (product) => ({
@@ -52,7 +52,10 @@ export const trackAddPaymentInfo = (product, paymentType = 'paypal') => {
   });
 };
 
-export const trackPurchase = (product, { transaction_id } = {}) => {
+export const trackPurchase = (product, { transaction_id, email } = {}) => {
+  // Enhanced Conversions — attach hashed email so Google can match this
+  // purchase to the user who clicked an ad. Must fire BEFORE the conversion.
+  if (email) setEnhancedConversionsUserData({ email });
   trackEvent('purchase', {
     transaction_id,
     currency: product.currency || 'USD',
@@ -106,7 +109,10 @@ export const trackTimeOnPage = (seconds, page_category) => {
   trackEvent('time_on_page', { seconds, page_category });
 };
 
-export const trackLeadFormSubmit = (productLine, sourcePage, valueOverride) => {
+export const trackLeadFormSubmit = (productLine, sourcePage, valueOverride, email) => {
+  // Enhanced Conversions — attach hashed email so Google can match this lead
+  // to the user who clicked an ad. Must fire BEFORE the conversion.
+  if (email) setEnhancedConversionsUserData({ email });
   const value = valueOverride ?? LEAD_FORM_VALUES[productLine] ?? LEAD_FORM_VALUES.default;
   trackEvent('lead_form_submit', {
     product_line: productLine,

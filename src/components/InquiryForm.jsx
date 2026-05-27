@@ -82,7 +82,9 @@ export default function InquiryForm({
       if (!res.ok || !data.success) {
         throw new Error(data.error || `Server error (${res.status})`);
       }
-      trackLeadFormSubmit(productLine, source);
+      // Pass email to enable Enhanced Conversions match against the ad-clicker's
+      // signed-in Google account. Email is captured before setEmail("") below.
+      trackLeadFormSubmit(productLine, source, undefined, email);
       setStatus("sent");
       setName("");
       setEmail("");

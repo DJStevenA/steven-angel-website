@@ -1338,7 +1338,8 @@ function GhostPage() {
                         // Fires GA4 lead_form_submit event AND Google Ads conversion to
                         // "Ghost Production - Lead" action ($300). Replaces previous inline
                         // gtag() call which never reached Google Ads (label was empty until 2026-05-08).
-                        trackLeadFormSubmit('GP', '/ghost', 300);
+                        // Email is captured before form.reset() — used for Enhanced Conversions.
+                        trackLeadFormSubmit('GP', '/ghost', 300, data.email);
                       } else {
                         alert("Something went wrong. Please try WhatsApp instead.");
                       }
