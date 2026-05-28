@@ -27,6 +27,9 @@ import { trackAddPaymentInfo, trackPurchase } from "../lib/analytics/events";
 
 // Module-level cache so the SDK is loaded at most once per client ID
 const sdkCache = new Map();
+let _preloadPromise = null;
+
+const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
 function loadPayPalSdk(clientId, mode) {
   const cacheKey = `${clientId}-${mode}`;
@@ -59,6 +62,29 @@ function loadPayPalSdk(clientId, mode) {
 
   sdkCache.set(cacheKey, promise);
   return promise;
+}
+
+/**
+ * Preload the PayPal SDK as early as possible (called when CheckoutModal opens).
+ * Fetches /shop/config and starts loading the PayPal script in the background.
+ * By the time the user enters their email and CheckoutButton mounts, the SDK
+ * is already cached and buttons render instantly.
+ */
+export function preloadPayPalSdk() {
+  if (_preloadPromise) return _preloadPromise;
+  _preloadPromise = (async () => {
+    try {
+      const res = await fetch(`${BACKEND}/shop/config`);
+      if (!res.ok) return;
+      const config = await res.json();
+      if (config.paypalClientId) {
+        await loadPayPalSdk(config.paypalClientId, config.paypalMode);
+      }
+    } catch {
+      // Non-fatal — CheckoutButton will retry on mount
+    }
+  })();
+  return _preloadPromise;
 }
 
 export default function CheckoutButton({ product, couponCode, guestEmail, onSuccess, onError }) {

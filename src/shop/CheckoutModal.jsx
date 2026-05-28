@@ -17,7 +17,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext.jsx";
-import CheckoutButton from "./CheckoutButton.jsx";
+import CheckoutButton, { preloadPayPalSdk } from "./CheckoutButton.jsx";
 import { trackBeginCheckout } from "../lib/analytics/events";
 
 const CYAN = "#00E5FF";
@@ -69,6 +69,7 @@ export default function CheckoutModal({ product, onClose }) {
   }, []);
 
   // Track checkout start — Clarity + GA4
+  // Also preload PayPal SDK immediately so it's ready when user enters email
   useEffect(() => {
     if (window.clarity) {
       window.clarity("event", "checkoutStart");
@@ -76,6 +77,7 @@ export default function CheckoutModal({ product, onClose }) {
       window.clarity("upgrade", "checkout");
     }
     trackBeginCheckout(product);
+    preloadPayPalSdk();
   }, [product]);
 
   // Lock body scroll while modal is open
