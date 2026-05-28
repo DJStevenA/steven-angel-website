@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useShopPlayer } from "../ShopPlayerContext.jsx";
+import { useCart } from "../CartContext.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -17,6 +19,9 @@ const GENRE_COLORS = {
 
 export default function GhostTrackCard({ track, isMobile, onBuy }) {
   const { playTrack, pauseTrack, seek, currentTrack, isPlaying, currentTime, duration } = useShopPlayer();
+  const { addToCart, isInCart } = useCart();
+  const navigate = useNavigate();
+  const inCart = isInCart(`ghost-${track.id}`);
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
   const progressRef = useRef(null);
@@ -344,31 +349,59 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
           <button
             onClick={() => {
               if (isSold) return;
-              if (window.gtag) window.gtag("event", "begin_checkout", {
+              if (inCart) {
+                navigate("/shop/cart");
+                return;
+              }
+              if (window.gtag) window.gtag("event", "add_to_cart", {
                 event_category: "ghost_catalog",
                 event_label: track.name,
-                value: track.price_eur,
-                currency: "EUR",
-                items: [{ item_id: track.id, item_name: track.name, item_category: track.genre, price: track.price_eur, quantity: 1 }],
+                value: track.price_usd,
+                currency: "USD",
+                items: [{ item_id: track.id, item_name: track.name, item_category: track.genre, price: track.price_usd, quantity: 1 }],
               });
-              onBuy(track);
+              addToCart({
+                id: `ghost-${track.id}`,
+                slug: `ghost-${track.id}`,
+                name: track.name,
+                price: track.price_usd,
+                image: `/shop/ghost-${track.id}-cover.webp`,
+                headline: `${track.genre} Ghost Track`,
+                isGhost: true,
+                trackId: track.id,
+              });
             }}
             disabled={isSold}
             style={{
               padding: isMobile ? "10px 18px" : "11px 22px",
               background: isSold
                 ? "rgba(255,255,255,0.06)"
-                : `linear-gradient(135deg, ${accentColor}, ${accentColor === CYAN ? "#00b8d4" : "#9b59d4"})`,
-              color: isSold ? "rgba(255,255,255,0.3)" : "#000",
-              border: "none", borderRadius: 6,
+                : inCart
+                  ? "rgba(0,229,255,0.08)"
+                  : `linear-gradient(135deg, ${accentColor}, ${accentColor === CYAN ? "#00b8d4" : "#9b59d4"})`,
+              color: isSold ? "rgba(255,255,255,0.3)" : inCart ? CYAN : "#000",
+              border: inCart ? `1px solid ${CYAN}` : "none",
+              borderRadius: 6,
               fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
               fontWeight: 800, fontSize: 13,
               letterSpacing: "0.15em", textTransform: "uppercase",
               cursor: isSold ? "not-allowed" : "pointer",
               whiteSpace: "nowrap",
+              display: "flex", alignItems: "center", gap: 6,
+              transition: "all 0.2s",
             }}
           >
-            {isSold ? "Sold" : "Buy Now"}
+            {isSold ? "Sold" : inCart ? (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={CYAN} strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                In Cart
+              </>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                Add to Cart
+              </>
+            )}
           </button>
         </div>
       </div>
