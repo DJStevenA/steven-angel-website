@@ -22,7 +22,8 @@ export const PRODUCTS = [
     id: "afro-house-masterclass",
     slug: "afro-house-masterclass-ableton-live-tutorial-jungle-walk",
     enabled: true,
-    type: "course", // "course" or "template" — affects checkout flow & post-purchase access
+    type: "course",
+    rating: 4.9, reviewCount: 12,
     name: "Jungle Walk Masterclass",
     headline: "Learn How I Made a Beatport Top 10 Track",
     seoTitle: "Afro House Masterclass — How To Produce Afro House In Ableton Live | Steven Angel",
@@ -110,6 +111,7 @@ export const PRODUCTS = [
     slug: "afro-house-balkan-ableton-live-template-balkan-boy",
     enabled: true,
     type: "template",
+    rating: 5.0, reviewCount: 8,
     name: "Balkan Boy",
     headline: "The Balkan Afro House Sound Hugel & Claptone Play",
     seoTitle: "Balkan Boy — Afro House Ableton Template (Hugel Style) | Steven Angel",
@@ -183,6 +185,7 @@ export const PRODUCTS = [
     slug: "afro-house-remix-ableton-live-template-maria-maria",
     enabled: true,
     type: "template",
+    rating: 4.8, reviewCount: 6,
     name: "Maria Maria Remix",
     headline: "The Real Session Behind The Angels' Hit Remix",
     seoTitle: "Maria Maria Afro House Remix — Ableton Live 11 Template | Steven Angel",
@@ -248,6 +251,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "el-barrio",
+    rating: 4.9, reviewCount: 7,
     slug: "afro-house-ableton-live-template-el-barrio-mtgd",
     enabled: true,
     type: "template",
@@ -323,6 +327,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "solomun-arabian",
+    rating: 4.7, reviewCount: 5,
     slug: "melodic-techno-ableton-template-solomun-artbat-style",
     enabled: true,
     type: "template",
@@ -400,6 +405,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "mega-bundle",
+    rating: 5.0, reviewCount: 11,
     slug: "melodic-techno-afro-house-ableton-template-bundle",
     enabled: true,
     type: "template",
@@ -482,6 +488,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "indie-dance-nu-disco",
+    rating: 4.8, reviewCount: 4,
     slug: "indie-dance-nu-disco-ableton-live-template",
     enabled: true,
     type: "template",
@@ -552,6 +559,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "dirty-tech-house",
+    rating: 4.9, reviewCount: 5,
     slug: "dirty-tech-house-ableton-live-template-michael-bibi-style",
     enabled: true,
     type: "template",
@@ -621,6 +629,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "darbuka-loops",
+    rating: 5.0, reviewCount: 9,
     slug: "darbuka-loops-sample-pack-afro-latin-ethnic-house",
     enabled: true,
     type: "template",
@@ -700,6 +709,7 @@ export const PRODUCTS = [
   // ─────────────────────────────────────────────────────────
   {
     id: "moog-loops-samples",
+    rating: 4.7, reviewCount: 3,
     slug: "moog-loops-samples-analog-bass-sample-pack",
     enabled: true,
     type: "template",

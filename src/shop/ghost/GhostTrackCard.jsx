@@ -300,10 +300,31 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
         {/* Exclusive tag */}
         <div style={{
           fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11,
-          color: "rgba(255,255,255,0.4)", marginBottom: 14,
+          color: "rgba(255,255,255,0.4)", marginBottom: 8,
         }}>
           {isSold ? "No longer available" : "Exclusive · One-time sale · Full rights transfer"}
         </div>
+
+        {/* Deliverables */}
+        {!isSold && (
+          <div style={{
+            display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 12,
+          }}>
+            {["Mastered WAV & MP3", "Extended + Radio Edit", "Stems"].map((d) => (
+              <span key={d} style={{
+                fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                fontSize: 9, fontWeight: 500,
+                color: "rgba(255,255,255,0.55)",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                padding: "2px 8px", borderRadius: 10,
+                whiteSpace: "nowrap",
+              }}>
+                {d}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Price + BUY row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>

@@ -120,6 +120,23 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
 }
 
 /**
+ * StarRating — renders 5 stars (filled/half/empty) from a 0-5 rating.
+ */
+function StarRating({ rating, size = 14 }) {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    if (rating >= i) {
+      stars.push(<span key={i} style={{ color: "#FFD700", fontSize: size }}>&#9733;</span>);
+    } else if (rating >= i - 0.5) {
+      stars.push(<span key={i} style={{ color: "#FFD700", fontSize: size, opacity: 0.7 }}>&#9733;</span>);
+    } else {
+      stars.push(<span key={i} style={{ color: "rgba(255,255,255,0.15)", fontSize: size }}>&#9733;</span>);
+    }
+  }
+  return <span style={{ display: "inline-flex", gap: 1 }}>{stars}</span>;
+}
+
+/**
  * MiniPlayButton — small circular play/pause button overlaid on the product
  * image. Triggers the shop-wide sticky player. Compact enough not to dominate
  * the card, but visible enough to invite a click.
@@ -280,6 +297,16 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         {/* Mini audio play button — overlaid on image bottom-right */}
         {product.audioUrl && <MiniPlayButton product={product} accentColor={accentColor} accentRgba={accentRgba} />}
       </div>
+
+      {/* Star rating */}
+      {product.rating > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+          <StarRating rating={product.rating} />
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
+            {product.reviewCount} reviews
+          </span>
+        </div>
+      )}
 
       {/* Genre · DAW · BPM · Key label */}
       <div style={{ ...label(accentColor), marginBottom: 8, lineHeight: 1.4 }}>

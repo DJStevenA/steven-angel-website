@@ -816,8 +816,32 @@ function GhostPage() {
             <h2 style={{ ...heading(isMobile ? 28 : 40), color: "#fff", marginBottom: 8 }}>
               Buy a Finished Track
             </h2>
-            <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.55)", maxWidth: 540, margin: "0 auto" }}>
+            <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.55)", maxWidth: 540, margin: "0 auto", marginBottom: 20 }}>
               Pre-made productions ready to release under your name. NDA + 100% rights transfer included.
+            </div>
+
+            {/* Deliverables badges */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 8 : 12, maxWidth: 600, margin: "0 auto" }}>
+              {[
+                { icon: "\uD83C\uDFA7", text: "Mastered WAV & MP3" },
+                { icon: "\uD83C\uDFB5", text: "Extended Edit & Radio Edit" },
+                { icon: "\uD83C\uDFDB\uFE0F", text: "Stems" },
+                { icon: "\uD83D\uDD12", text: "NDA + Full Rights" },
+              ].map(({ icon, text }) => (
+                <div key={text} style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  padding: "6px 14px",
+                  background: "rgba(0,229,255,0.05)",
+                  border: "1px solid rgba(0,229,255,0.15)",
+                  borderRadius: 20,
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                  fontSize: 12, color: "rgba(255,255,255,0.7)",
+                  whiteSpace: "nowrap",
+                }}>
+                  <span>{icon}</span>
+                  <span>{text}</span>
+                </div>
+              ))}
             </div>
           </div>
           <GhostCatalog isMobile={isMobile} />

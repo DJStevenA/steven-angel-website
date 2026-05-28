@@ -284,11 +284,26 @@ export default function ShopPage() {
                 <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: isMobile ? 16 : 22, letterSpacing: "0.08em", color: "rgba(255,255,255,0.7)", marginBottom: 28 }}>
                   Exclusive · One Buyer Only · Full Rights Transfer
                 </div>
-                <div style={{ ...body, maxWidth: 580, margin: "0 auto" }}>
+                <div style={{ ...body, maxWidth: 580, margin: "0 auto", marginBottom: 18 }}>
                   Finished, release-ready tracks by{" "}
                   <span style={{ color: CYAN, fontWeight: 600 }}>Steven Angel</span>.
                   Each is sold exactly once. You get the WAV, the rights, and a signed NDA.
                   Once sold, it disappears from this catalog forever.
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 8 : 10 }}>
+                  {["Mastered WAV & MP3", "Extended Edit & Radio Edit", "Stems", "NDA + Full Rights"].map((d) => (
+                    <span key={d} style={{
+                      display: "flex", alignItems: "center", gap: 5,
+                      padding: "5px 12px",
+                      background: "rgba(187,134,252,0.06)",
+                      border: "1px solid rgba(187,134,252,0.2)",
+                      borderRadius: 20,
+                      fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                      fontSize: 11, color: "rgba(255,255,255,0.7)", whiteSpace: "nowrap",
+                    }}>
+                      {d}
+                    </span>
+                  ))}
                 </div>
               </>
             ) : (
