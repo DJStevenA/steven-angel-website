@@ -544,78 +544,7 @@ export default function ProductPage() {
                 {product.headline}
               </div>
 
-              {/* Price */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "baseline",
-                  gap: 12,
-                  marginBottom: 22,
-                  flexWrap: "wrap",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                    fontWeight: 900,
-                    fontSize: isMobile ? 38 : 48,
-                    color: accentColor,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  ${product.price}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                    fontWeight: 600,
-                    fontSize: 13,
-                    letterSpacing: "0.15em",
-                    color: "rgba(255,255,255,0.5)",
-                  }}
-                >
-                  {product.currency} · ONE-TIME
-                </div>
-              </div>
-
-              {/* Buy button */}
-              <button
-                onClick={handleBuy}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  padding: "16px 28px",
-                  background: isPurple
-                    ? PURPLE
-                    : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
-                  border: "none",
-                  borderRadius: 8,
-                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                  fontWeight: 800,
-                  fontSize: 16,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "#000",
-                  cursor: "pointer",
-                  boxShadow: `0 0 28px rgba(${accentRgba},0.35)`,
-                  marginBottom: 14,
-                }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                {inCart ? "View Cart" : "Add to Cart"}
-              </button>
-
-              <div
-                style={{
-                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.5)",
-                  textAlign: "center",
-                  marginBottom: 22,
-                }}
-              >
-                Instant email delivery · Lifetime re-downloads · Royalty-free
-              </div>
+              {/* Price + Add to Cart moved to bottom after specs */}
 
               {/* Audio preview — plays through the sticky player.
                   Filled-cyan call-to-action so users see "this is the play button". */}
@@ -994,6 +923,49 @@ export default function ProductPage() {
                   )}
                 </div>
               )}
+
+              {/* ── Price + Add to Cart (below specs) ── */}
+              <div style={{ marginTop: 32, paddingTop: 24, borderTop: `1px solid rgba(${accentRgba},0.15)` }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+                  <div style={{
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                    fontWeight: 900, fontSize: isMobile ? 38 : 48,
+                    color: accentColor, letterSpacing: "0.02em",
+                  }}>
+                    ${product.price}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                    fontWeight: 600, fontSize: 13, letterSpacing: "0.15em",
+                    color: "rgba(255,255,255,0.5)",
+                  }}>
+                    {product.currency} · ONE-TIME
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleBuy}
+                  style={{
+                    display: "block", width: "100%", padding: "16px 28px",
+                    background: isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+                    border: "none", borderRadius: 8,
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                    fontWeight: 800, fontSize: 16, letterSpacing: "0.12em",
+                    textTransform: "uppercase", color: "#000", cursor: "pointer",
+                    boxShadow: `0 0 28px rgba(${accentRgba},0.35)`, marginBottom: 14,
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                  {inCart ? "View Cart" : "Add to Cart"}
+                </button>
+
+                <div style={{
+                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                  fontSize: 11, color: "rgba(255,255,255,0.5)", textAlign: "center",
+                }}>
+                  Instant email delivery · Lifetime re-downloads · Royalty-free
+                </div>
+              </div>
             </div>
           </div>
         </section>

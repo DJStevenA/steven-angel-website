@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
+import Waveform from "./Waveform.jsx";
 
 const CYAN = "#00E5FF";
 const BG = "#04040f";
@@ -296,10 +297,10 @@ export default function ShopStickyPlayer() {
             <span style={timeStyle}>{fmt(displayTime)}</span>
           )}
 
-          {/* Seek bar — thin gradient line. Waveform lives on ProductPage only. */}
+          {/* Waveform seek bar — replaces thin line with SoundCloud-style waveform */}
           <div
             ref={seekBarRef}
-            style={trackBgStyle}
+            style={{ ...trackBgStyle, height: isMobile ? 28 : 36, background: "transparent", cursor: "pointer" }}
             onMouseDown={handleSeekDown}
             onTouchStart={handleSeekDown}
             aria-label="Seek"
@@ -308,8 +309,11 @@ export default function ShopStickyPlayer() {
             aria-valuemin={0}
             aria-valuemax={Math.round(duration)}
           >
-            <div style={trackFillStyle} />
-            <div style={seekHandleStyle} />
+            <Waveform
+              audioUrl={currentTrack?.audioUrl}
+              progress={duration > 0 ? displayTime / duration : 0}
+              height={isMobile ? 28 : 36}
+            />
           </div>
 
           <span style={timeStyle}>
