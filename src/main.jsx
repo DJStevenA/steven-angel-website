@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
 import App from "./App.jsx";
 import { AuthProvider } from "./shop/AuthContext.jsx";
+import { CartProvider } from "./shop/CartContext.jsx";
 import { ShopPlayerProvider } from "./shop/ShopPlayerContext.jsx";
 import ShopStickyPlayer from "./shop/ShopStickyPlayer.jsx";
 import { trackPageView } from "./lib/analytics/events";
@@ -28,6 +29,8 @@ const SignupPage = lazy(() => import("./shop/SignupPage.jsx"));
 const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
 const ForgotPage = lazy(() => import("./shop/ForgotPage.jsx"));
 const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
+const CheckoutPage = lazy(() => import("./shop/CheckoutPage.jsx"));
+const CartPage = lazy(() => import("./shop/CartPage.jsx"));
 
 const MashupGeneratorPage = lazy(() => import("./tools/mashup/MashupGeneratorPage.jsx"));
 const MashupCreditsPage = lazy(() => import("./tools/mashup/MashupCreditsPage.jsx"));
@@ -167,6 +170,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
+        <CartProvider>
         <ScrollToHash />
         <PageTitle />
         <Suspense fallback={<div style={{ background: "#000", minHeight: "100vh" }} />}>
@@ -211,6 +215,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route path="/shop/login" element={<LoginPage />} />
               <Route path="/shop/signup" element={<SignupPage />} />
               <Route path="/shop/account" element={<AccountPage />} />
+              <Route path="/shop/cart" element={<CartPage />} />
+              <Route path="/shop/checkout/:slug" element={<CheckoutPage />} />
               <Route path="/shop/forgot" element={<ForgotPage />} />
               <Route path="/shop/reset" element={<ResetPage />} />
               <Route path="/shop/:slug" element={<ProductPage />} />
@@ -219,6 +225,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

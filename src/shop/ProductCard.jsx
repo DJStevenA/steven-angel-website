@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
-import { Link } from "react-router-dom";
-import { trackSelectItem, trackAudioPreview } from "../lib/analytics/events";
+import { Link, useNavigate } from "react-router-dom";
+import { trackSelectItem, trackAudioPreview, trackAddToCart } from "../lib/analytics/events";
+import { useCart } from "./CartContext.jsx";
 
 /* ─── Color Constants (matches BRAND_GUIDE.md) ─── */
 const CYAN = "#00E5FF";
@@ -202,6 +203,10 @@ function MiniPlayButton({ product, accentColor, accentRgba }) {
  *   └─────────────────────────┘
  */
 export default function ProductCard({ product, isMobile, onBuy }) {
+  const navigate = useNavigate();
+  const { addToCart, isInCart } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
+  const inCart = isInCart(product.id);
   const isPurple = product.badgeColor === "purple";
   const accentColor = isPurple ? PURPLE : CYAN;
   const accentRgba = isPurple ? "187,134,252" : "0,229,255";
@@ -389,18 +394,29 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </span>
       </Link>
 
-      {/* Buy Now button */}
+      {/* Add to Cart / In Cart button */}
       <button
-        onClick={() => onBuy(product)}
+        onClick={() => {
+          if (inCart) {
+            navigate("/shop/cart");
+          } else {
+            addToCart(product);
+            trackAddToCart(product);
+            setJustAdded(true);
+            setTimeout(() => setJustAdded(false), 1500);
+          }
+        }}
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
           width: "100%",
-          background: isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
-          color: "#000",
-          border: "none",
+          background: inCart
+            ? "rgba(0,229,255,0.08)"
+            : isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+          color: inCart ? CYAN : "#000",
+          border: inCart ? `1px solid ${CYAN}` : "none",
           borderRadius: 50,
           padding: isMobile ? "13px 20px" : "15px 28px",
           fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
@@ -409,13 +425,24 @@ export default function ProductCard({ product, isMobile, onBuy }) {
           letterSpacing: "0.18em",
           textTransform: "uppercase",
           cursor: "pointer",
-          boxShadow: isPurple
+          boxShadow: inCart ? "none" : isPurple
             ? "0 0 24px rgba(187,134,252,0.4)"
             : "0 0 28px rgba(0,229,255,0.5)",
           marginTop: "auto",
+          transition: "all 0.2s",
         }}
       >
-        Buy Now
+        {inCart ? (
+          <>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={CYAN} strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            {justAdded ? "Added!" : "In Cart — View"}
+          </>
+        ) : (
+          <>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Add to Cart
+          </>
+        )}
       </button>
     </div>
   );

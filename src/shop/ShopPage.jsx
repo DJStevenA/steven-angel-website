@@ -4,8 +4,8 @@ import { getOrderedProducts } from "./products.js";
 import ProductCard from "./ProductCard.jsx";
 import DiscountPopup from "./DiscountPopup.jsx";
 import FreeAfroLatinPopup from "./FreeAfroLatinPopup.jsx";
-import CheckoutModal from "./CheckoutModal.jsx";
 import { useAuth } from "./AuthContext.jsx";
+import { useCart } from "./CartContext.jsx";
 import GhostCatalog from "./ghost/GhostCatalog.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
@@ -49,9 +49,9 @@ export default function ShopPage() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
-  const [checkoutProduct, setCheckoutProduct] = useState(null);
   const products = getOrderedProducts();
   const { user, loading: authLoading } = useAuth();
+  const { cartCount } = useCart();
   const location = useLocation();
   const { currentTrack } = useShopPlayer();
 
@@ -199,31 +199,69 @@ export default function ShopPage() {
           </div>
         )}
 
-        {/* Sign in / My Account button — hidden during initial auth load to avoid flicker */}
-        {!authLoading && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* Cart icon */}
           <Link
-            to={user ? "/shop/account" : "/shop/login"}
+            to="/shop/cart"
+            aria-label={`Cart (${cartCount} items)`}
             style={{
+              position: "relative",
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
-              background: user ? "rgba(0,229,255,0.08)" : "transparent",
-              border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.2)"}`,
-              color: user ? CYAN : "rgba(255,255,255,0.85)",
-              fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-              fontWeight: 700,
-              fontSize: isMobile ? 11 : 12,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: isMobile ? "7px 14px" : "9px 18px",
+              justifyContent: "center",
+              width: 38,
+              height: 38,
               borderRadius: 4,
+              background: cartCount > 0 ? "rgba(0,229,255,0.08)" : "transparent",
+              border: `1px solid ${cartCount > 0 ? CYAN : "rgba(255,255,255,0.15)"}`,
               textDecoration: "none",
-              whiteSpace: "nowrap",
+              transition: "all 0.15s",
             }}
           >
-            {user ? (isMobile ? "Account" : "My Account") : "Sign In"}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cartCount > 0 ? CYAN : "rgba(255,255,255,0.6)"} strokeWidth="2">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            {cartCount > 0 && (
+              <span style={{
+                position: "absolute", top: -6, right: -6,
+                background: CYAN, color: "#000",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
+                fontSize: 11, minWidth: 18, height: 18,
+                borderRadius: 9, display: "flex", alignItems: "center",
+                justifyContent: "center", lineHeight: 1,
+              }}>
+                {cartCount}
+              </span>
+            )}
           </Link>
-        )}
+
+          {/* Sign in / My Account */}
+          {!authLoading && (
+            <Link
+              to={user ? "/shop/account" : "/shop/login"}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: user ? "rgba(0,229,255,0.08)" : "transparent",
+                border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.2)"}`,
+                color: user ? CYAN : "rgba(255,255,255,0.85)",
+                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                fontWeight: 700,
+                fontSize: isMobile ? 11 : 12,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                padding: isMobile ? "7px 14px" : "9px 18px",
+                borderRadius: 4,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {user ? (isMobile ? "Account" : "My Account") : "Sign In"}
+            </Link>
+          )}
+        </div>
       </nav>
 
       <main>
@@ -469,13 +507,7 @@ export default function ShopPage() {
       {/* ═══ Support Widget ═══ */}
       <SupportWidget />
 
-      {/* Checkout Modal — opens when user clicks Buy Now on any product card */}
-      {checkoutProduct && (
-        <CheckoutModal
-          product={checkoutProduct}
-          onClose={() => setCheckoutProduct(null)}
-        />
-      )}
+      {/* Checkout moved to /shop/cart page with full cart flow */}
     </div>
   );
 }

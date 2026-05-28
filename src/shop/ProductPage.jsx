@@ -15,16 +15,16 @@
  */
 
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import {
   getProductBySlug,
   getOrderedProducts,
   getProductSpecs,
 } from "./products.js";
-import CheckoutModal from "./CheckoutModal.jsx";
 import Nav from "../Nav.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
+import { useCart } from "./CartContext.jsx";
 import Waveform from "./Waveform.jsx";
 import { trackViewItem, trackAddToCart, trackVideoPreview } from "../lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "../lib/analytics/hooks";
@@ -288,9 +288,17 @@ export default function ProductPage() {
     videoThresholds.current = new Set();
   };
 
+  const nav = useNavigate();
+  const { addToCart, isInCart } = useCart();
+  const inCart = isInCart(product?.id);
   const handleBuy = () => {
-    trackAddToCart(product);
-    setCheckoutOpen(true);
+    if (inCart) {
+      nav("/shop/cart");
+    } else {
+      addToCart(product);
+      trackAddToCart(product);
+      nav("/shop/cart");
+    }
   };
 
   return (
@@ -593,7 +601,8 @@ export default function ProductPage() {
                   marginBottom: 14,
                 }}
               >
-                Buy Now
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                {inCart ? "View Cart" : "Add to Cart"}
               </button>
 
               <div
@@ -1100,13 +1109,7 @@ export default function ProductPage() {
 
       <Footer />
 
-      {/* Checkout Modal — opens when user clicks Buy Now */}
-      {checkoutOpen && (
-        <CheckoutModal
-          product={product}
-          onClose={() => setCheckoutOpen(false)}
-        />
-      )}
+      {/* Checkout moved to dedicated /shop/checkout/:slug page */}
     </div>
   );
 }
