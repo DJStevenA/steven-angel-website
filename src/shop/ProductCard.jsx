@@ -119,6 +119,72 @@ function AudioPlayer({ product, accentColor, accentRgba }) {
 }
 
 /**
+ * MiniPlayButton — small circular play/pause button overlaid on the product
+ * image. Triggers the shop-wide sticky player. Compact enough not to dominate
+ * the card, but visible enough to invite a click.
+ */
+function MiniPlayButton({ product, accentColor, accentRgba }) {
+  const { playTrack, pauseTrack, currentTrack, isPlaying } = useShopPlayer();
+
+  const isThisTrack = currentTrack && currentTrack.id === product.id;
+  const isThisPlaying = isThisTrack && isPlaying;
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isThisPlaying) {
+      pauseTrack();
+    } else {
+      trackAudioPreview("click", { product_id: product.id, track_name: product.name, source: "listing_card" });
+      playTrack({
+        id: product.id,
+        title: product.name,
+        genre: product.genre,
+        subtitle: product.genre ? `${product.genre} · ${product.daw || ""}`.replace(/ · $/, "") : product.daw || "",
+        audioUrl: product.audioUrl,
+        coverUrl: product.image || null,
+      });
+    }
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      aria-label={isThisPlaying ? "Pause preview" : "Play preview"}
+      style={{
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        width: 42,
+        height: 42,
+        borderRadius: "50%",
+        background: isThisPlaying
+          ? accentColor
+          : "rgba(0,0,0,0.7)",
+        border: `2px solid ${accentColor}`,
+        backdropFilter: "blur(6px)",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: isThisPlaying
+          ? `0 0 16px rgba(${accentRgba},0.6)`
+          : `0 2px 12px rgba(0,0,0,0.5)`,
+        transition: "all 0.15s",
+        zIndex: 2,
+        padding: 0,
+      }}
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill={isThisPlaying ? "#000" : accentColor}>
+        {isThisPlaying
+          ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+          : <path d="M8 5v14l11-7z" />}
+      </svg>
+    </button>
+  );
+}
+
+/**
  * ProductCard — single shop product
  *
  * Visual structure:
@@ -181,31 +247,34 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </div>
       )}
 
-      {/* Product cover — always show the 3D box image (consistent grid) */}
-      <Link
-        to={`/shop/${product.slug}`}
-        style={{
-          display: "block",
-          marginBottom: 18,
-          textDecoration: "none",
-          color: "inherit",
-        }}
-      >
-        <img
-          src={product.image}
-          alt={product.name}
-          loading="lazy"
-          width="1324"
-          height="722"
+      {/* Product cover with mini play button overlay */}
+      <div style={{ position: "relative", marginBottom: 18 }}>
+        <Link
+          to={`/shop/${product.slug}`}
           style={{
-            width: "100%",
-            height: "auto",
-            aspectRatio: "1324/722",
             display: "block",
-            borderRadius: 6,
+            textDecoration: "none",
+            color: "inherit",
           }}
-        />
-      </Link>
+        >
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            width="1324"
+            height="722"
+            style={{
+              width: "100%",
+              height: "auto",
+              aspectRatio: "1324/722",
+              display: "block",
+              borderRadius: 6,
+            }}
+          />
+        </Link>
+        {/* Mini audio play button — overlaid on image bottom-right */}
+        {product.audioUrl && <MiniPlayButton product={product} accentColor={accentColor} accentRgba={accentRgba} />}
+      </div>
 
       {/* Genre · DAW · BPM · Key label */}
       <div style={{ ...label(accentColor), marginBottom: 8, lineHeight: 1.4 }}>
@@ -289,8 +358,9 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         </div>
       )}
 
-      {/* Audio preview removed from grid card (2026-05-20) — Steven asked
-          for play buttons only inside the product detail page. */}
+      {/* Mini audio preview restored on grid card (2026-05-27) — data shows
+          1:36 avg scroll on /shop but only 4/24 click through to product page.
+          Mini play button on image lets visitors hear before clicking. */}
 
       {/* Price */}
       <Link

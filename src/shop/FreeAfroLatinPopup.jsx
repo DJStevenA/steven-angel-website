@@ -1,7 +1,7 @@
 /**
  * FreeAfroLatinPopup — lead magnet popup on /shop.
  *
- * Trigger: 6 seconds after page load, OR scroll past 40% (whichever first).
+ * Trigger: 30 seconds after page load, OR scroll past 40% (whichever first).
  * Shows once per visitor (localStorage flag).
  *
  * Flow (Steven's spec 2026-05-20):
@@ -53,7 +53,7 @@ export default function FreeAfroLatinPopup() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
-  // Show once per visitor; trigger after 6s or scroll past 40%
+  // Show once per visitor; trigger after 30s or scroll past 40%
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (localStorage.getItem(STORAGE_KEY)) return;
@@ -64,7 +64,7 @@ export default function FreeAfroLatinPopup() {
       setVisible(true);
     };
 
-    const timer = setTimeout(fire, 6000);
+    const timer = setTimeout(fire, 30000);
     const onScroll = () => {
       const h = document.documentElement;
       const scrolled = (h.scrollTop + window.innerHeight) / h.scrollHeight;
