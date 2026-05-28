@@ -10,8 +10,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
-import CheckoutButton, { preloadPayPalSdk } from "./CheckoutButton.jsx";
-import { getProductById } from "./products.js";
+import CartCheckoutButton from "./CartCheckoutButton.jsx";
+import { preloadPayPalSdk } from "./CheckoutButton.jsx";
 import { trackBeginCheckout } from "../lib/analytics/events";
 
 const CYAN = "#00E5FF";
@@ -267,25 +267,19 @@ export default function CartPage() {
                     <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.45)", marginBottom: 14 }}>
                       Signed in as <strong style={{ color: "rgba(255,255,255,0.8)" }}>{user.email}</strong>
                     </div>
-                    {/* PayPal for each item (backend handles one product per order) */}
-                    {cart.map((item) => {
-                      const fullProduct = getProductById(item.id);
-                      return fullProduct ? (
-                        <div key={item.id} style={{ marginBottom: 8 }}>
-                          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>
-                            Pay for: {item.name} (${item.price})
-                          </div>
-                          <CheckoutButton product={fullProduct} couponCode={couponCode} onSuccess={handleSuccess} onError={setErrorMsg} />
-                        </div>
-                      ) : null;
-                    })}
+                    <CartCheckoutButton
+                      productIds={cart.map((it) => it.id)}
+                      couponCode={couponCode}
+                      onSuccess={handleSuccess}
+                      onError={setErrorMsg}
+                    />
                   </div>
                 )}
 
                 {!authLoading && !user && (
                   <div>
                     <label style={{ display: "block", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>
-                      Your Email
+                      Email for receipt
                     </label>
                     <input
                       type="email"
@@ -295,38 +289,39 @@ export default function CartPage() {
                       autoComplete="email"
                       style={{
                         width: "100%", padding: "12px 14px", background: "rgba(255,255,255,0.04)",
-                        border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6,
+                        border: `1px solid ${!emailValid && guestEmail ? "rgba(255,80,80,0.4)" : "rgba(255,255,255,0.1)"}`,
+                        borderRadius: 6,
                         color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 14,
                         boxSizing: "border-box", marginBottom: 4, outline: "none",
                       }}
                     />
                     <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 16, lineHeight: 1.5 }}>
-                      After payment you'll get your download + a link to set a password.
+                      Your download link + account setup will be sent here.
                     </div>
 
-                    {emailValid ? (
-                      cart.map((item) => {
-                        const fullProduct = getProductById(item.id);
-                        return fullProduct ? (
-                          <div key={item.id} style={{ marginBottom: 8 }}>
-                            {cart.length > 1 && (
-                              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>
-                                Pay for: {item.name} (${item.price})
-                              </div>
-                            )}
-                            <CheckoutButton product={fullProduct} couponCode={couponCode} guestEmail={guestEmail} onSuccess={handleSuccess} onError={setErrorMsg} />
-                          </div>
-                        ) : null;
-                      })
-                    ) : (
-                      <div style={{
-                        padding: "14px", textAlign: "center", background: "rgba(255,255,255,0.03)",
-                        border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 8,
-                        fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.35)",
-                      }}>
-                        Enter your email to see payment options
-                      </div>
-                    )}
+                    {/* Single PayPal button for all items — dimmed overlay if no email */}
+                    <div style={{ position: "relative" }}>
+                      {!emailValid && (
+                        <div style={{
+                          position: "absolute", inset: 0, zIndex: 2,
+                          background: "rgba(8,8,16,0.7)", borderRadius: 8,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                          color: "rgba(255,255,255,0.5)", cursor: "default",
+                        }}
+                        onClick={() => document.querySelector('input[type="email"]')?.focus()}
+                        >
+                          Enter your email above to pay
+                        </div>
+                      )}
+                      <CartCheckoutButton
+                        productIds={cart.map((it) => it.id)}
+                        couponCode={couponCode}
+                        guestEmail={guestEmail || "placeholder@pending.com"}
+                        onSuccess={handleSuccess}
+                        onError={setErrorMsg}
+                      />
+                    </div>
 
                     <div style={{ textAlign: "center", marginTop: 14 }}>
                       <Link to="/shop/login?redirect=/shop/cart" style={{
