@@ -7,6 +7,7 @@ import { CartProvider } from "./shop/CartContext.jsx";
 import { ShopPlayerProvider } from "./shop/ShopPlayerContext.jsx";
 import ShopStickyPlayer from "./shop/ShopStickyPlayer.jsx";
 import { trackPageView } from "./lib/analytics/events";
+import { RevealStyles } from "./lib/useReveal.jsx";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
 const GhostCustom = lazy(() => import("./GhostCustom.jsx"));
@@ -175,6 +176,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <CartProvider>
         <ScrollToHash />
         <PageTitle />
+        <RevealStyles />
         <Suspense fallback={<div style={{ background: "#000", minHeight: "100vh" }} />}>
           <Routes>
             <Route path="/" element={<App />} />

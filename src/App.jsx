@@ -3,6 +3,7 @@ import TrackPlayer from "./components/TrackPlayer";
 import { Link } from "react-router-dom";
 import { trackWhatsAppLead } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
+import { Reveal } from "./lib/useReveal.jsx";
 
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
@@ -256,7 +257,7 @@ export default function App() {
         </section>
 
         {/* ══════ 2. BIO — About Steven ══════ */}
-        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+        <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 48, alignItems: "center" }}>
             <img
               src="/images/portrait.webp"
@@ -309,10 +310,10 @@ export default function App() {
               </div>
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* ══════ 3. VIDEOS — "They play my music." ══════ */}
-        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+        <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 1060, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 28 : 36), textAlign: "center", marginBottom: 8 }}>
               THEY PLAY <span style={{ background: `linear-gradient(90deg, ${cyan}, ${purple})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>MY MUSIC.</span>
@@ -376,7 +377,7 @@ export default function App() {
               </div>
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* ══════ 3. MUSIC — "Listen to my work." ══════ */}
         {/* id="player" is the anchor for Google Ads sitelink "Steven's Releases" → steven-angel.com#player */}
@@ -385,7 +386,7 @@ export default function App() {
         </div>
 
         {/* ══════ 5. LESSON DEMO ══════ */}
-        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
+        <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 800, margin: "0 auto" }}>
             <h2 style={{ ...heading(isMobile ? 24 : 36), textAlign: "center", marginBottom: 8 }}>
               A GLIMPSE OF HOW <span style={{ color: cyan }}>I TEACH.</span>
@@ -417,12 +418,12 @@ export default function App() {
               </Link>
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* ══════ 6. (moved to after hero) ══════ */}
 
         {/* ══════ 7. TESTIMONIALS ══════ */}
-        <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
+        <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>
           <div style={{ maxWidth: 1060, margin: "0 auto" }}>
             <div style={{ ...label(purple), marginBottom: 12, textAlign: "center" }}>WHAT THEY SAY</div>
             <h2 style={{ ...heading(isMobile ? 28 : 44), textAlign: "center", marginBottom: 12 }}>WHAT CLIENTS &amp; STUDENTS SAY</h2>
@@ -462,12 +463,12 @@ export default function App() {
               (Testimonials shown are representative — real quotes will replace these soon.)
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
       </main>
 
       {/* ══════ CONTACT ══════ */}
-      <section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
+      <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ ...heading(isMobile ? 28 : 40), marginBottom: 12 }}>
             LET'S <span style={{ color: cyan }}>TALK.</span>
@@ -575,7 +576,7 @@ export default function App() {
             </button>
           </form>
         </div>
-      </section>
+      </section></Reveal>
 
       {/* ══════ 8. FOOTER ══════ */}
       <footer style={{ padding: "28px 48px", borderTop: "1px solid #0d0d0d", textAlign: "center" }}>
