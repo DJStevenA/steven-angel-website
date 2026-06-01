@@ -466,6 +466,27 @@ export default function BlogPost() {
             {/* FAQ from frontmatter */}
             <BlogFAQ items={post.faq_schema} />
 
+            {/* Preferred Source CTA — Google AI Overviews citation boost */}
+            <div style={{
+              margin: "32px 0", padding: "16px 20px",
+              background: "rgba(0,229,255,0.04)",
+              border: "1px solid rgba(0,229,255,0.15)",
+              borderRadius: 10,
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+              fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.6,
+            }}>
+              Want more production tips in your search results?{" "}
+              <a
+                href="https://www.google.com/preferences"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: CYAN, textDecoration: "underline" }}
+              >
+                Add Steven Angel as a Preferred Source
+              </a>{" "}
+              in your Google Search settings.
+            </div>
+
             {/* CTA */}
             <BlogCTA
               headline={ctaHeadlineFor(post)}

@@ -32,6 +32,8 @@ const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
 const CheckoutPage = lazy(() => import("./shop/CheckoutPage.jsx"));
 const CartPage = lazy(() => import("./shop/CartPage.jsx"));
 
+const HebrewLanding = lazy(() => import("./HebrewLanding.jsx"));
+
 const MashupGeneratorPage = lazy(() => import("./tools/mashup/MashupGeneratorPage.jsx"));
 const MashupCreditsPage = lazy(() => import("./tools/mashup/MashupCreditsPage.jsx"));
 const MashupJobPage = lazy(() => import("./tools/mashup/MashupJobPage.jsx"));
@@ -180,6 +182,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route element={<ShopLayout />}>
               <Route path="/ghost" element={<Ghost />} />
             </Route>
+            <Route path="/he" element={<HebrewLanding />} />
             <Route path="/ghost/custom" element={<GhostCustom />} />
             <Route path="/ghost/finish-demo" element={<GhostFinishDemo />} />
             <Route path="/lessons" element={<Lessons />} />

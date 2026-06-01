@@ -45,13 +45,12 @@ function staticSeoPages() {
     },
     areaServed: 'Worldwide',
     url: 'https://steven-angel.com/ghost',
-    offers: {
-      '@type': 'Offer',
-      price: '300',
-      priceCurrency: 'USD',
-      url: 'https://steven-angel.com/ghost',
-      availability: 'https://schema.org/InStock',
-    },
+    offers: [
+      { '@type': 'Offer', name: 'Demo Finishing', price: '300', priceCurrency: 'USD', url: 'https://steven-angel.com/ghost/finish-demo' },
+      { '@type': 'Offer', name: 'Full Production (No Vocal)', price: '800', priceCurrency: 'USD', url: 'https://steven-angel.com/ghost/custom' },
+      { '@type': 'Offer', name: 'Full Production with Vocal', price: '1500', priceCurrency: 'USD', url: 'https://steven-angel.com/ghost/custom' },
+      { '@type': 'Offer', name: 'Ready-Made Ghost Track', priceRange: '€39–€870', priceCurrency: 'EUR', url: 'https://steven-angel.com/ghost', availability: 'https://schema.org/InStock' },
+    ],
   });
 
   const shopTitle = 'Ableton Templates & Afro House Masterclass | Steven Angel';
@@ -204,6 +203,17 @@ function staticSeoPages() {
           title: 'Ableton Lessons by a Moblack & MTGD Artist | Steven Angel',
           description:
             '1-on-1 Ableton lessons from a producer released on Moblack, MTGD & Sony. Afro House, Latin House, Tech House & Indie Dance. From $30 intro session.',
+          schema: {
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'Ableton Production Lessons',
+            provider: { '@type': 'Person', name: 'Steven Angel', url: 'https://steven-angel.com' },
+            description: '1-on-1 online Ableton production lessons. 3 modules: Software, Music Theory, Sound Design + Mix & Mastering. Afro House, Melodic Techno, Indie Dance.',
+            offers: [
+              { '@type': 'Offer', name: '1 Hour Lesson', price: '80', priceCurrency: 'USD' },
+              { '@type': 'Offer', name: 'Intro Session', price: '30', priceCurrency: 'USD' },
+            ],
+          },
         },
         {
           path: '/the-angels',
@@ -216,6 +226,19 @@ function staticSeoPages() {
           title: 'Professional Mix & Mastering from $35 | Steven Angel',
           description:
             'Professional online mastering from $35. Trusted by Hernan Cattaneo & Dole & Kom. Mix + Master from $150. 3-day turnaround. Afro House, Melodic Techno, Electronic.',
+          schema: {
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            name: 'Mix & Mastering',
+            provider: { '@type': 'Person', name: 'Steven Angel', url: 'https://steven-angel.com' },
+            description: 'Professional mix and mastering for Afro House, Afro Latin, Indie Dance, Melodic Techno. Trusted by Hernan Cattaneo & Dole & Kom.',
+            offers: [
+              { '@type': 'Offer', name: 'Mastering', price: '35', priceCurrency: 'USD' },
+              { '@type': 'Offer', name: 'Stem Mastering (10 stems)', price: '75', priceCurrency: 'USD' },
+              { '@type': 'Offer', name: 'Mix + Master (30 stems)', price: '150', priceCurrency: 'USD' },
+              { '@type': 'Offer', name: 'Mix + Master (30-100 stems)', price: '250', priceCurrency: 'USD' },
+            ],
+          },
         },
         {
           path: '/privacy',
@@ -255,6 +278,10 @@ function staticSeoPages() {
             '</head>',
             `    <meta name="robots" content="noindex,follow" />\n  </head>`
           );
+        }
+        // Service schema for service pages (Google AI Overviews / Generative UI)
+        if (page.schema) {
+          pageHtml = injectJsonLd(pageHtml, 'service-jsonld', page.schema);
         }
         const pageDir = path.join(distDir, ...page.path.split('/').filter(Boolean));
         fs.mkdirSync(pageDir, { recursive: true });
@@ -366,6 +393,18 @@ function staticSeoPages() {
           'blog-article-jsonld',
           articleSchema
         );
+
+        // BreadcrumbList: Home → Blog → Post Title
+        const breadcrumbSchema = {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+            { '@type': 'ListItem', position: 3, name: post.title },
+          ],
+        };
+        postHtml = injectJsonLd(postHtml, 'blog-breadcrumb-jsonld', breadcrumbSchema);
 
         if (Array.isArray(post.faq_schema) && post.faq_schema.length > 0) {
           const faqSchema = {
