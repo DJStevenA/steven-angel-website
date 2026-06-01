@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TrackPlayer from "./components/TrackPlayer";
 import { Link } from "react-router-dom";
+import Nav from "./Nav.jsx";
 import { trackWhatsAppLead } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
 import { Reveal } from "./lib/useReveal.jsx";
@@ -86,35 +87,8 @@ export default function App() {
   return (
     <div style={{ background: "#000", color: "#fff", overflowX: "hidden" }}>
 
-      {/* ── NAV ── */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, display: "flex", justifyContent: "space-between", alignItems: "center", height: 64, padding: "0 48px", background: "rgba(0,0,0,0.9)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(255,255,255,0.06)", boxSizing: "border-box" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <button
-            onClick={() => { if (window.history.length > 2) { window.history.back(); } else { window.location.href = '/'; } }}
-            aria-label="Go back"
-            style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: cyan, fontSize: 15, lineHeight: 1, opacity: 0.8, transition: "opacity 0.2s" }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "1"}
-            onMouseLeave={e => e.currentTarget.style.opacity = "0.8"}
-          >
-            ←
-          </button>
-          <Link to="/" style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 20, letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1, textDecoration: "none", color: "#fff" }}>
-            STEVEN <span style={{ color: cyan }}>ANGEL</span>
-          </Link>
-        </div>
-        <div style={{ display: isMobile ? "none" : "flex", gap: 32, alignItems: "center" }}>
-          {[
-            { label: "Ghost", to: "/ghost" },
-            { label: "Lessons", to: "/lessons" },
-            { label: "The Lab", to: "/blog" },
-            { label: "Shop", to: "/shop" },
-          ].map(({ label: lbl, to }) => (
-            <Link key={lbl} to={to} style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 600, fontSize: 13, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", textDecoration: "none", lineHeight: 1 }}>
-              {lbl}
-            </Link>
-          ))}
-        </div>
-      </nav>
+      {/* ── NAV (shared component with hamburger menu on mobile) ── */}
+      <Nav />
 
       <main>
 
