@@ -13,6 +13,7 @@
 
 import clearMasterRaw from './posts/clear-master-afro-house-track.md?raw';
 import referenceMatchingRaw from './posts/reference-matching.md?raw';
+import signToLabelsRaw from './posts/sign-to-labels.md?raw';
 import { parseFrontmatter } from './parseFrontmatter.js';
 
 function build(raw) {
@@ -23,6 +24,7 @@ function build(raw) {
 const ALL = [
   build(clearMasterRaw),
   build(referenceMatchingRaw),
+  build(signToLabelsRaw),
 ];
 
 const posts = ALL
