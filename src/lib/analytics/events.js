@@ -27,6 +27,11 @@ export const trackViewItem = (product) => {
     value: product.price,
     items: [itemFromProduct(product)],
   });
+  // Meta Pixel
+  if (window.fbq) window.fbq('track', 'ViewContent', {
+    content_ids: [product.id], content_type: 'product',
+    value: product.price, currency: product.currency || 'USD',
+  });
 };
 
 export const trackViewItemList = (products, listName = 'shop') => {
@@ -67,6 +72,11 @@ export const trackPurchase = (product, { transaction_id, email } = {}) => {
     currency: product.currency || 'USD',
     transaction_id,
   });
+  // Meta Pixel
+  if (window.fbq) window.fbq('track', 'Purchase', {
+    content_ids: [product.id], content_type: 'product',
+    value: product.price, currency: product.currency || 'USD',
+  });
 };
 
 export const trackAddToCart = (product) => {
@@ -74,6 +84,11 @@ export const trackAddToCart = (product) => {
     currency: product.currency || 'USD',
     value: product.price,
     items: [itemFromProduct(product)],
+  });
+  // Meta Pixel
+  if (window.fbq) window.fbq('track', 'AddToCart', {
+    content_ids: [product.id], content_type: 'product',
+    value: product.price, currency: product.currency || 'USD',
   });
 };
 
