@@ -1196,69 +1196,47 @@ function Accordion({ title, children, defaultOpen = false, accentColor = "#00E5F
   return (
     <div style={{
       marginTop: 18,
-      border: `1px solid rgba(${accentRgba},${open ? 0.32 : 0.18})`,
-      borderRadius: 12,
-      background: open
-        ? `linear-gradient(180deg, rgba(${accentRgba},0.05), rgba(255,255,255,0.02))`
-        : `linear-gradient(180deg, rgba(${accentRgba},0.025), rgba(255,255,255,0.01))`,
+      border: `1px solid rgba(${accentRgba},0.15)`,
+      borderRadius: 10,
+      background: "rgba(255,255,255,0.02)",
       overflow: "hidden",
-      boxShadow: open ? `0 0 22px rgba(${accentRgba},0.10)` : "none",
-      transition: "all 200ms",
     }}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         style={{
-          display: "flex", flexDirection: "column", width: "100%",
-          padding: "18px 20px",
-          alignItems: "center", justifyContent: "center", gap: 10,
+          display: "flex", width: "100%", padding: "16px 20px",
+          alignItems: "center", justifyContent: "space-between",
           background: "transparent", border: "none",
-          cursor: "pointer", textAlign: "center",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+          fontWeight: 800, fontSize: 16, letterSpacing: "0.06em",
+          textTransform: "uppercase", color: "#fff", cursor: "pointer",
+          textAlign: "left",
         }}
       >
-        <span style={{
-          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-          fontWeight: 800, fontSize: 17, letterSpacing: "0.18em",
-          textTransform: "uppercase", color: "#fff",
-        }}>
-          {title}
-        </span>
-        <span
+        <span>{title}</span>
+        <svg
           aria-hidden="true"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={accentColor}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           style={{
-            display: "inline-flex", alignItems: "center", justifyContent: "center",
-            width: 36, height: 36, borderRadius: "50%",
-            border: `1.5px solid rgba(${accentRgba},${open ? 0.7 : 0.5})`,
-            background: open
-              ? `rgba(${accentRgba},0.18)`
-              : `rgba(${accentRgba},0.08)`,
-            color: accentColor, fontSize: 22, fontWeight: 400,
-            lineHeight: 1, transition: "transform 220ms, background 200ms, border-color 200ms",
-            transform: open ? "rotate(45deg)" : "rotate(0deg)",
-            boxShadow: `0 0 16px rgba(${accentRgba},0.25)`,
+            flexShrink: 0,
+            transition: "transform 200ms",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
           }}
         >
-          +
-        </span>
-        {!open && (
-          <span style={{
-            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-            fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase",
-            color: `rgba(${accentRgba},0.7)`, marginTop: -2,
-          }}>
-            Tap to open
-          </span>
-        )}
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
       </button>
       {open && (
-        <div style={{
-          padding: "4px 22px 22px",
-          color: "rgba(255,255,255,0.88)",
-          borderTop: `1px solid rgba(${accentRgba},0.12)`,
-          marginTop: 4,
-          paddingTop: 18,
-        }}>
+        <div style={{ padding: "0 20px 20px", color: "rgba(255,255,255,0.85)" }}>
           {children}
         </div>
       )}
