@@ -1027,34 +1027,21 @@ export default function ProductPage() {
                   Add to Cart
                 </button>
 
-                {/* PayPal — official logo (PNG hosted by PayPal CDN) */}
+                {/* PayPal — adds to cart and goes to checkout with PayPal */}
                 <button
-                  onClick={() => nav(`/shop/checkout?product=${product.slug}&express=paypal`)}
+                  onClick={() => {
+                    if (!inCart) addToCart(product);
+                    nav("/shop/checkout");
+                  }}
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center",
                     width: "100%", padding: "14px 28px",
                     background: "#ffc439",
                     border: "none", borderRadius: 8,
-                    cursor: "pointer", marginBottom: 8,
+                    cursor: "pointer", marginBottom: 14,
                   }}
                 >
                   <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" height="22" style={{ height: 22 }} />
-                </button>
-
-                {/* More Payment Options — Card / Apple Pay / Google Pay via Airwallex */}
-                <button
-                  onClick={() => nav(`/shop/checkout?product=${product.slug}`)}
-                  style={{
-                    display: "block", width: "100%", padding: "13px 28px",
-                    background: "transparent",
-                    border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8,
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: 600, fontSize: 13, letterSpacing: "0.06em",
-                    color: "rgba(255,255,255,0.85)", cursor: "pointer",
-                    marginBottom: 14,
-                  }}
-                >
-                  More Payment Options
                 </button>
 
                 <div style={{
