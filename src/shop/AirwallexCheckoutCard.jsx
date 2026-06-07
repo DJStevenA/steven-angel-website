@@ -32,7 +32,11 @@ import { useAuth } from "./AuthContext.jsx";
 import { trackAddPaymentInfo, trackPurchase } from "../lib/analytics/events";
 
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
-const SDK_URL = "https://static.airwallex.com/components/v1/loader.js";
+// Airwallex SDK CDN. The newer `static.airwallex.com/components/v1/loader.js`
+// returns 404 — that path doesn't exist. The Embedded Elements bundle does,
+// is UMD, and exposes `window.Airwallex` with the same createElement('dropIn', …)
+// API we need. Verified live 2026-06-07.
+const SDK_URL = "https://checkout.airwallex.com/assets/elements.bundle.min.js";
 
 // SDK is a singleton — cache the load promise across mounts so navigating
 // back to /shop/cart doesn't reload the script.
@@ -40,13 +44,13 @@ let sdkPromise = null;
 function loadAirwallexSdk() {
   if (sdkPromise) return sdkPromise;
   sdkPromise = new Promise((resolve, reject) => {
-    if (window.AirwallexComponentsSDK) return resolve(window.AirwallexComponentsSDK);
+    if (window.Airwallex) return resolve(window.Airwallex);
     const s = document.createElement("script");
     s.src = SDK_URL;
     s.async = true;
     s.onload = () => {
-      if (window.AirwallexComponentsSDK) resolve(window.AirwallexComponentsSDK);
-      else reject(new Error("Airwallex SDK loaded but global missing"));
+      if (window.Airwallex) resolve(window.Airwallex);
+      else reject(new Error("Airwallex SDK loaded but window.Airwallex is undefined"));
     };
     s.onerror = () => { sdkPromise = null; reject(new Error("Failed to load Airwallex SDK")); };
     document.body.appendChild(s);
@@ -112,8 +116,13 @@ export default function AirwallexCheckoutCard({
         const SDK = await loadAirwallexSdk();
         if (cancelled) return;
 
-        // 3. Init (idempotent — Airwallex SDK handles re-init gracefully)
-        await SDK.init({ env: "prod", enabledElements: ["payments"] });
+        // 3. Init (idempotent — Airwallex Embedded Elements .init is sync).
+        try {
+          SDK.init({ env: "prod", origin: window.location.origin });
+        } catch (e) {
+          // Re-init throws on subsequent mounts — that's fine.
+          if (!String(e).includes("already")) throw e;
+        }
         if (cancelled) return;
 
         // 4. Create Drop-in element with the requested theme
