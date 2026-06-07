@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airwallex Checkout Demo</title>
+  <script src="https://static.airwallex.com/components/sdk/v1/index.js"></script>
+  <style>
+    body { font-family: -apple-system, Arial, sans-serif; background: #f5f5f5; padding: 40px 20px; }
+    .container { max-width: 500px; margin: 0 auto; }
+    h1 { font-size: 20px; margin-bottom: 20px; }
+    #dropIn { min-height: 300px; }
+    .note { color: #666; font-size: 13px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Airwallex Drop-in Element — Standard Template</h1>
+    <div id="dropIn">Loading Airwallex checkout...</div>
+    <p class="note">
+      This is the standard Airwallex Drop-in Element. It requires a live PaymentIntent 
+      (API key + client_secret) to render the actual payment form. Without credentials, 
+      the element cannot mount.<br><br>
+      To see it live, credentials need to be configured on the backend.
+    </p>
+  </div>
+  <script>
+    (async () => {
+      try {
+        const sdk = await window.AirwallexComponentsSDK.init({
+          env: 'prod',
+          enabledElements: ['payments'],
+        });
+        document.getElementById('dropIn').innerHTML = 
+          '<p style="color:#999;padding:40px;text-align:center;border:2px dashed #ddd;border-radius:8px;">' +
+          '⚠️ Airwallex SDK loaded successfully.<br><br>' +
+          'The Drop-in Element needs a <strong>PaymentIntent</strong> (intent_id + client_secret) to render.<br><br>' +
+          'Once API credentials are on the backend, this will show:<br>' +
+          '• Credit card fields (Visa, MC, Amex)<br>' +
+          '• Apple Pay button<br>' +
+          '• Google Pay button<br>' +
+          '• Any other enabled payment methods<br><br>' +
+          'It looks exactly like the abtsounds.com screenshots you sent.</p>';
+      } catch(e) {
+        document.getElementById('dropIn').innerHTML = 
+          '<p style="color:red;">SDK error: ' + e.message + '</p>';
+      }
+    })();
+  </script>
+</body>
+</html>

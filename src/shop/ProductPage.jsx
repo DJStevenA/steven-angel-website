@@ -1027,21 +1027,25 @@ export default function ProductPage() {
                   Add to Cart
                 </button>
 
-                {/* PayPal — instant single-product payment (no cart) */}
+                {/* PayPal — official logo button */}
                 <button
                   onClick={() => nav(`/shop/checkout?product=${product.slug}&express=paypal`)}
                   style={{
-                    display: "block", width: "100%", padding: "14px 28px",
-                    background: "#ffc439", color: "#0a2540",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    width: "100%", padding: "14px 28px",
+                    background: "#ffc439",
                     border: "none", borderRadius: 8,
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontWeight: 700, fontSize: 15, letterSpacing: "0.02em",
                     cursor: "pointer", marginBottom: 8,
                   }}
                 >
-                  <span style={{ fontStyle: "italic", fontWeight: 800 }}>Pay</span>
-                  <span style={{ fontStyle: "italic", fontWeight: 800, color: "#1a3a6e" }}>Pal</span>
-                  <span style={{ marginLeft: 8, fontWeight: 600 }}>— Pay now</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="80" height="20" viewBox="0 0 101 25">
+                    <path fill="#253B80" d="M12.2 2.4h-7c-.5 0-.9.3-1 .8L1.6 19c-.1.4.2.7.6.7h3.4c.5 0 .9-.3 1-.8l.7-4.5c.1-.5.5-.8 1-.8h2.3c4.7 0 7.4-2.3 8.1-6.8.3-2 0-3.5-.9-4.6C16.7 3 14.8 2.4 12.2 2.4z"/>
+                    <path fill="#179BD7" d="M39.4 2.4h-7c-.5 0-.9.3-1 .8l-2.6 15.8c-.1.4.2.7.6.7h3.6c.3 0 .6-.3.7-.6l.7-4.7c.1-.5.5-.8 1-.8h2.3c4.7 0 7.4-2.3 8.1-6.8.3-2 0-3.5-.9-4.6C43.8 3 41.9 2.4 39.4 2.4z"/>
+                    <path fill="#253B80" d="M57.4 8.3c-.3 2-1.8 2-3.3 2H53l.6-3.6c0-.2.2-.4.5-.4h.5c1 0 1.9 0 2.4.6.3.3.4.8.3 1.4zM56.7 2.4h-5.5c-.5 0-.9.3-1 .8l-2.2 13.9c-.1.4.2.7.6.7h2.8c.3 0 .6-.2.7-.6l.6-3.8c.1-.5.5-.8 1-.8h2.3c4.6 0 7.3-2.2 8-6.7.3-1.9 0-3.5-.9-4.6-1-1.2-2.8-1.8-5.4-1.9z"/>
+                    <path fill="#179BD7" d="M71.7 8.3c-.3 2-1.8 2-3.3 2h-.9l.6-3.6c0-.2.2-.4.5-.4h.4c1 0 1.9 0 2.4.6.3.3.4.8.3 1.4zM71 2.4h-5.5c-.5 0-.9.3-1 .8L62.3 17c-.1.4.2.7.6.7h2.6c.5 0 .9-.3 1-.8l.6-3.6c.1-.5.5-.8 1-.8h2.3c4.6 0 7.3-2.2 8-6.7.3-1.9 0-3.5-.9-4.6-1-1.2-2.8-1.8-5.5-1.8z"/>
+                    <path fill="#253B80" d="M84.5 8.1c-.3 1.8-1.8 3.1-3.6 3.1-1 0-1.7-.3-2.2-.9-.4-.5-.6-1.3-.5-2.1.3-1.8 1.8-3.1 3.6-3.1 1 0 1.7.3 2.2.9.4.6.6 1.3.5 2.1zM88 2.3h-2.8c-.2 0-.4.2-.5.4l-.1.7-.2-.3c-.6-.9-2-1.2-3.4-1.2-3.2 0-5.9 2.4-6.4 5.8-.3 1.7.1 3.3 1.1 4.4.9 1 2.2 1.5 3.7 1.5 2.6 0 4.1-1.7 4.1-1.7l-.1.7c-.1.4.2.7.6.7h2.5c.5 0 .9-.3 1-.8l1.5-9.4c0-.5-.3-.8-.6-.8z"/>
+                    <path fill="#179BD7" d="M98.5 8.1c-.3 1.8-1.8 3.1-3.6 3.1-1 0-1.7-.3-2.2-.9-.4-.5-.6-1.3-.5-2.1.3-1.8 1.8-3.1 3.6-3.1 1 0 1.7.3 2.2.9.4.6.6 1.3.5 2.1zM101.9 2.3h-2.8c-.2 0-.4.2-.5.4l-.1.7-.2-.3c-.6-.9-2-1.2-3.4-1.2-3.2 0-5.9 2.4-6.4 5.8-.3 1.7.1 3.3 1.1 4.4.9 1 2.2 1.5 3.7 1.5 2.6 0 4.1-1.7 4.1-1.7l-.1.7c-.1.4.2.7.6.7h2.5c.5 0 .9-.3 1-.8l1.5-9.4c0-.5-.3-.8-.6-.8z"/>
+                  </svg>
                 </button>
 
                 {/* More Payment Options — Card / Apple Pay / Google Pay via Airwallex */}
