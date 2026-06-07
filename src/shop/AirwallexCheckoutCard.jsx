@@ -207,83 +207,29 @@ export default function AirwallexCheckoutCard({
     : { background: "#f9fafb", border: "1px dashed #d1d5db", color: "#6b7280" };
   const loadingColor = isDark ? "rgba(255,255,255,0.5)" : "#6b7280";
 
-  const isDarkPreview = isDark;
-  const previewBg = isDarkPreview ? "rgba(255,255,255,0.03)" : "#fafbfc";
-  const previewBorder = isDarkPreview ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e5e7eb";
-  const previewText = isDarkPreview ? "rgba(255,255,255,0.85)" : "#1a1f2e";
-  const previewMuted = isDarkPreview ? "rgba(255,255,255,0.5)" : "#6b7280";
+  const emptyHintBg = isDark ? "rgba(255,255,255,0.03)" : "#fafbfc";
+  const emptyHintBorder = isDark ? "1px dashed rgba(255,255,255,0.15)" : "1px dashed #d1d5db";
+  const emptyHintText = isDark ? "rgba(255,255,255,0.55)" : "#6b7280";
 
   return (
     <div>
-      {/* If no email yet, show a STATIC visual preview of what's coming so
-          customers see the available methods immediately (Shopify-style).
-          The real Drop-in mounts once email is valid. Steven 2026-06-07. */}
+      {/* Steven 2026-06-07: removed the fake "Credit Card / Apple Pay / Google
+          Pay" preview that looked like a built form but wasn't actually
+          interactive. Now we show ONLY a clear hint when the real Drop-in
+          isn't loaded yet. The genuine Airwallex template renders on top once
+          email is valid + intent is created. */}
       {!emailValid && (
         <div style={{
-          padding: 14,
-          background: previewBg,
-          border: previewBorder,
+          padding: "14px 16px",
+          background: emptyHintBg,
+          border: emptyHintBorder,
           borderRadius: 8,
           fontFamily: "'DM Sans', sans-serif",
+          fontSize: 13,
+          color: emptyHintText,
+          textAlign: "center",
         }}>
-          {/* Card row */}
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            paddingBottom: 12, borderBottom: previewBorder,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <CircleIcon dark={isDarkPreview} />
-              <div style={{ fontSize: 13, fontWeight: 600, color: previewText }}>
-                Credit / Debit Card
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 4 }}>
-              {["VISA", "MC", "AMEX"].map((l) => (
-                <span key={l} style={{
-                  padding: "2px 6px", borderRadius: 3,
-                  background: isDarkPreview ? "rgba(255,255,255,0.06)" : "#f3f4f6",
-                  border: isDarkPreview ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e5e7eb",
-                  fontSize: 9, fontWeight: 700,
-                  color: isDarkPreview ? "rgba(255,255,255,0.8)" : "#374151",
-                  letterSpacing: "0.05em",
-                }}>{l}</span>
-              ))}
-            </div>
-          </div>
-
-          {/* Apple Pay row */}
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            padding: "12px 0", borderBottom: previewBorder,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <CircleIcon dark={isDarkPreview} />
-              <div style={{ fontSize: 13, fontWeight: 600, color: previewText }}>
-                Apple Pay
-              </div>
-            </div>
-          </div>
-
-          {/* Google Pay row */}
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            paddingTop: 12,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <CircleIcon dark={isDarkPreview} />
-              <div style={{ fontSize: 13, fontWeight: 600, color: previewText }}>
-                Google Pay
-              </div>
-            </div>
-          </div>
-
-          {/* Hint */}
-          <div style={{
-            marginTop: 14, paddingTop: 12, borderTop: previewBorder,
-            fontSize: 11, color: previewMuted, textAlign: "center",
-          }}>
-            Enter your email above so we can send your download
-          </div>
+          Enter your email above — the secure payment form will appear here.
         </div>
       )}
 
@@ -326,18 +272,5 @@ export function preloadAirwallexSdk() {
   try { loadAirwallexSdk(); } catch { /* noop */ }
 }
 
-function CircleIcon({ dark }) {
-  return (
-    <div style={{
-      width: 22, height: 22, borderRadius: "50%",
-      background: dark ? "rgba(255,255,255,0.08)" : "#e5e7eb",
-      border: dark ? "1px solid rgba(255,255,255,0.12)" : "1px solid #d1d5db",
-      display: "flex", alignItems: "center", justifyContent: "center",
-    }}>
-      <span style={{
-        width: 8, height: 8, borderRadius: "50%",
-        background: dark ? "rgba(255,255,255,0.3)" : "#9ca3af",
-      }} />
-    </div>
-  );
-}
+/* CircleIcon helper removed — was only used by the now-removed static
+   preview that confused customers (Steven 2026-06-07). */
