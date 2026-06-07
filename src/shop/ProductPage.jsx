@@ -594,98 +594,38 @@ export default function ProductPage() {
 
               {/* Price + Add to Cart moved to bottom after specs */}
 
-              {/* Audio preview — plays through the sticky player.
-                  Filled-cyan call-to-action so users see "this is the play button". */}
-              {product.audioUrl && (() => {
-                const isThisTrack = currentTrack?.id === product.id;
-                const isThisPlaying = isThisTrack && isPlaying;
-                return (
-                  <button
-                    onClick={() => {
-                      if (isThisPlaying) {
-                        pauseTrack();
-                      } else {
-                        playTrack({
-                          id: product.id,
-                          title: product.name,
-                          subtitle: `${product.category || product.genre || "Afro House"} · Ableton Live 12`,
-                          audioUrl: product.audioUrl,
-                          coverUrl: product.image,
-                        });
-                      }
-                    }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 12,
-                      width: "100%",
-                      padding: "14px 22px",
-                      background: isThisPlaying
-                        ? `rgba(${accentRgba},0.12)`
-                        : `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`,
-                      border: `1px solid ${accentColor}`,
-                      borderRadius: 50, // pill per Brand Kit
-                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                      fontWeight: 700,
-                      fontSize: 14,
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      color: isThisPlaying ? accentColor : "#000",
-                      cursor: "pointer",
-                      marginBottom: product.audioLoops?.length ? 14 : 18,
-                      boxShadow: isThisPlaying ? "none" : `0 0 22px rgba(${accentRgba},0.4)`,
-                      transition: "all 0.15s",
-                    }}
-                    aria-label={isThisPlaying ? "Pause" : "Play preview"}
-                  >
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        width: 22,
-                        height: 22,
-                        borderRadius: "50%",
-                        background: isThisPlaying ? accentColor : "#000",
-                      }}
-                    >
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill={isThisPlaying ? "#000" : accentColor}>
-                        {isThisPlaying
-                          ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
-                          : <path d="M8 5v14l11-7z" />
-                        }
-                      </svg>
-                    </span>
-                    {isThisPlaying ? "Pause" : "Play Preview"}
-                  </button>
-                );
-              })()}
-
-              {/* Waveform — always visible (Beatport-style). Shows progress
-                  when this product's audio is playing, static otherwise.
-                  Click to seek when playing, click to start when not. */}
+              {/* Unified preview player — Steven 2026-06-07: single row with
+                  a small play/pause circle on the left and the waveform graphic
+                  to its right. Replaces the separate "Play Preview" CTA pill
+                  + standalone waveform card. */}
               {product.audioUrl && (() => {
                 const isThisTrack = currentTrack?.id === product.id;
                 const isLoop = typeof currentTrack?.id === "string"
                   && currentTrack?.id?.startsWith(`${product.id}__loop-`);
                 const isActive = isThisTrack || isLoop;
+                const isThisPlaying = isThisTrack && isPlaying;
                 const activeUrl = isActive ? currentTrack.audioUrl : product.audioUrl;
                 const progress = isActive && duration > 0 ? currentTime / duration : 0;
-                const handleSeekClick = (e) => {
+                const startProductPreview = () => playTrack({
+                  id: product.id,
+                  title: product.name,
+                  subtitle: `${product.category || product.genre || "Afro House"} · Ableton Live 12`,
+                  audioUrl: product.audioUrl,
+                  coverUrl: product.image,
+                });
+                const handlePlayClick = (e) => {
+                  e.stopPropagation();
+                  if (isThisPlaying) pauseTrack();
+                  else startProductPreview();
+                };
+                const handleWaveformClick = (e) => {
                   if (isActive && duration > 0) {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const x = (e.clientX ?? e.touches?.[0]?.clientX ?? 0) - rect.left;
                     const pct = Math.max(0, Math.min(1, x / rect.width));
                     seek(pct * duration);
-                  } else if (product.audioUrl) {
-                    playTrack({
-                      id: product.id,
-                      title: product.name,
-                      subtitle: `${product.category || product.genre || "Afro House"} · Ableton Live 12`,
-                      audioUrl: product.audioUrl,
-                      coverUrl: product.image,
-                    });
+                  } else {
+                    startProductPreview();
                   }
                 };
                 const fmt = (s) => {
@@ -696,79 +636,74 @@ export default function ProductPage() {
                 };
                 return (
                   <div
-                    onClick={handleSeekClick}
-                    role="slider"
-                    aria-label={isActive ? "Seek" : "Play preview"}
-                    aria-valuenow={Math.round(isActive ? currentTime : 0)}
-                    aria-valuemin={0}
-                    aria-valuemax={Math.round(isActive ? duration : 0)}
                     style={{
-                      marginBottom: 18,
-                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 14,
+                      marginBottom: product.audioLoops?.length ? 14 : 18,
                       background: `linear-gradient(180deg, rgba(${accentRgba},0.10), rgba(${accentRgba},0.04))`,
-                      border: `1px solid rgba(${accentRgba},${isActive ? 0.45 : 0.30})`,
+                      border: `1px solid rgba(${accentRgba},${isActive ? 0.45 : 0.28})`,
                       borderRadius: 12,
-                      padding: "14px 16px",
-                      position: "relative",
+                      padding: "10px 14px",
                       userSelect: "none",
-                      touchAction: "none",
                       boxShadow: isActive
-                        ? `0 0 28px rgba(${accentRgba},0.28), inset 0 0 0 1px rgba(${accentRgba},0.10)`
-                        : `0 0 18px rgba(${accentRgba},0.10)`,
+                        ? `0 0 28px rgba(${accentRgba},0.28)`
+                        : `0 0 16px rgba(${accentRgba},0.10)`,
                       transition: "box-shadow 200ms, border-color 200ms",
                     }}
                   >
-                    <div
+                    {/* Play / Pause */}
+                    <button
+                      type="button"
+                      onClick={handlePlayClick}
+                      aria-label={isThisPlaying ? "Pause" : "Play preview"}
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: 10,
-                        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                        fontWeight: 700,
-                        fontSize: 11,
-                        letterSpacing: "0.28em",
-                        textTransform: "uppercase",
+                        flexShrink: 0,
+                        width: 44, height: 44, borderRadius: "50%",
+                        background: isThisPlaying
+                          ? `rgba(${accentRgba},0.12)`
+                          : `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`,
+                        border: `1px solid ${accentColor}`,
+                        display: "inline-flex", alignItems: "center", justifyContent: "center",
+                        cursor: "pointer",
+                        boxShadow: isThisPlaying ? "none" : `0 0 16px rgba(${accentRgba},0.45)`,
+                        transition: "all 0.15s",
                       }}
                     >
-                      <span style={{
-                        display: "inline-flex", alignItems: "center", gap: 8,
-                        color: accentColor, flexShrink: 0,
-                      }}>
-                        <span style={{
-                          display: "inline-block", width: 6, height: 6, borderRadius: "50%",
-                          background: accentColor,
-                          boxShadow: isActive ? `0 0 8px ${accentColor}` : "none",
-                          animation: isActive ? "pulse 1.4s ease-in-out infinite" : "none",
-                        }} />
-                        Preview
-                      </span>
-                      <span style={{
-                        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                        flex: 1, margin: "0 12px", textAlign: "right",
-                        color: "rgba(255,255,255,0.55)",
-                        fontSize: 10, letterSpacing: "0.22em",
-                      }}>
-                        {isActive ? (isLoop ? currentTrack.title : "Now playing") : "Tap to play"}
-                      </span>
-                      {isActive && (
-                        <span style={{ color: accentColor, flexShrink: 0, fontSize: 11 }}>
-                          {fmt(currentTime)} / {fmt(duration)}
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ position: "relative", height: 60 }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill={isThisPlaying ? accentColor : "#000"}>
+                        {isThisPlaying
+                          ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+                          : <path d="M8 5v14l11-7z" />
+                        }
+                      </svg>
+                    </button>
+
+                    {/* Waveform — click anywhere to seek/start */}
+                    <div
+                      onClick={handleWaveformClick}
+                      role="slider"
+                      aria-label={isActive ? "Seek" : "Play preview"}
+                      aria-valuenow={Math.round(isActive ? currentTime : 0)}
+                      aria-valuemin={0}
+                      aria-valuemax={Math.round(isActive ? duration : 0)}
+                      style={{
+                        flex: 1, minWidth: 0,
+                        position: "relative",
+                        height: 48,
+                        cursor: "pointer",
+                        touchAction: "none",
+                      }}
+                    >
                       <Waveform
                         audioUrl={activeUrl}
                         progress={progress}
-                        height={60}
+                        height={48}
                       />
                       {isActive && (
                         <div
                           style={{
                             position: "absolute",
-                            top: 0,
-                            bottom: 0,
+                            top: 0, bottom: 0,
                             left: `${progress * 100}%`,
                             width: 2,
                             background: "#fff",
@@ -779,6 +714,19 @@ export default function ProductPage() {
                         />
                       )}
                     </div>
+
+                    {/* Time display (only when something is playing) */}
+                    {isActive && (
+                      <span style={{
+                        flexShrink: 0,
+                        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                        fontWeight: 700, fontSize: 11,
+                        letterSpacing: "0.12em", color: accentColor,
+                        fontVariantNumeric: "tabular-nums",
+                      }}>
+                        {fmt(currentTime)} / {fmt(duration)}
+                      </span>
+                    )}
                   </div>
                 );
               })()}
