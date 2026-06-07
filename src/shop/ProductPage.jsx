@@ -628,12 +628,6 @@ export default function ProductPage() {
                     startProductPreview();
                   }
                 };
-                const fmt = (s) => {
-                  if (!s || isNaN(s) || s === Infinity) return "0:00";
-                  const m = Math.floor(s / 60);
-                  const sec = Math.floor(s % 60);
-                  return `${m}:${sec.toString().padStart(2, "0")}`;
-                };
                 return (
                   <div
                     style={{
@@ -715,18 +709,6 @@ export default function ProductPage() {
                       )}
                     </div>
 
-                    {/* Time display (only when something is playing) */}
-                    {isActive && (
-                      <span style={{
-                        flexShrink: 0,
-                        fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                        fontWeight: 700, fontSize: 11,
-                        letterSpacing: "0.12em", color: accentColor,
-                        fontVariantNumeric: "tabular-nums",
-                      }}>
-                        {fmt(currentTime)} / {fmt(duration)}
-                      </span>
-                    )}
                   </div>
                 );
               })()}
