@@ -65,23 +65,27 @@ function loadPayPalSdk(clientId, mode) {
 }
 
 /**
- * Preload the PayPal SDK as early as possible (called when CheckoutModal opens).
- * Fetches /shop/config and starts loading the PayPal script in the background.
- * By the time the user enters their email and CheckoutButton mounts, the SDK
- * is already cached and buttons render instantly.
+ * Preload the PayPal SDK as early as possible. Single shared Promise guards
+ * against double-loading — fixes the "zoid has deleted all components" error
+ * that occurred when two components both tried to load the SDK in parallel
+ * (e.g. preload from useEffect + CartCheckoutButton's own loader).
+ *
+ * Returns the loaded `window.paypal` (or null if config/load fails).
+ * Callers MUST await the return — don't add their own <script> tag.
  */
 export function preloadPayPalSdk() {
   if (_preloadPromise) return _preloadPromise;
   _preloadPromise = (async () => {
     try {
       const res = await fetch(`${BACKEND}/shop/config`);
-      if (!res.ok) return;
+      if (!res.ok) return null;
       const config = await res.json();
-      if (config.paypalClientId) {
-        await loadPayPalSdk(config.paypalClientId, config.paypalMode);
-      }
+      if (!config.paypalClientId) return null;
+      return await loadPayPalSdk(config.paypalClientId, config.paypalMode);
     } catch {
-      // Non-fatal — CheckoutButton will retry on mount
+      // Reset so a future call can retry
+      _preloadPromise = null;
+      return null;
     }
   })();
   return _preloadPromise;

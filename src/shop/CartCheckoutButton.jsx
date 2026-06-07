@@ -11,26 +11,10 @@ import { preloadPayPalSdk } from "./CheckoutButton.jsx";
 import { trackAddPaymentInfo, trackPurchase } from "../lib/analytics/events";
 
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
-const sdkCache = new Map();
-
-function loadPayPalSdk(clientId, mode) {
-  const cacheKey = `${clientId}-${mode}`;
-  if (sdkCache.has(cacheKey)) return sdkCache.get(cacheKey);
-  const promise = new Promise((resolve, reject) => {
-    if (window.paypal && window.__paypalLoadedClientId === cacheKey) return resolve(window.paypal);
-    const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD&intent=capture&disable-funding=credit,card`;
-    script.async = true;
-    script.onload = () => {
-      if (window.paypal) { window.__paypalLoadedClientId = cacheKey; resolve(window.paypal); }
-      else reject(new Error("PayPal SDK loaded but window.paypal is undefined"));
-    };
-    script.onerror = () => { sdkCache.delete(cacheKey); reject(new Error("Failed to load PayPal SDK")); };
-    document.body.appendChild(script);
-  });
-  sdkCache.set(cacheKey, promise);
-  return promise;
-}
+// SDK loading delegates to the shared preloadPayPalSdk() in CheckoutButton.jsx
+// — a single shared promise prevents double-loading and the "zoid has deleted
+// all components" race condition that occurred when two components both tried
+// to load the SDK in parallel.
 
 export default function CartCheckoutButton({ productIds, couponCode, guestEmail, onSuccess, onError }) {
   const { token } = useAuth();
@@ -57,12 +41,9 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
         setLoading(true);
         setError(null);
 
-        const configRes = await fetch(`${BACKEND}/shop/config`);
-        if (!configRes.ok) throw new Error("Failed to load shop config");
-        const config = await configRes.json();
-        if (!config.paypalClientId) throw new Error("PayPal not configured");
-
-        const paypal = await loadPayPalSdk(config.paypalClientId, config.paypalMode);
+        // Single shared loader — guards against double-load / zoid mismatch.
+        const paypal = await preloadPayPalSdk();
+        if (!paypal) throw new Error("PayPal not configured");
         if (cancelled || !containerRef.current) return;
 
         buttonsInstance = paypal.Buttons({
