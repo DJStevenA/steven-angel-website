@@ -75,8 +75,12 @@ export default function AirwallexCheckoutCard({
   const emailValid = !!user || (guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail));
 
   useEffect(() => {
-    // Don't auto-load if email isn't ready yet (avoids creating an
-    // abandoned intent for a typo). Render the "Enter email" hint instead.
+    // Guard: backend airwallex-guest requires a valid email to create the
+    // pending guest user. Don't fire the API call until we have one. (For
+    // logged-in users, we always proceed.) Steven 2026-06-07: we used to
+    // also gate the visual rendering on email — that left a confusing
+    // empty placeholder. Now we render a STATIC preview immediately and
+    // only swap to the live Drop-in once email is valid.
     if (!emailValid || productIds.length === 0) return;
     let cancelled = false;
 
@@ -194,20 +198,83 @@ export default function AirwallexCheckoutCard({
     : { background: "#f9fafb", border: "1px dashed #d1d5db", color: "#6b7280" };
   const loadingColor = isDark ? "rgba(255,255,255,0.5)" : "#6b7280";
 
+  const isDarkPreview = isDark;
+  const previewBg = isDarkPreview ? "rgba(255,255,255,0.03)" : "#fafbfc";
+  const previewBorder = isDarkPreview ? "1px solid rgba(255,255,255,0.08)" : "1px solid #e5e7eb";
+  const previewText = isDarkPreview ? "rgba(255,255,255,0.85)" : "#1a1f2e";
+  const previewMuted = isDarkPreview ? "rgba(255,255,255,0.5)" : "#6b7280";
+
   return (
     <div>
+      {/* If no email yet, show a STATIC visual preview of what's coming so
+          customers see the available methods immediately (Shopify-style).
+          The real Drop-in mounts once email is valid. Steven 2026-06-07. */}
       {!emailValid && (
         <div style={{
-          padding: "12px 14px",
-          background: placeholderStyle.background,
-          border: placeholderStyle.border,
+          padding: 14,
+          background: previewBg,
+          border: previewBorder,
           borderRadius: 8,
           fontFamily: "'DM Sans', sans-serif",
-          fontSize: 13,
-          color: placeholderStyle.color,
-          textAlign: "center",
         }}>
-          Enter your email above to pay with card / Apple Pay / Google Pay
+          {/* Card row */}
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            paddingBottom: 12, borderBottom: previewBorder,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <CircleIcon dark={isDarkPreview} />
+              <div style={{ fontSize: 13, fontWeight: 600, color: previewText }}>
+                Credit / Debit Card
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 4 }}>
+              {["VISA", "MC", "AMEX"].map((l) => (
+                <span key={l} style={{
+                  padding: "2px 6px", borderRadius: 3,
+                  background: isDarkPreview ? "rgba(255,255,255,0.06)" : "#f3f4f6",
+                  border: isDarkPreview ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e5e7eb",
+                  fontSize: 9, fontWeight: 700,
+                  color: isDarkPreview ? "rgba(255,255,255,0.8)" : "#374151",
+                  letterSpacing: "0.05em",
+                }}>{l}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Apple Pay row */}
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            padding: "12px 0", borderBottom: previewBorder,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <CircleIcon dark={isDarkPreview} />
+              <div style={{ fontSize: 13, fontWeight: 600, color: previewText }}>
+                Apple Pay
+              </div>
+            </div>
+          </div>
+
+          {/* Google Pay row */}
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            paddingTop: 12,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <CircleIcon dark={isDarkPreview} />
+              <div style={{ fontSize: 13, fontWeight: 600, color: previewText }}>
+                Google Pay
+              </div>
+            </div>
+          </div>
+
+          {/* Hint */}
+          <div style={{
+            marginTop: 14, paddingTop: 12, borderTop: previewBorder,
+            fontSize: 11, color: previewMuted, textAlign: "center",
+          }}>
+            Enter your email above so we can send your download
+          </div>
         </div>
       )}
 
@@ -248,4 +315,20 @@ export default function AirwallexCheckoutCard({
  * preloadPayPalSdk. */
 export function preloadAirwallexSdk() {
   try { loadAirwallexSdk(); } catch { /* noop */ }
+}
+
+function CircleIcon({ dark }) {
+  return (
+    <div style={{
+      width: 22, height: 22, borderRadius: "50%",
+      background: dark ? "rgba(255,255,255,0.08)" : "#e5e7eb",
+      border: dark ? "1px solid rgba(255,255,255,0.12)" : "1px solid #d1d5db",
+      display: "flex", alignItems: "center", justifyContent: "center",
+    }}>
+      <span style={{
+        width: 8, height: 8, borderRadius: "50%",
+        background: dark ? "rgba(255,255,255,0.3)" : "#9ca3af",
+      }} />
+    </div>
+  );
 }
