@@ -33,6 +33,7 @@ const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
 const CheckoutPage = lazy(() => import("./shop/CheckoutPage.jsx"));
 const CartCheckoutPage = lazy(() => import("./shop/CartCheckoutPage.jsx"));
 const CartPage = lazy(() => import("./shop/CartPage.jsx"));
+import FloatingCart from "./shop/FloatingCart.jsx";
 
 const HebrewLanding = lazy(() => import("./HebrewLanding.jsx"));
 
@@ -178,6 +179,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <ScrollToHash />
         <PageTitle />
         <RevealStyles />
+        {/* Floating cart icon — appears top-right on every page when the
+            cart has items (auto-hides on /shop/cart + /shop/checkout). */}
+        <FloatingCart />
         <Suspense fallback={<div style={{ background: "#000", minHeight: "100vh" }} />}>
           <Routes>
             <Route path="/" element={<App />} />

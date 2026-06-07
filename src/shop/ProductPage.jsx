@@ -291,15 +291,16 @@ export default function ProductPage() {
   const nav = useNavigate();
   const { addToCart, isInCart } = useCart();
   const inCart = isInCart(product?.id);
-  const handleBuy = () => {
-    if (inCart) {
-      nav("/shop/cart");
-    } else {
+  // Add-to-cart: STAY on the product page so the customer can keep browsing.
+  // The floating cart icon (top-right) confirms what they have. Steven 2026-06-07.
+  const handleAddToCart = () => {
+    if (!inCart && product) {
       addToCart(product);
       trackAddToCart(product);
-      nav("/shop/cart");
     }
   };
+  const handleCheckout = () => nav("/shop/checkout");
+  const handleViewCart = () => nav("/shop/cart");
 
   return (
     <div style={{ background: BG, minHeight: "100vh", color: "#fff", overflowX: "hidden" }}>
@@ -836,29 +837,32 @@ export default function ProductPage() {
                 </div>
               )}
 
-              {/* Description */}
-              <p style={{ ...body, marginBottom: 0 }}>{product.description}</p>
+              {/* Trust pills — Steven 2026-06-07 (matches ABT pattern) */}
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
+                <TrustPill text="100% Royalty Free" accentColor={accentColor} accentRgba={accentRgba} />
+                <TrustPill text="Made In-House" accentColor={accentColor} accentRgba={accentRgba} />
+                <TrustPill text="Instant Download" accentColor={accentColor} accentRgba={accentRgba} />
+              </div>
 
-              {/* Specs */}
+              {/* Description — collapsible accordion. Default open so SEO crawlers
+                  + first-time visitors see the copy immediately, Steven 2026-06-07. */}
+              <Accordion title="Description" defaultOpen accentColor={accentColor} accentRgba={accentRgba}>
+                <p style={{ ...body, margin: 0 }}>{product.description}</p>
+              </Accordion>
+
+              {/* Specs — collapsible accordion */}
               {product.specs && (
+                <Accordion title="Specs" accentColor={accentColor} accentRgba={accentRgba}>
                 <div
                   style={{
-                    marginTop: 28,
-                    padding: "20px 22px",
-                    background: "rgba(255,255,255,0.03)",
-                    border: `1px solid rgba(${accentRgba},0.15)`,
-                    borderRadius: 10,
+                    marginTop: 0,
+                    padding: 0,
+                    background: "transparent",
+                    border: "none",
+                    borderRadius: 0,
                   }}
                 >
-                  <div
-                    style={{
-                      ...heading(isMobile ? 16 : 18),
-                      marginBottom: 16,
-                      color: accentColor,
-                    }}
-                  >
-                    Specs
-                  </div>
+                  {/* Header removed — accordion title already says "Specs" */}
 
                   {/* DAW / BPM / Key / Length / Channels — single-line items */}
                   {product.specs.daw && (
@@ -932,6 +936,7 @@ export default function ProductPage() {
                     </div>
                   )}
                 </div>
+                </Accordion>
               )}
 
               {/* ── Price + Add to Cart (below specs) ── */}
@@ -953,21 +958,75 @@ export default function ProductPage() {
                   </div>
                 </div>
 
+                {/* Buy stack — Add to Cart always, plus Checkout once added.
+                    Steven 2026-06-07: previously the button morphed to "View
+                    Cart" which removed the buy intent. Now both options sit
+                    side-by-side so the customer can keep browsing OR pay. */}
                 <button
-                  onClick={handleBuy}
+                  onClick={handleAddToCart}
+                  disabled={inCart}
                   style={{
                     display: "block", width: "100%", padding: "16px 28px",
-                    background: isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
-                    border: "none", borderRadius: 8,
+                    background: inCart
+                      ? "rgba(255,255,255,0.08)"
+                      : (isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`),
+                    border: inCart ? `1px solid rgba(${accentRgba},0.4)` : "none",
+                    borderRadius: 8,
                     fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 800, fontSize: 16, letterSpacing: "0.12em",
-                    textTransform: "uppercase", color: "#000", cursor: "pointer",
-                    boxShadow: `0 0 28px rgba(${accentRgba},0.35)`, marginBottom: 14,
+                    textTransform: "uppercase",
+                    color: inCart ? accentColor : "#000",
+                    cursor: inCart ? "default" : "pointer",
+                    boxShadow: inCart ? "none" : `0 0 28px rgba(${accentRgba},0.35)`,
+                    marginBottom: 10,
                   }}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                  {inCart ? "View Cart" : "Add to Cart"}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={inCart ? accentColor : "#000"} strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}>
+                    {inCart ? (
+                      <path d="M20 6L9 17l-5-5" />
+                    ) : (
+                      <>
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                      </>
+                    )}
+                  </svg>
+                  {inCart ? "In Cart" : "Add to Cart"}
                 </button>
+
+                {inCart && (
+                  <button
+                    onClick={handleCheckout}
+                    style={{
+                      display: "block", width: "100%", padding: "16px 28px",
+                      background: isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+                      border: "none", borderRadius: 8,
+                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                      fontWeight: 800, fontSize: 16, letterSpacing: "0.12em",
+                      textTransform: "uppercase", color: "#000", cursor: "pointer",
+                      boxShadow: `0 0 28px rgba(${accentRgba},0.35)`, marginBottom: 8,
+                    }}
+                  >
+                    Checkout
+                  </button>
+                )}
+                {inCart && (
+                  <button
+                    onClick={handleViewCart}
+                    style={{
+                      display: "block", width: "100%", padding: "12px 20px",
+                      background: "transparent",
+                      border: `1px solid rgba(255,255,255,0.15)`, borderRadius: 8,
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontWeight: 600, fontSize: 13, letterSpacing: "0.05em",
+                      color: "rgba(255,255,255,0.75)", cursor: "pointer",
+                      marginBottom: 14,
+                    }}
+                  >
+                    View Cart
+                  </button>
+                )}
 
                 <div style={{
                   fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
@@ -1093,5 +1152,80 @@ export default function ProductPage() {
 
       {/* Checkout moved to dedicated /shop/checkout/:slug page */}
     </div>
+  );
+}
+
+// ── Accordion ───────────────────────────────────────────────────────────────
+// Lightweight reusable collapsible. Header has +/- icon, click to toggle.
+// `defaultOpen` controls initial state. Steven 2026-06-07: replaces flat
+// always-visible Description / Specs blocks per ABT reference.
+function Accordion({ title, children, defaultOpen = false, accentColor = "#00E5FF", accentRgba = "0,229,255" }) {
+  const [open, setOpen] = React.useState(defaultOpen);
+  return (
+    <div style={{
+      marginTop: 18,
+      border: `1px solid rgba(${accentRgba},0.15)`,
+      borderRadius: 10,
+      background: "rgba(255,255,255,0.02)",
+      overflow: "hidden",
+    }}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        style={{
+          display: "flex", width: "100%", padding: "16px 20px",
+          alignItems: "center", justifyContent: "space-between",
+          background: "transparent", border: "none",
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+          fontWeight: 800, fontSize: 16, letterSpacing: "0.06em",
+          textTransform: "uppercase", color: "#fff", cursor: "pointer",
+          textAlign: "left",
+        }}
+      >
+        <span>{title}</span>
+        <span
+          aria-hidden="true"
+          style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: 24, height: 24, borderRadius: "50%",
+            border: `1px solid rgba(${accentRgba},0.4)`,
+            color: accentColor, fontSize: 18, fontWeight: 600,
+            lineHeight: 1, transition: "transform 180ms",
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+          }}
+        >
+          +
+        </span>
+      </button>
+      {open && (
+        <div style={{ padding: "0 20px 20px", color: "rgba(255,255,255,0.85)" }}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── TrustPill ────────────────────────────────────────────────────────────────
+// Small badge for credibility signals (100% Royalty Free, Made In-House, etc).
+// Steven 2026-06-07 — added to product page above the description (ABT pattern).
+function TrustPill({ text, accentColor = "#00E5FF", accentRgba = "0,229,255" }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 6,
+      padding: "6px 12px", borderRadius: 999,
+      background: `rgba(${accentRgba},0.08)`,
+      border: `1px solid rgba(${accentRgba},0.3)`,
+      fontFamily: "'DM Sans', sans-serif",
+      fontWeight: 600, fontSize: 11, letterSpacing: "0.04em",
+      color: accentColor,
+      whiteSpace: "nowrap",
+    }}>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      {text}
+    </span>
   );
 }
