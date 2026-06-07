@@ -2,8 +2,21 @@
  * /shop/cart — Cart + Checkout page.
  *
  * Shows all items in the cart with remove buttons, coupon input,
- * price breakdown, and PayPal payment. Guest email or sign-in.
- * PayPal SDK preloads on mount so buttons appear fast.
+ * price breakdown, and TWO payment options:
+ *   - Airwallex Drop-in (Card + Apple Pay + Google Pay) — on top
+ *   - PayPal button — below
+ *
+ * Both render immediately. Email is required for guest before either fires.
+ * Coupon WELCOME15 is auto-applied for first-time visitors (the discount
+ * popup sets a localStorage flag the first time it shows).
+ *
+ * Changes 2026-06-07 (Marketing brief checkout_improvements.md + Steven):
+ *   - PayPal renders immediately; no "Enter email" overlay
+ *   - Coupon placeholder changed to "Enter coupon code" (auto-apply handles
+ *     suggesting WELCOME15 — no more pre-filled placeholder confusion)
+ *   - New trust signals: 14-day money-back guarantee + credibility line
+ *     (Released on Sony · MoBlack · MTGD · Beatport Top 10) + card logos
+ *   - Airwallex Drop-in mounted in its own card above PayPal
  */
 
 import React, { useState, useEffect } from "react";
@@ -12,6 +25,7 @@ import { useCart } from "./CartContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import CartCheckoutButton from "./CartCheckoutButton.jsx";
 import { preloadPayPalSdk } from "./CheckoutButton.jsx";
+import AirwallexCheckoutCard, { preloadAirwallexSdk } from "./AirwallexCheckoutCard.jsx";
 import { trackBeginCheckout } from "../lib/analytics/events";
 
 const CYAN = "#00E5FF";
@@ -27,9 +41,18 @@ export default function CartPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
+  // Auto-apply WELCOME15 for first-time visitors who saw the discount popup
+  // (or are first-time on the cart page). Cookie-based via localStorage so
+  // it survives refresh / closes / re-opens. Steven 2026-06-07 directive.
   const [couponCode, setCouponCode] = useState(() => {
     if (typeof window === "undefined") return "";
-    return localStorage.getItem("shop_discount_popup_seen") ? "WELCOME15" : "";
+    const popupSeen = localStorage.getItem("shop_discount_popup_seen");
+    const cartFirstVisit = !localStorage.getItem("shop_cart_visited");
+    if (popupSeen || cartFirstVisit) {
+      try { localStorage.setItem("shop_cart_visited", "1"); } catch { /* noop */ }
+      return "WELCOME15";
+    }
+    return "";
   });
   const [guestEmail, setGuestEmail] = useState("");
   const [status, setStatus] = useState("idle");
@@ -47,6 +70,7 @@ export default function CartPage() {
   useEffect(() => {
     document.title = "Cart | Steven Angel Shop";
     preloadPayPalSdk();
+    preloadAirwallexSdk();
   }, []);
 
   // Compute pricing
@@ -56,7 +80,6 @@ export default function CartPage() {
   const total = round2(subtotal - discount);
 
   const emailValid = guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail);
-  const canPay = cart.length > 0 && (user || emailValid);
 
   const handleSuccess = () => {
     setStatus("success");
@@ -238,7 +261,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {/* Coupon */}
+                {/* Coupon — placeholder is now neutral (auto-apply handles WELCOME15) */}
                 <label style={{ display: "block", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 6, marginTop: 16 }}>
                   Coupon Code
                 </label>
@@ -246,12 +269,12 @@ export default function CartPage() {
                   type="text"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
-                  placeholder="WELCOME15"
+                  placeholder="Enter coupon code"
                   style={{
                     width: "100%", padding: "10px 12px", background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6,
                     color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                    letterSpacing: "0.1em", boxSizing: "border-box", marginBottom: 18, outline: "none",
+                    letterSpacing: "0.05em", boxSizing: "border-box", marginBottom: 18, outline: "none",
                   }}
                 />
 
@@ -267,6 +290,19 @@ export default function CartPage() {
                     <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.45)", marginBottom: 14 }}>
                       Signed in as <strong style={{ color: "rgba(255,255,255,0.8)" }}>{user.email}</strong>
                     </div>
+
+                    {/* Airwallex card form first */}
+                    <PaymentLabel text="Pay with Card / Apple Pay / Google Pay" />
+                    <AirwallexCheckoutCard
+                      productIds={cart.map((it) => it.id)}
+                      couponCode={couponCode}
+                      onSuccess={handleSuccess}
+                      onError={setErrorMsg}
+                    />
+
+                    <OrSeparator />
+
+                    <PaymentLabel text="Pay with PayPal" />
                     <CartCheckoutButton
                       productIds={cart.map((it) => it.id)}
                       couponCode={couponCode}
@@ -299,29 +335,48 @@ export default function CartPage() {
                       Your download link + account setup will be sent here.
                     </div>
 
-                    {/* Single PayPal button for all items — dimmed overlay if no email */}
-                    <div style={{ position: "relative" }}>
-                      {!emailValid && (
-                        <div style={{
-                          position: "absolute", inset: 0, zIndex: 2,
-                          background: "rgba(8,8,16,0.7)", borderRadius: 8,
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                          color: "rgba(255,255,255,0.5)", cursor: "default",
-                        }}
-                        onClick={() => document.querySelector('input[type="email"]')?.focus()}
-                        >
-                          Enter your email above to pay
-                        </div>
-                      )}
+                    {/* Airwallex Drop-in (Card / Apple Pay / Google Pay) — top */}
+                    <PaymentLabel text="Pay with Card / Apple Pay / Google Pay" />
+                    <AirwallexCheckoutCard
+                      productIds={cart.map((it) => it.id)}
+                      couponCode={couponCode}
+                      guestEmail={guestEmail}
+                      onSuccess={handleSuccess}
+                      onError={setErrorMsg}
+                    />
+
+                    <OrSeparator />
+
+                    {/* PayPal — always renders. If no email yet, dimmed +
+                        hint; PayPal SDK ignores clicks via pointerEvents.
+                        This replaces the old "Enter your email above" full
+                        overlay that the Marketing brief flagged as broken-
+                        looking (2026-06-07 checkout_improvements.md). */}
+                    <PaymentLabel text="Pay with PayPal" />
+                    <div style={{
+                      opacity: emailValid ? 1 : 0.4,
+                      pointerEvents: emailValid ? "auto" : "none",
+                      transition: "opacity 200ms",
+                    }}>
                       <CartCheckoutButton
                         productIds={cart.map((it) => it.id)}
                         couponCode={couponCode}
-                        guestEmail={guestEmail || "placeholder@pending.com"}
+                        guestEmail={emailValid ? guestEmail : undefined}
                         onSuccess={handleSuccess}
                         onError={setErrorMsg}
                       />
                     </div>
+                    {!emailValid && (
+                      <div style={{
+                        textAlign: "center",
+                        marginTop: 6,
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: 11,
+                        color: "rgba(255,255,255,0.45)",
+                      }}>
+                        Enter your email above to pay
+                      </div>
+                    )}
 
                     <div style={{ textAlign: "center", marginTop: 14 }}>
                       <Link to="/shop/login?redirect=/shop/cart" style={{
@@ -344,28 +399,120 @@ export default function CartPage() {
                   </div>
                 )}
 
-                {/* Trust */}
-                <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 6 }}>
-                  {[
-                    { icon: "\u{1F512}", text: "Secure payment via PayPal" },
-                    { icon: "\u26A1", text: "Instant download after payment" },
-                    { icon: "\u221E", text: "Lifetime access" },
-                  ].map(({ icon, text }) => (
-                    <div key={text} style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                      color: "rgba(255,255,255,0.4)",
-                    }}>
-                      <span>{icon}</span>
-                      <span>{text}</span>
-                    </div>
-                  ))}
-                </div>
+                {/* Trust block */}
+                <TrustBlock />
               </div>
             </div>
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+// ── Small reusable bits ──────────────────────────────────────────────────────
+
+function PaymentLabel({ text }) {
+  return (
+    <div style={{
+      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11,
+      letterSpacing: "0.2em", textTransform: "uppercase",
+      color: "rgba(255,255,255,0.55)", marginBottom: 8, marginTop: 2,
+    }}>
+      {text}
+    </div>
+  );
+}
+
+function OrSeparator() {
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", gap: 12,
+      margin: "20px 0 14px",
+      fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+      color: "rgba(255,255,255,0.35)", letterSpacing: "0.16em", textTransform: "uppercase",
+    }}>
+      <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.1)" }} />
+      <span>or</span>
+      <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.1)" }} />
+    </div>
+  );
+}
+
+function TrustBlock() {
+  return (
+    <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      {/* Card logos row */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, marginBottom: 14,
+        flexWrap: "wrap",
+      }}>
+        <CardLogo label="VISA" />
+        <CardLogo label="MC" />
+        <CardLogo label="AMEX" />
+        <WalletLogo label="Apple Pay" />
+        <WalletLogo label="G Pay" />
+        <WalletLogo label="PayPal" />
+      </div>
+
+      {/* Trust lines */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {[
+          { icon: "\u{1F512}", text: "Secure payment, encrypted end-to-end" },
+          { icon: "⚡", text: "Instant download after payment" },
+          { icon: "\u{1F4B0}", text: "14-day money-back guarantee" },
+          { icon: "∞", text: "Lifetime access" },
+        ].map(({ icon, text }) => (
+          <div key={text} style={{
+            display: "flex", alignItems: "center", gap: 8,
+            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+            color: "rgba(255,255,255,0.5)",
+          }}>
+            <span>{icon}</span>
+            <span>{text}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Credibility line — Steven's real labels + Beatport, picked 2026-06-07 over a fake buyer count */}
+      <div style={{
+        marginTop: 14, paddingTop: 12,
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+        fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+        color: "rgba(255,255,255,0.42)", lineHeight: 1.55,
+        textAlign: "center",
+      }}>
+        Released on <strong style={{ color: "rgba(255,255,255,0.7)" }}>Sony</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>MoBlack</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>MTGD</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>GoDeeVa</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>Beatport Top 10</strong>
+      </div>
+    </div>
+  );
+}
+
+function CardLogo({ label }) {
+  return (
+    <div style={{
+      padding: "4px 8px", borderRadius: 4,
+      background: "rgba(255,255,255,0.08)",
+      border: "1px solid rgba(255,255,255,0.12)",
+      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+      fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase",
+      color: "rgba(255,255,255,0.8)",
+    }}>
+      {label}
+    </div>
+  );
+}
+
+function WalletLogo({ label }) {
+  return (
+    <div style={{
+      padding: "4px 8px", borderRadius: 4,
+      background: "rgba(0,229,255,0.06)",
+      border: "1px solid rgba(0,229,255,0.18)",
+      fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+      fontSize: 10, color: "rgba(255,255,255,0.85)",
+    }}>
+      {label}
     </div>
   );
 }

@@ -36,11 +36,17 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
   const { token } = useAuth();
   const containerRef = useRef(null);
   const couponRef = useRef(couponCode);
+  const guestEmailRef = useRef(guestEmail);
   const guestTokenRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => { couponRef.current = couponCode; }, [couponCode]);
+  // Keep guestEmail current in createOrder closure without forcing a button
+  // re-render on every keystroke. CartPage may pass guestEmail as undefined
+  // until the email is valid (renders dimmed PayPal then), so we accept
+  // late-binding here.
+  useEffect(() => { guestEmailRef.current = guestEmail; }, [guestEmail]);
 
   useEffect(() => {
     let cancelled = false;
@@ -64,12 +70,13 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
 
           createOrder: async () => {
             try {
-              const isGuest = !!guestEmail;
+              const currentEmail = guestEmailRef.current;
+              const isGuest = !!currentEmail;
               const endpoint = isGuest ? "/shop/checkout/cart-guest" : "/shop/checkout/cart-create";
               const headers = { "Content-Type": "application/json" };
               if (!isGuest && token) headers.Authorization = `Bearer ${token}`;
               const body = isGuest
-                ? { productIds, email: guestEmail, couponCode: couponRef.current || null }
+                ? { productIds, email: currentEmail, couponCode: couponRef.current || null }
                 : { productIds, couponCode: couponRef.current || null };
               const res = await fetch(`${BACKEND}${endpoint}`, {
                 method: "POST",
@@ -102,7 +109,7 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
                 window.clarity("event", "purchaseComplete");
                 window.clarity("set", "conversion_type", "purchase_cart");
               }
-              trackPurchase({ id: "cart", name: "Cart", price: 0 }, { transaction_id: data.orderID, email: guestEmail });
+              trackPurchase({ id: "cart", name: "Cart", price: 0 }, { transaction_id: data.orderID, email: guestEmailRef.current });
               if (onSuccess) onSuccess(json);
             } catch (err) {
               setError(err.message);
