@@ -13,3 +13,4 @@ public/images/pacha-ibiza-thumb-3.jpg
 lh-*.json
 # Briefs are agent-specific instructions, not site code (per ACP §5.5)
 briefs/
+.gstack/

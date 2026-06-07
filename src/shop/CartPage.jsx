@@ -15,8 +15,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { trackBeginCheckout } from "../lib/analytics/events";
+import CartCheckoutButton from "./CartCheckoutButton.jsx";
+import { preloadPayPalSdk } from "./CheckoutButton.jsx";
 
-const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 const CYAN = "#00E5FF";
 const BG = "#080810";
 
@@ -25,9 +26,10 @@ const COUPONS_CLIENT = { WELCOME15: { percentOff: 15 } };
 function round2(n) { return Math.round(n * 100) / 100; }
 
 export default function CartPage() {
-  const { cart, removeFromCart, cartTotal } = useCart();
-  const { user, loading: authLoading } = useAuth();
+  const { cart, removeFromCart, clearCart, cartTotal } = useCart();
+  useAuth(); // ensure auth context is available even though we don't gate on it
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState(null);
 
   // Auto-apply WELCOME15 for first-time visitors. Survives reload via
   // localStorage. Steven 2026-06-07 — biggest single conversion lever
@@ -54,6 +56,15 @@ export default function CartPage() {
 
   useEffect(() => {
     document.title = "Cart | Steven Angel Shop";
+    preloadPayPalSdk();
+  }, []);
+
+  // Fire begin_checkout once when cart loads with items (analytics)
+  useEffect(() => {
+    if (cart.length > 0) {
+      try { trackBeginCheckout({ id: "cart", name: "Cart", price: cartTotal, currency: "USD" }); } catch { /* analytics never blocks */ }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const coupon = couponCode ? COUPONS_CLIENT[couponCode.toUpperCase()] : null;
@@ -61,15 +72,14 @@ export default function CartPage() {
   const discount = coupon ? round2(subtotal * (coupon.percentOff / 100)) : 0;
   const total = round2(subtotal - discount);
 
-  // Steven 2026-06-07 Option A: cart routes to our internal /shop/checkout
-  // (white, Shopify-style page) — no email collected here, no redirect to
-  // Airwallex. The /shop/checkout page handles email + embedded card form
-  // (Airwallex Embedded Elements) + PayPal.
-  const handleCheckout = () => {
-    if (cart.length === 0) return;
-    try { trackBeginCheckout({ id: "cart", name: "Cart", price: total, currency: "USD" }); } catch { /* analytics never blocks navigation */ }
-    try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
-    navigate("/shop/checkout");
+  // Steven 2026-06-07 evening: PayPal Smart Buttons render inline on the cart.
+  // No redirect to /shop/checkout — click PayPal, popup opens, payer email
+  // comes from PayPal (cart-anon endpoint). Clear cart + go to thank-you on success.
+  const productIds = cart.map((item) => item.id);
+
+  const handleSuccess = () => {
+    clearCart();
+    navigate("/shop/thank-you");
   };
 
   return (
@@ -230,29 +240,46 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* CTA — single big button → /shop/checkout. No email here per
-                Steven 2026-06-07 Option A: email is collected on page 2. */}
-            <button
-              onClick={handleCheckout}
-              disabled={authLoading}
-              style={{
-                width: "100%", padding: "18px 24px",
-                background: CYAN, color: "#000",
-                border: "none", borderRadius: 8,
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 800, fontSize: 16, letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                cursor: authLoading ? "default" : "pointer",
-                opacity: authLoading ? 0.6 : 1,
-                transition: "transform 120ms, box-shadow 120ms",
-                boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
-              }}
-              onMouseDown={(e) => { e.currentTarget.style.transform = "translateY(1px)"; }}
-              onMouseUp={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              Check out — ${total.toFixed(2)}
-            </button>
+            {/* PayPal Smart Buttons — instant cart checkout, no email gate.
+                Steven 2026-06-07 evening: direct PayPal popup, payer email
+                comes from PayPal after capture (cart-anon endpoint). */}
+            <CartCheckoutButton
+              productIds={productIds}
+              couponCode={couponCode}
+              onSuccess={handleSuccess}
+              onError={setErrorMsg}
+            />
+
+            {errorMsg && (
+              <div style={{
+                marginTop: 12, padding: "10px 14px",
+                background: "rgba(255,80,80,0.08)",
+                border: "1px solid rgba(255,80,80,0.4)",
+                borderRadius: 6,
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 12, color: "#ff8080",
+              }}>
+                {errorMsg}
+              </div>
+            )}
+
+            {/* Trust signals — Steven 2026-06-07 evening */}
+            <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 6 }}>
+              {[
+                { icon: "\u{1F512}", text: "Secure payment via PayPal" },
+                { icon: "⚡", text: "Instant download after payment" },
+                { icon: "∞", text: "Lifetime access — no subscription" },
+              ].map(({ icon, text }) => (
+                <div key={text} style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                  color: "rgba(255,255,255,0.5)",
+                }}>
+                  <span>{icon}</span>
+                  <span>{text}</span>
+                </div>
+              ))}
+            </div>
 
             <Link to="/shop" style={{
               display: "block", textAlign: "center", marginTop: 18,

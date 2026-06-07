@@ -54,7 +54,6 @@ export default function CartCheckoutPage() {
     if (typeof window === "undefined") return "";
     return localStorage.getItem("shop_active_coupon") || "";
   });
-  const [guestEmail, setGuestEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
   const [status, setStatus] = useState("idle");
   const [isMobile, setIsMobile] = useState(
@@ -85,8 +84,6 @@ export default function CartCheckoutPage() {
   const subtotal = round2(items.reduce((sum, it) => sum + it.price, 0));
   const discount = coupon ? round2(subtotal * (coupon.percentOff / 100)) : 0;
   const total = round2(subtotal - discount);
-
-  const emailValid = !!user || (guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail));
 
   const handleSuccess = () => {
     setStatus("success");
@@ -215,40 +212,6 @@ export default function CartCheckoutPage() {
           padding: isMobile ? "24px 18px" : "32px 28px",
           position: isMobile ? "static" : "sticky", top: 80,
         }}>
-          {/* Email */}
-          {!authLoading && !user && (
-            <>
-              <label style={{
-                display: "block",
-                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
-                fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)", marginBottom: 6,
-              }}>
-                Your Email
-              </label>
-              <input
-                type="email"
-                value={guestEmail}
-                onChange={(e) => setGuestEmail(e.target.value)}
-                placeholder="you@email.com"
-                autoComplete="email"
-                style={{
-                  width: "100%", padding: "13px 14px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: `1px solid rgba(255,255,255,0.12)`, borderRadius: 6,
-                  color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                  boxSizing: "border-box", marginBottom: 6, outline: "none",
-                }}
-              />
-              <div style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                color: "rgba(255,255,255,0.4)", marginBottom: 20, lineHeight: 1.5,
-              }}>
-                Your download link will be sent to this email.
-              </div>
-            </>
-          )}
-
           {!authLoading && user && (
             <div style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 12,
@@ -258,11 +221,10 @@ export default function CartCheckoutPage() {
             </div>
           )}
 
-          {/* PayPal — always visible, no email gate */}
+          {/* PayPal — no email required, anon checkout gets email from PayPal */}
           <CartCheckoutButton
             productIds={productIds}
             couponCode={couponCode}
-            guestEmail={!user ? (guestEmail || undefined) : undefined}
             onSuccess={handleSuccess}
             onError={setErrorMsg}
           />

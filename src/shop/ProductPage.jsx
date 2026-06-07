@@ -28,6 +28,7 @@ import { useCart } from "./CartContext.jsx";
 import Waveform from "./Waveform.jsx";
 import { trackViewItem, trackAddToCart, trackVideoPreview } from "../lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "../lib/analytics/hooks";
+import CartCheckoutButton from "./CartCheckoutButton.jsx";
 
 const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
@@ -1027,22 +1028,16 @@ export default function ProductPage() {
                   Add to Cart
                 </button>
 
-                {/* PayPal — adds to cart and goes to checkout with PayPal */}
-                <button
-                  onClick={() => {
-                    if (!inCart) addToCart(product);
-                    nav("/shop/checkout");
-                  }}
-                  style={{
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    width: "100%", padding: "14px 28px",
-                    background: "#ffc439",
-                    border: "none", borderRadius: 8,
-                    cursor: "pointer", marginBottom: 14,
-                  }}
-                >
-                  <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" height="22" style={{ height: 22 }} />
-                </button>
+                {/* PayPal Smart Buttons — instant single-product buy.
+                    Steven 2026-06-07: no email gate, no redirect — anon flow
+                    pulls payer email from PayPal after capture. */}
+                <div style={{ marginBottom: 14 }}>
+                  <CartCheckoutButton
+                    productIds={[product.id]}
+                    couponCode={null}
+                    onSuccess={() => nav("/shop/thank-you")}
+                  />
+                </div>
 
                 <div style={{
                   fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
