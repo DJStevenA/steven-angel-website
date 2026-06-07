@@ -303,6 +303,7 @@ export default function ProductPage() {
 
   return (
     <div style={{ background: BG, minHeight: "100vh", color: "#fff", overflowX: "hidden" }}>
+      <style>{`@keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.25); } }`}</style>
       {/* Hidden H1 — long-tail SEO keyword */}
       <h1 style={visuallyHidden}>
         {product.seoTitle ||
@@ -704,13 +705,17 @@ export default function ProductPage() {
                     style={{
                       marginBottom: 18,
                       cursor: "pointer",
-                      background: `rgba(${accentRgba},0.05)`,
-                      border: `1px solid rgba(${accentRgba},0.15)`,
-                      borderRadius: 10,
-                      padding: "10px 14px",
+                      background: `linear-gradient(180deg, rgba(${accentRgba},0.10), rgba(${accentRgba},0.04))`,
+                      border: `1px solid rgba(${accentRgba},${isActive ? 0.45 : 0.30})`,
+                      borderRadius: 12,
+                      padding: "14px 16px",
                       position: "relative",
                       userSelect: "none",
                       touchAction: "none",
+                      boxShadow: isActive
+                        ? `0 0 28px rgba(${accentRgba},0.28), inset 0 0 0 1px rgba(${accentRgba},0.10)`
+                        : `0 0 18px rgba(${accentRgba},0.10)`,
+                      transition: "box-shadow 200ms, border-color 200ms",
                     }}
                   >
                     <div
@@ -718,29 +723,45 @@ export default function ProductPage() {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        marginBottom: 6,
+                        marginBottom: 10,
                         fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                         fontWeight: 700,
-                        fontSize: 10,
-                        letterSpacing: "0.22em",
+                        fontSize: 11,
+                        letterSpacing: "0.28em",
                         textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.55)",
                       }}
                     >
-                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, marginRight: 8 }}>
-                        {isActive ? (isLoop ? currentTrack.title : "Now playing") : "Click to preview"}
+                      <span style={{
+                        display: "inline-flex", alignItems: "center", gap: 8,
+                        color: accentColor, flexShrink: 0,
+                      }}>
+                        <span style={{
+                          display: "inline-block", width: 6, height: 6, borderRadius: "50%",
+                          background: accentColor,
+                          boxShadow: isActive ? `0 0 8px ${accentColor}` : "none",
+                          animation: isActive ? "pulse 1.4s ease-in-out infinite" : "none",
+                        }} />
+                        Preview
+                      </span>
+                      <span style={{
+                        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        flex: 1, margin: "0 12px", textAlign: "right",
+                        color: "rgba(255,255,255,0.55)",
+                        fontSize: 10, letterSpacing: "0.22em",
+                      }}>
+                        {isActive ? (isLoop ? currentTrack.title : "Now playing") : "Tap to play"}
                       </span>
                       {isActive && (
-                        <span style={{ color: accentColor, flexShrink: 0 }}>
+                        <span style={{ color: accentColor, flexShrink: 0, fontSize: 11 }}>
                           {fmt(currentTime)} / {fmt(duration)}
                         </span>
                       )}
                     </div>
-                    <div style={{ position: "relative", height: 44 }}>
+                    <div style={{ position: "relative", height: 60 }}>
                       <Waveform
                         audioUrl={activeUrl}
                         progress={progress}
-                        height={44}
+                        height={60}
                       />
                       {isActive && (
                         <div
@@ -751,7 +772,7 @@ export default function ProductPage() {
                             left: `${progress * 100}%`,
                             width: 2,
                             background: "#fff",
-                            boxShadow: `0 0 6px ${accentColor}`,
+                            boxShadow: `0 0 8px ${accentColor}`,
                             pointerEvents: "none",
                             transition: "left 0.1s linear",
                           }}
@@ -1175,42 +1196,69 @@ function Accordion({ title, children, defaultOpen = false, accentColor = "#00E5F
   return (
     <div style={{
       marginTop: 18,
-      border: `1px solid rgba(${accentRgba},0.15)`,
-      borderRadius: 10,
-      background: "rgba(255,255,255,0.02)",
+      border: `1px solid rgba(${accentRgba},${open ? 0.32 : 0.18})`,
+      borderRadius: 12,
+      background: open
+        ? `linear-gradient(180deg, rgba(${accentRgba},0.05), rgba(255,255,255,0.02))`
+        : `linear-gradient(180deg, rgba(${accentRgba},0.025), rgba(255,255,255,0.01))`,
       overflow: "hidden",
+      boxShadow: open ? `0 0 22px rgba(${accentRgba},0.10)` : "none",
+      transition: "all 200ms",
     }}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         style={{
-          display: "flex", width: "100%", padding: "16px 20px",
-          alignItems: "center", justifyContent: "space-between",
+          display: "flex", flexDirection: "column", width: "100%",
+          padding: "18px 20px",
+          alignItems: "center", justifyContent: "center", gap: 10,
           background: "transparent", border: "none",
-          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-          fontWeight: 800, fontSize: 16, letterSpacing: "0.06em",
-          textTransform: "uppercase", color: "#fff", cursor: "pointer",
-          textAlign: "left",
+          cursor: "pointer", textAlign: "center",
         }}
       >
-        <span>{title}</span>
+        <span style={{
+          fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+          fontWeight: 800, fontSize: 17, letterSpacing: "0.18em",
+          textTransform: "uppercase", color: "#fff",
+        }}>
+          {title}
+        </span>
         <span
           aria-hidden="true"
           style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center",
-            width: 24, height: 24, borderRadius: "50%",
-            border: `1px solid rgba(${accentRgba},0.4)`,
-            color: accentColor, fontSize: 18, fontWeight: 600,
-            lineHeight: 1, transition: "transform 180ms",
+            width: 36, height: 36, borderRadius: "50%",
+            border: `1.5px solid rgba(${accentRgba},${open ? 0.7 : 0.5})`,
+            background: open
+              ? `rgba(${accentRgba},0.18)`
+              : `rgba(${accentRgba},0.08)`,
+            color: accentColor, fontSize: 22, fontWeight: 400,
+            lineHeight: 1, transition: "transform 220ms, background 200ms, border-color 200ms",
             transform: open ? "rotate(45deg)" : "rotate(0deg)",
+            boxShadow: `0 0 16px rgba(${accentRgba},0.25)`,
           }}
         >
           +
         </span>
+        {!open && (
+          <span style={{
+            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+            fontSize: 10, letterSpacing: "0.25em", textTransform: "uppercase",
+            color: `rgba(${accentRgba},0.7)`, marginTop: -2,
+          }}>
+            Tap to open
+          </span>
+        )}
       </button>
       {open && (
-        <div style={{ padding: "0 20px 20px", color: "rgba(255,255,255,0.85)" }}>
+        <div style={{
+          padding: "4px 22px 22px",
+          color: "rgba(255,255,255,0.88)",
+          borderTop: `1px solid rgba(${accentRgba},0.12)`,
+          marginTop: 4,
+          paddingTop: 18,
+        }}>
           {children}
         </div>
       )}
