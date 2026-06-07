@@ -16,6 +16,7 @@ import { useCart } from "./CartContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
 import { trackBeginCheckout } from "../lib/analytics/events";
 
+const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 const CYAN = "#00E5FF";
 const BG = "#080810";
 
@@ -25,8 +26,11 @@ function round2(n) { return Math.round(n * 100) / 100; }
 
 export default function CartPage() {
   const { cart, removeFromCart, cartTotal } = useCart();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, token } = useAuth();
   const navigate = useNavigate();
+  const [checkoutStatus, setCheckoutStatus] = useState("idle"); // idle | redirecting | needs-email | error
+  const [guestEmail, setGuestEmail] = useState("");
+  const [checkoutError, setCheckoutError] = useState(null);
 
   // Auto-apply WELCOME15 for first-time visitors. Survives reload via
   // localStorage. Steven 2026-06-07 — biggest single conversion lever
@@ -60,13 +64,46 @@ export default function CartPage() {
   const discount = coupon ? round2(subtotal * (coupon.percentOff / 100)) : 0;
   const total = round2(subtotal - discount);
 
-  const handleCheckout = () => {
+  // Steven 2026-06-07: redirect straight to Airwallex Payment Link — their
+  // hosted page, their design, all payment methods. No more /shop/checkout
+  // (kept as fallback route but no longer the primary entry point).
+  const handleCheckout = async () => {
     if (cart.length === 0) return;
-    try { trackBeginCheckout({ id: "cart", name: "Cart", price: total, currency: "USD" }); } catch { /* analytics never blocks navigation */ }
-    // Persist the active coupon code for the checkout page to pick up
-    // (it re-reads from localStorage; one shared source of truth).
-    try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
-    navigate("/shop/checkout");
+
+    const emailValid = !!user || (guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail));
+    if (!emailValid) {
+      setCheckoutStatus("needs-email");
+      return;
+    }
+
+    setCheckoutStatus("redirecting");
+    setCheckoutError(null);
+    try { trackBeginCheckout({ id: "cart", name: "Cart", price: total, currency: "USD" }); } catch { /* analytics never blocks */ }
+
+    try {
+      const headers = { "Content-Type": "application/json" };
+      if (user && token) headers.Authorization = `Bearer ${token}`;
+      const body = {
+        productIds: cart.map((it) => it.id),
+        couponCode: couponCode || null,
+      };
+      if (!user) body.email = guestEmail;
+
+      const res = await fetch(`${BACKEND}/shop/checkout/airwallex-link`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || `Checkout failed (${res.status})`);
+      }
+      // Hand off to Airwallex's hosted page.
+      window.location.href = data.url;
+    } catch (err) {
+      setCheckoutStatus("error");
+      setCheckoutError(err.message);
+    }
   };
 
   return (
@@ -227,18 +264,47 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* CTA — single big button, like Shopify "Check out" */}
+            {/* Guest email — only when no logged-in user and we're about to redirect.
+                Steven 2026-06-07: Airwallex's hosted page collects card details
+                etc, but we still need an email for download delivery + receipt. */}
+            {!user && (
+              <div style={{ marginBottom: 12 }}>
+                <input
+                  type="email"
+                  value={guestEmail}
+                  onChange={(e) => { setGuestEmail(e.target.value); if (checkoutStatus === "needs-email") setCheckoutStatus("idle"); }}
+                  placeholder="Email for download link"
+                  autoComplete="email"
+                  style={{
+                    width: "100%", padding: "14px 16px",
+                    background: "rgba(255,255,255,0.04)",
+                    border: `1px solid ${checkoutStatus === "needs-email" ? "rgba(255,80,80,0.6)" : "rgba(255,255,255,0.1)"}`,
+                    borderRadius: 8,
+                    color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                    boxSizing: "border-box", outline: "none",
+                  }}
+                />
+                {checkoutStatus === "needs-email" && (
+                  <div style={{ marginTop: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ff8080" }}>
+                    Please enter a valid email so we can send your download.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* CTA — redirects to Airwallex's hosted page */}
             <button
               onClick={handleCheckout}
-              disabled={authLoading}
+              disabled={authLoading || checkoutStatus === "redirecting"}
               style={{
                 width: "100%", padding: "18px 24px",
                 background: CYAN, color: "#000",
                 border: "none", borderRadius: 8,
                 fontFamily: "'Barlow Condensed', sans-serif",
                 fontWeight: 800, fontSize: 16, letterSpacing: "0.18em",
-                textTransform: "uppercase", cursor: authLoading ? "default" : "pointer",
-                opacity: authLoading ? 0.6 : 1,
+                textTransform: "uppercase",
+                cursor: (authLoading || checkoutStatus === "redirecting") ? "default" : "pointer",
+                opacity: (authLoading || checkoutStatus === "redirecting") ? 0.6 : 1,
                 transition: "transform 120ms, box-shadow 120ms",
                 boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
               }}
@@ -246,8 +312,28 @@ export default function CartPage() {
               onMouseUp={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              Check out — ${total.toFixed(2)}
+              {checkoutStatus === "redirecting"
+                ? "Redirecting to secure checkout…"
+                : `Check out — $${total.toFixed(2)}`}
             </button>
+
+            {checkoutError && (
+              <div style={{
+                marginTop: 12, padding: "10px 14px",
+                background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.4)",
+                borderRadius: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#ff8080",
+              }}>
+                {checkoutError}
+              </div>
+            )}
+
+            <div style={{
+              marginTop: 12, textAlign: "center",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+              color: "rgba(255,255,255,0.45)",
+            }}>
+              Secure checkout hosted by Airwallex — Card · Apple Pay · Google Pay · PayPal
+            </div>
 
             <Link to="/shop" style={{
               display: "block", textAlign: "center", marginTop: 18,
