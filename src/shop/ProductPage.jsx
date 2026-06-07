@@ -289,18 +289,16 @@ export default function ProductPage() {
   };
 
   const nav = useNavigate();
-  const { addToCart, isInCart } = useCart();
-  const inCart = isInCart(product?.id);
+  const { addToCart, isInCart, cartCount } = useCart();
   // Add-to-cart: STAY on the product page so the customer can keep browsing.
-  // The floating cart icon (top-right) confirms what they have. Steven 2026-06-07.
+  // The nav cart icon (top-right) confirms what they have. No "In Cart"
+  // disabled marker — Steven 2026-06-07 explicit removal.
   const handleAddToCart = () => {
-    if (!inCart && product) {
+    if (product && !isInCart(product.id)) {
       addToCart(product);
       trackAddToCart(product);
     }
   };
-  const handleCheckout = () => nav("/shop/checkout");
-  const handleViewCart = () => nav("/shop/cart");
 
   return (
     <div style={{ background: BG, minHeight: "100vh", color: "#fff", overflowX: "hidden" }}>
@@ -312,7 +310,8 @@ export default function ProductPage() {
 
       <Nav />
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb + Cart icon — Steven 2026-06-07: cart icon needs to be
+          visible on product pages too (same one ShopPage has in its nav). */}
       <nav
         aria-label="Breadcrumb"
         style={{ padding: isMobile ? "20px 20px 0" : "24px 60px 0" }}
@@ -321,20 +320,66 @@ export default function ProductPage() {
           style={{
             maxWidth: 1200,
             margin: "0 auto",
-            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-            fontSize: 12,
-            color: "rgba(255,255,255,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 16,
           }}
         >
-          <Link to="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
-            Home
+          <div
+            style={{
+              fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+              fontSize: 12,
+              color: "rgba(255,255,255,0.5)",
+              minWidth: 0,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <Link to="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+              Home
+            </Link>
+            <span style={{ margin: "0 8px" }}>/</span>
+            <Link to="/shop" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+              Shop
+            </Link>
+            <span style={{ margin: "0 8px" }}>/</span>
+            <span style={{ color: "#fff" }}>{product.name}</span>
+          </div>
+
+          {/* Cart icon — same one ShopPage's top nav uses */}
+          <Link
+            to="/shop/cart"
+            aria-label={`Cart (${cartCount} items)`}
+            style={{
+              position: "relative", display: "inline-flex",
+              alignItems: "center", justifyContent: "center",
+              width: 38, height: 38, borderRadius: 4,
+              background: cartCount > 0 ? "rgba(0,229,255,0.08)" : "transparent",
+              border: `1px solid ${cartCount > 0 ? CYAN : "rgba(255,255,255,0.15)"}`,
+              textDecoration: "none", flexShrink: 0,
+              transition: "all 0.15s",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cartCount > 0 ? CYAN : "rgba(255,255,255,0.6)"} strokeWidth="2">
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+            {cartCount > 0 && (
+              <span style={{
+                position: "absolute", top: -6, right: -6,
+                background: CYAN, color: "#000",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
+                fontSize: 11, minWidth: 18, height: 18,
+                borderRadius: 9, display: "flex",
+                alignItems: "center", justifyContent: "center", lineHeight: 1,
+              }}>
+                {cartCount}
+              </span>
+            )}
           </Link>
-          <span style={{ margin: "0 8px" }}>/</span>
-          <Link to="/shop" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
-            Shop
-          </Link>
-          <span style={{ margin: "0 8px" }}>/</span>
-          <span style={{ color: "#fff" }}>{product.name}</span>
         </div>
       </nav>
 
@@ -958,75 +1003,62 @@ export default function ProductPage() {
                   </div>
                 </div>
 
-                {/* Buy stack — Add to Cart always, plus Checkout once added.
-                    Steven 2026-06-07: previously the button morphed to "View
-                    Cart" which removed the buy intent. Now both options sit
-                    side-by-side so the customer can keep browsing OR pay. */}
+                {/* Buy stack — Steven 2026-06-07 Option A:
+                    1. Add to Cart (cyan/purple per product) — same label both states
+                    2. 🟡 PayPal — instant single-product checkout
+                    3. ⚫ More Payment Options — card/Apple Pay/Google Pay on /shop/checkout */}
                 <button
                   onClick={handleAddToCart}
-                  disabled={inCart}
                   style={{
                     display: "block", width: "100%", padding: "16px 28px",
-                    background: inCart
-                      ? "rgba(255,255,255,0.08)"
-                      : (isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`),
-                    border: inCart ? `1px solid rgba(${accentRgba},0.4)` : "none",
-                    borderRadius: 8,
+                    background: isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+                    border: "none", borderRadius: 8,
                     fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                     fontWeight: 800, fontSize: 16, letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: inCart ? accentColor : "#000",
-                    cursor: inCart ? "default" : "pointer",
-                    boxShadow: inCart ? "none" : `0 0 28px rgba(${accentRgba},0.35)`,
-                    marginBottom: 10,
+                    textTransform: "uppercase", color: "#000", cursor: "pointer",
+                    boxShadow: `0 0 28px rgba(${accentRgba},0.35)`, marginBottom: 10,
                   }}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={inCart ? accentColor : "#000"} strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}>
-                    {inCart ? (
-                      <path d="M20 6L9 17l-5-5" />
-                    ) : (
-                      <>
-                        <circle cx="9" cy="21" r="1" />
-                        <circle cx="20" cy="21" r="1" />
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                      </>
-                    )}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" style={{ verticalAlign: "middle", marginRight: 8 }}>
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                   </svg>
-                  {inCart ? "In Cart" : "Add to Cart"}
+                  Add to Cart
                 </button>
 
-                {inCart && (
-                  <button
-                    onClick={handleCheckout}
-                    style={{
-                      display: "block", width: "100%", padding: "16px 28px",
-                      background: isPurple ? PURPLE : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
-                      border: "none", borderRadius: 8,
-                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                      fontWeight: 800, fontSize: 16, letterSpacing: "0.12em",
-                      textTransform: "uppercase", color: "#000", cursor: "pointer",
-                      boxShadow: `0 0 28px rgba(${accentRgba},0.35)`, marginBottom: 8,
-                    }}
-                  >
-                    Checkout
-                  </button>
-                )}
-                {inCart && (
-                  <button
-                    onClick={handleViewCart}
-                    style={{
-                      display: "block", width: "100%", padding: "12px 20px",
-                      background: "transparent",
-                      border: `1px solid rgba(255,255,255,0.15)`, borderRadius: 8,
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontWeight: 600, fontSize: 13, letterSpacing: "0.05em",
-                      color: "rgba(255,255,255,0.75)", cursor: "pointer",
-                      marginBottom: 14,
-                    }}
-                  >
-                    View Cart
-                  </button>
-                )}
+                {/* PayPal — instant single-product payment (no cart) */}
+                <button
+                  onClick={() => nav(`/shop/checkout?product=${product.slug}&express=paypal`)}
+                  style={{
+                    display: "block", width: "100%", padding: "14px 28px",
+                    background: "#ffc439", color: "#0a2540",
+                    border: "none", borderRadius: 8,
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontWeight: 700, fontSize: 15, letterSpacing: "0.02em",
+                    cursor: "pointer", marginBottom: 8,
+                  }}
+                >
+                  <span style={{ fontStyle: "italic", fontWeight: 800 }}>Pay</span>
+                  <span style={{ fontStyle: "italic", fontWeight: 800, color: "#1a3a6e" }}>Pal</span>
+                  <span style={{ marginLeft: 8, fontWeight: 600 }}>— Pay now</span>
+                </button>
+
+                {/* More Payment Options — Card / Apple Pay / Google Pay via Airwallex */}
+                <button
+                  onClick={() => nav(`/shop/checkout?product=${product.slug}`)}
+                  style={{
+                    display: "block", width: "100%", padding: "13px 28px",
+                    background: "transparent",
+                    border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8,
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontWeight: 600, fontSize: 13, letterSpacing: "0.06em",
+                    color: "rgba(255,255,255,0.85)", cursor: "pointer",
+                    marginBottom: 14,
+                  }}
+                >
+                  More Payment Options
+                </button>
 
                 <div style={{
                   fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
