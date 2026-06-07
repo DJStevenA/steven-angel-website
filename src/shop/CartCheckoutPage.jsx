@@ -1,23 +1,11 @@
 /**
- * /shop/checkout — Steven 2026-06-07 Option A.
+ * /shop/checkout — PayPal-only checkout, dark theme matching steven-angel.com.
  *
- * Page on OUR domain (steven-angel.com/shop/checkout), styled like ABT /
- * Shopify checkout: white background, professional, centered logo. The CARD
- * INPUTS inside come from Airwallex Embedded Elements (their styling for
- * those specific fields). PayPal is offered as a second payment method.
+ * Email + official PayPal Smart Buttons. That's it.
  *
  * Two entry points:
  *   - /shop/checkout                — full cart from /shop/cart
- *   - /shop/checkout?product=<slug> — single product from a "More Payment
- *                                     Options" button on the product page
- *   - /shop/checkout?product=<slug>&express=paypal — same, but PayPal pre-
- *                                     selected (from product-page PayPal btn)
- *
- * Required fields (per Steven 2026-06-07):
- *   - Email (for download delivery + receipt). Nothing else.
- *
- * Express checkout block at the top: PayPal → G Pay → Apple Pay big buttons.
- * Order summary in the right column. Footer with refund/privacy/terms.
+ *   - /shop/checkout?product=<slug> — single product buy
  */
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -27,21 +15,25 @@ import { useAuth } from "./AuthContext.jsx";
 import { getProductBySlug } from "./products.js";
 import CartCheckoutButton from "./CartCheckoutButton.jsx";
 import { preloadPayPalSdk } from "./CheckoutButton.jsx";
-import AirwallexCheckoutCard, { preloadAirwallexSdk } from "./AirwallexCheckoutCard.jsx";
+
+const CYAN = "#00E5FF";
+const BG = "#080810";
+const CARD_BG = "rgba(255,255,255,0.03)";
+const BORDER = "rgba(255,255,255,0.1)";
+const TEXT = "#fff";
+const TEXT_MUTED = "rgba(255,255,255,0.5)";
 
 const COUPONS_CLIENT = { WELCOME15: { percentOff: 15 } };
 
 function round2(n) { return Math.round(n * 100) / 100; }
 
 export default function CartCheckoutPage() {
-  const { cart, clearCart, cartTotal } = useCart();
+  const { cart, clearCart } = useCart();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  // Resolve "items" — either ?product=<slug> single buy, or the full cart.
   const singleSlug = params.get("product");
-  const expressIntent = params.get("express"); // "paypal" or null
   const singleProduct = useMemo(() => {
     if (!singleSlug) return null;
     return getProductBySlug(singleSlug) || null;
@@ -63,11 +55,8 @@ export default function CartCheckoutPage() {
     return localStorage.getItem("shop_active_coupon") || "";
   });
   const [guestEmail, setGuestEmail] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState(
-    expressIntent === "paypal" ? "paypal" : "card"
-  );
   const [errorMsg, setErrorMsg] = useState(null);
-  const [status, setStatus] = useState("idle"); // idle | success
+  const [status, setStatus] = useState("idle");
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 980 : false
   );
@@ -80,11 +69,9 @@ export default function CartCheckoutPage() {
 
   useEffect(() => {
     document.title = "Checkout | Steven Angel Shop";
-    preloadAirwallexSdk();
     preloadPayPalSdk();
   }, []);
 
-  // Empty cart + no single product → send back to /shop/cart.
   useEffect(() => {
     if (status === "idle" && items.length === 0) {
       const t = setTimeout(() => navigate("/shop/cart"), 30);
@@ -107,412 +94,219 @@ export default function CartCheckoutPage() {
     navigate("/shop/thank-you");
   };
 
-  /* ── styles (light theme, Shopify-ish) ───────────────────────────────────── */
-  const PAGE_BG = "#f4f5f7";
-  const CARD_BG = "#ffffff";
-  const TEXT = "#1a1f2e";
-  const TEXT_MUTED = "#6b7280";
-  const BORDER = "#e5e7eb";
-  const ACCENT = "#1a1f2e";
-
-  const sectionLabel = {
-    fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-    fontWeight: 600,
-    fontSize: 16,
-    color: TEXT,
-    margin: "0 0 14px",
-  };
-  const subtleNote = {
-    fontFamily: "'DM Sans', sans-serif",
-    fontSize: 12,
-    color: TEXT_MUTED,
-    marginBottom: 14,
-  };
-  const inputStyle = {
-    width: "100%",
-    padding: "14px 14px",
-    background: CARD_BG,
-    border: `1px solid ${BORDER}`,
-    borderRadius: 6,
-    color: TEXT,
-    fontFamily: "'DM Sans', sans-serif",
-    fontSize: 15,
-    boxSizing: "border-box",
-    outline: "none",
-  };
-
   return (
-    <div style={{ background: PAGE_BG, minHeight: "100vh", color: TEXT, fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif" }}>
-      {/* Header — white, logo centered, professional */}
-      <header style={{
-        background: CARD_BG,
-        borderBottom: `1px solid ${BORDER}`,
-        padding: "20px 24px",
-        display: "flex", justifyContent: "center", alignItems: "center",
-        position: "relative",
+    <div style={{ background: BG, minHeight: "100vh", color: TEXT }}>
+      {/* Nav */}
+      <nav style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "0 clamp(20px, 4vw, 48px)", height: 64,
+        background: "rgba(0,0,0,0.92)", backdropFilter: "blur(14px)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}>
-        <Link to="/shop" style={{
-          fontFamily: "'Barlow Condensed', sans-serif",
-          fontWeight: 900, fontSize: 22, letterSpacing: "0.12em",
-          textDecoration: "none", color: TEXT,
+        <Link to="/" style={{
+          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+          fontSize: 20, letterSpacing: "0.1em", textDecoration: "none", color: "#fff",
         }}>
-          STEVEN ANGEL
+          STEVEN <span style={{ color: CYAN }}>ANGEL</span>
         </Link>
         <Link to={singleProduct ? `/shop/${singleProduct.slug}` : "/shop/cart"} style={{
-          position: "absolute", right: 24,
-          fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-          color: TEXT_MUTED, textDecoration: "none",
+          fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 600,
+          fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
+          color: "rgba(255,255,255,0.6)", textDecoration: "none",
         }}>
           &larr; Back
         </Link>
-      </header>
+      </nav>
 
       <main style={{
-        maxWidth: 1100, margin: "0 auto",
-        padding: isMobile ? "24px 16px 80px" : "40px 24px 80px",
+        maxWidth: 900, margin: "0 auto",
+        padding: isMobile ? "32px 16px 80px" : "48px 24px 80px",
         display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1.4fr) minmax(320px, 1fr)",
+        gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
         gap: isMobile ? 32 : 48,
         alignItems: "start",
       }}>
-        {/* LEFT — Form */}
-        <section>
-          {/* Express checkout block — PayPal → G Pay → Apple Pay (per Steven). */}
-          <div style={sectionLabel}>Express checkout</div>
+        {/* LEFT — Order summary */}
+        <div>
           <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-            gap: 10, marginBottom: 18,
+            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+            fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase",
+            color: CYAN, marginBottom: 20,
           }}>
-            <button
-              onClick={() => setPaymentMethod("paypal")}
-              style={{
-                padding: "14px 16px", background: "#ffc439",
-                color: "#0a2540", border: "none", borderRadius: 6,
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 700, fontSize: 15, letterSpacing: "0.01em",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontStyle: "italic", fontWeight: 800 }}>Pay</span>
-              <span style={{ fontStyle: "italic", fontWeight: 800, color: "#1a3a6e" }}>Pal</span>
-            </button>
-            <button
-              onClick={() => setPaymentMethod("card")}
-              style={{
-                padding: "14px 16px", background: "#000",
-                color: "#fff", border: "none", borderRadius: 6,
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 600, fontSize: 14, letterSpacing: "0.02em",
-                cursor: "pointer",
-              }}
-            >
-              G Pay
-            </button>
-            <button
-              onClick={() => setPaymentMethod("card")}
-              style={{
-                padding: "14px 16px", background: "#000",
-                color: "#fff", border: "none", borderRadius: 6,
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 600, fontSize: 14, letterSpacing: "0.02em",
-                cursor: "pointer",
-              }}
-            >
-              <span style={{ fontWeight: 800 }}>&#63743;</span> Pay
-            </button>
-          </div>
-
-          {/* OR separator */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: 12, margin: "8px 0 20px",
-          }}>
-            <div style={{ flex: 1, height: 1, background: BORDER }} />
-            <span style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-              color: TEXT_MUTED, letterSpacing: "0.16em", textTransform: "uppercase",
-            }}>or</span>
-            <div style={{ flex: 1, height: 1, background: BORDER }} />
-          </div>
-
-          {/* Contact — ONLY email */}
-          <div style={sectionLabel}>Contact</div>
-          {!user ? (
-            <>
-              <input
-                type="email"
-                value={guestEmail}
-                onChange={(e) => setGuestEmail(e.target.value)}
-                placeholder="Email"
-                autoComplete="email"
-                style={{
-                  ...inputStyle,
-                  borderColor: !emailValid && guestEmail ? "#ef4444" : BORDER,
-                  marginBottom: 8,
-                }}
-              />
-              <div style={subtleNote}>
-                Your download link will be sent to this email.
-              </div>
-            </>
-          ) : (
-            <div style={{
-              padding: "14px 16px", background: "#f0f9ff",
-              border: `1px solid #bae6fd`, borderRadius: 6,
-              fontSize: 13, color: "#075985", marginBottom: 20,
-            }}>
-              Signed in as <strong>{user.email}</strong>
-            </div>
-          )}
-
-          {/* Payment section — radio cards (Credit Card / PayPal) */}
-          <div style={{ ...sectionLabel, marginTop: 28 }}>Payment</div>
-          <div style={{ ...subtleNote, marginBottom: 16 }}>
-            All transactions are secure and encrypted.
-          </div>
-
-          {/* Credit Card radio + form */}
-          <div
-            onClick={() => setPaymentMethod("card")}
-            style={{
-              background: CARD_BG,
-              border: `1px solid ${paymentMethod === "card" ? "#16a34a" : BORDER}`,
-              borderRadius: 8, marginBottom: 12, cursor: "pointer",
-              overflow: "hidden",
-            }}
-          >
-            <div style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: 16,
-              background: paymentMethod === "card" ? "#f0fdf4" : CARD_BG,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <RadioDot selected={paymentMethod === "card"} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: TEXT }}>
-                  Credit / Debit Card · Apple Pay · Google Pay
-                </span>
-              </div>
-              <CardLogosRow />
-            </div>
-            {paymentMethod === "card" && (
-              <div style={{ padding: 16, borderTop: `1px solid ${BORDER}` }}>
-                <AirwallexCheckoutCard
-                  productIds={productIds}
-                  couponCode={couponCode}
-                  guestEmail={!user ? guestEmail : undefined}
-                  onSuccess={handleSuccess}
-                  onError={setErrorMsg}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* PayPal radio */}
-          <div
-            onClick={() => setPaymentMethod("paypal")}
-            style={{
-              background: CARD_BG,
-              border: `1px solid ${paymentMethod === "paypal" ? "#16a34a" : BORDER}`,
-              borderRadius: 8, marginBottom: 16, cursor: "pointer",
-              overflow: "hidden",
-            }}
-          >
-            <div style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: 16,
-              background: paymentMethod === "paypal" ? "#f0fdf4" : CARD_BG,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <RadioDot selected={paymentMethod === "paypal"} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: TEXT }}>
-                  PayPal
-                </span>
-              </div>
-              <span style={{
-                fontStyle: "italic", fontWeight: 800, color: "#0a2540", fontSize: 18,
-              }}>
-                Pay<span style={{ color: "#1a3a6e" }}>Pal</span>
-              </span>
-            </div>
-            {paymentMethod === "paypal" && emailValid && (
-              <div style={{ padding: 16, borderTop: `1px solid ${BORDER}` }}>
-                <CartCheckoutButton
-                  productIds={productIds}
-                  couponCode={couponCode}
-                  guestEmail={!user ? guestEmail : undefined}
-                  onSuccess={handleSuccess}
-                  onError={setErrorMsg}
-                />
-              </div>
-            )}
-            {paymentMethod === "paypal" && !emailValid && (
-              <div style={{
-                padding: 16, borderTop: `1px solid ${BORDER}`,
-                fontSize: 13, color: TEXT_MUTED, textAlign: "center",
-              }}>
-                Enter your email above to enable PayPal.
-              </div>
-            )}
-          </div>
-
-          {errorMsg && (
-            <div style={{
-              marginTop: 8, padding: "12px 14px",
-              background: "#fef2f2", border: "1px solid #fecaca",
-              borderRadius: 6, fontSize: 13, color: "#991b1b",
-            }}>
-              {errorMsg}
-            </div>
-          )}
-
-          {!user && (
-            <div style={{ marginTop: 18, fontSize: 13, color: TEXT_MUTED, textAlign: "center" }}>
-              Already have an account?{" "}
-              <Link to="/shop/login?redirect=/shop/checkout" style={{ color: TEXT, textDecoration: "underline" }}>
-                Sign in
-              </Link>
-            </div>
-          )}
-        </section>
-
-        {/* RIGHT — Order summary (sticky) */}
-        <aside style={{
-          background: CARD_BG, border: `1px solid ${BORDER}`,
-          borderRadius: 10, padding: 24,
-          position: isMobile ? "static" : "sticky", top: 24,
-        }}>
-          <div style={{
-            fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: 13,
-            color: TEXT_MUTED, marginBottom: 14,
-            textTransform: "uppercase", letterSpacing: "0.08em",
-          }}>
-            Order summary
+            Checkout
           </div>
 
           {items.map((item) => (
             <div key={item.id} style={{
-              display: "flex", gap: 12, padding: "10px 0",
+              display: "flex", gap: 14, padding: "14px 0",
               borderBottom: `1px solid ${BORDER}`, alignItems: "center",
             }}>
-              <div style={{ position: "relative", flexShrink: 0 }}>
-                <img src={item.image} alt={item.name} width="56" height="56" style={{
-                  width: 56, height: 56, objectFit: "cover", borderRadius: 6,
-                  border: `1px solid ${BORDER}`,
-                }} />
-                <span style={{
-                  position: "absolute", top: -6, right: -6,
-                  background: "#1a1f2e", color: "#fff",
-                  borderRadius: 999, padding: "2px 7px",
-                  fontSize: 11, fontWeight: 600,
-                  minWidth: 18, textAlign: "center",
-                }}>1</span>
-              </div>
+              <img src={item.image} alt={item.name} width="60" height="60" style={{
+                width: 60, height: 60, objectFit: "cover", borderRadius: 8,
+                border: `1px solid rgba(0,229,255,0.2)`,
+              }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{
-                  fontSize: 14, fontWeight: 600, color: TEXT,
+                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                  fontSize: 16, textTransform: "uppercase", letterSpacing: "0.03em",
                   overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                 }}>
                   {item.name}
                 </div>
               </div>
               <div style={{
-                fontSize: 14, fontWeight: 600, color: TEXT, whiteSpace: "nowrap",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                fontSize: 18, color: CYAN,
               }}>
                 ${item.price.toFixed(2)}
               </div>
             </div>
           ))}
 
+          {/* Coupon */}
           <div style={{ marginTop: 16, display: "flex", gap: 8 }}>
             <input
               type="text"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
               placeholder="Discount code"
-              style={{ ...inputStyle, padding: "10px 12px", fontSize: 13, flex: 1 }}
-            />
-            <button
-              type="button"
-              disabled
               style={{
-                padding: "10px 16px", background: "transparent",
+                flex: 1, padding: "10px 12px",
+                background: "rgba(255,255,255,0.04)",
                 border: `1px solid ${BORDER}`, borderRadius: 6,
-                color: TEXT_MUTED, fontWeight: 600, fontSize: 13,
-                cursor: "default",
+                color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                letterSpacing: "0.1em", boxSizing: "border-box", outline: "none",
               }}
-            >
-              Apply
-            </button>
+            />
           </div>
 
+          {/* Totals */}
           <div style={{ marginTop: 20, borderTop: `1px solid ${BORDER}`, paddingTop: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: TEXT_MUTED, marginBottom: 8 }}>
-              <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
             {discount > 0 && (
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "#16a34a", marginBottom: 8 }}>
-                <span>Discount ({couponCode})</span>
-                <span>-${discount.toFixed(2)}</span>
-              </div>
+              <>
+                <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: TEXT_MUTED, marginBottom: 6 }}>
+                  <span>Subtotal</span>
+                  <span>${subtotal.toFixed(2)}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: CYAN, marginBottom: 6 }}>
+                  <span>{couponCode}</span>
+                  <span>-${discount.toFixed(2)}</span>
+                </div>
+              </>
             )}
             <div style={{
               display: "flex", justifyContent: "space-between", alignItems: "baseline",
-              marginTop: 14, paddingTop: 14, borderTop: `1px solid ${BORDER}`,
+              marginTop: discount > 0 ? 10 : 0,
             }}>
-              <span style={{ fontSize: 16, fontWeight: 600, color: TEXT }}>Total</span>
-              <span style={{ fontSize: 24, fontWeight: 700, color: TEXT }}>
-                <span style={{ fontSize: 13, color: TEXT_MUTED, marginRight: 6 }}>USD</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)" }}>Total</span>
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 32, color: CYAN }}>
                 ${total.toFixed(2)}
+                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginLeft: 6, fontWeight: 600 }}>USD</span>
               </span>
             </div>
           </div>
-        </aside>
+        </div>
+
+        {/* RIGHT — Email + PayPal */}
+        <div style={{
+          background: "linear-gradient(135deg, #0a0a20, #0d0418)",
+          border: "1px solid rgba(0,229,255,0.15)",
+          borderRadius: 14,
+          padding: isMobile ? "24px 18px" : "32px 28px",
+          position: isMobile ? "static" : "sticky", top: 80,
+        }}>
+          {/* Email */}
+          {!authLoading && !user && (
+            <>
+              <label style={{
+                display: "block",
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "rgba(255,255,255,0.6)", marginBottom: 6,
+              }}>
+                Your Email
+              </label>
+              <input
+                type="email"
+                value={guestEmail}
+                onChange={(e) => setGuestEmail(e.target.value)}
+                placeholder="you@email.com"
+                autoComplete="email"
+                style={{
+                  width: "100%", padding: "13px 14px",
+                  background: "rgba(255,255,255,0.04)",
+                  border: `1px solid rgba(255,255,255,0.12)`, borderRadius: 6,
+                  color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                  boxSizing: "border-box", marginBottom: 6, outline: "none",
+                }}
+              />
+              <div style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                color: "rgba(255,255,255,0.4)", marginBottom: 20, lineHeight: 1.5,
+              }}>
+                Your download link will be sent to this email.
+              </div>
+            </>
+          )}
+
+          {!authLoading && user && (
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+              color: "rgba(255,255,255,0.5)", marginBottom: 20,
+            }}>
+              Signed in as <strong style={{ color: "rgba(255,255,255,0.8)" }}>{user.email}</strong>
+            </div>
+          )}
+
+          {/* PayPal — always visible, no email gate */}
+          <CartCheckoutButton
+            productIds={productIds}
+            couponCode={couponCode}
+            guestEmail={!user ? (guestEmail || undefined) : undefined}
+            onSuccess={handleSuccess}
+            onError={setErrorMsg}
+          />
+
+          {errorMsg && (
+            <div style={{
+              marginTop: 14, padding: "10px 14px",
+              background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.4)",
+              borderRadius: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ff8080",
+            }}>
+              {errorMsg}
+            </div>
+          )}
+
+          {/* Trust signals */}
+          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { icon: "\u{1F512}", text: "Secure payment via PayPal" },
+              { icon: "\u26A1", text: "Instant download after payment" },
+              { icon: "\u221E", text: "Lifetime access" },
+            ].map(({ icon, text }) => (
+              <div key={text} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                color: "rgba(255,255,255,0.45)",
+              }}>
+                <span>{icon}</span>
+                <span>{text}</span>
+              </div>
+            ))}
+          </div>
+
+          {!user && (
+            <div style={{ textAlign: "center", marginTop: 16 }}>
+              <Link to="/shop/login?redirect=/shop/checkout" style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                color: "rgba(255,255,255,0.5)", textDecoration: "underline",
+              }}>
+                Already have an account? Sign in
+              </Link>
+            </div>
+          )}
+        </div>
       </main>
-
-      <footer style={{
-        borderTop: `1px solid ${BORDER}`,
-        padding: "20px 24px",
-        textAlign: "center",
-        fontSize: 12, color: TEXT_MUTED,
-      }}>
-        <Link to="/refund" style={{ color: TEXT_MUTED, textDecoration: "underline", marginRight: 14 }}>Refund policy</Link>
-        <Link to="/privacy" style={{ color: TEXT_MUTED, textDecoration: "underline", marginRight: 14 }}>Privacy</Link>
-        <Link to="/terms" style={{ color: TEXT_MUTED, textDecoration: "underline" }}>Terms</Link>
-      </footer>
-    </div>
-  );
-}
-
-function RadioDot({ selected }) {
-  return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: 18, height: 18, borderRadius: "50%",
-      border: `2px solid ${selected ? "#16a34a" : "#cbd5e1"}`,
-      background: "#fff", flexShrink: 0,
-    }}>
-      {selected && (
-        <span style={{
-          width: 8, height: 8, borderRadius: "50%",
-          background: "#16a34a",
-        }} />
-      )}
-    </span>
-  );
-}
-
-function CardLogosRow() {
-  return (
-    <div style={{ display: "flex", gap: 6 }}>
-      {["VISA", "MC", "AMEX"].map((l) => (
-        <span key={l} style={{
-          padding: "2px 6px", borderRadius: 3,
-          background: "#f3f4f6", border: "1px solid #e5e7eb",
-          fontSize: 10, fontWeight: 700, color: "#374151",
-          letterSpacing: "0.05em",
-        }}>{l}</span>
-      ))}
     </div>
   );
 }
