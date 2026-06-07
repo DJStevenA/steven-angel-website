@@ -71,11 +71,15 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
           createOrder: async () => {
             try {
               const currentEmail = guestEmailRef.current;
-              const isGuest = !!currentEmail;
-              const endpoint = isGuest ? "/shop/checkout/cart-guest" : "/shop/checkout/cart-create";
+              const hasEmail = !!currentEmail;
+              const hasToken = !!token;
+              // Three paths: logged in → cart-create, has email → cart-guest, neither → cart-anon
+              const endpoint = hasToken ? "/shop/checkout/cart-create"
+                : hasEmail ? "/shop/checkout/cart-guest"
+                : "/shop/checkout/cart-anon";
               const headers = { "Content-Type": "application/json" };
-              if (!isGuest && token) headers.Authorization = `Bearer ${token}`;
-              const body = isGuest
+              if (hasToken) headers.Authorization = `Bearer ${token}`;
+              const body = hasEmail
                 ? { productIds, email: currentEmail, couponCode: couponRef.current || null }
                 : { productIds, couponCode: couponRef.current || null };
               const res = await fetch(`${BACKEND}${endpoint}`, {
@@ -85,7 +89,9 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
               });
               const data = await res.json();
               if (!res.ok) throw new Error(data.error || "Failed to create order");
-              if (isGuest && data.token) guestTokenRef.current = data.token;
+              if (hasEmail && data.token) guestTokenRef.current = data.token;
+              // Track if this was an anon order (no email, no login)
+              if (!hasToken && !hasEmail) guestTokenRef.current = "__anon__";
               return data.orderId;
             } catch (err) {
               setError(err.message);
@@ -97,6 +103,24 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
           onApprove: async (data) => {
             try {
               trackAddPaymentInfo({ id: "cart", name: "Cart", price: 0 });
+              const isAnon = guestTokenRef.current === "__anon__";
+              // Anon orders use a different capture endpoint that gets email from PayPal
+              if (isAnon) {
+                const res = await fetch(`${BACKEND}/shop/checkout/cart-anon-capture`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ orderId: data.orderID }),
+                });
+                const json = await res.json();
+                if (!res.ok) throw new Error(json.error || "Failed to capture payment");
+                if (window.clarity) {
+                  window.clarity("event", "purchaseComplete");
+                  window.clarity("set", "conversion_type", "purchase_cart_anon");
+                }
+                trackPurchase({ id: "cart", name: "Cart", price: 0 }, { transaction_id: data.orderID, email: json.email });
+                if (onSuccess) onSuccess(json);
+                return;
+              }
               const captureToken = guestTokenRef.current || token;
               const res = await fetch(`${BACKEND}/shop/checkout/capture`, {
                 method: "POST",
