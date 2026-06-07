@@ -1,35 +1,22 @@
 /**
- * /shop/cart — Cart + Checkout page.
+ * /shop/cart — minimal on-brand cart drawer/page.
  *
- * Shows all items in the cart with remove buttons, coupon input,
- * price breakdown, and TWO payment options:
- *   - Airwallex Drop-in (Card + Apple Pay + Google Pay) — on top
- *   - PayPal button — below
+ * Per Steven 2026-06-07: this page ONLY shows items + coupon + total + the
+ * "Check out" CTA. All payment forms, trust signals, and credibility lines
+ * live on /shop/checkout (white, Shopify-style) — kept off the cart so the
+ * cart stays on-brand dark and focused.
  *
- * Both render immediately. Email is required for guest before either fires.
- * Coupon WELCOME15 is auto-applied for first-time visitors (the discount
- * popup sets a localStorage flag the first time it shows).
- *
- * Changes 2026-06-07 (Marketing brief checkout_improvements.md + Steven):
- *   - PayPal renders immediately; no "Enter email" overlay
- *   - Coupon placeholder changed to "Enter coupon code" (auto-apply handles
- *     suggesting WELCOME15 — no more pre-filled placeholder confusion)
- *   - New trust signals: 14-day money-back guarantee + credibility line
- *     (Released on Sony · MoBlack · MTGD · Beatport Top 10) + card logos
- *   - Airwallex Drop-in mounted in its own card above PayPal
+ * Auto-applies WELCOME15 for first-time visitors (cookie-based via the
+ * `shop_cart_visited` flag + the existing discount-popup flag).
  */
 
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
-import CartCheckoutButton from "./CartCheckoutButton.jsx";
-import { preloadPayPalSdk } from "./CheckoutButton.jsx";
-import AirwallexCheckoutCard, { preloadAirwallexSdk } from "./AirwallexCheckoutCard.jsx";
 import { trackBeginCheckout } from "../lib/analytics/events";
 
 const CYAN = "#00E5FF";
-const PURPLE = "#BB86FC";
 const BG = "#080810";
 
 const COUPONS_CLIENT = { WELCOME15: { percentOff: 15 } };
@@ -37,13 +24,13 @@ const COUPONS_CLIENT = { WELCOME15: { percentOff: 15 } };
 function round2(n) { return Math.round(n * 100) / 100; }
 
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart, cartTotal } = useCart();
+  const { cart, removeFromCart, cartTotal } = useCart();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Auto-apply WELCOME15 for first-time visitors who saw the discount popup
-  // (or are first-time on the cart page). Cookie-based via localStorage so
-  // it survives refresh / closes / re-opens. Steven 2026-06-07 directive.
+  // Auto-apply WELCOME15 for first-time visitors. Survives reload via
+  // localStorage. Steven 2026-06-07 — biggest single conversion lever
+  // per the Marketing brief.
   const [couponCode, setCouponCode] = useState(() => {
     if (typeof window === "undefined") return "";
     const popupSeen = localStorage.getItem("shop_discount_popup_seen");
@@ -54,9 +41,6 @@ export default function CartPage() {
     }
     return "";
   });
-  const [guestEmail, setGuestEmail] = useState("");
-  const [status, setStatus] = useState("idle");
-  const [errorMsg, setErrorMsg] = useState(null);
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -69,47 +53,21 @@ export default function CartPage() {
 
   useEffect(() => {
     document.title = "Cart | Steven Angel Shop";
-    preloadPayPalSdk();
-    preloadAirwallexSdk();
   }, []);
 
-  // Compute pricing
   const coupon = couponCode ? COUPONS_CLIENT[couponCode.toUpperCase()] : null;
   const subtotal = round2(cartTotal);
   const discount = coupon ? round2(subtotal * (coupon.percentOff / 100)) : 0;
   const total = round2(subtotal - discount);
 
-  const emailValid = guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail);
-
-  const handleSuccess = () => {
-    setStatus("success");
-    clearCart();
+  const handleCheckout = () => {
+    if (cart.length === 0) return;
+    try { trackBeginCheckout({ id: "cart", name: "Cart", price: total, currency: "USD" }); } catch { /* analytics never blocks navigation */ }
+    // Persist the active coupon code for the checkout page to pick up
+    // (it re-reads from localStorage; one shared source of truth).
+    try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
+    navigate("/shop/checkout");
   };
-
-  // Success screen
-  if (status === "success") {
-    return (
-      <div style={{ background: BG, minHeight: "100vh", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-        <div style={{ textAlign: "center", maxWidth: 460 }}>
-          <div style={{ fontSize: 56, color: CYAN, marginBottom: 16 }}>&#10003;</div>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 36, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 12, color: "#fff" }}>
-            Thank You!
-          </div>
-          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.6, marginBottom: 24 }}>
-            Your purchase is confirmed.
-            {user ? " Head to your account to download." : " Check your email for the download link."}
-          </div>
-          <Link to={user ? "/shop/account" : "/shop"} style={{
-            display: "inline-block", padding: "14px 32px", background: CYAN, color: "#000",
-            borderRadius: 50, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
-            fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", textDecoration: "none",
-          }}>
-            {user ? "Go to My Account" : "Back to Shop"}
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={{ background: BG, minHeight: "100vh", color: "#fff" }}>
@@ -128,7 +86,7 @@ export default function CartPage() {
         </Link>
       </nav>
 
-      <main style={{ maxWidth: 900, margin: "0 auto", padding: isMobile ? "32px 16px 80px" : "48px 24px 80px" }}>
+      <main style={{ maxWidth: 760, margin: "0 auto", padding: isMobile ? "32px 16px 80px" : "48px 24px 80px" }}>
         <div style={{
           fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
           fontSize: isMobile ? 32 : 42, textTransform: "uppercase",
@@ -162,18 +120,24 @@ export default function CartPage() {
             </Link>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 380px", gap: isMobile ? 32 : 40 }}>
-            {/* Left: Cart items */}
-            <div>
-              {cart.map((item) => (
+          <>
+            {/* Items */}
+            <div style={{
+              background: "linear-gradient(135deg, #0a0a20, #0d0418)",
+              border: "1px solid rgba(0,229,255,0.18)",
+              borderRadius: 14,
+              padding: isMobile ? "12px 16px" : "16px 24px",
+              marginBottom: 20,
+            }}>
+              {cart.map((item, i) => (
                 <div key={item.id} style={{
                   display: "flex", gap: 16, padding: "16px 0",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  borderBottom: i < cart.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
                   alignItems: "center",
                 }}>
                   <Link to={`/shop/${item.slug}`} style={{ flexShrink: 0 }}>
                     <img src={item.image} alt={item.name} width="120" height="66" style={{
-                      width: isMobile ? 80 : 120, height: "auto", borderRadius: 6,
+                      width: isMobile ? 72 : 100, height: "auto", borderRadius: 6,
                       border: "1px solid rgba(255,255,255,0.08)",
                     }} />
                   </Link>
@@ -186,7 +150,7 @@ export default function CartPage() {
                     }}>
                       {item.name}
                     </Link>
-                    {item.headline && (
+                    {item.headline && !isMobile && (
                       <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
                         {item.headline}
                       </div>
@@ -210,309 +174,91 @@ export default function CartPage() {
                   </div>
                 </div>
               ))}
-
-              <Link to="/shop" style={{
-                display: "inline-block", marginTop: 20,
-                fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                color: CYAN, textDecoration: "none",
-              }}>
-                &larr; Add more items
-              </Link>
             </div>
 
-            {/* Right: Payment */}
-            <div>
-              <div style={{
-                background: "linear-gradient(135deg, #0a0a20, #0d0418)",
-                border: "1px solid rgba(0,229,255,0.2)",
-                borderRadius: 14, padding: isMobile ? "24px 18px" : "28px 24px",
-                position: "sticky", top: 80,
-              }}>
+            {/* Coupon — minimal */}
+            <div style={{ marginBottom: 16 }}>
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
+                placeholder="Enter coupon code"
+                style={{
+                  width: "100%", padding: "12px 16px",
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8,
+                  color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                  letterSpacing: "0.05em", boxSizing: "border-box", outline: "none",
+                }}
+              />
+            </div>
+
+            {/* Totals */}
+            <div style={{
+              padding: "16px 0", marginBottom: 24,
+              borderTop: "1px solid rgba(255,255,255,0.08)",
+            }}>
+              {discount > 0 && (
                 <div style={{
-                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
-                  fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: CYAN, marginBottom: 16,
+                  display: "flex", justifyContent: "space-between",
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                  color: CYAN, marginBottom: 8,
                 }}>
-                  Order Summary
+                  <span>Discount ({couponCode})</span>
+                  <span>-${discount.toFixed(2)}</span>
                 </div>
-
-                {/* Line items */}
-                {cart.map((item) => (
-                  <div key={item.id} style={{
-                    display: "flex", justifyContent: "space-between",
-                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                    color: "rgba(255,255,255,0.6)", marginBottom: 6,
-                  }}>
-                    <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginRight: 8 }}>{item.name}</span>
-                    <span style={{ flexShrink: 0 }}>${item.price.toFixed(2)}</span>
-                  </div>
-                ))}
-
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", margin: "12px 0", paddingTop: 12 }}>
-                  {discount > 0 && (
-                    <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: CYAN, marginBottom: 6 }}>
-                      <span>Discount ({couponCode})</span>
-                      <span>-${discount.toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                    <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Total</span>
-                    <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: CYAN }}>${total.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* Coupon — placeholder is now neutral (auto-apply handles WELCOME15) */}
-                <label style={{ display: "block", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 6, marginTop: 16 }}>
-                  Coupon Code
-                </label>
-                <input
-                  type="text"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
-                  placeholder="Enter coupon code"
-                  style={{
-                    width: "100%", padding: "10px 12px", background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6,
-                    color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                    letterSpacing: "0.05em", boxSizing: "border-box", marginBottom: 18, outline: "none",
-                  }}
-                />
-
-                {/* Auth / Payment */}
-                {authLoading && (
-                  <div style={{ padding: "16px 0", textAlign: "center", fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-                    Loading...
-                  </div>
-                )}
-
-                {!authLoading && user && (
-                  <div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.45)", marginBottom: 14 }}>
-                      Signed in as <strong style={{ color: "rgba(255,255,255,0.8)" }}>{user.email}</strong>
-                    </div>
-
-                    {/* Airwallex card form first */}
-                    <PaymentLabel text="Pay with Card / Apple Pay / Google Pay" />
-                    <AirwallexCheckoutCard
-                      productIds={cart.map((it) => it.id)}
-                      couponCode={couponCode}
-                      onSuccess={handleSuccess}
-                      onError={setErrorMsg}
-                    />
-
-                    <OrSeparator />
-
-                    <PaymentLabel text="Pay with PayPal" />
-                    <CartCheckoutButton
-                      productIds={cart.map((it) => it.id)}
-                      couponCode={couponCode}
-                      onSuccess={handleSuccess}
-                      onError={setErrorMsg}
-                    />
-                  </div>
-                )}
-
-                {!authLoading && !user && (
-                  <div>
-                    <label style={{ display: "block", fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 6 }}>
-                      Email for receipt
-                    </label>
-                    <input
-                      type="email"
-                      value={guestEmail}
-                      onChange={(e) => setGuestEmail(e.target.value)}
-                      placeholder="you@email.com"
-                      autoComplete="email"
-                      style={{
-                        width: "100%", padding: "12px 14px", background: "rgba(255,255,255,0.04)",
-                        border: `1px solid ${!emailValid && guestEmail ? "rgba(255,80,80,0.4)" : "rgba(255,255,255,0.1)"}`,
-                        borderRadius: 6,
-                        color: "#fff", fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                        boxSizing: "border-box", marginBottom: 4, outline: "none",
-                      }}
-                    />
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 16, lineHeight: 1.5 }}>
-                      Your download link + account setup will be sent here.
-                    </div>
-
-                    {/* Airwallex Drop-in (Card / Apple Pay / Google Pay) — top */}
-                    <PaymentLabel text="Pay with Card / Apple Pay / Google Pay" />
-                    <AirwallexCheckoutCard
-                      productIds={cart.map((it) => it.id)}
-                      couponCode={couponCode}
-                      guestEmail={guestEmail}
-                      onSuccess={handleSuccess}
-                      onError={setErrorMsg}
-                    />
-
-                    <OrSeparator />
-
-                    {/* PayPal — always renders. If no email yet, dimmed +
-                        hint; PayPal SDK ignores clicks via pointerEvents.
-                        This replaces the old "Enter your email above" full
-                        overlay that the Marketing brief flagged as broken-
-                        looking (2026-06-07 checkout_improvements.md). */}
-                    <PaymentLabel text="Pay with PayPal" />
-                    <div style={{
-                      opacity: emailValid ? 1 : 0.4,
-                      pointerEvents: emailValid ? "auto" : "none",
-                      transition: "opacity 200ms",
-                    }}>
-                      <CartCheckoutButton
-                        productIds={cart.map((it) => it.id)}
-                        couponCode={couponCode}
-                        guestEmail={emailValid ? guestEmail : undefined}
-                        onSuccess={handleSuccess}
-                        onError={setErrorMsg}
-                      />
-                    </div>
-                    {!emailValid && (
-                      <div style={{
-                        textAlign: "center",
-                        marginTop: 6,
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontSize: 11,
-                        color: "rgba(255,255,255,0.45)",
-                      }}>
-                        Enter your email above to pay
-                      </div>
-                    )}
-
-                    <div style={{ textAlign: "center", marginTop: 14 }}>
-                      <Link to="/shop/login?redirect=/shop/cart" style={{
-                        fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                        color: "rgba(255,255,255,0.5)", textDecoration: "underline",
-                      }}>
-                        Already have an account? Sign in
-                      </Link>
-                    </div>
-                  </div>
-                )}
-
-                {errorMsg && (
-                  <div style={{
-                    marginTop: 12, padding: "10px 14px",
-                    background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.4)",
-                    borderRadius: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ff8080",
-                  }}>
-                    {errorMsg}
-                  </div>
-                )}
-
-                {/* Trust block */}
-                <TrustBlock />
+              )}
+              <div style={{
+                display: "flex", justifyContent: "space-between", alignItems: "baseline",
+              }}>
+                <span style={{
+                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                  fontSize: 16, color: "rgba(255,255,255,0.85)",
+                  textTransform: "uppercase", letterSpacing: "0.06em",
+                }}>
+                  Total
+                </span>
+                <span style={{
+                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+                  fontSize: 36, color: CYAN,
+                }}>
+                  ${total.toFixed(2)}
+                </span>
               </div>
             </div>
-          </div>
+
+            {/* CTA — single big button, like Shopify "Check out" */}
+            <button
+              onClick={handleCheckout}
+              disabled={authLoading}
+              style={{
+                width: "100%", padding: "18px 24px",
+                background: CYAN, color: "#000",
+                border: "none", borderRadius: 8,
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 800, fontSize: 16, letterSpacing: "0.18em",
+                textTransform: "uppercase", cursor: authLoading ? "default" : "pointer",
+                opacity: authLoading ? 0.6 : 1,
+                transition: "transform 120ms, box-shadow 120ms",
+                boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
+              }}
+              onMouseDown={(e) => { e.currentTarget.style.transform = "translateY(1px)"; }}
+              onMouseUp={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              Check out — ${total.toFixed(2)}
+            </button>
+
+            <Link to="/shop" style={{
+              display: "block", textAlign: "center", marginTop: 18,
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: "rgba(255,255,255,0.5)", textDecoration: "none",
+            }}>
+              &larr; Add more items
+            </Link>
+          </>
         )}
       </main>
-    </div>
-  );
-}
-
-// ── Small reusable bits ──────────────────────────────────────────────────────
-
-function PaymentLabel({ text }) {
-  return (
-    <div style={{
-      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 11,
-      letterSpacing: "0.2em", textTransform: "uppercase",
-      color: "rgba(255,255,255,0.55)", marginBottom: 8, marginTop: 2,
-    }}>
-      {text}
-    </div>
-  );
-}
-
-function OrSeparator() {
-  return (
-    <div style={{
-      display: "flex", alignItems: "center", gap: 12,
-      margin: "20px 0 14px",
-      fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-      color: "rgba(255,255,255,0.35)", letterSpacing: "0.16em", textTransform: "uppercase",
-    }}>
-      <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.1)" }} />
-      <span>or</span>
-      <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.1)" }} />
-    </div>
-  );
-}
-
-function TrustBlock() {
-  return (
-    <div style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-      {/* Card logos row */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: 8, marginBottom: 14,
-        flexWrap: "wrap",
-      }}>
-        <CardLogo label="VISA" />
-        <CardLogo label="MC" />
-        <CardLogo label="AMEX" />
-        <WalletLogo label="Apple Pay" />
-        <WalletLogo label="G Pay" />
-        <WalletLogo label="PayPal" />
-      </div>
-
-      {/* Trust lines */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        {[
-          { icon: "\u{1F512}", text: "Secure payment, encrypted end-to-end" },
-          { icon: "⚡", text: "Instant download after payment" },
-          { icon: "\u{1F4B0}", text: "14-day money-back guarantee" },
-          { icon: "∞", text: "Lifetime access" },
-        ].map(({ icon, text }) => (
-          <div key={text} style={{
-            display: "flex", alignItems: "center", gap: 8,
-            fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-            color: "rgba(255,255,255,0.5)",
-          }}>
-            <span>{icon}</span>
-            <span>{text}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Credibility line — Steven's real labels + Beatport, picked 2026-06-07 over a fake buyer count */}
-      <div style={{
-        marginTop: 14, paddingTop: 12,
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-        fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-        color: "rgba(255,255,255,0.42)", lineHeight: 1.55,
-        textAlign: "center",
-      }}>
-        Released on <strong style={{ color: "rgba(255,255,255,0.7)" }}>Sony</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>MoBlack</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>MTGD</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>GoDeeVa</strong> · <strong style={{ color: "rgba(255,255,255,0.7)" }}>Beatport Top 10</strong>
-      </div>
-    </div>
-  );
-}
-
-function CardLogo({ label }) {
-  return (
-    <div style={{
-      padding: "4px 8px", borderRadius: 4,
-      background: "rgba(255,255,255,0.08)",
-      border: "1px solid rgba(255,255,255,0.12)",
-      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
-      fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase",
-      color: "rgba(255,255,255,0.8)",
-    }}>
-      {label}
-    </div>
-  );
-}
-
-function WalletLogo({ label }) {
-  return (
-    <div style={{
-      padding: "4px 8px", borderRadius: 4,
-      background: "rgba(0,229,255,0.06)",
-      border: "1px solid rgba(0,229,255,0.18)",
-      fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
-      fontSize: 10, color: "rgba(255,255,255,0.85)",
-    }}>
-      {label}
     </div>
   );
 }

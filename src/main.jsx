@@ -31,6 +31,7 @@ const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
 const ForgotPage = lazy(() => import("./shop/ForgotPage.jsx"));
 const ResetPage = lazy(() => import("./shop/ResetPage.jsx"));
 const CheckoutPage = lazy(() => import("./shop/CheckoutPage.jsx"));
+const CartCheckoutPage = lazy(() => import("./shop/CartCheckoutPage.jsx"));
 const CartPage = lazy(() => import("./shop/CartPage.jsx"));
 
 const HebrewLanding = lazy(() => import("./HebrewLanding.jsx"));
@@ -221,6 +222,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route path="/shop/signup" element={<SignupPage />} />
               <Route path="/shop/account" element={<AccountPage />} />
               <Route path="/shop/cart" element={<CartPage />} />
+              <Route path="/shop/checkout" element={<CartCheckoutPage />} />
               <Route path="/shop/checkout/:slug" element={<CheckoutPage />} />
               <Route path="/shop/forgot" element={<ForgotPage />} />
               <Route path="/shop/reset" element={<ResetPage />} />

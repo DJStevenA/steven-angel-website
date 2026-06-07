@@ -62,6 +62,7 @@ export default function AirwallexCheckoutCard({
   guestEmail,
   onSuccess,
   onError,
+  theme = "light", // "light" matches the white /shop/checkout page; "dark" for legacy dark surfaces.
 }) {
   const { token, user } = useAuth();
   const containerRef = useRef(null);
@@ -111,19 +112,29 @@ export default function AirwallexCheckoutCard({
         await SDK.init({ env: "prod", enabledElements: ["payments"] });
         if (cancelled) return;
 
-        // 4. Create Drop-in element
+        // 4. Create Drop-in element with the requested theme
+        const appearance = theme === "dark"
+          ? {
+              mode: "dark",
+              variables: {
+                colorBrand: CYAN,
+                colorBackground: "transparent",
+                colorText: "#ffffff",
+              },
+            }
+          : {
+              mode: "light",
+              variables: {
+                colorBrand: "#1a1f2e",
+                colorBackground: "#ffffff",
+                colorText: "#1a1f2e",
+              },
+            };
         const element = SDK.createElement("dropIn", {
           intent_id: data.intentId,
           client_secret: data.clientSecret,
           currency: data.currency || "USD",
-          appearance: {
-            mode: "dark",
-            variables: {
-              colorBrand: CYAN,
-              colorBackground: "transparent",
-              colorText: "#ffffff",
-            },
-          },
+          appearance,
         });
         elementRef.current = element;
 
@@ -177,17 +188,23 @@ export default function AirwallexCheckoutCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds.join(","), couponCode, guestEmail, !!user, token]);
 
+  const isDark = theme === "dark";
+  const placeholderStyle = isDark
+    ? { background: "rgba(255,255,255,0.04)", border: "1px dashed rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.55)" }
+    : { background: "#f9fafb", border: "1px dashed #d1d5db", color: "#6b7280" };
+  const loadingColor = isDark ? "rgba(255,255,255,0.5)" : "#6b7280";
+
   return (
     <div>
       {!emailValid && (
         <div style={{
           padding: "12px 14px",
-          background: "rgba(255,255,255,0.04)",
-          border: "1px dashed rgba(255,255,255,0.15)",
+          background: placeholderStyle.background,
+          border: placeholderStyle.border,
           borderRadius: 8,
           fontFamily: "'DM Sans', sans-serif",
           fontSize: 13,
-          color: "rgba(255,255,255,0.55)",
+          color: placeholderStyle.color,
           textAlign: "center",
         }}>
           Enter your email above to pay with card / Apple Pay / Google Pay
@@ -200,7 +217,7 @@ export default function AirwallexCheckoutCard({
           textAlign: "center",
           fontFamily: "'DM Sans', sans-serif",
           fontSize: 13,
-          color: "rgba(255,255,255,0.5)",
+          color: loadingColor,
         }}>
           Loading secure payment form…
         </div>
