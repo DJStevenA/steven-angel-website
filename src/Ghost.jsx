@@ -1221,9 +1221,6 @@ function GhostPage() {
               ))}
             </div>
 
-            <div style={{ ...body, textAlign: "center", marginTop: 32, fontSize: 12, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>
-              (Testimonials shown are representative — real client quotes will replace these soon.)
-            </div>
           </div>
         </section>
 
