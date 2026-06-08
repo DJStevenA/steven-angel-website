@@ -25,6 +25,7 @@ import Nav from "../Nav.jsx";
 import Footer from "../Footer.jsx";
 import { useShopPlayer } from "./ShopPlayerContext.jsx";
 import { useCart } from "./CartContext.jsx";
+import { useAuth } from "./AuthContext.jsx";
 import Waveform from "./Waveform.jsx";
 import { trackViewItem, trackAddToCart, trackVideoPreview } from "../lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "../lib/analytics/hooks";
@@ -291,6 +292,7 @@ export default function ProductPage() {
 
   const nav = useNavigate();
   const { addToCart, isInCart, cartCount } = useCart();
+  const { user, loading: authLoading } = useAuth();
   // Add-to-cart: STAY on the product page so the customer can keep browsing.
   // The nav cart icon (top-right) confirms what they have. No "In Cart"
   // disabled marker — Steven 2026-06-07 explicit removal.
@@ -350,38 +352,63 @@ export default function ProductPage() {
             <span style={{ color: "#fff" }}>{product.name}</span>
           </div>
 
-          {/* Cart icon — same one ShopPage's top nav uses */}
-          <Link
-            to="/shop/cart"
-            aria-label={`Cart (${cartCount} items)`}
-            style={{
-              position: "relative", display: "inline-flex",
-              alignItems: "center", justifyContent: "center",
-              width: 38, height: 38, borderRadius: 4,
-              background: cartCount > 0 ? "rgba(0,229,255,0.08)" : "transparent",
-              border: `1px solid ${cartCount > 0 ? CYAN : "rgba(255,255,255,0.15)"}`,
-              textDecoration: "none", flexShrink: 0,
-              transition: "all 0.15s",
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cartCount > 0 ? CYAN : "rgba(255,255,255,0.6)"} strokeWidth="2">
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="20" cy="21" r="1" />
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-            </svg>
-            {cartCount > 0 && (
-              <span style={{
-                position: "absolute", top: -6, right: -6,
-                background: CYAN, color: "#000",
-                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
-                fontSize: 11, minWidth: 18, height: 18,
-                borderRadius: 9, display: "flex",
-                alignItems: "center", justifyContent: "center", lineHeight: 1,
-              }}>
-                {cartCount}
-              </span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+            {/* Cart icon — same one ShopPage's top nav uses */}
+            <Link
+              to="/shop/cart"
+              aria-label={`Cart (${cartCount} items)`}
+              style={{
+                position: "relative", display: "inline-flex",
+                alignItems: "center", justifyContent: "center",
+                width: 38, height: 38, borderRadius: 4,
+                background: cartCount > 0 ? "rgba(0,229,255,0.08)" : "transparent",
+                border: `1px solid ${cartCount > 0 ? CYAN : "rgba(255,255,255,0.15)"}`,
+                textDecoration: "none",
+                transition: "all 0.15s",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={cartCount > 0 ? CYAN : "rgba(255,255,255,0.6)"} strokeWidth="2">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              {cartCount > 0 && (
+                <span style={{
+                  position: "absolute", top: -6, right: -6,
+                  background: CYAN, color: "#000",
+                  fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800,
+                  fontSize: 11, minWidth: 18, height: 18,
+                  borderRadius: 9, display: "flex",
+                  alignItems: "center", justifyContent: "center", lineHeight: 1,
+                }}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Sign in / My Account — icon only */}
+            {!authLoading && (
+              <Link
+                to={user ? "/shop/account" : "/shop/login"}
+                aria-label={user ? "My account" : "Sign in"}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 38, height: 38, borderRadius: 4,
+                  background: user ? "rgba(0,229,255,0.08)" : "transparent",
+                  border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.15)"}`,
+                  textDecoration: "none",
+                  transition: "all 0.15s",
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={user ? CYAN : "rgba(255,255,255,0.6)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </Link>
             )}
-          </Link>
+          </div>
         </div>
       </nav>
 

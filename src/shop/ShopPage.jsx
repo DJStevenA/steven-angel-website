@@ -236,29 +236,29 @@ export default function ShopPage() {
             )}
           </Link>
 
-          {/* Sign in / My Account */}
+          {/* Sign in / My Account — icon only */}
           {!authLoading && (
             <Link
               to={user ? "/shop/account" : "/shop/login"}
+              aria-label={user ? "My account" : "Sign in"}
               style={{
+                position: "relative",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 8,
-                background: user ? "rgba(0,229,255,0.08)" : "transparent",
-                border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.2)"}`,
-                color: user ? CYAN : "rgba(255,255,255,0.85)",
-                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                fontWeight: 700,
-                fontSize: isMobile ? 11 : 12,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                padding: isMobile ? "7px 14px" : "9px 18px",
+                justifyContent: "center",
+                width: 38,
+                height: 38,
                 borderRadius: 4,
+                background: user ? "rgba(0,229,255,0.08)" : "transparent",
+                border: `1px solid ${user ? CYAN : "rgba(255,255,255,0.15)"}`,
                 textDecoration: "none",
-                whiteSpace: "nowrap",
+                transition: "all 0.15s",
               }}
             >
-              {user ? (isMobile ? "Account" : "My Account") : "Sign In"}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={user ? CYAN : "rgba(255,255,255,0.6)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
             </Link>
           )}
         </div>
