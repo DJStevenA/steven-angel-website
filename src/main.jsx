@@ -5,7 +5,7 @@ import App from "./App.jsx";
 import { AuthProvider } from "./shop/AuthContext.jsx";
 import { CartProvider } from "./shop/CartContext.jsx";
 import { ShopPlayerProvider } from "./shop/ShopPlayerContext.jsx";
-import ShopStickyPlayer from "./shop/ShopStickyPlayer.jsx";
+
 import { trackPageView } from "./lib/analytics/events";
 import { RevealStyles } from "./lib/useReveal.jsx";
 
@@ -55,7 +55,6 @@ function ShopLayout() {
   return (
     <ShopPlayerProvider>
       <Outlet />
-      <ShopStickyPlayer />
     </ShopPlayerProvider>
   );
 }
