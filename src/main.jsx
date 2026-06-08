@@ -34,6 +34,8 @@ const CheckoutPage = lazy(() => import("./shop/CheckoutPage.jsx"));
 const CartCheckoutPage = lazy(() => import("./shop/CartCheckoutPage.jsx"));
 const ThankYouPage = lazy(() => import("./shop/ThankYouPage.jsx"));
 const CartPage = lazy(() => import("./shop/CartPage.jsx"));
+// Preview-only route (branch: airwallex-dropin-preview). Not linked from anywhere.
+const AirwallexPreviewPage = lazy(() => import("./shop/AirwallexPreviewPage.jsx"));
 
 const HebrewLanding = lazy(() => import("./HebrewLanding.jsx"));
 
@@ -228,6 +230,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route path="/shop/cart" element={<CartPage />} />
               <Route path="/shop/thank-you" element={<ThankYouPage />} />
               <Route path="/shop/checkout" element={<CartCheckoutPage />} />
+              <Route path="/shop/airwallex-preview" element={<AirwallexPreviewPage />} />
               <Route path="/shop/checkout/:slug" element={<CheckoutPage />} />
               <Route path="/shop/forgot" element={<ForgotPage />} />
               <Route path="/shop/reset" element={<ResetPage />} />
