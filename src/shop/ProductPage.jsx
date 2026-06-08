@@ -1009,13 +1009,36 @@ export default function ProductPage() {
                 {/* PayPal Smart Buttons — instant single-product buy.
                     Steven 2026-06-07: no email gate, no redirect — anon flow
                     pulls payer email from PayPal after capture. */}
-                <div style={{ marginBottom: 14 }}>
+                <div style={{ marginBottom: 10 }}>
                   <CartCheckoutButton
                     productIds={[product.id]}
                     couponCode={null}
                     onSuccess={() => nav("/shop/thank-you")}
                   />
                 </div>
+
+                {/* Other payment methods → checkout-v2 (Airwallex Drop-in +
+                    Apple Pay + Google Pay + card + Klarna etc). Adds the
+                    product to the cart on the way. Steven 2026-06-07 flow. */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!isInCart(product.id)) addToCart(product);
+                    nav("/shop/checkout-v2");
+                  }}
+                  style={{
+                    display: "block", width: "100%", padding: "12px 22px",
+                    background: "transparent",
+                    border: "1px solid rgba(255,255,255,0.25)",
+                    borderRadius: 8,
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                    fontWeight: 700, fontSize: 13, letterSpacing: "0.18em",
+                    textTransform: "uppercase", color: "#fff", cursor: "pointer",
+                    marginBottom: 14,
+                  }}
+                >
+                  Other payment methods
+                </button>
 
                 <div style={{
                   fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",

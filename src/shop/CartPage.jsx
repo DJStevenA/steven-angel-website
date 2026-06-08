@@ -248,6 +248,28 @@ export default function CartPage() {
               onSuccess={handleSuccess}
             />
 
+            {/* Check Out → /shop/checkout-v2 — full checkout with
+                Apple Pay + Google Pay + card + Klarna + PayPal in one page.
+                Steven 2026-06-07 night flow. */}
+            <button
+              type="button"
+              onClick={() => {
+                try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
+                navigate("/shop/checkout-v2");
+              }}
+              style={{
+                width: "100%", padding: "16px 24px", marginTop: 12,
+                background: CYAN, color: "#000",
+                border: "none", borderRadius: 8,
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 800, fontSize: 15, letterSpacing: "0.18em",
+                textTransform: "uppercase", cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
+              }}
+            >
+              Check out — ${total.toFixed(2)}
+            </button>
+
             {/* Trust signals — Steven 2026-06-07 evening */}
             <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 6 }}>
               {[
