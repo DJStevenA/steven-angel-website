@@ -82,6 +82,50 @@ export default function ShopPage() {
     trackViewItemList(products, 'shop');
   }, []);
 
+  // BreadcrumbList + CollectionPage + ItemList JSON-LD — Steven 2026-06-08
+  // per SiteWise audit (only Person was found before). Helps Google + AI
+  // shopping agents understand the shop catalog and price range.
+  useEffect(() => {
+    const existing = document.getElementById("shop-jsonld");
+    if (existing) existing.remove();
+    const ld = document.createElement("script");
+    ld.id = "shop-jsonld";
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify([
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://steven-angel.com" },
+          { "@type": "ListItem", position: 2, name: "Shop", item: "https://steven-angel.com/shop" },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: "Steven Angel — Shop",
+        url: "https://steven-angel.com/shop",
+        description: "Ableton templates, masterclasses, and sample packs from Steven Angel — Afro House, Tech House, Melodic Techno.",
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Steven Angel — Templates & Lessons",
+        itemListElement: products.slice(0, 10).map((p, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: `https://steven-angel.com/shop/${p.slug}`,
+          name: p.name,
+        })),
+      },
+    ]);
+    document.head.appendChild(ld);
+    return () => {
+      const node = document.getElementById("shop-jsonld");
+      if (node) node.remove();
+    };
+  }, []);
+
   useEffect(() => {
     if (activeTab === "ghost" && window.clarity) window.clarity("event", "ghostCatalogView");
   }, [activeTab]);

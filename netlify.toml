@@ -13,6 +13,26 @@
   # canonical tags + Google Ads landing pages still match the served URL.
   pretty_urls = false
 
+# ────────────────────────────────────────────────────────────────────────────
+# Security headers (added 2026-06-08, per UNPWNED security audit Score 70/100)
+#
+# Applied to every response. Caveats:
+#   - CSP runs in REPORT-ONLY mode for the first deploy cycle to surface any
+#     3rd-party that would get blocked (GTM, Clarity, PayPal, Airwallex, Brevo,
+#     YouTube embeds, Cloudflare R2, Meta Pixel). After 48h of clean reports,
+#     flip the header name from `Content-Security-Policy-Report-Only` to
+#     `Content-Security-Policy` to actually enforce.
+#   - HSTS is already served (kept as-is via Netlify default).
+# ────────────────────────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=*, fullscreen=(self)"
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.clarity.ms https://*.clarity.ms https://*.paypal.com https://*.paypalobjects.com https://www.paypal.com https://checkout.airwallex.com https://*.airwallex.com https://connect.facebook.net https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https: ; media-src 'self' blob: https://ghost-backend-production-adb6.up.railway.app https://*.r2.cloudflarestorage.com https://*.r2.dev https://pub-*.r2.dev; connect-src 'self' https://ghost-backend-production-adb6.up.railway.app https://www.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://*.clarity.ms https://*.paypal.com https://*.airwallex.com https://api.airwallex.com https://api.brevo.com https://my.sendinblue.com https://connect.facebook.net https://www.facebook.com https://*.r2.cloudflarestorage.com https://*.r2.dev; frame-src 'self' https://www.youtube.com https://*.paypal.com https://*.airwallex.com https://td.doubleclick.net https://www.googletagmanager.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://*.paypal.com https://*.airwallex.com; upgrade-insecure-requests"
+
 [[headers]]
   for = "/.well-known/apple-developer-merchantid-domain-association"
   [headers.values]

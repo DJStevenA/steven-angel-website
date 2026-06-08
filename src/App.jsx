@@ -571,6 +571,26 @@ export default function App() {
             )
           )}
         </div>
+
+        {/* Legal row — required by GDPR / consumer protection. Steven 2026-06-08. */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", marginBottom: 10 }}>
+          {[
+            { label: "Privacy", to: "/privacy" },
+            { label: "Terms", to: "/terms" },
+            { label: "Refund Policy", to: "/refund" },
+            { label: "Contact", href: "mailto:dj.steven.angel@gmail.com" },
+          ].map(({ label: lbl, to, href }) =>
+            to ? (
+              <Link key={lbl} to={to} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>{lbl}</Link>
+            ) : (
+              <a key={lbl} href={href} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>{lbl}</a>
+            )
+          )}
+        </div>
+
+        <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 6 }}>
+          Tel Aviv, Israel
+        </div>
         <span style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
           &copy; {new Date().getFullYear()} Steven Angel — All Rights Reserved
         </span>

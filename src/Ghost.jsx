@@ -425,6 +425,29 @@ function GhostPage() {
     };
   }, []);
 
+  /* BreadcrumbList — helps Google and AI agents place this page in the
+     site hierarchy. Steven 2026-06-08 — per SiteWise audit. */
+  useEffect(() => {
+    const existing = document.getElementById("ghost-breadcrumb-jsonld");
+    if (existing) existing.remove();
+    const ld = document.createElement("script");
+    ld.id = "ghost-breadcrumb-jsonld";
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://steven-angel.com" },
+        { "@type": "ListItem", position: 2, name: "Ghost Production", item: "https://steven-angel.com/ghost" },
+      ],
+    });
+    document.head.appendChild(ld);
+    return () => {
+      const node = document.getElementById("ghost-breadcrumb-jsonld");
+      if (node) node.remove();
+    };
+  }, []);
+
   /* ────────────────────────────────────────────────────
      Render
      ──────────────────────────────────────────────────── */

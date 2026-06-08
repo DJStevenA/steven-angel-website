@@ -220,22 +220,33 @@ export default function ProductPage() {
     const ld = document.createElement("script");
     ld.id = "product-jsonld";
     ld.type = "application/ld+json";
-    ld.textContent = JSON.stringify({
-      "@context": "https://schema.org/",
-      "@type": "Product",
-      name: `${product.name} — ${product.headline}`,
-      description: product.seoDescription || product.description,
-      brand: { "@type": "Brand", name: "Steven Angel" },
-      sku: product.id,
-      image: typeof window !== "undefined" ? `${window.location.origin}/og-image.png` : undefined,
-      offers: {
-        "@type": "Offer",
-        price: product.price,
-        priceCurrency: product.currency,
-        availability: "https://schema.org/InStock",
-        url: typeof window !== "undefined" ? window.location.href : undefined,
+    ld.textContent = JSON.stringify([
+      {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        name: `${product.name} — ${product.headline}`,
+        description: product.seoDescription || product.description,
+        brand: { "@type": "Brand", name: "Steven Angel" },
+        sku: product.id,
+        image: typeof window !== "undefined" ? `${window.location.origin}/og-image.png` : undefined,
+        offers: {
+          "@type": "Offer",
+          price: product.price,
+          priceCurrency: product.currency,
+          availability: "https://schema.org/InStock",
+          url: typeof window !== "undefined" ? window.location.href : undefined,
+        },
       },
-    });
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://steven-angel.com" },
+          { "@type": "ListItem", position: 2, name: "Shop", item: "https://steven-angel.com/shop" },
+          { "@type": "ListItem", position: 3, name: product.name, item: `https://steven-angel.com/shop/${product.slug}` },
+        ],
+      },
+    ]);
     document.head.appendChild(ld);
     return () => {
       const node = document.getElementById("product-jsonld");
