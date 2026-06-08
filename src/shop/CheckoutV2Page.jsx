@@ -129,6 +129,7 @@ export default function CheckoutV2Page() {
     city: "",
   });
   const [method, setMethod] = useState("card"); // 'card' (Airwallex) or 'paypal'
+  const [payNowError, setPayNowError] = useState(null);
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 980 : false
   );
@@ -177,22 +178,21 @@ export default function CheckoutV2Page() {
     }
   }, [cart.length, navigate]);
 
-  // ── Create Airwallex intent (once we have email + cart) ───────────────────
+  // ── Create Airwallex intent (anon — no email gate) ────────────────────────
   useEffect(() => {
-    if (!emailValid || productIds.length === 0) return;
+    if (productIds.length === 0) return;
     let cancelled = false;
     async function createIntent() {
       try {
-        const res = await fetch(`${BACKEND}/shop/checkout/airwallex-guest`, {
+        const res = await fetch(`${BACKEND}/shop/checkout/airwallex-cart-anon`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productIds, email, couponCode: couponCode || null }),
+          body: JSON.stringify({ productIds, couponCode: couponCode || null }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to create Airwallex intent");
         if (cancelled) return;
         intentRef.current = data;
-        // Once intent exists, mount Drop-in if card method is selected
         mountAirwallexElements(data);
       } catch (err) {
         console.error("[checkout-v2] Airwallex intent failed:", err);
@@ -201,7 +201,7 @@ export default function CheckoutV2Page() {
     createIntent();
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [emailValid, productIds.join(","), couponCode]);
+  }, [productIds.join(","), couponCode]);
 
   async function mountAirwallexElements(intent) {
     try {
@@ -322,13 +322,19 @@ export default function CheckoutV2Page() {
   }
 
   // ── Pay Now (Airwallex submit) ────────────────────────────────────────────
-  // The Airwallex Drop-in has its own internal Pay button. This bottom button
-  // is the visual unifier — but Drop-in's SDK doesn't expose a public submit()
-  // method. So we focus + scroll to the Drop-in instead, prompting the user
-  // to click the real button. (See README in branch for upgrade path to the
-  // Embedded Card Element which DOES support custom submit.)
+  // Email is validated AT THIS POINT (not before) per Steven's rule —
+  // never gate UI behind email; only require it when the customer actually
+  // tries to pay (we need it to send the download link).
+  // The Airwallex Drop-in has its own internal Pay button; the SDK doesn't
+  // expose a public submit() method, so the custom Pay Now scrolls to it
+  // to direct the user's eye. (Upgrade path: Embedded Card Element which
+  // does support custom submit.)
   const handlePayNow = () => {
-    if (method === "paypal") return; // PayPal has its own button in section
+    if (!emailValid) {
+      setPayNowError("Email required — we send your download link there.");
+      return;
+    }
+    setPayNowError(null);
     if (dropInContainerRef.current) {
       dropInContainerRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -374,14 +380,6 @@ export default function CheckoutV2Page() {
               <div ref={expressPayPalRef} style={{ minHeight: 44 }} />
               <div ref={expressApplePayRef} style={{ minHeight: 44 }} />
               <div ref={expressGooglePayRef} style={{ minHeight: 44 }} />
-            </div>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 12,
-              margin: "20px 0 8px", fontSize: 12, color: "#9ca3af",
-            }}>
-              <span style={{ flex: 1, borderTop: "1px solid #e5e7eb" }} />
-              or pay with details
-              <span style={{ flex: 1, borderTop: "1px solid #e5e7eb" }} />
             </div>
           </section>
 
@@ -438,17 +436,7 @@ export default function CheckoutV2Page() {
               </div>
               {method === "card" && (
                 <div style={{ marginTop: 12 }}>
-                  {!emailValid ? (
-                    <div style={{
-                      padding: "14px 16px", background: "#f9fafb",
-                      border: "1px dashed #d1d5db", borderRadius: 4,
-                      fontSize: 13, color: "#6b7280", textAlign: "center",
-                    }}>
-                      Enter your email above to load the payment form.
-                    </div>
-                  ) : (
-                    <div ref={dropInContainerRef} style={{ minHeight: 200 }} />
-                  )}
+                  <div ref={dropInContainerRef} style={{ minHeight: 200 }} />
                 </div>
               )}
             </label>
@@ -474,16 +462,14 @@ export default function CheckoutV2Page() {
                   checked={method === "paypal"}
                   onChange={() => setMethod("paypal")}
                 />
-                <span style={{ fontWeight: 500, fontSize: 14 }}>PayPal</span>
+                <span style={{ fontWeight: 500, fontSize: 14, flex: 1 }}>PayPal</span>
+                <img
+                  src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png"
+                  alt="PayPal"
+                  height="20"
+                  style={{ height: 20, display: "block" }}
+                />
               </div>
-              {method === "paypal" && (
-                <div style={{ marginTop: 12 }}>
-                  <div ref={paypalContainerRef} style={{ minHeight: 48 }} />
-                  <div style={{ fontSize: 12, color: "#6b7280", marginTop: 8 }}>
-                    Click the PayPal button to complete your purchase.
-                  </div>
-                </div>
-              )}
             </label>
           </section>
 
@@ -556,32 +542,48 @@ export default function CheckoutV2Page() {
             </div>
           </section>
 
-          {/* Bottom Pay Now (Airwallex flow only — PayPal uses its own button above) */}
-          {method === "card" && (
-            <button
-              type="button"
-              onClick={handlePayNow}
-              disabled={!emailValid || cart.length === 0}
-              style={{
-                width: "100%",
-                padding: "16px 20px",
-                fontSize: 15,
-                fontFamily: "system-ui, -apple-system, sans-serif",
-                fontWeight: 600,
-                color: "#fff",
-                background: emailValid ? "#111" : "#9ca3af",
-                border: "none",
-                borderRadius: 6,
-                cursor: emailValid ? "pointer" : "not-allowed",
-                letterSpacing: "0.02em",
-              }}
-            >
-              Pay Now — ${total.toFixed(2)}
-            </button>
-          )}
-          {method === "paypal" && (
-            <div style={{ fontSize: 13, color: "#6b7280", textAlign: "center", padding: 12 }}>
-              Complete your purchase using the PayPal button above.
+          {/* Bottom action — Pay Now (Airwallex) OR PayPal Smart Button.
+              When PayPal radio is selected, the official PayPal button
+              replaces our custom Pay Now in this same slot. */}
+          <div style={{ position: "relative" }}>
+            {/* PayPal Smart Button container (visible only when PayPal selected) */}
+            <div
+              ref={paypalContainerRef}
+              style={{ display: method === "paypal" ? "block" : "none", minHeight: 48 }}
+            />
+
+            {/* Custom Pay Now (visible only when card method selected) */}
+            {method === "card" && (
+              <button
+                type="button"
+                onClick={handlePayNow}
+                style={{
+                  width: "100%",
+                  padding: "16px 20px",
+                  fontSize: 15,
+                  fontFamily: "system-ui, -apple-system, sans-serif",
+                  fontWeight: 600,
+                  color: "#fff",
+                  background: "#111",
+                  border: "none",
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                Pay Now
+              </button>
+            )}
+          </div>
+
+          {/* Email error — shown only when user tries to Pay without a valid email */}
+          {payNowError && (
+            <div style={{
+              marginTop: 10, padding: "10px 14px",
+              background: "#fff4f4", border: "1px solid #f5b5b5",
+              borderRadius: 4, color: "#a01010", fontSize: 13,
+            }}>
+              {payNowError}
             </div>
           )}
         </div>
