@@ -22,6 +22,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
   const { addToCart, isInCart } = useCart();
   const navigate = useNavigate();
   const inCart = isInCart(`ghost-${track.id}`);
+  const [showNdaMsg, setShowNdaMsg] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
   const progressRef = useRef(null);
@@ -381,6 +382,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
                 currency: "USD",
                 items: [{ item_id: track.id, item_name: track.name, item_category: track.genre, price: track.price_usd, quantity: 1 }],
               });
+              // Add the ghost track
               addToCart({
                 id: `ghost-${track.id}`,
                 slug: `ghost-${track.id}`,
@@ -391,6 +393,20 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
                 isGhost: true,
                 trackId: track.id,
               });
+              // Auto-add NDA + 100% Ownership as $0 companion item
+              addToCart({
+                id: `nda-${track.id}`,
+                slug: `nda-${track.id}`,
+                name: `NDA + 100% Ownership — ${track.name}`,
+                price: 0,
+                image: `/shop/ghost-${track.id}-cover.webp`,
+                headline: "Non-Disclosure Agreement + Full Copyright Transfer",
+                isNda: true,
+                trackId: track.id,
+              });
+              // Show NDA included message
+              setShowNdaMsg(true);
+              setTimeout(() => setShowNdaMsg(false), 4000);
             }}
             disabled={isSold}
             style={{
@@ -426,6 +442,20 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
           </button>
         </div>
       </div>
+
+      {/* NDA included toast */}
+      {showNdaMsg && (
+        <div style={{
+          position: "absolute", bottom: 8, left: 8, right: 8,
+          background: "rgba(0,229,255,0.12)", border: `1px solid ${CYAN}44`,
+          borderRadius: 8, padding: "10px 14px", zIndex: 5,
+          fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+          color: "rgba(255,255,255,0.85)", lineHeight: 1.5,
+          animation: "fadeIn 0.2s ease",
+        }}>
+          <strong style={{ color: CYAN }}>NDA + 100% Ownership</strong> included automatically. Sent to your email after purchase.
+        </div>
+      )}
     </div>
   );
 }

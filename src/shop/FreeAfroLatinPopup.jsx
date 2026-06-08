@@ -130,34 +130,25 @@ export default function FreeAfroLatinPopup() {
     <div
       role="dialog"
       aria-label="Free Afro Latin House Sample Pack"
-      aria-modal="true"
       style={{
         position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.75)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
+        bottom: 0,
+        left: 0,
+        right: 0,
         zIndex: 10000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 16,
-        animation: "fadeIn 0.3s ease",
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) close();
+        animation: "slideUp 0.3s ease",
       }}
     >
       <div
         style={{
           background: "linear-gradient(135deg, #04040f 0%, #0a0a14 100%)",
-          border: `1px solid ${CYAN}33`,
-          borderRadius: 16,
-          padding: isMobile ? 24 : 36,
-          maxWidth: 480,
-          width: "100%",
-          position: "relative",
-          boxShadow: `0 0 60px ${CYAN}22, 0 20px 60px rgba(0,0,0,0.6)`,
+          borderTop: `1px solid ${CYAN}33`,
+          padding: isMobile ? "16px 16px" : "16px 32px",
+          display: "flex",
+          alignItems: isMobile ? "stretch" : "center",
+          flexDirection: isMobile ? "column" : "row",
+          gap: isMobile ? 12 : 20,
+          boxShadow: `0 -4px 30px rgba(0,0,0,0.6)`,
           color: "#fff",
           fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
         }}
@@ -168,12 +159,12 @@ export default function FreeAfroLatinPopup() {
           aria-label="Close"
           style={{
             position: "absolute",
-            top: 14,
-            right: 14,
+            top: 8,
+            right: 12,
             background: "transparent",
             border: "none",
             color: "rgba(255,255,255,0.5)",
-            fontSize: 22,
+            fontSize: 20,
             cursor: "pointer",
             padding: 4,
             lineHeight: 1,
@@ -184,103 +175,25 @@ export default function FreeAfroLatinPopup() {
 
         {!submitted ? (
           <>
-            <div
-              style={{
-                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                fontWeight: 700,
-                fontSize: 11,
-                letterSpacing: "0.3em",
-                color: CYAN,
-                textTransform: "uppercase",
-                marginBottom: 8,
-              }}
-            >
-              Free — Limited
-            </div>
-            <h2
-              style={{
-                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                fontWeight: 900,
-                fontSize: isMobile ? 26 : 32,
-                letterSpacing: "0.02em",
-                lineHeight: 1.1,
-                margin: "0 0 4px",
-                color: "#fff",
-              }}
-            >
-              Free Afro Latin House
-              <br />
-              <span
-                style={{
-                  background: `linear-gradient(90deg, ${CYAN}, ${PURPLE})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Sample Pack
-              </span>
-            </h2>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", margin: "8px 0 18px" }}>
-              125 BPM · G minor · Royalty-free
-            </div>
-
-            {/* Mini audio player — master preview */}
-            <audio
-              controls
-              preload="none"
-              src={MASTER_PREVIEW_URL}
-              style={{
-                width: "100%",
-                height: 40,
-                marginBottom: 18,
-                borderRadius: 8,
-                background: "#000",
-                filter: "invert(1) hue-rotate(180deg)", // makes default audio player cyan-ish on dark bg
-              }}
-            />
-
-            {/* Stem breakdown */}
-            <div
-              style={{
-                background: "rgba(0,229,255,0.04)",
-                border: `1px solid ${CYAN}22`,
-                borderRadius: 8,
-                padding: "12px 14px",
-                marginBottom: 18,
-              }}
-            >
+            <div style={{ flex: 1, paddingRight: isMobile ? 24 : 0 }}>
               <div
                 style={{
                   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 11,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: CYAN,
-                  marginBottom: 8,
-                }}
-              >
-                12 Stems Inside
+                  fontWeight: 900,
+                  fontSize: isMobile ? 18 : 22,
+                  letterSpacing: "0.02em",
+                  lineHeight: 1.2,
+                  margin: 0,
+                color: "#fff",
+              }}>
+                Free Afro Latin House <span style={{ color: CYAN }}>Sample Pack</span>
               </div>
-              {STEMS.map((s) => (
-                <div
-                  key={s.label}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: 13,
-                    color: "rgba(255,255,255,0.75)",
-                    padding: "3px 0",
-                  }}
-                >
-                  <span>{s.label}</span>
-                  <span style={{ color: CYAN, fontWeight: 600 }}>× {s.count}</span>
-                </div>
-              ))}
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>
+                12 stems · 125 BPM · Royalty-free · Leave your email
+              </div>
             </div>
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} style={{ display: "flex", gap: 8, flex: isMobile ? undefined : "0 0 auto", width: isMobile ? "100%" : "auto" }}>
               <input
                 type="email"
                 inputMode="email"
@@ -290,86 +203,55 @@ export default function FreeAfroLatinPopup() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 style={{
-                  width: "100%",
-                  padding: "13px 16px",
-                  background: "rgba(255,255,255,0.04)",
-                  border: `1px solid ${error ? "#ff4444" : "rgba(255,255,255,0.12)"}`,
-                  borderRadius: 8,
+                  width: isMobile ? "100%" : 220,
+                  padding: "10px 14px",
+                  background: "rgba(255,255,255,0.06)",
+                  border: `1px solid ${error ? "#ff4444" : "rgba(255,255,255,0.15)"}`,
+                  borderRadius: 6,
                   color: "#fff",
-                  fontSize: 15,
+                  fontSize: 14,
                   fontFamily: "inherit",
                   outline: "none",
-                  marginBottom: error ? 6 : 14,
                   boxSizing: "border-box",
                 }}
               />
-              {error && (
-                <div style={{ color: "#ff6666", fontSize: 12, marginBottom: 12 }}>{error}</div>
-              )}
               <button
                 type="submit"
                 disabled={loading}
                 style={{
-                  width: "100%",
-                  padding: "16px 28px",
-                  background: loading ? "#222" : "linear-gradient(135deg, #00E5FF, #00b8d4)",
-                  color: loading ? "rgba(255,255,255,0.5)" : "#000",
+                  padding: "10px 20px",
+                  background: loading ? "#222" : `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+                  color: "#000",
                   border: "none",
-                  borderRadius: 50, // pill — per Brand Kit
-                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                  borderRadius: 6,
+                  fontFamily: "'Barlow Condensed', sans-serif",
                   fontWeight: 700,
-                  fontSize: 15,
-                  letterSpacing: "0.2em",
+                  fontSize: 13,
+                  letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   cursor: loading ? "wait" : "pointer",
-                  boxShadow: loading ? "none" : "0 0 28px rgba(0,229,255,0.5)",
-                  transition: "all 0.15s",
+                  whiteSpace: "nowrap",
                 }}
               >
-                {loading ? "Sending…" : "Email me the pack"}
+                {loading ? "..." : "Get it free"}
               </button>
-              <div
-                style={{
-                  fontSize: 11,
-                  color: "rgba(255,255,255,0.4)",
-                  marginTop: 12,
-                  textAlign: "center",
-                  lineHeight: 1.5,
-                }}
-              >
-                You'll also get the occasional newsletter — unsubscribe any time.
-              </div>
             </form>
+            {error && <div style={{ color: "#ff6666", fontSize: 11, marginTop: 4 }}>{error}</div>}
           </>
         ) : (
-          <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontSize: 44, marginBottom: 12, color: CYAN }}>✓</div>
-            <h2
-              style={{
-                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                fontWeight: 900,
-                fontSize: 28,
-                margin: "0 0 12px",
-                color: "#fff",
-                letterSpacing: "0.02em",
-              }}
-            >
-              Check Your Inbox
-            </h2>
-            <p style={{ color: "rgba(255,255,255,0.75)", fontSize: 14, lineHeight: 1.6 }}>
-              I just sent the download link to <strong style={{ color: CYAN }}>{email}</strong>.
-            </p>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, lineHeight: 1.6, marginTop: 12 }}>
-              If you don't see it within a minute, check your spam or promotions folder.
-            </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ color: CYAN, fontSize: 22 }}>✓</span>
+            <span style={{ fontSize: 14, color: "rgba(255,255,255,0.8)" }}>
+              Sent to <strong style={{ color: CYAN }}>{email}</strong> — check your inbox!
+            </span>
           </div>
         )}
       </div>
 
       <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to   { transform: translateY(0); opacity: 1; }
         }
       `}</style>
     </div>

@@ -1497,7 +1497,7 @@ function GhostPage() {
         </section>
       </main>
 
-      <GhostDiscountPopup />
+      {/* Ghost popup removed per Steven */}
 
       {/* ═══ Footer ═══ */}
       <footer
