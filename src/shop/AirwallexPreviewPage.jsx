@@ -6,15 +6,13 @@
  * Just the SDK's default render — exactly what you'd see in Airwallex's own
  * docs page.
  *
- * Environment: DEMO. Creates a \$1 USD test intent on api-demo.airwallex.com.
- * Use test card 4242 4242 4242 4242 (any future expiry, any 3-digit CVC).
+ * Environment: matches the backend Airwallex config (currently "prod").
+ * Creates a $1 USD intent. Do NOT submit a card unless you're OK charging
+ * yourself $1 — this page is for visual inspection only.
  *
  * This page lives ONLY on the `airwallex-dropin-preview` branch. It will
  * appear on the Netlify branch preview URL but is NOT linked from anywhere
  * on the main site.
- *
- * Backend endpoint: POST /shop/checkout/airwallex-preview-intent
- * Requires AIRWALLEX_DEMO_CLIENT_ID + AIRWALLEX_DEMO_API_KEY on Railway.
  */
 
 import React, { useEffect, useRef, useState } from "react";
@@ -48,7 +46,7 @@ export default function AirwallexPreviewPage() {
   const [intent, setIntent] = useState(null);
 
   useEffect(() => {
-    document.title = "Airwallex Drop-in Preview (Demo)";
+    document.title = "Airwallex Drop-in Preview";
   }, []);
 
   useEffect(() => {
@@ -59,7 +57,8 @@ export default function AirwallexPreviewPage() {
         setStatus("loading");
         setErrorMsg(null);
 
-        // 1. Fetch demo intent from backend
+        // 1. Fetch preview intent from backend (uses live Airwallex creds,
+        //    $1 USD intent — page is preview-only, not linked from prod)
         const res = await fetch(`${BACKEND}/shop/checkout/airwallex-preview-intent`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -67,7 +66,7 @@ export default function AirwallexPreviewPage() {
         });
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.hint || data.error || `Backend error (${res.status})`);
+          throw new Error(data.error || `Backend error (${res.status})`);
         }
         if (cancelled) return;
         setIntent(data);
@@ -76,14 +75,15 @@ export default function AirwallexPreviewPage() {
         const Airwallex = await loadAirwallexSdk();
         if (cancelled) return;
 
-        // 3. Init SDK in DEMO env
+        // 3. Init SDK matching the backend's environment
+        const env = data.environment === "demo" ? "demo" : "prod";
         await Airwallex.init({
-          env: "demo",
+          env,
           enabledElements: ["payments"],
         });
 
-        // 4. Create + mount the Drop-in with the MINIMAL config — no theme,
-        //    no custom appearance, no styling overrides. Just intent_id and
+        // 4. Create + mount the Drop-in with MINIMAL config — no theme, no
+        //    custom appearance, no styling overrides. Just intent_id and
         //    client_secret. The SDK uses its default Airwallex look.
         const element = Airwallex.createElement("dropIn", {
           intent_id: data.intent_id,
@@ -97,7 +97,6 @@ export default function AirwallexPreviewPage() {
           setStatus("ready");
         }
 
-        // Optional: listen for success/error events so the page reflects state
         element.on("success", (event) => {
           console.log("[airwallex-preview] success", event);
           setStatus("success");
@@ -138,9 +137,8 @@ export default function AirwallexPreviewPage() {
           Airwallex Drop-in — raw preview
         </h1>
         <p style={{ fontSize: 13, color: "#666", margin: "0 0 20px" }}>
-          Demo environment · $1.00 USD test intent · No custom styling applied.
-          Use test card <strong>4242 4242 4242 4242</strong>, any future expiry,
-          any CVC.
+          $1.00 USD intent · No custom styling applied. Do not submit a card
+          unless you want to charge yourself $1.
         </p>
 
         {status === "loading" && (
@@ -173,7 +171,7 @@ export default function AirwallexPreviewPage() {
             fontSize: 13,
             marginBottom: 16,
           }}>
-            <strong>Payment captured (demo).</strong> Refresh to start a new intent.
+            <strong>Payment captured.</strong> Refresh to start a new intent.
           </div>
         )}
 
@@ -187,9 +185,7 @@ export default function AirwallexPreviewPage() {
           </div>
         )}
 
-        {/* Drop-in mount target — NO wrapper styling beyond a basic border so
-            the widget's edges are visible. Remove this border once you've seen
-            the default render. */}
+        {/* Drop-in mount target — no wrapper styling. */}
         <div ref={containerRef} style={{ minHeight: 360 }} />
 
         {intent && (
