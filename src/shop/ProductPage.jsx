@@ -829,37 +829,7 @@ export default function ProductPage() {
                 </div>
               )}
 
-              {/* SEO tags pills (replaces generic trust pills) */}
-              {product.seoTags && product.seoTags.length > 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 8,
-                    marginBottom: 24,
-                  }}
-                >
-                  {product.seoTags.map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                        fontSize: 11,
-                        fontWeight: 500,
-                        color: "rgba(255,255,255,0.7)",
-                        background: `rgba(${accentRgba},0.06)`,
-                        border: `1px solid rgba(${accentRgba},0.2)`,
-                        padding: "5px 12px",
-                        borderRadius: 20,
-                        cursor: "default",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+              {/* SEO tags moved to bottom of page */}
 
               {/* Trust pills — Steven 2026-06-07 (matches ABT pattern) */}
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
@@ -868,14 +838,16 @@ export default function ProductPage() {
                 <TrustPill text="Instant Download" accentColor={accentColor} accentRgba={accentRgba} />
               </div>
 
-              {/* Description — collapsible accordion. Default open so SEO crawlers
-                  + first-time visitors see the copy immediately, Steven 2026-06-07. */}
+              {/* Description — collapsible accordion. Mobile: order -1 pushes above waveform */}
+              <div style={{ order: isMobile ? -2 : undefined }}>
               <Accordion title="Description" defaultOpen accentColor={accentColor} accentRgba={accentRgba}>
                 <p style={{ ...body, margin: 0 }}>{product.description}</p>
               </Accordion>
+              </div>
 
-              {/* Specs — collapsible accordion */}
+              {/* Specs — collapsible accordion. Mobile: order -1 pushes above waveform */}
               {product.specs && (
+                <div style={{ order: isMobile ? -1 : undefined }}>
                 <Accordion title="Specs" accentColor={accentColor} accentRgba={accentRgba}>
                 <div
                   style={{
@@ -961,6 +933,7 @@ export default function ProductPage() {
                   )}
                 </div>
                 </Accordion>
+                </div>
               )}
 
               {/* ── Price + Add to Cart (below specs) ── */}
@@ -1050,6 +1023,22 @@ export default function ProductPage() {
             </div>
           </div>
         </section>
+
+        {/* SEO tags — small, bottom of page */}
+        {product.seoTags && product.seoTags.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 5, justifyContent: "center", padding: "16px 20px", maxWidth: 800, margin: "0 auto" }}>
+            {product.seoTags.map((tag) => (
+              <span key={tag} style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 500,
+                color: "rgba(255,255,255,0.35)",
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                padding: "2px 8px", borderRadius: 10,
+                cursor: "default", pointerEvents: "none",
+              }}>{tag}</span>
+            ))}
+          </div>
+        )}
 
         {/* Related Products */}
         <section
