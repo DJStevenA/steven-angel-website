@@ -1,13 +1,15 @@
 /**
- * /shop/cart — minimal on-brand cart drawer/page.
+ * /shop/cart — on-brand cart with full credibility stack.
  *
- * Per Steven 2026-06-07: this page ONLY shows items + coupon + total + the
- * "Check out" CTA. All payment forms, trust signals, and credibility lines
- * live on /shop/checkout (white, Shopify-style) — kept off the cart so the
- * cart stays on-brand dark and focused.
- *
- * Auto-applies WELCOME15 for first-time visitors (cookie-based via the
- * `shop_cart_visited` flag + the existing discount-popup flag).
+ * Steven 2026-06-08 night:
+ *  - Clear Cart link below items
+ *  - Primary CTA = big yellow PayPal Smart Button (CartCheckoutButton)
+ *    with "Start with PayPal" eyebrow label above
+ *  - Secondary CTA = small "Other Payment Options" text link → /shop/checkout-v2
+ *  - Credibility row: "Secure Payment via PayPal & Airwallex" + SSL +
+ *    payment-method logo strip (Visa/MC/Amex/Apple Pay/Google Pay)
+ *  - Removed "Lifetime access" trust line (kept Instant Download)
+ *  - WELCOME15 is no longer auto-applied — coupon field stays for manual entry
  */
 
 import React, { useState, useEffect } from "react";
@@ -30,19 +32,8 @@ export default function CartPage() {
   useAuth(); // ensure auth context is available even though we don't gate on it
   const navigate = useNavigate();
 
-  // Auto-apply WELCOME15 for first-time visitors. Survives reload via
-  // localStorage. Steven 2026-06-07 — biggest single conversion lever
-  // per the Marketing brief.
-  const [couponCode, setCouponCode] = useState(() => {
-    if (typeof window === "undefined") return "";
-    const popupSeen = localStorage.getItem("shop_discount_popup_seen");
-    const cartFirstVisit = !localStorage.getItem("shop_cart_visited");
-    if (popupSeen || cartFirstVisit) {
-      try { localStorage.setItem("shop_cart_visited", "1"); } catch { /* noop */ }
-      return "WELCOME15";
-    }
-    return "";
-  });
+  // Coupon field — manual entry only (Steven 2026-06-08 night: no auto-apply).
+  const [couponCode, setCouponCode] = useState("");
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -188,6 +179,26 @@ export default function CartPage() {
               ))}
             </div>
 
+            {/* Clear cart — Steven 2026-06-08 night */}
+            {cart.length > 1 && (
+              <div style={{ textAlign: "right", marginTop: -8, marginBottom: 14 }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm("Remove all items from cart?")) clearCart();
+                  }}
+                  style={{
+                    background: "none", border: "none", padding: "4px 6px",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                    color: "rgba(255,255,255,0.4)", cursor: "pointer",
+                    textDecoration: "underline", textUnderlineOffset: 3,
+                  }}
+                >
+                  Clear cart
+                </button>
+              </div>
+            )}
+
             {/* Coupon — minimal */}
             <div style={{ marginBottom: 16 }}>
               <input
@@ -239,53 +250,99 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* PayPal Smart Buttons — instant cart checkout, no email gate.
-                Steven 2026-06-07 evening: direct PayPal popup, payer email
-                comes from PayPal after capture (cart-anon endpoint). */}
+            {/* ─── Primary CTA — Start with PayPal ─── */}
+            <div style={{
+              fontFamily: "'Barlow Condensed', sans-serif",
+              fontWeight: 700, fontSize: 11, letterSpacing: "0.22em",
+              textTransform: "uppercase", color: "rgba(255,255,255,0.55)",
+              marginBottom: 8, textAlign: "center",
+            }}>
+              Start with PayPal
+            </div>
             <CartCheckoutButton
               productIds={productIds}
               couponCode={couponCode}
               onSuccess={handleSuccess}
             />
 
-            {/* Check Out → /shop/checkout-v2 — full checkout with
-                Apple Pay + Google Pay + card + Klarna + PayPal in one page.
-                Steven 2026-06-07 night flow. */}
-            <button
-              type="button"
-              onClick={() => {
-                try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
-                navigate("/shop/checkout-v2");
-              }}
-              style={{
-                width: "100%", padding: "16px 24px", marginTop: 12,
-                background: CYAN, color: "#000",
-                border: "none", borderRadius: 8,
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 800, fontSize: 15, letterSpacing: "0.18em",
-                textTransform: "uppercase", cursor: "pointer",
-                boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
-              }}
-            >
-              Check out — ${total.toFixed(2)}
-            </button>
+            {/* ─── Secondary CTA — Other Payment Options ─── */}
+            <div style={{ textAlign: "center", marginTop: 14 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
+                  navigate("/shop/checkout-v2");
+                }}
+                style={{
+                  background: "none", border: "none", padding: "4px 6px",
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                  color: "rgba(255,255,255,0.6)", cursor: "pointer",
+                  textDecoration: "underline", textUnderlineOffset: 3,
+                }}
+              >
+                Other Payment Options &rarr;
+              </button>
+            </div>
 
-            {/* Trust signals — Steven 2026-06-07 evening */}
-            <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 6 }}>
-              {[
-                { icon: "\u{1F512}", text: "Secure payment via PayPal" },
-                { icon: "⚡", text: "Instant download after payment" },
-                { icon: "∞", text: "Lifetime access — no subscription" },
-              ].map(({ icon, text }) => (
-                <div key={text} style={{
-                  display: "flex", alignItems: "center", gap: 8,
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                  color: "rgba(255,255,255,0.5)",
-                }}>
-                  <span>{icon}</span>
-                  <span>{text}</span>
-                </div>
-              ))}
+            {/* ─── Credibility row ─── */}
+            <div style={{
+              marginTop: 22, padding: "16px 18px",
+              background: "rgba(255,255,255,0.025)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 10,
+            }}>
+              {/* SSL + processors line */}
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                gap: 8, flexWrap: "wrap",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 12,
+                color: "rgba(255,255,255,0.7)", marginBottom: 10,
+              }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <span>Secure Payment via PayPal &amp; Airwallex</span>
+              </div>
+
+              {/* Payment method logo strip */}
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                gap: 10, flexWrap: "wrap", marginBottom: 10,
+              }}>
+                {[
+                  { name: "VISA", bg: "#1a1f71", color: "#fff" },
+                  { name: "MC", bg: "#fff", color: "#000", subtitle: "Mastercard" },
+                  { name: "AMEX", bg: "#016fd0", color: "#fff" },
+                  { name: "PayPal", bg: "#003087", color: "#fff", italic: true },
+                  { name: "Pay", bg: "#000", color: "#fff" },
+                  { name: "G Pay", bg: "#fff", color: "#5f6368" },
+                ].map(({ name, bg, color, italic }) => (
+                  <span key={name} style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    padding: "3px 8px", minWidth: 40, height: 22,
+                    background: bg, color, borderRadius: 3,
+                    fontFamily: italic ? "Georgia, serif" : "system-ui, sans-serif",
+                    fontStyle: italic ? "italic" : "normal",
+                    fontWeight: 800, fontSize: 10, letterSpacing: "0.02em",
+                    border: bg === "#fff" ? "1px solid rgba(0,0,0,0.08)" : "none",
+                  }}>
+                    {name}
+                  </span>
+                ))}
+              </div>
+
+              {/* SSL/Encryption micro line */}
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                gap: 14, flexWrap: "wrap",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 11,
+                color: "rgba(255,255,255,0.45)",
+              }}>
+                <span>🔒 256-bit SSL</span>
+                <span>⚡ Instant download</span>
+                <span>↺ 7-day refund</span>
+              </div>
             </div>
 
             <Link to="/shop" style={{
