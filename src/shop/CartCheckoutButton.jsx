@@ -23,7 +23,6 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
   const guestEmailRef = useRef(guestEmail);
   const guestTokenRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => { couponRef.current = couponCode; }, [couponCode]);
   // Keep guestEmail current in createOrder closure without forcing a button
@@ -39,7 +38,6 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
     async function setup() {
       try {
         setLoading(true);
-        setError(null);
 
         // Single shared loader — guards against double-load / zoid mismatch.
         const paypal = await preloadPayPalSdk();
@@ -75,8 +73,7 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
               if (!hasToken && !hasEmail) guestTokenRef.current = "__anon__";
               return data.orderId;
             } catch (err) {
-              setError(err.message);
-              if (onError) onError(err.message);
+              console.error("[cart-checkout] createOrder failed:", err);
               throw err;
             }
           },
@@ -117,15 +114,14 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
               trackPurchase({ id: "cart", name: "Cart", price: 0 }, { transaction_id: data.orderID, email: guestEmailRef.current });
               if (onSuccess) onSuccess(json);
             } catch (err) {
-              setError(err.message);
-              if (onError) onError(err.message);
+              console.error("[cart-checkout] capture failed:", err);
             }
           },
 
           onError: (err) => {
-            const msg = typeof err === "string" ? err : err?.message || "PayPal error";
-            setError(msg);
-            if (onError) onError(msg);
+            // Silent — never surface PayPal SDK errors to the customer.
+            // Includes benign 'window is closed' when user closes the popup.
+            console.error("[cart-checkout] paypal SDK error:", err);
           },
         });
 
@@ -135,7 +131,7 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err.message || "Failed to initialize checkout");
+          console.error("[cart-checkout] setup failed:", err);
           setLoading(false);
         }
       }
@@ -157,11 +153,6 @@ export default function CartCheckoutButton({ productIds, couponCode, guestEmail,
         </div>
       )}
       <div ref={containerRef} />
-      {error && (
-        <div style={{ marginTop: 12, padding: "10px 14px", background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.4)", borderRadius: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ff8080" }}>
-          {error}
-        </div>
-      )}
     </div>
   );
 }

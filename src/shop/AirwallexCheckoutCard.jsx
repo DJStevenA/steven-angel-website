@@ -73,7 +73,6 @@ export default function AirwallexCheckoutCard({
   const elementRef = useRef(null);
   const guestTokenRef = useRef(null);
   const [status, setStatus] = useState("idle"); // idle | loading | ready | error
-  const [errorMsg, setErrorMsg] = useState(null);
 
   // Email is mandatory for guest. Logged-in users get it from auth.
   const emailValid = !!user || (guestEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail));
@@ -90,7 +89,6 @@ export default function AirwallexCheckoutCard({
 
     async function setup() {
       setStatus("loading");
-      setErrorMsg(null);
       try {
         // 1. Ask backend to create the intent
         const isGuest = !user;
@@ -174,18 +172,16 @@ export default function AirwallexCheckoutCard({
           if (onSuccess) onSuccess({ intentId: data.intentId, provider: "airwallex" });
         });
         element.on("error", (ev) => {
-          const m = ev?.error?.message || "Payment failed";
+          // Silent — never surface Airwallex errors to the customer.
+          console.error("[airwallex] element error:", ev);
           setStatus("error");
-          setErrorMsg(m);
-          if (onError) onError(m);
         });
 
         setStatus("ready");
       } catch (err) {
         if (cancelled) return;
+        console.error("[airwallex] setup failed:", err);
         setStatus("error");
-        setErrorMsg(err.message);
-        if (onError) onError(err.message);
       }
     }
 
@@ -246,21 +242,6 @@ export default function AirwallexCheckoutCard({
       )}
 
       <div ref={containerRef} style={{ minHeight: emailValid ? 60 : 0 }} />
-
-      {errorMsg && (
-        <div style={{
-          marginTop: 10,
-          padding: "10px 14px",
-          background: "rgba(255,80,80,0.08)",
-          border: "1px solid rgba(255,80,80,0.4)",
-          borderRadius: 6,
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 12,
-          color: "#ff8080",
-        }}>
-          {errorMsg}
-        </div>
-      )}
     </div>
   );
 }

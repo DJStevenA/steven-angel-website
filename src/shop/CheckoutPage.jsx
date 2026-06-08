@@ -52,7 +52,6 @@ export default function CheckoutPage() {
   });
   const [guestEmail, setGuestEmail] = useState("");
   const [status, setStatus] = useState("idle");
-  const [errorMsg, setErrorMsg] = useState(null);
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 768 : false
   );
@@ -288,7 +287,7 @@ export default function CheckoutPage() {
                     }}
                   />
 
-                  <CheckoutButton product={product} couponCode={couponCode} onSuccess={handleSuccess} onError={setErrorMsg} />
+                  <CheckoutButton product={product} couponCode={couponCode} onSuccess={handleSuccess} />
                 </div>
               )}
 
@@ -337,7 +336,7 @@ export default function CheckoutPage() {
 
                   {/* PayPal buttons (show when email is valid) */}
                   {emailValid ? (
-                    <CheckoutButton product={product} couponCode={couponCode} guestEmail={guestEmail} onSuccess={handleSuccess} onError={setErrorMsg} />
+                    <CheckoutButton product={product} couponCode={couponCode} guestEmail={guestEmail} onSuccess={handleSuccess} />
                   ) : (
                     <div style={{
                       padding: "14px", textAlign: "center", background: "rgba(255,255,255,0.03)",
@@ -356,16 +355,6 @@ export default function CheckoutPage() {
                       Already have an account? Sign in
                     </Link>
                   </div>
-                </div>
-              )}
-
-              {errorMsg && (
-                <div style={{
-                  marginTop: 14, padding: "10px 14px",
-                  background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.4)",
-                  borderRadius: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ff8080",
-                }}>
-                  {errorMsg}
                 </div>
               )}
 

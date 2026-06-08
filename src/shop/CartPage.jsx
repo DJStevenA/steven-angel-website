@@ -29,7 +29,6 @@ export default function CartPage() {
   const { cart, removeFromCart, clearCart, cartTotal } = useCart();
   useAuth(); // ensure auth context is available even though we don't gate on it
   const navigate = useNavigate();
-  const [errorMsg, setErrorMsg] = useState(null);
 
   // Auto-apply WELCOME15 for first-time visitors. Survives reload via
   // localStorage. Steven 2026-06-07 — biggest single conversion lever
@@ -247,21 +246,7 @@ export default function CartPage() {
               productIds={productIds}
               couponCode={couponCode}
               onSuccess={handleSuccess}
-              onError={setErrorMsg}
             />
-
-            {errorMsg && (
-              <div style={{
-                marginTop: 12, padding: "10px 14px",
-                background: "rgba(255,80,80,0.08)",
-                border: "1px solid rgba(255,80,80,0.4)",
-                borderRadius: 6,
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 12, color: "#ff8080",
-              }}>
-                {errorMsg}
-              </div>
-            )}
 
             {/* Trust signals — Steven 2026-06-07 evening */}
             <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 6 }}>

@@ -100,7 +100,6 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
   // between createOrder and onApprove.
   const guestTokenRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Keep couponRef in sync so createOrder always sees the latest code
   useEffect(() => {
@@ -161,9 +160,7 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
               if (isGuest && data.token) guestTokenRef.current = data.token;
               return data.orderId;
             } catch (err) {
-              const msg = err.message || "Failed to create order";
-              setError(msg);
-              if (onError) onError(msg);
+              console.error("[checkout] createOrder failed:", err);
               throw err;
             }
           },
@@ -202,24 +199,18 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
               if (product) trackPurchase(product, { transaction_id: data.orderID, email: guestEmail });
               if (onSuccess) onSuccess(json.purchase);
             } catch (err) {
-              const msg = err.message || "Payment capture failed";
-              setError(msg);
-              if (onError) onError(msg);
+              console.error("[checkout] capture failed:", err);
             }
           },
 
           onCancel: () => {
-            // User closed the PayPal popup — not an error, just reset loading
+            // User closed the PayPal popup — silent.
           },
 
           onError: (err) => {
-            console.error("[paypal] button error:", err);
-            const msg =
-              typeof err === "string"
-                ? err
-                : err?.message || "PayPal encountered an error";
-            setError(msg);
-            if (onError) onError(msg);
+            // Silent — never surface PayPal SDK errors to the customer.
+            // Includes benign 'window is closed' when user closes the popup.
+            console.error("[checkout] paypal SDK error:", err);
           },
         });
 
@@ -230,7 +221,6 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
       } catch (err) {
         if (cancelled) return;
         console.error("[checkout] setup error:", err);
-        setError(err.message || "Failed to initialize checkout");
         setLoading(false);
       }
     }
@@ -268,22 +258,6 @@ export default function CheckoutButton({ product, couponCode, guestEmail, onSucc
         </div>
       )}
       <div ref={containerRef} />
-      {error && (
-        <div
-          style={{
-            marginTop: 12,
-            padding: "10px 14px",
-            background: "rgba(255,80,80,0.08)",
-            border: "1px solid rgba(255,80,80,0.4)",
-            borderRadius: 6,
-            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-            fontSize: 12,
-            color: "#ff8080",
-          }}
-        >
-          {error}
-        </div>
-      )}
     </div>
   );
 }

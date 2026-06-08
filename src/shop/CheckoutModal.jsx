@@ -54,7 +54,6 @@ export default function CheckoutModal({ product, onClose }) {
     return localStorage.getItem("shop_discount_popup_seen") ? "WELCOME15" : "";
   });
   const [status, setStatus] = useState("idle"); // idle | success | error
-  const [errorMsg, setErrorMsg] = useState(null);
   // Guest checkout flow (no account)
   const [guestMode, setGuestMode] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
@@ -113,7 +112,7 @@ export default function CheckoutModal({ product, onClose }) {
   };
 
   const handleError = (msg) => {
-    setErrorMsg(msg);
+    console.error("[checkout-modal] error:", msg);
   };
 
   const pricing = computePricingPreview(product.price, couponCode);
@@ -490,23 +489,6 @@ export default function CheckoutModal({ product, onClose }) {
               onSuccess={handleSuccess}
               onError={handleError}
             />
-
-            {errorMsg && (
-              <div
-                style={{
-                  marginTop: 12,
-                  padding: "10px 14px",
-                  background: "rgba(255,80,80,0.08)",
-                  border: "1px solid rgba(255,80,80,0.4)",
-                  borderRadius: 6,
-                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                  fontSize: 12,
-                  color: "#ff8080",
-                }}
-              >
-                {errorMsg}
-              </div>
-            )}
 
             <div
               style={{

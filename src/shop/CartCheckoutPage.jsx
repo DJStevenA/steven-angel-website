@@ -54,7 +54,6 @@ export default function CartCheckoutPage() {
     if (typeof window === "undefined") return "";
     return localStorage.getItem("shop_active_coupon") || "";
   });
-  const [errorMsg, setErrorMsg] = useState(null);
   const [status, setStatus] = useState("idle");
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 980 : false
@@ -226,18 +225,7 @@ export default function CartCheckoutPage() {
             productIds={productIds}
             couponCode={couponCode}
             onSuccess={handleSuccess}
-            onError={setErrorMsg}
           />
-
-          {errorMsg && (
-            <div style={{
-              marginTop: 14, padding: "10px 14px",
-              background: "rgba(255,80,80,0.08)", border: "1px solid rgba(255,80,80,0.4)",
-              borderRadius: 6, fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ff8080",
-            }}>
-              {errorMsg}
-            </div>
-          )}
 
           {/* Trust signals */}
           <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
