@@ -41,8 +41,7 @@ function loadAirwallexSdk() {
 export default function AirwallexPreviewPage() {
   const containerRef = useRef(null);
   const elementRef = useRef(null);
-  const [status, setStatus] = useState("idle"); // idle | loading | ready | error | success
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [status, setStatus] = useState("idle"); // idle | loading | ready | success
   const [intent, setIntent] = useState(null);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ export default function AirwallexPreviewPage() {
     async function setup() {
       try {
         setStatus("loading");
-        setErrorMsg(null);
 
         // 1. Fetch preview intent from backend (uses live Airwallex creds,
         //    $1 USD intent — page is preview-only, not linked from prod)
@@ -102,14 +100,13 @@ export default function AirwallexPreviewPage() {
           setStatus("success");
         });
         element.on("error", (event) => {
-          console.error("[airwallex-preview] error", event);
-          setErrorMsg(event?.error?.message || "Payment error");
+          // Silent — debug only, never shown.
+          console.error("[airwallex-preview] element error:", event);
         });
       } catch (err) {
         if (cancelled) return;
+        // Silent — debug only.
         console.error("[airwallex-preview] setup error:", err);
-        setErrorMsg(err.message || "Failed to initialize");
-        setStatus("error");
       }
     }
 
@@ -144,44 +141,6 @@ export default function AirwallexPreviewPage() {
         {status === "loading" && (
           <div style={{ padding: 24, textAlign: "center", color: "#666" }}>
             Loading Drop-in…
-          </div>
-        )}
-
-        {status === "error" && (
-          <div style={{
-            padding: 14,
-            background: "#fff4f4",
-            border: "1px solid #f5b5b5",
-            borderRadius: 6,
-            color: "#a01010",
-            fontSize: 13,
-            marginBottom: 16,
-          }}>
-            <strong>Setup error:</strong> {errorMsg}
-          </div>
-        )}
-
-        {status === "success" && (
-          <div style={{
-            padding: 14,
-            background: "#f0fff4",
-            border: "1px solid #b5e5c5",
-            borderRadius: 6,
-            color: "#106020",
-            fontSize: 13,
-            marginBottom: 16,
-          }}>
-            <strong>Payment captured.</strong> Refresh to start a new intent.
-          </div>
-        )}
-
-        {errorMsg && status === "ready" && (
-          <div style={{
-            padding: 10, marginBottom: 12,
-            background: "#fff4f4", border: "1px solid #f5b5b5",
-            borderRadius: 6, color: "#a01010", fontSize: 12,
-          }}>
-            {errorMsg}
           </div>
         )}
 
