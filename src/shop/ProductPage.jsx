@@ -751,124 +751,95 @@ export default function ProductPage() {
                 );
               })()}
 
-              {/* Multi-loop player (sample packs only) — 5 individual loops
-                  with clickable play buttons. Plays via the same sticky player. */}
-              {product.audioLoops?.length > 0 && (
-                <div
-                  style={{
-                    marginBottom: 22,
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    borderRadius: 10,
-                    padding: "12px 14px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                      fontWeight: 700,
-                      fontSize: 11,
-                      letterSpacing: "0.22em",
-                      textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.5)",
-                      marginBottom: 10,
-                    }}
-                  >
-                    Listen to {product.audioLoops.length} loops from the pack
-                  </div>
-                  {product.audioLoops.map((loop, idx) => {
-                    const loopId = `${product.id}__loop-${idx}`;
-                    const isThisLoop = currentTrack?.id === loopId;
-                    const isThisLoopPlaying = isThisLoop && isPlaying;
-                    return (
-                      <button
-                        key={loopId}
-                        onClick={() => {
-                          if (isThisLoopPlaying) {
-                            pauseTrack();
-                          } else {
-                            playTrack({
-                              id: loopId,
-                              title: loop.title,
-                              subtitle: product.name,
-                              audioUrl: loop.audioUrl,
-                              coverUrl: product.image,
-                            });
-                          }
-                        }}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 12,
-                          width: "100%",
-                          padding: "10px 12px",
-                          background: isThisLoopPlaying ? `rgba(${accentRgba},0.10)` : "transparent",
-                          border: "none",
-                          borderRadius: 8,
-                          color: "#fff",
-                          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                          fontSize: 14,
-                          cursor: "pointer",
-                          textAlign: "left",
-                          transition: "background 0.15s",
-                        }}
-                        aria-label={isThisLoopPlaying ? `Pause ${loop.title}` : `Play ${loop.title}`}
-                      >
-                        <span
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: 28,
-                            height: 28,
-                            borderRadius: "50%",
-                            background: accentColor,
-                            flexShrink: 0,
-                          }}
-                        >
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="#000">
-                            {isThisLoopPlaying
-                              ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
-                              : <path d="M8 5v14l11-7z" />
-                            }
-                          </svg>
-                        </span>
-                        <span style={{ flex: 1 }}>{loop.title}</span>
-                      </button>
-                    );
-                  })}
+              {/* Description — right below preview player (Steven 2026-06-08) */}
+              <Accordion title="Description" defaultOpen accentColor={accentColor} accentRgba={accentRgba}>
+                <p style={{ ...body, margin: 0 }}>{product.description}</p>
+              </Accordion>
+
+              {/* Specs — collapsible accordion */}
+              {product.specs && (
+                <Accordion title="Specs" accentColor={accentColor} accentRgba={accentRgba}>
+                <div style={{ marginTop: 0, padding: 0, background: "transparent", border: "none", borderRadius: 0 }}>
+                  {product.specs.daw && <SpecLine label="DAW" value={product.specs.daw} accentRgba={accentRgba} />}
+                  {product.specs.bpm && <SpecLine label="BPM" value={String(product.specs.bpm)} accentRgba={accentRgba} />}
+                  {product.specs.key && <SpecLine label="Key" value={product.specs.key} accentRgba={accentRgba} />}
+                  {product.specs.length && <SpecLine label="Length" value={product.specs.length} accentRgba={accentRgba} />}
+                  {product.specs.channels && <SpecLine label="Channels" value={product.specs.channels} accentRgba={accentRgba} />}
+                  {product.specs.whatYouGet && <SpecList title="What You Get" items={product.specs.whatYouGet} accentColor={accentColor} />}
+                  {product.specs.lessons && (
+                    <>
+                      <SpecList title="Lesson Topics" items={product.specs.lessons} accentColor={accentColor} />
+                      <div style={{ marginTop: 8, padding: "10px 12px", background: "rgba(0,229,255,0.06)", borderLeft: `3px solid ${accentColor}`, borderRadius: 4, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}>
+                        ✓ All {product.specs.lessons.length} video lessons + project file + sample pack are downloadable from your Account immediately after purchase.
+                      </div>
+                    </>
+                  )}
+                  {product.specs.samplePack && <SpecList title="Sample Pack" items={product.specs.samplePack} accentColor={accentColor} />}
+                  {product.specs.templates && <SpecList title="Templates Included" items={product.specs.templates} accentColor={accentColor} />}
+                  {product.specs.includes && <SpecList title="Project Includes" items={product.specs.includes} accentColor={accentColor} />}
+                  {product.specs.plugins && <SpecList title="Plugins Needed" items={product.specs.plugins} accentColor={accentColor} />}
+                  {product.specs.notes && (
+                    <div style={{ marginTop: 14 }}>
+                      {product.specs.notes.map((note, i) => (
+                        <div key={i} style={{ ...body, fontSize: 13, fontStyle: "italic", color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>* {note}</div>
+                      ))}
+                    </div>
+                  )}
                 </div>
+                </Accordion>
               )}
 
-              {/* SEO tags pills (replaces generic trust pills) */}
-              {product.seoTags && product.seoTags.length > 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 8,
-                    marginBottom: 24,
-                  }}
-                >
-                  {product.seoTags.map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                        fontSize: 11,
-                        fontWeight: 500,
-                        color: "rgba(255,255,255,0.7)",
-                        background: `rgba(${accentRgba},0.06)`,
-                        border: `1px solid rgba(${accentRgba},0.2)`,
-                        padding: "5px 12px",
-                        borderRadius: 20,
-                        cursor: "default",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              {/* Demo loops — compact 2+2+1 grid (Steven 2026-06-08) */}
+              {product.audioLoops?.length > 0 && (
+                <div style={{ marginBottom: 22, marginTop: 18 }}>
+                  <div style={{
+                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                    fontWeight: 700, fontSize: 11, letterSpacing: "0.22em",
+                    textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 8,
+                  }}>
+                    Listen to {product.audioLoops.length} loops from the pack
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                    {product.audioLoops.map((loop, idx) => {
+                      const loopId = `${product.id}__loop-${idx}`;
+                      const isThisLoop = currentTrack?.id === loopId;
+                      const isThisLoopPlaying = isThisLoop && isPlaying;
+                      const isLastOdd = product.audioLoops.length % 2 === 1 && idx === product.audioLoops.length - 1;
+                      return (
+                        <button
+                          key={loopId}
+                          onClick={() => {
+                            if (isThisLoopPlaying) pauseTrack();
+                            else playTrack({ id: loopId, title: loop.title, subtitle: product.name, audioUrl: loop.audioUrl, coverUrl: product.image });
+                          }}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 8,
+                            padding: "7px 10px",
+                            background: isThisLoopPlaying ? `rgba(${accentRgba},0.10)` : "rgba(255,255,255,0.02)",
+                            border: `1px solid rgba(${accentRgba},${isThisLoopPlaying ? 0.3 : 0.08})`,
+                            borderRadius: 8, color: "#fff",
+                            fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                            fontSize: 12, cursor: "pointer", textAlign: "left",
+                            transition: "background 0.15s",
+                            ...(isLastOdd ? { gridColumn: "1 / -1", justifySelf: "center", width: "calc(50% - 3px)" } : {}),
+                          }}
+                          aria-label={isThisLoopPlaying ? `Pause ${loop.title}` : `Play ${loop.title}`}
+                        >
+                          <span style={{
+                            display: "inline-flex", alignItems: "center", justifyContent: "center",
+                            width: 22, height: 22, borderRadius: "50%", background: accentColor, flexShrink: 0,
+                          }}>
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="#000">
+                              {isThisLoopPlaying
+                                ? <><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></>
+                                : <path d="M8 5v14l11-7z" />}
+                            </svg>
+                          </span>
+                          <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{loop.title}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
 
@@ -878,101 +849,6 @@ export default function ProductPage() {
                 <TrustPill text="Made In-House" accentColor={accentColor} accentRgba={accentRgba} />
                 <TrustPill text="Instant Download" accentColor={accentColor} accentRgba={accentRgba} />
               </div>
-
-              {/* Description — collapsible accordion. Default open so SEO crawlers
-                  + first-time visitors see the copy immediately, Steven 2026-06-07. */}
-              <Accordion title="Description" defaultOpen accentColor={accentColor} accentRgba={accentRgba}>
-                <p style={{ ...body, margin: 0 }}>{product.description}</p>
-              </Accordion>
-
-              {/* Specs — collapsible accordion */}
-              {product.specs && (
-                <Accordion title="Specs" accentColor={accentColor} accentRgba={accentRgba}>
-                <div
-                  style={{
-                    marginTop: 0,
-                    padding: 0,
-                    background: "transparent",
-                    border: "none",
-                    borderRadius: 0,
-                  }}
-                >
-                  {/* Header removed — accordion title already says "Specs" */}
-
-                  {/* DAW / BPM / Key / Length / Channels — single-line items */}
-                  {product.specs.daw && (
-                    <SpecLine label="DAW" value={product.specs.daw} accentRgba={accentRgba} />
-                  )}
-                  {product.specs.bpm && (
-                    <SpecLine label="BPM" value={String(product.specs.bpm)} accentRgba={accentRgba} />
-                  )}
-                  {product.specs.key && (
-                    <SpecLine label="Key" value={product.specs.key} accentRgba={accentRgba} />
-                  )}
-                  {product.specs.length && (
-                    <SpecLine label="Length" value={product.specs.length} accentRgba={accentRgba} />
-                  )}
-                  {product.specs.channels && (
-                    <SpecLine label="Channels" value={product.specs.channels} accentRgba={accentRgba} />
-                  )}
-
-                  {/* List sections */}
-                  {product.specs.whatYouGet && (
-                    <SpecList title="What You Get" items={product.specs.whatYouGet} accentColor={accentColor} />
-                  )}
-                  {product.specs.lessons && (
-                    <>
-                      <SpecList title="Lesson Topics" items={product.specs.lessons} accentColor={accentColor} />
-                      <div
-                        style={{
-                          marginTop: 8,
-                          padding: "10px 12px",
-                          background: "rgba(0,229,255,0.06)",
-                          borderLeft: `3px solid ${accentColor}`,
-                          borderRadius: 4,
-                          fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                          fontSize: 13,
-                          color: "rgba(255,255,255,0.75)",
-                          lineHeight: 1.5,
-                        }}
-                      >
-                        ✓ All {product.specs.lessons.length} video lessons + project file + sample pack are downloadable from your Account immediately after purchase.
-                      </div>
-                    </>
-                  )}
-                  {product.specs.samplePack && (
-                    <SpecList title="Sample Pack" items={product.specs.samplePack} accentColor={accentColor} />
-                  )}
-                  {product.specs.templates && (
-                    <SpecList title="Templates Included" items={product.specs.templates} accentColor={accentColor} />
-                  )}
-                  {product.specs.includes && (
-                    <SpecList title="Project Includes" items={product.specs.includes} accentColor={accentColor} />
-                  )}
-                  {product.specs.plugins && (
-                    <SpecList title="Plugins Needed" items={product.specs.plugins} accentColor={accentColor} />
-                  )}
-                  {product.specs.notes && (
-                    <div style={{ marginTop: 14 }}>
-                      {product.specs.notes.map((note, i) => (
-                        <div
-                          key={i}
-                          style={{
-                            ...body,
-                            fontSize: 13,
-                            fontStyle: "italic",
-                            color: "rgba(255,255,255,0.5)",
-                            marginBottom: 4,
-                          }}
-                        >
-                          * {note}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                </Accordion>
-              )}
 
               {/* ── Price + Add to Cart (below specs) ── */}
               <div style={{ marginTop: 32, paddingTop: 24, borderTop: `1px solid rgba(${accentRgba},0.15)` }}>
@@ -1057,6 +933,23 @@ export default function ProductPage() {
                 }}>
                   Instant email delivery · Lifetime re-downloads · Royalty-free
                 </div>
+
+                {/* SEO tags — bottom of page (Steven 2026-06-08) */}
+                {product.seoTags && product.seoTags.length > 0 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 20, justifyContent: "center" }}>
+                    {product.seoTags.map((tag) => (
+                      <span key={tag} style={{
+                        fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
+                        fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.5)",
+                        background: `rgba(${accentRgba},0.04)`,
+                        border: `1px solid rgba(${accentRgba},0.12)`,
+                        padding: "4px 10px", borderRadius: 20,
+                      }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

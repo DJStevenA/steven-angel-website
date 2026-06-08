@@ -119,15 +119,7 @@ export default function CheckoutV2Page() {
     return localStorage.getItem("shop_active_coupon") || "";
   });
   const [email, setEmail] = useState(user?.email || "");
-  const [billing, setBilling] = useState({
-    country: "US",
-    firstName: "",
-    lastName: "",
-    address: "",
-    apartment: "",
-    postalCode: "",
-    city: "",
-  });
+  const [billingCountry, setBillingCountry] = useState("US");
   const [method, setMethod] = useState("card"); // 'card' (Airwallex) or 'paypal'
   const [payNowError, setPayNowError] = useState(null);
   const [isMobile, setIsMobile] = useState(
@@ -213,7 +205,7 @@ export default function CheckoutV2Page() {
         try {
           const ap = Airwallex.createElement("applePayButton", {
             intent_id: intent.intentId, client_secret: intent.clientSecret,
-            countryCode: billing.country || "US", style: { type: "buy", theme: "black", height: 44 },
+            countryCode: billingCountry || "US", style: { type: "buy", theme: "black", height: 44 },
           });
           ap.mount(expressApplePayRef.current);
           expressInstancesRef.current.applePay = ap;
@@ -223,7 +215,7 @@ export default function CheckoutV2Page() {
         try {
           const gp = Airwallex.createElement("googlePayButton", {
             intent_id: intent.intentId, client_secret: intent.clientSecret,
-            countryCode: billing.country || "US",
+            countryCode: billingCountry || "US",
             buttonType: "buy", buttonColor: "black", height: 44,
           });
           gp.mount(expressGooglePayRef.current);
@@ -473,73 +465,19 @@ export default function CheckoutV2Page() {
             </label>
           </section>
 
-          {/* Billing address */}
+          {/* Country (needed for Apple Pay / Google Pay) */}
           <section style={{ marginBottom: 24 }}>
-            <h3 style={sectionTitle}>Billing address</h3>
-
-            <div style={{ marginBottom: 12 }}>
-              <label style={labelStyle} htmlFor="cv2-country">Country</label>
-              <select
-                id="cv2-country"
-                value={billing.country}
-                onChange={(e) => setBilling((b) => ({ ...b, country: e.target.value }))}
-                style={inputStyle}
-              >
-                {COUNTRIES.map(([code, name]) => (
-                  <option key={code} value={code}>{name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
-              <div>
-                <label style={labelStyle} htmlFor="cv2-first">First name</label>
-                <input id="cv2-first" type="text" autoComplete="given-name"
-                  value={billing.firstName}
-                  onChange={(e) => setBilling((b) => ({ ...b, firstName: e.target.value }))}
-                  style={inputStyle} />
-              </div>
-              <div>
-                <label style={labelStyle} htmlFor="cv2-last">Last name</label>
-                <input id="cv2-last" type="text" autoComplete="family-name"
-                  value={billing.lastName}
-                  onChange={(e) => setBilling((b) => ({ ...b, lastName: e.target.value }))}
-                  style={inputStyle} />
-              </div>
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label style={labelStyle} htmlFor="cv2-address">Address</label>
-              <input id="cv2-address" type="text" autoComplete="street-address"
-                value={billing.address}
-                onChange={(e) => setBilling((b) => ({ ...b, address: e.target.value }))}
-                style={inputStyle} />
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label style={labelStyle} htmlFor="cv2-apt">Apartment, suite, etc. (optional)</label>
-              <input id="cv2-apt" type="text" autoComplete="address-line2"
-                value={billing.apartment}
-                onChange={(e) => setBilling((b) => ({ ...b, apartment: e.target.value }))}
-                style={inputStyle} />
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              <div>
-                <label style={labelStyle} htmlFor="cv2-postal">Postal code (optional)</label>
-                <input id="cv2-postal" type="text" autoComplete="postal-code"
-                  value={billing.postalCode}
-                  onChange={(e) => setBilling((b) => ({ ...b, postalCode: e.target.value }))}
-                  style={inputStyle} />
-              </div>
-              <div>
-                <label style={labelStyle} htmlFor="cv2-city">City</label>
-                <input id="cv2-city" type="text" autoComplete="address-level2"
-                  value={billing.city}
-                  onChange={(e) => setBilling((b) => ({ ...b, city: e.target.value }))}
-                  style={inputStyle} />
-              </div>
-            </div>
+            <label style={labelStyle} htmlFor="cv2-country">Country</label>
+            <select
+              id="cv2-country"
+              value={billingCountry}
+              onChange={(e) => setBillingCountry(e.target.value)}
+              style={inputStyle}
+            >
+              {COUNTRIES.map(([code, name]) => (
+                <option key={code} value={code}>{name}</option>
+              ))}
+            </select>
           </section>
 
           {/* Bottom action — Pay Now (Airwallex) OR PayPal Smart Button.
