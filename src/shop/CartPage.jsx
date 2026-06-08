@@ -239,52 +239,35 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* 1. Check out button */}
-            <button
-              type="button"
-              onClick={() => {
-                try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch {}
-                navigate("/shop/checkout");
-              }}
-              style={{
-                width: "100%", padding: "18px 24px",
-                background: CYAN, color: "#000",
-                border: "none", borderRadius: 8,
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 800, fontSize: 16, letterSpacing: "0.18em",
-                textTransform: "uppercase", cursor: "pointer",
-                boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
-                marginBottom: 10,
-              }}
-            >
-              Check out — ${total.toFixed(2)}
-            </button>
-
-            {/* 2. PayPal button (direct to PayPal auth) */}
+            {/* PayPal Smart Buttons — instant cart checkout, no email gate.
+                Steven 2026-06-07 evening: direct PayPal popup, payer email
+                comes from PayPal after capture (cart-anon endpoint). */}
             <CartCheckoutButton
               productIds={productIds}
               couponCode={couponCode}
               onSuccess={handleSuccess}
             />
 
-            {/* 3. Other payment options (small link to Airwallex page) */}
+            {/* Check Out → /shop/checkout-v2 — full checkout with
+                Apple Pay + Google Pay + card + Klarna + PayPal in one page.
+                Steven 2026-06-07 night flow. */}
             <button
               type="button"
               onClick={() => {
-                try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch {}
-                navigate("/shop/checkout");
+                try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
+                navigate("/shop/checkout-v2");
               }}
               style={{
-                width: "100%", padding: "10px",
-                background: "transparent", color: "rgba(255,255,255,0.5)",
-                border: "none", borderRadius: 0,
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 500, fontSize: 12,
-                cursor: "pointer", textDecoration: "underline",
-                marginTop: 4,
+                width: "100%", padding: "16px 24px", marginTop: 12,
+                background: CYAN, color: "#000",
+                border: "none", borderRadius: 8,
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 800, fontSize: 15, letterSpacing: "0.18em",
+                textTransform: "uppercase", cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(0,229,255,0.18)",
               }}
             >
-              Other payment options
+              Check out — ${total.toFixed(2)}
             </button>
 
             {/* Trust signals — Steven 2026-06-07 evening */}
