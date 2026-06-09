@@ -313,26 +313,12 @@ export default function CartPage() {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 gap: 10, flexWrap: "wrap", marginBottom: 10,
               }}>
-                {[
-                  { name: "VISA", bg: "#1a1f71", color: "#fff" },
-                  { name: "MC", bg: "#fff", color: "#000", subtitle: "Mastercard" },
-                  { name: "AMEX", bg: "#016fd0", color: "#fff" },
-                  { name: "PayPal", bg: "#003087", color: "#fff", italic: true },
-                  { name: "Pay", bg: "#000", color: "#fff" },
-                  { name: "G Pay", bg: "#fff", color: "#5f6368" },
-                ].map(({ name, bg, color, italic }) => (
-                  <span key={name} style={{
-                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    padding: "3px 8px", minWidth: 40, height: 22,
-                    background: bg, color, borderRadius: 3,
-                    fontFamily: italic ? "Georgia, serif" : "system-ui, sans-serif",
-                    fontStyle: italic ? "italic" : "normal",
-                    fontWeight: 800, fontSize: 10, letterSpacing: "0.02em",
-                    border: bg === "#fff" ? "1px solid rgba(0,0,0,0.08)" : "none",
-                  }}>
-                    {name}
-                  </span>
-                ))}
+                <img src="https://cdn.brandfolder.io/KGT2DTA4/at/8vbr53cc46qd9hbv-visa.svg" alt="Visa" height="22" style={{ height: 22, borderRadius: 3 }} />
+                <img src="https://cdn.brandfolder.io/KGT2DTA4/at/nbhf4m638kk6b9g4-mastercard.svg" alt="Mastercard" height="22" style={{ height: 22, borderRadius: 3 }} />
+                <img src="https://cdn.brandfolder.io/KGT2DTA4/at/rh7krq4p-amex.svg" alt="Amex" height="22" style={{ height: 22, borderRadius: 3 }} />
+                <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" height="22" style={{ height: 22, borderRadius: 3 }} />
+                <img src="https://developer.apple.com/assets/elements/icons/apple-pay/apple-pay.svg" alt="Apple Pay" height="22" style={{ height: 22, background: "#000", borderRadius: 3, padding: "2px 6px" }} />
+                <img src="https://developers.google.com/static/pay/api/images/brand-guidelines/google-pay-mark.png" alt="Google Pay" height="22" style={{ height: 22, borderRadius: 3 }} />
               </div>
 
               {/* SSL/Encryption micro line */}
