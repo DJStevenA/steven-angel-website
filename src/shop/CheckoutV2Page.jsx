@@ -120,8 +120,6 @@ export default function CheckoutV2Page() {
   });
   const [email, setEmail] = useState(user?.email || "");
   const [billingCountry, setBillingCountry] = useState("US");
-  const [method, setMethod] = useState("card"); // 'card' (Airwallex) or 'paypal'
-  const [payNowError, setPayNowError] = useState(null);
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.innerWidth < 980 : false
   );
@@ -140,11 +138,9 @@ export default function CheckoutV2Page() {
   const expressApplePayRef = useRef(null);
   const expressGooglePayRef = useRef(null);
   const dropInContainerRef = useRef(null);
-  const paypalContainerRef = useRef(null);
 
   const expressInstancesRef = useRef({});
   const dropInElementRef = useRef(null);
-  const paypalInstanceRef = useRef(null);
   const intentRef = useRef(null);
 
   // ── Setup: scroll + title + analytics + body bg ────────────────────────────
@@ -223,12 +219,16 @@ export default function CheckoutV2Page() {
         } catch (e) { console.error("[checkout-v2] Google Pay init:", e); }
       }
 
-      // Drop-in (main card / methods widget)
+      // Drop-in — Steven 2026-06-09: configured for CARD ONLY.
+      // Apple Pay / Google Pay / PayPal live in the Express row above.
+      // The `methods: ['card']` config tells the Drop-in to render only
+      // the card form, suppressing the internal wallet/Klarna buttons.
       if (dropInContainerRef.current && !dropInElementRef.current) {
         const dropIn = Airwallex.createElement("dropIn", {
           intent_id: intent.intentId,
           client_secret: intent.clientSecret,
           currency: intent.currency,
+          methods: ["card"],
         });
         dropIn.mount(dropInContainerRef.current);
         dropInElementRef.current = dropIn;
@@ -277,7 +277,9 @@ export default function CheckoutV2Page() {
     }
   }
 
-  // ── Mount PayPal in PayPal section + Express row ──────────────────────────
+  // ── Mount PayPal Smart Button in the Express row only ────────────────────
+  // Steven 2026-06-09: PayPal lives ONLY in the Express row at the top.
+  // Removed the standalone PayPal radio section below the card form.
   useEffect(() => {
     if (productIds.length === 0) return;
     let cancelled = false;
@@ -285,7 +287,6 @@ export default function CheckoutV2Page() {
       const paypal = await preloadPayPalSdk();
       if (!paypal || cancelled) return;
 
-      // Express row PayPal button (small)
       if (expressPayPalRef.current && !expressInstancesRef.current.paypal) {
         try {
           const ppExpress = paypal.Buttons({
@@ -296,17 +297,6 @@ export default function CheckoutV2Page() {
           ppExpress.render(expressPayPalRef.current);
           expressInstancesRef.current.paypal = ppExpress;
         } catch (e) { console.error("[checkout-v2] Express PayPal:", e); }
-      }
-
-      // Main PayPal section
-      if (paypalContainerRef.current && !paypalInstanceRef.current) {
-        const ppMain = paypal.Buttons({
-          style: { layout: "vertical", color: "gold", shape: "rect", label: "paypal", height: 48 },
-          createOrder: () => paypalCreateOrder(),
-          onApprove: (data) => paypalOnApprove(data),
-        });
-        ppMain.render(paypalContainerRef.current);
-        paypalInstanceRef.current = ppMain;
       }
     }
     setupPayPal();
@@ -346,31 +336,10 @@ export default function CheckoutV2Page() {
   }
 
   // ── Pay Now (Airwallex submit) ────────────────────────────────────────────
-  // Email is validated AT THIS POINT (not before) per Steven's rule —
-  // never gate UI behind email; only require it when the customer actually
-  // tries to pay (we need it to send the download link).
-  // The Airwallex Drop-in has its own internal Pay button; the SDK doesn't
-  // expose a public submit() method, so the custom Pay Now scrolls to it
-  // to direct the user's eye. (Upgrade path: Embedded Card Element which
-  // does support custom submit.)
-  const handlePayNow = () => {
-    if (!emailValid) {
-      setPayNowError("Please enter your email above — we send the download link to that address.");
-      // Scroll the email field into view + focus it so the user lands on
-      // exactly what's missing. Steven 2026-06-09: form stays open, the
-      // error only fires when they actually click Pay.
-      const emailEl = document.getElementById("cv2-email");
-      if (emailEl) {
-        emailEl.scrollIntoView({ behavior: "smooth", block: "center" });
-        setTimeout(() => emailEl.focus(), 350);
-      }
-      return;
-    }
-    setPayNowError(null);
-    if (dropInContainerRef.current) {
-      dropInContainerRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
+  // handlePayNow removed 2026-06-09 — no more custom black Pay Now button.
+  // The Airwallex Drop-in has its own purple Pay button which is the sole
+  // submit path for the card form. Express row wallets (PayPal/AP/GP) each
+  // have their own submit baked in.
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -426,7 +395,7 @@ export default function CheckoutV2Page() {
               type="email"
               autoComplete="email"
               value={email}
-              onChange={(e) => { setEmail(e.target.value); setPayNowError(null); }}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@email.com"
               style={{
                 ...inputStyle,
@@ -447,99 +416,40 @@ export default function CheckoutV2Page() {
             )}
           </section>
 
-          {/* Payment method selector */}
+          {/* Credit Card — single section, no radio toggle.
+              Steven 2026-06-09: PayPal, Apple Pay, Google Pay are all in the
+              Express row above. This section is ONLY credit card. The
+              Airwallex Drop-in handles the card form + its own submit
+              button. No black "Pay Now" — that was confusing duplicate.
+              Wallets-inside-Drop-in (AP/GP/Klarna) are removed via the
+              `applepay: { disabled: true }` etc. config in mountAirwallexElements. */}
           <section style={{ marginBottom: 24 }}>
-            <h3 style={sectionTitle}>Payment</h3>
-
-            {/* Card / wallets (Airwallex) */}
-            <label
-              htmlFor="cv2-method-card"
-              style={{
-                display: "block",
-                border: method === "card" ? "1px solid #111" : "1px solid #d1d5db",
-                borderRadius: 6,
-                padding: "14px 16px",
-                marginBottom: 10,
-                cursor: "pointer",
-                background: method === "card" ? "#fafafa" : "#fff",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <input
-                  id="cv2-method-card"
-                  type="radio"
-                  name="cv2-method"
-                  value="card"
-                  checked={method === "card"}
-                  onChange={() => setMethod("card")}
-                />
-                <span style={{ fontWeight: 500, fontSize: 14 }}>Credit card / Apple Pay / Google Pay / Klarna</span>
-              </div>
-              {method === "card" && (
-                <div style={{ marginTop: 12 }}>
-                  {/* Steven 2026-06-09 explicit: form fully open, NOTHING
-                      blocked or visually warned about up front. The email
-                      validation happens at submit time only — see handlePayNow
-                      + dropIn.on("success") email-recovery flow. */}
-                  <div ref={dropInContainerRef} style={{ minHeight: 220, position: "relative" }}>
-                    {/* Skeleton — visible until Airwallex Drop-in iframe replaces
-                        the inner DOM. Drop-in mount replaces children of the
-                        container, so this disappears automatically. */}
-                    <div style={{
-                      position: "absolute", inset: 0,
-                      display: "flex", flexDirection: "column", gap: 10,
-                      padding: 14,
-                      pointerEvents: "none",
-                    }}>
-                      <style>{`@keyframes cv2Pulse{0%{opacity:.55}50%{opacity:.85}100%{opacity:.55}}`}</style>
-                      <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, background: "#f3f4f6", borderRadius: 4 }} />
-                      <div style={{ display: "flex", gap: 10 }}>
-                        <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, flex: 1, background: "#f3f4f6", borderRadius: 4 }} />
-                        <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, width: 110, background: "#f3f4f6", borderRadius: 4 }} />
-                      </div>
-                      <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, background: "#f3f4f6", borderRadius: 4 }} />
-                      <div style={{ textAlign: "center", marginTop: 4, fontSize: 11, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
-                        Loading secure payment form…
-                      </div>
-                    </div>
-                  </div>
+            <h3 style={sectionTitle}>Credit Card</h3>
+            <div ref={dropInContainerRef} style={{ minHeight: 220, position: "relative", border: "1px solid #e5e7eb", borderRadius: 6, padding: 0 }}>
+              {/* Skeleton — visible until Airwallex Drop-in iframe replaces
+                  the inner DOM. Drop-in mount replaces children of the
+                  container, so this disappears automatically. */}
+              <div style={{
+                position: "absolute", inset: 0,
+                display: "flex", flexDirection: "column", gap: 10,
+                padding: 14,
+                pointerEvents: "none",
+              }}>
+                <style>{`@keyframes cv2Pulse{0%{opacity:.55}50%{opacity:.85}100%{opacity:.55}}`}</style>
+                <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, background: "#f3f4f6", borderRadius: 4 }} />
+                <div style={{ display: "flex", gap: 10 }}>
+                  <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, flex: 1, background: "#f3f4f6", borderRadius: 4 }} />
+                  <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, width: 110, background: "#f3f4f6", borderRadius: 4 }} />
                 </div>
-              )}
-            </label>
-
-            {/* PayPal */}
-            <label
-              htmlFor="cv2-method-paypal"
-              style={{
-                display: "block",
-                border: method === "paypal" ? "1px solid #111" : "1px solid #d1d5db",
-                borderRadius: 6,
-                padding: "14px 16px",
-                cursor: "pointer",
-                background: method === "paypal" ? "#fafafa" : "#fff",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <input
-                  id="cv2-method-paypal"
-                  type="radio"
-                  name="cv2-method"
-                  value="paypal"
-                  checked={method === "paypal"}
-                  onChange={() => setMethod("paypal")}
-                />
-                <span style={{ fontWeight: 500, fontSize: 14, flex: 1 }}>PayPal</span>
-                <img
-                  src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png"
-                  alt="PayPal"
-                  height="20"
-                  style={{ height: 20, display: "block" }}
-                />
+                <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, background: "#f3f4f6", borderRadius: 4 }} />
+                <div style={{ textAlign: "center", marginTop: 4, fontSize: 11, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
+                  Loading secure payment form…
+                </div>
               </div>
-            </label>
+            </div>
           </section>
 
-          {/* Country (needed for Apple Pay / Google Pay) */}
+          {/* Country (needed for Apple Pay / Google Pay rendering up top) */}
           <section style={{ marginBottom: 24 }}>
             <label style={labelStyle} htmlFor="cv2-country">Country</label>
             <select
@@ -554,50 +464,8 @@ export default function CheckoutV2Page() {
             </select>
           </section>
 
-          {/* Bottom action — Pay Now (Airwallex) OR PayPal Smart Button.
-              When PayPal radio is selected, the official PayPal button
-              replaces our custom Pay Now in this same slot. */}
-          <div style={{ position: "relative" }}>
-            {/* PayPal Smart Button container (visible only when PayPal selected) */}
-            <div
-              ref={paypalContainerRef}
-              style={{ display: method === "paypal" ? "block" : "none", minHeight: 48 }}
-            />
-
-            {/* Custom Pay Now (visible only when card method selected) */}
-            {method === "card" && (
-              <button
-                type="button"
-                onClick={handlePayNow}
-                style={{
-                  width: "100%",
-                  padding: "16px 20px",
-                  fontSize: 15,
-                  fontFamily: "system-ui, -apple-system, sans-serif",
-                  fontWeight: 600,
-                  color: "#fff",
-                  background: "#111",
-                  border: "none",
-                  borderRadius: 6,
-                  cursor: "pointer",
-                  letterSpacing: "0.02em",
-                }}
-              >
-                Pay Now
-              </button>
-            )}
-          </div>
-
-          {/* Email error — shown only when user tries to Pay without a valid email */}
-          {payNowError && (
-            <div style={{
-              marginTop: 10, padding: "10px 14px",
-              background: "#fff4f4", border: "1px solid #f5b5b5",
-              borderRadius: 4, color: "#a01010", fontSize: 13,
-            }}>
-              {payNowError}
-            </div>
-          )}
+          {/* payNowError display removed — no more custom Pay Now button.
+              Airwallex Drop-in's own Pay button handles errors internally. */}
 
           {/* Trust signals — inline with payment (Baymard: +18% completion) */}
           <div style={{
