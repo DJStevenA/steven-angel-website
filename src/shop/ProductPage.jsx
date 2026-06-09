@@ -900,7 +900,12 @@ export default function ProductPage() {
                   <CartCheckoutButton
                     productIds={[product.id]}
                     couponCode={null}
-                    onSuccess={() => nav("/shop/thank-you")}
+                    onSuccess={(json) => {
+                      if (json?.token) {
+                        try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds: [product.id] })); } catch {}
+                      }
+                      nav("/shop/thank-you");
+                    }}
                   />
                 </div>
 

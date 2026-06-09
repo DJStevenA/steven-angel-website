@@ -468,8 +468,24 @@ export default function CheckoutV2Page() {
                 <span style={{ fontWeight: 500, fontSize: 14 }}>Credit card / Apple Pay / Google Pay / Klarna</span>
               </div>
               {method === "card" && (
-                <div style={{ marginTop: 12 }}>
+                <div style={{ marginTop: 12, position: "relative" }}>
                   <div ref={dropInContainerRef} style={{ minHeight: 200 }} />
+                  {/* Block payment when email is missing — prevent money-without-delivery */}
+                  {!emailValid && (
+                    <div
+                      onClick={() => document.getElementById("cv2-email")?.focus()}
+                      style={{
+                        position: "absolute", inset: 0, zIndex: 10,
+                        background: "rgba(255,255,255,0.85)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        borderRadius: 4, cursor: "pointer",
+                      }}
+                    >
+                      <span style={{ fontSize: 13, color: "#ef4444", fontWeight: 600, fontFamily: "system-ui, sans-serif" }}>
+                        ↑ Enter your email first
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
             </label>

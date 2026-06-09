@@ -67,7 +67,10 @@ export default function CartPage() {
   // comes from PayPal (cart-anon endpoint). Clear cart + go to thank-you on success.
   const productIds = cart.map((item) => item.id);
 
-  const handleSuccess = () => {
+  const handleSuccess = (json) => {
+    if (json?.token) {
+      try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds })); } catch {}
+    }
     clearCart();
     navigate("/shop/thank-you");
   };
