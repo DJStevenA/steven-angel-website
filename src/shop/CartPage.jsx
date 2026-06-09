@@ -49,19 +49,20 @@ export default function CartPage() {
     document.title = "Cart | Steven Angel Shop";
     preloadPayPalSdk();
 
-    // ── Prefetch checkout-v2 dependencies on idle ─────────────────────────
-    // Steven 2026-06-09: mobile users see Airwallex Drop-in load slowly
-    // because the SDK script (~250KB) + the iframe start downloading only
-    // AFTER they click "Other Payment Options" or PayPal succeeds. By the
-    // time they're on the cart page they're very likely to go to checkout
-    // next, so we warm the cache here. Three pieces:
-    //   1. Airwallex Elements SDK (~250KB JS)
-    //   2. CheckoutV2Page bundle (the React route component)
-    //   3. Pre-warm a HEAD request to api.airwallex.com (TLS handshake)
-    // Wrapped in requestIdleCallback so it never competes with cart paint.
-    const prefetchCheckoutDeps = () => {
+    // ── Pre-warm checkout-v2 on idle ──────────────────────────────────────
+    // Steven 2026-06-09: Drop-in feels slow even after prefetch. So we go
+    // further: while the user is browsing the cart we
+    //   (1) prefetch the Airwallex Elements SDK script
+    //   (2) prefetch the CheckoutV2Page React chunk
+    //   (3) PRE-CREATE the payment intent on the backend
+    //   (4) ALSO inject the SDK <script> tag right away so init can happen
+    // sessionStorage carries the warmed intent forward to checkout-v2 so
+    // it doesn't re-call the backend on mount.
+    let intentAbort = new AbortController();
+    const prewarmCheckout = () => {
       const head = document.head;
-      // Airwallex Elements SDK
+
+      // (1) Airwallex Elements SDK — fetch
       if (!document.querySelector('link[data-prefetch="awx-sdk"]')) {
         const l = document.createElement("link");
         l.rel = "prefetch";
@@ -71,29 +72,61 @@ export default function CartPage() {
         l.setAttribute("data-prefetch", "awx-sdk");
         head.appendChild(l);
       }
-      // CheckoutV2Page route bundle — Vite emits a CheckoutV2Page-<hash>.js
-      // chunk; scrape its URL from existing <link rel="modulepreload"> tags
-      // that Vite already wrote for other lazy routes (they all share the
-      // same hashed filename pattern).
+
+      // (1b) ALSO inject the script tag itself — this way window.Airwallex
+      // is ready by the time the user lands on checkout-v2. Idempotent: if
+      // it's already on the page (e.g. user came back) we skip.
+      if (!window.Airwallex && !document.querySelector('script[data-awx-script]')) {
+        const s = document.createElement("script");
+        s.src = "https://checkout.airwallex.com/assets/elements.bundle.min.js";
+        s.async = true;
+        s.setAttribute("data-awx-script", "1");
+        document.body.appendChild(s);
+      }
+
+      // (2) CheckoutV2Page route chunk via dynamic import
       try {
-        const cv2 = Array.from(document.querySelectorAll('link[rel="modulepreload"]'))
-          .map(el => el.href)
-          .find(h => /CheckoutV2Page-[A-Za-z0-9_-]+\.js$/.test(h));
-        // If not preloaded yet, manually trigger a fetch to warm the chunk.
-        // (Vite normally only emits modulepreload for current route, not
-        //  future navigations.)
-        if (!cv2) {
-          // Find any asset hash to construct the URL — easier approach:
-          // dynamic import the route component. React will lazy-resolve.
-          import(/* webpackChunkName: "checkout-v2" */ "./CheckoutV2Page.jsx").catch(() => {});
+        import("./CheckoutV2Page.jsx").catch(() => {});
+      } catch { /* noop */ }
+
+      // (3) Pre-create the Airwallex payment intent. Cache key includes the
+      // exact cart contents + active coupon so a cart change invalidates it.
+      try {
+        if (cart.length === 0) return;
+        const cacheKey = `awx_intent_${productIds.join(",")}_${couponCode || ""}`;
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          // 8-minute TTL — Airwallex intents expire after ~10min, leave buffer
+          if (parsed && parsed.savedAt && (Date.now() - parsed.savedAt) < 8 * 60 * 1000) {
+            return; // still fresh, no need to refetch
+          }
         }
+        fetch("https://ghost-backend-production-adb6.up.railway.app/shop/checkout/airwallex-cart-anon", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productIds, couponCode: couponCode || null }),
+          signal: intentAbort.signal,
+        })
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (!data) return;
+            sessionStorage.setItem(cacheKey, JSON.stringify({ ...data, savedAt: Date.now() }));
+          })
+          .catch(() => { /* aborted or network — fall back to checkout-v2's own fetch */ });
       } catch { /* noop */ }
     };
+
     const ric = window.requestIdleCallback || ((cb) => setTimeout(cb, 800));
     const cancelRic = window.cancelIdleCallback || clearTimeout;
-    const handle = ric(prefetchCheckoutDeps, { timeout: 2000 });
-    return () => { try { cancelRic(handle); } catch { /* noop */ } };
-  }, []);
+    const handle = ric(prewarmCheckout, { timeout: 2000 });
+    return () => {
+      try { cancelRic(handle); } catch { /* noop */ }
+      try { intentAbort.abort(); } catch { /* noop */ }
+    };
+    // Re-run if cart contents or coupon changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productIds.join(","), couponCode]);
 
   // Fire begin_checkout once when cart loads with items (analytics)
   useEffect(() => {
