@@ -58,10 +58,22 @@ export default function CartPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Bundle discount — Steven 2026-06-08 night: when cart has 3+ items,
+  // auto-apply 15% off each item. Shown as strikethrough per-item price +
+  // explicit "Bundle discount" line in totals. Does NOT stack with coupons
+  // (we use whichever is larger — both currently 15%).
+  const BUNDLE_THRESHOLD = 3;
+  const BUNDLE_PERCENT = 15;
+  const bundleActive = cart.length >= BUNDLE_THRESHOLD;
   const coupon = couponCode ? COUPONS_CLIENT[couponCode.toUpperCase()] : null;
+  const couponPercent = coupon?.percentOff || 0;
+  const effectivePercent = Math.max(bundleActive ? BUNDLE_PERCENT : 0, couponPercent);
   const subtotal = round2(cartTotal);
-  const discount = coupon ? round2(subtotal * (coupon.percentOff / 100)) : 0;
+  const discount = round2(subtotal * (effectivePercent / 100));
   const total = round2(subtotal - discount);
+  const discountLabel = bundleActive && effectivePercent === BUNDLE_PERCENT
+    ? `Bundle discount (${BUNDLE_PERCENT}% — 3+ items)`
+    : `Discount (${couponCode})`;
 
   // Steven 2026-06-07 evening: PayPal Smart Buttons render inline on the cart.
   // No redirect to /shop/checkout — click PayPal, popup opens, payer email
@@ -136,7 +148,11 @@ export default function CartPage() {
               padding: isMobile ? "12px 16px" : "16px 24px",
               marginBottom: 20,
             }}>
-              {cart.map((item, i) => (
+              {cart.map((item, i) => {
+                const itemDiscounted = bundleActive
+                  ? round2(item.price * (1 - BUNDLE_PERCENT / 100))
+                  : item.price;
+                return (
                 <div key={item.id} style={{
                   display: "flex", gap: 16, padding: "16px 0",
                   borderBottom: i < cart.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
@@ -174,13 +190,54 @@ export default function CartPage() {
                     </button>
                   </div>
                   <div style={{
-                    fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
-                    fontSize: isMobile ? 20 : 24, color: CYAN, whiteSpace: "nowrap",
+                    display: "flex", flexDirection: "column", alignItems: "flex-end",
+                    whiteSpace: "nowrap", lineHeight: 1.1,
                   }}>
-                    ${item.price}
+                    {bundleActive && (
+                      <span style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: isMobile ? 12 : 13,
+                        color: "rgba(255,255,255,0.4)",
+                        textDecoration: "line-through",
+                        marginBottom: 2,
+                      }}>
+                        ${item.price.toFixed(2)}
+                      </span>
+                    )}
+                    <span style={{
+                      fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+                      fontSize: isMobile ? 20 : 24, color: bundleActive ? "#84ffac" : CYAN,
+                    }}>
+                      ${itemDiscounted.toFixed(2)}
+                    </span>
                   </div>
                 </div>
-              ))}
+                );
+              })}
+
+              {/* Bundle nudge — appears 1 item shy of trigger to encourage adding */}
+              {!bundleActive && cart.length === BUNDLE_THRESHOLD - 1 && (
+                <div style={{
+                  marginTop: 4, padding: "10px 14px",
+                  background: "linear-gradient(90deg, rgba(132,255,172,0.10), rgba(0,229,255,0.08))",
+                  border: "1px dashed rgba(132,255,172,0.45)", borderRadius: 8,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12.5,
+                  color: "#a8ffc4", textAlign: "center",
+                }}>
+                  🎁 Add 1 more item to unlock <b>15% off everything</b>
+                </div>
+              )}
+              {bundleActive && (
+                <div style={{
+                  marginTop: 4, padding: "8px 14px",
+                  background: "rgba(132,255,172,0.08)",
+                  border: "1px solid rgba(132,255,172,0.35)", borderRadius: 8,
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 12.5,
+                  color: "#84ffac", textAlign: "center",
+                }}>
+                  ✓ Bundle discount active — 15% off each item
+                </div>
+              )}
             </div>
 
             {/* Clear cart — Steven 2026-06-08 night */}
@@ -226,14 +283,24 @@ export default function CartPage() {
               borderTop: "1px solid rgba(255,255,255,0.08)",
             }}>
               {discount > 0 && (
-                <div style={{
-                  display: "flex", justifyContent: "space-between",
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 14,
-                  color: CYAN, marginBottom: 8,
-                }}>
-                  <span>Discount ({couponCode})</span>
-                  <span>-${discount.toFixed(2)}</span>
-                </div>
+                <>
+                  <div style={{
+                    display: "flex", justifyContent: "space-between",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+                    color: "rgba(255,255,255,0.55)", marginBottom: 6,
+                  }}>
+                    <span>Subtotal</span>
+                    <span style={{ textDecoration: "line-through" }}>${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div style={{
+                    display: "flex", justifyContent: "space-between",
+                    fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+                    color: bundleActive ? "#84ffac" : CYAN, marginBottom: 8,
+                  }}>
+                    <span>{discountLabel}</span>
+                    <span>-${discount.toFixed(2)}</span>
+                  </div>
+                </>
               )}
               <div style={{
                 display: "flex", justifyContent: "space-between", alignItems: "baseline",
@@ -269,24 +336,26 @@ export default function CartPage() {
               onSuccess={handleSuccess}
             />
 
-            {/* ─── Secondary CTA — Other Payment Options ─── */}
-            <div style={{ textAlign: "center", marginTop: 14 }}>
-              <button
-                type="button"
-                onClick={() => {
-                  try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
-                  navigate("/shop/checkout-v2");
-                }}
-                style={{
-                  background: "none", border: "none", padding: "4px 6px",
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 13,
-                  color: "rgba(255,255,255,0.6)", cursor: "pointer",
-                  textDecoration: "underline", textUnderlineOffset: 3,
-                }}
-              >
-                Other Payment Options &rarr;
-              </button>
-            </div>
+            {/* ─── Secondary CTA — Other Payment Options (big button) ─── */}
+            <button
+              type="button"
+              onClick={() => {
+                try { localStorage.setItem("shop_active_coupon", couponCode || ""); } catch { /* noop */ }
+                navigate("/shop/checkout-v2");
+              }}
+              style={{
+                display: "block", width: "100%",
+                padding: "14px 22px", marginTop: 14,
+                background: "transparent",
+                border: "1px solid rgba(255,255,255,0.28)",
+                borderRadius: 8,
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 700, fontSize: 14, letterSpacing: "0.18em",
+                textTransform: "uppercase", color: "#fff", cursor: "pointer",
+              }}
+            >
+              Other Payment Options
+            </button>
 
             {/* ─── Credibility row ─── */}
             <div style={{
@@ -309,17 +378,19 @@ export default function CartPage() {
                 <span>Secure Payment via PayPal &amp; Airwallex</span>
               </div>
 
-              {/* Payment method logo strip */}
+              {/* Payment method logos — inline SVG so they NEVER 404.
+                  Steven 2026-06-09: previous CDN-hosted versions (brandfolder)
+                  returned 404 and showed broken images on the cart. */}
               <div style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
-                gap: 10, flexWrap: "wrap", marginBottom: 10,
+                gap: 8, flexWrap: "wrap", marginBottom: 10,
               }}>
-                <img src="https://cdn.brandfolder.io/KGT2DTA4/at/8vbr53cc46qd9hbv-visa.svg" alt="Visa" height="22" style={{ height: 22, borderRadius: 3 }} />
-                <img src="https://cdn.brandfolder.io/KGT2DTA4/at/nbhf4m638kk6b9g4-mastercard.svg" alt="Mastercard" height="22" style={{ height: 22, borderRadius: 3 }} />
-                <img src="https://cdn.brandfolder.io/KGT2DTA4/at/rh7krq4p-amex.svg" alt="Amex" height="22" style={{ height: 22, borderRadius: 3 }} />
-                <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" height="22" style={{ height: 22, borderRadius: 3 }} />
-                <img src="https://developer.apple.com/assets/elements/icons/apple-pay/apple-pay.svg" alt="Apple Pay" height="22" style={{ height: 22, background: "#000", borderRadius: 3, padding: "2px 6px" }} />
-                <img src="https://developers.google.com/static/pay/api/images/brand-guidelines/google-pay-mark.png" alt="Google Pay" height="22" style={{ height: 22, borderRadius: 3 }} />
+                <PayLogoVisa />
+                <PayLogoMastercard />
+                <PayLogoAmex />
+                <PayLogoPayPal />
+                <PayLogoApplePay />
+                <PayLogoGooglePay />
               </div>
 
               {/* SSL/Encryption micro line */}
@@ -415,5 +486,89 @@ export default function CartPage() {
         )}
       </main>
     </div>
+  );
+}
+
+// ── Payment method logos ────────────────────────────────────────────────────
+// Inline SVG so they're zero-byte over the wire (bundled in JS) and can never
+// 404 the way the previous CDN-hosted images did. Steven 2026-06-09.
+
+const LOGO_BOX = {
+  display: "inline-flex", alignItems: "center", justifyContent: "center",
+  height: 24, padding: "0 6px", borderRadius: 3,
+  border: "1px solid rgba(255,255,255,0.12)",
+  background: "#fff",
+  boxSizing: "border-box",
+};
+
+function PayLogoVisa() {
+  return (
+    <span style={LOGO_BOX} aria-label="Visa" title="Visa">
+      <svg width="38" height="14" viewBox="0 0 48 16" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="13" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="14" fontStyle="italic" fill="#1A1F71" letterSpacing="0">VISA</text>
+      </svg>
+    </span>
+  );
+}
+
+function PayLogoMastercard() {
+  return (
+    <span style={LOGO_BOX} aria-label="Mastercard" title="Mastercard">
+      <svg width="32" height="20" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="10" r="7" fill="#EB001B" />
+        <circle cx="20" cy="10" r="7" fill="#F79E1B" />
+        <path d="M16 4.8a7 7 0 010 10.4 7 7 0 010-10.4z" fill="#FF5F00" />
+      </svg>
+    </span>
+  );
+}
+
+function PayLogoAmex() {
+  return (
+    <span style={{ ...LOGO_BOX, background: "#016FD0" }} aria-label="American Express" title="American Express">
+      <svg width="30" height="14" viewBox="0 0 40 14" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="11" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="11" fill="#fff" letterSpacing="0.5">AMEX</text>
+      </svg>
+    </span>
+  );
+}
+
+function PayLogoPayPal() {
+  return (
+    <span style={LOGO_BOX} aria-label="PayPal" title="PayPal">
+      <svg width="48" height="14" viewBox="0 0 60 16" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="13" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="13" fontStyle="italic" fill="#003087">Pay</text>
+        <text x="22" y="13" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="13" fontStyle="italic" fill="#009CDE">Pal</text>
+      </svg>
+    </span>
+  );
+}
+
+function PayLogoApplePay() {
+  return (
+    <span style={{ ...LOGO_BOX, background: "#000" }} aria-label="Apple Pay" title="Apple Pay">
+      <svg width="42" height="16" viewBox="0 0 52 18" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+        {/* Apple logo */}
+        <path d="M8.4 3.2c.5-.6.8-1.4.7-2.2-.7 0-1.5.4-2 1-.5.5-.9 1.3-.7 2.1.7 0 1.5-.4 2-.9zm.6 1c-1.1-.1-2 .6-2.6.6-.6 0-1.4-.6-2.3-.6-1.2 0-2.3.7-2.9 1.8-1.2 2.2-.3 5.4.9 7.2.6.9 1.3 1.8 2.2 1.8.9 0 1.2-.6 2.3-.6 1.1 0 1.4.6 2.3.5.9 0 1.6-.9 2.2-1.7.7-1 1-2 1-2.1-.1 0-1.9-.7-1.9-2.8 0-1.8 1.4-2.6 1.5-2.7-.9-1.2-2.1-1.4-2.7-1.4z" />
+        {/* "Pay" text */}
+        <text x="16" y="13" fontFamily="-apple-system, Helvetica Neue, sans-serif" fontWeight="600" fontSize="11" fill="#fff">Pay</text>
+      </svg>
+    </span>
+  );
+}
+
+function PayLogoGooglePay() {
+  return (
+    <span style={LOGO_BOX} aria-label="Google Pay" title="Google Pay">
+      <svg width="46" height="16" viewBox="0 0 60 18" xmlns="http://www.w3.org/2000/svg">
+        {/* G */}
+        <path d="M9.5 9c0-.5-.04-1-.13-1.46H5v2.76h2.55a2.18 2.18 0 01-.94 1.44v1.2h1.52A4.62 4.62 0 009.5 9z" fill="#4285F4" />
+        <path d="M5 13.5c1.27 0 2.34-.42 3.13-1.14l-1.52-1.2c-.42.28-.96.45-1.6.45-1.24 0-2.28-.84-2.66-1.96H.78v1.24A4.7 4.7 0 005 13.5z" fill="#34A853" />
+        <path d="M2.34 9.65a2.78 2.78 0 010-1.79V6.62H.78A4.65 4.65 0 00.3 8.75c0 .76.18 1.48.48 2.13l1.56-1.23z" fill="#FBBC04" />
+        <path d="M5 5.9c.7 0 1.32.24 1.81.72L8.16 5.2A4.5 4.5 0 005 4 4.7 4.7 0 00.78 6.62l1.56 1.24A2.8 2.8 0 015 5.9z" fill="#EA4335" />
+        {/* "Pay" */}
+        <text x="14" y="12" fontFamily="Arial, sans-serif" fontWeight="600" fontSize="11" fill="#5F6368">Pay</text>
+      </svg>
+    </span>
   );
 }

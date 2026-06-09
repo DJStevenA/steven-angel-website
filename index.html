@@ -37,6 +37,12 @@
     <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
     <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
     <link rel="preconnect" href="https://ghost-backend-production-adb6.up.railway.app" crossorigin />
+    <!-- Checkout SDK preconnects — saves DNS+TLS handshake on /shop/checkout-v2.
+         Steven 2026-06-09: speed-up for checkout-v2. -->
+    <link rel="preconnect" href="https://checkout.airwallex.com" crossorigin />
+    <link rel="preconnect" href="https://www.paypal.com" crossorigin />
+    <link rel="preconnect" href="https://www.paypalobjects.com" crossorigin />
+    <link rel="dns-prefetch" href="https://api.airwallex.com" />
 
     <!-- DNS prefetch for non-critical 3rd-party domains -->
     <link rel="dns-prefetch" href="https://www.youtube.com" />
