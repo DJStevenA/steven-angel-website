@@ -1,15 +1,14 @@
 /**
- * /shop/cart — on-brand cart with full credibility stack.
+ * /shop/cart — on-brand cart.
  *
- * Steven 2026-06-08 night:
+ * Steven 2026-06-09 (latest):
  *  - Clear Cart link below items
  *  - Primary CTA = big yellow PayPal Smart Button (CartCheckoutButton)
  *    with "Start with PayPal" eyebrow label above
- *  - Secondary CTA = small "Other Payment Options" text link → /shop/checkout-v2
- *  - Credibility row: "Secure Payment via PayPal & Airwallex" + SSL +
- *    payment-method logo strip (Visa/MC/Amex/Apple Pay/Google Pay)
- *  - Removed "Lifetime access" trust line (kept Instant Download)
+ *  - Secondary CTA = big "Other Payment Options" button → /shop/checkout-v2
+ *  - Bundle discount (15% off each when 3+ items in cart)
  *  - WELCOME15 is no longer auto-applied — coupon field stays for manual entry
+ *  - Credibility row REMOVED 2026-06-09 (felt cluttered).
  */
 
 import React, { useState, useEffect } from "react";
@@ -402,54 +401,7 @@ export default function CartPage() {
               Other Payment Options
             </button>
 
-            {/* ─── Credibility row ─── */}
-            <div style={{
-              marginTop: 22, padding: "16px 18px",
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10,
-            }}>
-              {/* SSL + processors line */}
-              <div style={{
-                display: "flex", alignItems: "center", justifyContent: "center",
-                gap: 8, flexWrap: "wrap",
-                fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                color: "rgba(255,255,255,0.7)", marginBottom: 10,
-              }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-                <span>Secure Payment via PayPal &amp; Airwallex</span>
-              </div>
-
-              {/* Payment method logos — inline SVG so they NEVER 404.
-                  Steven 2026-06-09: previous CDN-hosted versions (brandfolder)
-                  returned 404 and showed broken images on the cart. */}
-              <div style={{
-                display: "flex", alignItems: "center", justifyContent: "center",
-                gap: 8, flexWrap: "wrap", marginBottom: 10,
-              }}>
-                <PayLogoVisa />
-                <PayLogoMastercard />
-                <PayLogoAmex />
-                <PayLogoPayPal />
-                <PayLogoApplePay />
-                <PayLogoGooglePay />
-              </div>
-
-              {/* SSL/Encryption micro line */}
-              <div style={{
-                display: "flex", alignItems: "center", justifyContent: "center",
-                gap: 14, flexWrap: "wrap",
-                fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                color: "rgba(255,255,255,0.45)",
-              }}>
-                <span>🔒 256-bit SSL</span>
-                <span>⚡ Instant download</span>
-                <span>↺ 7-day refund</span>
-              </div>
-            </div>
+            {/* Credibility row removed by Steven 2026-06-09 — felt cluttered. */}
 
             {/* ─── Upsell — "Complete Your Studio" ─── */}
             {(() => {
@@ -534,86 +486,5 @@ export default function CartPage() {
   );
 }
 
-// ── Payment method logos ────────────────────────────────────────────────────
-// Inline SVG so they're zero-byte over the wire (bundled in JS) and can never
-// 404 the way the previous CDN-hosted images did. Steven 2026-06-09.
-
-const LOGO_BOX = {
-  display: "inline-flex", alignItems: "center", justifyContent: "center",
-  height: 24, padding: "0 6px", borderRadius: 3,
-  border: "1px solid rgba(255,255,255,0.12)",
-  background: "#fff",
-  boxSizing: "border-box",
-};
-
-function PayLogoVisa() {
-  return (
-    <span style={LOGO_BOX} aria-label="Visa" title="Visa">
-      <svg width="38" height="14" viewBox="0 0 48 16" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="13" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="14" fontStyle="italic" fill="#1A1F71" letterSpacing="0">VISA</text>
-      </svg>
-    </span>
-  );
-}
-
-function PayLogoMastercard() {
-  return (
-    <span style={LOGO_BOX} aria-label="Mastercard" title="Mastercard">
-      <svg width="32" height="20" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="10" r="7" fill="#EB001B" />
-        <circle cx="20" cy="10" r="7" fill="#F79E1B" />
-        <path d="M16 4.8a7 7 0 010 10.4 7 7 0 010-10.4z" fill="#FF5F00" />
-      </svg>
-    </span>
-  );
-}
-
-function PayLogoAmex() {
-  return (
-    <span style={{ ...LOGO_BOX, background: "#016FD0" }} aria-label="American Express" title="American Express">
-      <svg width="30" height="14" viewBox="0 0 40 14" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="11" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="11" fill="#fff" letterSpacing="0.5">AMEX</text>
-      </svg>
-    </span>
-  );
-}
-
-function PayLogoPayPal() {
-  return (
-    <span style={LOGO_BOX} aria-label="PayPal" title="PayPal">
-      <svg width="48" height="14" viewBox="0 0 60 16" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="13" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="13" fontStyle="italic" fill="#003087">Pay</text>
-        <text x="22" y="13" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="13" fontStyle="italic" fill="#009CDE">Pal</text>
-      </svg>
-    </span>
-  );
-}
-
-function PayLogoApplePay() {
-  return (
-    <span style={{ ...LOGO_BOX, background: "#000" }} aria-label="Apple Pay" title="Apple Pay">
-      <svg width="42" height="16" viewBox="0 0 52 18" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-        {/* Apple logo */}
-        <path d="M8.4 3.2c.5-.6.8-1.4.7-2.2-.7 0-1.5.4-2 1-.5.5-.9 1.3-.7 2.1.7 0 1.5-.4 2-.9zm.6 1c-1.1-.1-2 .6-2.6.6-.6 0-1.4-.6-2.3-.6-1.2 0-2.3.7-2.9 1.8-1.2 2.2-.3 5.4.9 7.2.6.9 1.3 1.8 2.2 1.8.9 0 1.2-.6 2.3-.6 1.1 0 1.4.6 2.3.5.9 0 1.6-.9 2.2-1.7.7-1 1-2 1-2.1-.1 0-1.9-.7-1.9-2.8 0-1.8 1.4-2.6 1.5-2.7-.9-1.2-2.1-1.4-2.7-1.4z" />
-        {/* "Pay" text */}
-        <text x="16" y="13" fontFamily="-apple-system, Helvetica Neue, sans-serif" fontWeight="600" fontSize="11" fill="#fff">Pay</text>
-      </svg>
-    </span>
-  );
-}
-
-function PayLogoGooglePay() {
-  return (
-    <span style={LOGO_BOX} aria-label="Google Pay" title="Google Pay">
-      <svg width="46" height="16" viewBox="0 0 60 18" xmlns="http://www.w3.org/2000/svg">
-        {/* G */}
-        <path d="M9.5 9c0-.5-.04-1-.13-1.46H5v2.76h2.55a2.18 2.18 0 01-.94 1.44v1.2h1.52A4.62 4.62 0 009.5 9z" fill="#4285F4" />
-        <path d="M5 13.5c1.27 0 2.34-.42 3.13-1.14l-1.52-1.2c-.42.28-.96.45-1.6.45-1.24 0-2.28-.84-2.66-1.96H.78v1.24A4.7 4.7 0 005 13.5z" fill="#34A853" />
-        <path d="M2.34 9.65a2.78 2.78 0 010-1.79V6.62H.78A4.65 4.65 0 00.3 8.75c0 .76.18 1.48.48 2.13l1.56-1.23z" fill="#FBBC04" />
-        <path d="M5 5.9c.7 0 1.32.24 1.81.72L8.16 5.2A4.5 4.5 0 005 4 4.7 4.7 0 00.78 6.62l1.56 1.24A2.8 2.8 0 015 5.9z" fill="#EA4335" />
-        {/* "Pay" */}
-        <text x="14" y="12" fontFamily="Arial, sans-serif" fontWeight="600" fontSize="11" fill="#5F6368">Pay</text>
-      </svg>
-    </span>
-  );
-}
+// Payment method logo components removed 2026-06-09 — Steven cut the
+// credibility row from the cart, so these are no longer referenced.
