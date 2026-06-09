@@ -212,9 +212,11 @@ export default function CheckoutV2Page() {
           // Steven 2026-06-09: Airwallex SDK was logging
           // "please check the required options of google pay button element"
           // because we were missing currency + amount + buttonType structure.
-          // Required keys per Airwallex JS SDK reference:
-          //   intent_id, client_secret, currency, countryCode, amount,
-          //   button: { buttonType, buttonColor, height, sizeMode }
+          // sizeMode change Steven 2026-06-09 (later that day): "fill" was
+          // rendering Google's "accepted cards" indicator strip INSIDE the
+          // button (Visa/MC/Amex tiles visible on the right). "static" with
+          // an explicit buttonSizeMode + plain buttonType gives a clean
+          // "G Pay" pill that matches the Apple Pay button visually.
           const gp = Airwallex.createElement("googlePayButton", {
             intent_id: intent.intentId,
             client_secret: intent.clientSecret,
@@ -223,10 +225,10 @@ export default function CheckoutV2Page() {
             countryCode: billingCountry || "US",
             origin: window.location.origin,
             button: {
-              buttonType: "buy",
+              buttonType: "plain",
               buttonColor: "black",
+              buttonSizeMode: "fill",
               height: 44,
-              sizeMode: "fill",
             },
           });
           gp.mount(expressGooglePayRef.current);
