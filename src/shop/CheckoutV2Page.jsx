@@ -233,9 +233,23 @@ export default function CheckoutV2Page() {
         dropIn.mount(dropInContainerRef.current);
         dropInElementRef.current = dropIn;
 
-        dropIn.on("success", (event) => {
+        dropIn.on("success", async (event) => {
           console.log("[checkout-v2] Airwallex success:", event);
           try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: intent.intentId, email }); } catch {}
+          // Confirm delivery — create purchase rows + send download email
+          try {
+            await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: email || undefined,
+                productIds,
+                couponCode: couponCode || null,
+                orderId: `awx_${intent.intentId}`,
+                provider: "airwallex",
+              }),
+            });
+          } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
           clearCart();
           navigate("/shop/thank-you");
         });
