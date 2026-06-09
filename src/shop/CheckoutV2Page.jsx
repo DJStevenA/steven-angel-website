@@ -469,7 +469,29 @@ export default function CheckoutV2Page() {
               </div>
               {method === "card" && (
                 <div style={{ marginTop: 12, position: "relative" }}>
-                  <div ref={dropInContainerRef} style={{ minHeight: 200 }} />
+                  <div ref={dropInContainerRef} style={{ minHeight: 220, position: "relative" }}>
+                    {/* Skeleton — visible until Airwallex Drop-in iframe replaces
+                        the inner DOM. Steven 2026-06-09: makes the "slow Airwallex
+                        load on mobile" feel instant. The Drop-in mount replaces
+                        children of the container, so this disappears automatically. */}
+                    <div style={{
+                      position: "absolute", inset: 0,
+                      display: "flex", flexDirection: "column", gap: 10,
+                      padding: 14,
+                      pointerEvents: "none",
+                    }}>
+                      <style>{`@keyframes cv2Pulse{0%{opacity:.55}50%{opacity:.85}100%{opacity:.55}}`}</style>
+                      <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, background: "#f3f4f6", borderRadius: 4 }} />
+                      <div style={{ display: "flex", gap: 10 }}>
+                        <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, flex: 1, background: "#f3f4f6", borderRadius: 4 }} />
+                        <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, width: 110, background: "#f3f4f6", borderRadius: 4 }} />
+                      </div>
+                      <div style={{ animation: "cv2Pulse 1.4s ease-in-out infinite", height: 38, background: "#f3f4f6", borderRadius: 4 }} />
+                      <div style={{ textAlign: "center", marginTop: 4, fontSize: 11, color: "#9ca3af", fontFamily: "system-ui, sans-serif" }}>
+                        Loading secure payment form…
+                      </div>
+                    </div>
+                  </div>
                   {/* Block payment when email is missing — prevent money-without-delivery */}
                   {!emailValid && (
                     <div

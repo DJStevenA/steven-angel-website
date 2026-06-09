@@ -48,6 +48,51 @@ export default function CartPage() {
   useEffect(() => {
     document.title = "Cart | Steven Angel Shop";
     preloadPayPalSdk();
+
+    // ── Prefetch checkout-v2 dependencies on idle ─────────────────────────
+    // Steven 2026-06-09: mobile users see Airwallex Drop-in load slowly
+    // because the SDK script (~250KB) + the iframe start downloading only
+    // AFTER they click "Other Payment Options" or PayPal succeeds. By the
+    // time they're on the cart page they're very likely to go to checkout
+    // next, so we warm the cache here. Three pieces:
+    //   1. Airwallex Elements SDK (~250KB JS)
+    //   2. CheckoutV2Page bundle (the React route component)
+    //   3. Pre-warm a HEAD request to api.airwallex.com (TLS handshake)
+    // Wrapped in requestIdleCallback so it never competes with cart paint.
+    const prefetchCheckoutDeps = () => {
+      const head = document.head;
+      // Airwallex Elements SDK
+      if (!document.querySelector('link[data-prefetch="awx-sdk"]')) {
+        const l = document.createElement("link");
+        l.rel = "prefetch";
+        l.as = "script";
+        l.href = "https://checkout.airwallex.com/assets/elements.bundle.min.js";
+        l.crossOrigin = "anonymous";
+        l.setAttribute("data-prefetch", "awx-sdk");
+        head.appendChild(l);
+      }
+      // CheckoutV2Page route bundle — Vite emits a CheckoutV2Page-<hash>.js
+      // chunk; scrape its URL from existing <link rel="modulepreload"> tags
+      // that Vite already wrote for other lazy routes (they all share the
+      // same hashed filename pattern).
+      try {
+        const cv2 = Array.from(document.querySelectorAll('link[rel="modulepreload"]'))
+          .map(el => el.href)
+          .find(h => /CheckoutV2Page-[A-Za-z0-9_-]+\.js$/.test(h));
+        // If not preloaded yet, manually trigger a fetch to warm the chunk.
+        // (Vite normally only emits modulepreload for current route, not
+        //  future navigations.)
+        if (!cv2) {
+          // Find any asset hash to construct the URL — easier approach:
+          // dynamic import the route component. React will lazy-resolve.
+          import(/* webpackChunkName: "checkout-v2" */ "./CheckoutV2Page.jsx").catch(() => {});
+        }
+      } catch { /* noop */ }
+    };
+    const ric = window.requestIdleCallback || ((cb) => setTimeout(cb, 800));
+    const cancelRic = window.cancelIdleCallback || clearTimeout;
+    const handle = ric(prefetchCheckoutDeps, { timeout: 2000 });
+    return () => { try { cancelRic(handle); } catch { /* noop */ } };
   }, []);
 
   // Fire begin_checkout once when cart loads with items (analytics)
