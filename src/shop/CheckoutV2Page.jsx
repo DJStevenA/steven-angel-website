@@ -170,28 +170,10 @@ export default function CheckoutV2Page() {
     }
   }, [cart.length, navigate]);
 
-  // ── Create / reuse Airwallex intent (anon — no email gate) ───────────────
-  // Steven 2026-06-09: CartPage pre-creates the intent on idle and stores
-  // it in sessionStorage. If a fresh cached intent matches our cart, we
-  // skip the backend roundtrip entirely — Drop-in mounts immediately.
+  // ── Create Airwallex intent (anon — no email gate) ────────────────────────
   useEffect(() => {
     if (productIds.length === 0) return;
     let cancelled = false;
-    const cacheKey = `awx_intent_${productIds.join(",")}_${couponCode || ""}`;
-
-    // Try cache first — saves a 200-500ms backend roundtrip.
-    try {
-      const cached = sessionStorage.getItem(cacheKey);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (parsed && parsed.savedAt && (Date.now() - parsed.savedAt) < 8 * 60 * 1000 && parsed.intentId) {
-          intentRef.current = parsed;
-          mountAirwallexElements(parsed);
-          return; // skip the network fetch entirely
-        }
-      }
-    } catch { /* noop — fall through to fetch */ }
-
     async function createIntent() {
       try {
         const res = await fetch(`${BACKEND}/shop/checkout/airwallex-cart-anon`, {
@@ -203,7 +185,6 @@ export default function CheckoutV2Page() {
         if (!res.ok) throw new Error(data.error || "Failed to create Airwallex intent");
         if (cancelled) return;
         intentRef.current = data;
-        try { sessionStorage.setItem(cacheKey, JSON.stringify({ ...data, savedAt: Date.now() })); } catch {}
         mountAirwallexElements(data);
       } catch (err) {
         console.error("[checkout-v2] Airwallex intent failed:", err);
