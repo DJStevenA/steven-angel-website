@@ -268,7 +268,7 @@ export default function CartPage() {
                   fontFamily: "'DM Sans', sans-serif", fontSize: 12.5,
                   color: "#a8ffc4", textAlign: "center",
                 }}>
-                  🎁 Add 1 more item to unlock <b>15% off everything</b>
+                  Add 1 more item to unlock <b>15% off everything</b>
                 </div>
               )}
               {bundleActive && (
