@@ -235,25 +235,36 @@ export default function CheckoutV2Page() {
 
         dropIn.on("success", async (event) => {
           console.log("[checkout-v2] Airwallex success:", event);
-          try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: intent.intentId, email }); } catch {}
+          // Try to get email from: (1) form field, (2) Airwallex event, (3) logged-in user
+          const buyerEmail = email
+            || event?.detail?.paymentIntent?.latest_payment_attempt?.payment_method?.billing?.email
+            || user?.email
+            || "";
+          try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: intent.intentId, email: buyerEmail }); } catch {}
           // Confirm delivery — create purchase rows + send download email
-          try {
-            const confirmRes = await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: email || undefined,
-                productIds,
-                couponCode: couponCode || null,
-                orderId: `awx_${intent.intentId}`,
-                provider: "airwallex",
-              }),
-            });
-            const confirmData = await confirmRes.json().catch(() => ({}));
-            if (confirmData.token) {
-              try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds })); } catch {}
-            }
-          } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
+          if (buyerEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) {
+            try {
+              const confirmRes = await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: buyerEmail,
+                  productIds,
+                  couponCode: couponCode || null,
+                  orderId: `awx_${intent.intentId}`,
+                  provider: "airwallex",
+                }),
+              });
+              if (confirmRes.ok) {
+                const confirmData = await confirmRes.json().catch(() => ({}));
+                if (confirmData.token) {
+                  try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds })); } catch {}
+                }
+              }
+            } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
+          } else {
+            console.warn("[checkout-v2] No valid email — skipping confirm-delivery. Payment succeeded but no email delivery.");
+          }
           clearCart();
           navigate("/shop/thank-you");
         });
@@ -396,20 +407,29 @@ export default function CheckoutV2Page() {
             </div>
           </section>
 
-          {/* Email */}
+          {/* Email — required for delivery */}
           <section style={{ marginBottom: 24 }}>
-            <label style={labelStyle} htmlFor="cv2-email">Email</label>
+            <label style={labelStyle} htmlFor="cv2-email">
+              Email <span style={{ color: "#ef4444" }}>*</span>
+              <span style={{ color: "#6b7280", fontWeight: 400, marginLeft: 6 }}>— we send your download here</span>
+            </label>
             <input
               id="cv2-email"
               type="email"
               autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { setEmail(e.target.value); setPayNowError(null); }}
               placeholder="you@email.com"
-              style={inputStyle}
+              style={{
+                ...inputStyle,
+                border: !emailValid && email.length > 0 ? "1px solid #ef4444" : inputStyle.border,
+              }}
               disabled={!!user}
             />
-            {!user && (
+            {!emailValid && email.length > 0 && (
+              <div style={{ fontSize: 12, color: "#ef4444", marginTop: 4 }}>Please enter a valid email address</div>
+            )}
+            {!user && emailValid && (
               <div style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>
                 Already have an account?{" "}
                 <Link to="/shop/login?redirect=/shop/checkout-v2" style={{ color: "#111", textDecoration: "underline" }}>
