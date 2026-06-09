@@ -605,7 +605,7 @@ export default function CheckoutV2Page() {
               type="text"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
-              placeholder="WELCOME15"
+              placeholder="Coupon code"
               style={inputStyle}
             />
           </div>

@@ -48,11 +48,7 @@ export default function CheckoutModal({ product, onClose }) {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  const [couponCode, setCouponCode] = useState(() => {
-    if (typeof window === "undefined") return "";
-    // Auto-fill WELCOME15 if visitor saw the welcome popup
-    return localStorage.getItem("shop_discount_popup_seen") ? "WELCOME15" : "";
-  });
+  const [couponCode, setCouponCode] = useState("");
   const [status, setStatus] = useState("idle"); // idle | success | error
   // Guest checkout flow (no account)
   const [guestMode, setGuestMode] = useState(false);
@@ -405,7 +401,7 @@ export default function CheckoutModal({ product, onClose }) {
               type="text"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
-              placeholder="WELCOME15"
+              placeholder="Coupon code"
               autoComplete="off"
               spellCheck={false}
               style={{

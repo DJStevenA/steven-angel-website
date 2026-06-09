@@ -46,10 +46,7 @@ export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const product = getProductBySlug(slug);
 
-  const [couponCode, setCouponCode] = useState(() => {
-    if (typeof window === "undefined") return "";
-    return localStorage.getItem("shop_discount_popup_seen") ? "WELCOME15" : "";
-  });
+  const [couponCode, setCouponCode] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [status, setStatus] = useState("idle");
   const [isMobile, setIsMobile] = useState(
@@ -278,7 +275,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
-                    placeholder="WELCOME15"
+                    placeholder="Coupon code"
                     style={{
                       width: "100%", padding: "11px 14px", background: "rgba(255,255,255,0.04)",
                       border: "1px solid rgba(255,255,255,0.12)", borderRadius: 6,
@@ -325,7 +322,7 @@ export default function CheckoutPage() {
                     type="text"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value.trim().toUpperCase())}
-                    placeholder="WELCOME15"
+                    placeholder="Coupon code"
                     style={{
                       width: "100%", padding: "11px 14px", background: "rgba(255,255,255,0.04)",
                       border: "1px solid rgba(255,255,255,0.12)", borderRadius: 6,
