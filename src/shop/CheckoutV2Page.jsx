@@ -355,7 +355,15 @@ export default function CheckoutV2Page() {
   // does support custom submit.)
   const handlePayNow = () => {
     if (!emailValid) {
-      setPayNowError("Email required — we send your download link there.");
+      setPayNowError("Please enter your email above — we send the download link to that address.");
+      // Scroll the email field into view + focus it so the user lands on
+      // exactly what's missing. Steven 2026-06-09: form stays open, the
+      // error only fires when they actually click Pay.
+      const emailEl = document.getElementById("cv2-email");
+      if (emailEl) {
+        emailEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(() => emailEl.focus(), 350);
+      }
       return;
     }
     setPayNowError(null);
@@ -468,12 +476,15 @@ export default function CheckoutV2Page() {
                 <span style={{ fontWeight: 500, fontSize: 14 }}>Credit card / Apple Pay / Google Pay / Klarna</span>
               </div>
               {method === "card" && (
-                <div style={{ marginTop: 12, position: "relative" }}>
+                <div style={{ marginTop: 12 }}>
+                  {/* Steven 2026-06-09 explicit: form fully open, NOTHING
+                      blocked or visually warned about up front. The email
+                      validation happens at submit time only — see handlePayNow
+                      + dropIn.on("success") email-recovery flow. */}
                   <div ref={dropInContainerRef} style={{ minHeight: 220, position: "relative" }}>
                     {/* Skeleton — visible until Airwallex Drop-in iframe replaces
-                        the inner DOM. Steven 2026-06-09: makes the "slow Airwallex
-                        load on mobile" feel instant. The Drop-in mount replaces
-                        children of the container, so this disappears automatically. */}
+                        the inner DOM. Drop-in mount replaces children of the
+                        container, so this disappears automatically. */}
                     <div style={{
                       position: "absolute", inset: 0,
                       display: "flex", flexDirection: "column", gap: 10,
@@ -492,22 +503,6 @@ export default function CheckoutV2Page() {
                       </div>
                     </div>
                   </div>
-                  {/* Block payment when email is missing — prevent money-without-delivery */}
-                  {!emailValid && (
-                    <div
-                      onClick={() => document.getElementById("cv2-email")?.focus()}
-                      style={{
-                        position: "absolute", inset: 0, zIndex: 10,
-                        background: "rgba(255,255,255,0.85)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        borderRadius: 4, cursor: "pointer",
-                      }}
-                    >
-                      <span style={{ fontSize: 13, color: "#ef4444", fontWeight: 600, fontFamily: "system-ui, sans-serif" }}>
-                        ↑ Enter your email first
-                      </span>
-                    </div>
-                  )}
                 </div>
               )}
             </label>
