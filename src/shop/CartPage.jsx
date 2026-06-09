@@ -16,9 +16,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "./CartContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
-import { trackBeginCheckout } from "../lib/analytics/events";
+import { trackBeginCheckout, trackAddToCart } from "../lib/analytics/events";
 import CartCheckoutButton from "./CartCheckoutButton.jsx";
 import { preloadPayPalSdk } from "./CheckoutButton.jsx";
+import { getOrderedProducts } from "./products.js";
 
 const CYAN = "#00E5FF";
 const BG = "#080810";
@@ -28,7 +29,7 @@ const COUPONS_CLIENT = { WELCOME15: { percentOff: 15 } };
 function round2(n) { return Math.round(n * 100) / 100; }
 
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart, cartTotal } = useCart();
+  const { cart, addToCart, removeFromCart, clearCart, cartTotal } = useCart();
   useAuth(); // ensure auth context is available even though we don't gate on it
   const navigate = useNavigate();
 
@@ -69,7 +70,7 @@ export default function CartPage() {
 
   const handleSuccess = (json) => {
     if (json?.token) {
-      try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds })); } catch {}
+      try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds, items: cart.map(i => ({ name: i.name, price: i.price })), total, email: json.email })); } catch {}
     }
     clearCart();
     navigate("/shop/thank-you");
@@ -333,6 +334,75 @@ export default function CartPage() {
                 <span>↺ 7-day refund</span>
               </div>
             </div>
+
+            {/* ─── Upsell — "Complete Your Studio" ─── */}
+            {(() => {
+              const cartIds = new Set(cart.map(i => i.id));
+              const suggestions = getOrderedProducts()
+                .filter(p => p.enabled && !cartIds.has(p.id) && p.id !== "test-1-dollar")
+                .slice(0, 3);
+              if (suggestions.length === 0) return null;
+              return (
+                <div style={{ marginTop: 24 }}>
+                  <div style={{
+                    fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                    fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.4)", marginBottom: 12,
+                  }}>
+                    Complete Your Studio
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {suggestions.map(p => (
+                      <div key={p.id} style={{
+                        display: "flex", alignItems: "center", gap: 12,
+                        padding: "10px 14px",
+                        background: "rgba(255,255,255,0.02)",
+                        border: "1px solid rgba(255,255,255,0.06)",
+                        borderRadius: 8,
+                      }}>
+                        <Link to={`/shop/${p.slug}`} style={{ flexShrink: 0 }}>
+                          <img src={p.image} alt={p.name} width="52" height="52" style={{
+                            width: 52, height: 52, objectFit: "cover", borderRadius: 6,
+                            border: "1px solid rgba(255,255,255,0.08)",
+                          }} />
+                        </Link>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <Link to={`/shop/${p.slug}`} style={{
+                            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+                            fontSize: 13, textTransform: "uppercase", letterSpacing: "0.03em",
+                            color: "#fff", textDecoration: "none", display: "block",
+                          }}>
+                            {p.name}
+                          </Link>
+                          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                            {p.headline}
+                          </div>
+                        </div>
+                        <div style={{ textAlign: "right", flexShrink: 0 }}>
+                          <div style={{
+                            fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+                            fontSize: 16, color: CYAN,
+                          }}>
+                            ${p.price}
+                          </div>
+                          <button
+                            onClick={() => { addToCart(p); trackAddToCart(p); }}
+                            style={{
+                              background: "none", border: `1px solid ${CYAN}`, borderRadius: 4,
+                              color: CYAN, fontFamily: "'DM Sans', sans-serif",
+                              fontSize: 10, fontWeight: 600, padding: "3px 8px",
+                              cursor: "pointer", marginTop: 2,
+                            }}
+                          >
+                            + Add
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
 
             <Link to="/shop" style={{
               display: "block", textAlign: "center", marginTop: 18,

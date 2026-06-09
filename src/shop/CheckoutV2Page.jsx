@@ -258,7 +258,7 @@ export default function CheckoutV2Page() {
               if (confirmRes.ok) {
                 const confirmData = await confirmRes.json().catch(() => ({}));
                 if (confirmData.token) {
-                  try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds })); } catch {}
+                  try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds, items: cart.map(i => ({ name: i.name, price: i.price })), total, email: buyerEmail })); } catch {}
                 }
               }
             } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
@@ -336,7 +336,7 @@ export default function CheckoutV2Page() {
       if (!res.ok) throw new Error(json.error || "Capture failed");
       try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: data.orderID, email: json.email }); } catch {}
       if (json.token) {
-        try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds })); } catch {}
+        try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds, items: cart.map(i => ({ name: i.name, price: i.price })), total, email: json.email })); } catch {}
       }
       clearCart();
       navigate("/shop/thank-you");
@@ -581,6 +581,26 @@ export default function CheckoutV2Page() {
               {payNowError}
             </div>
           )}
+
+          {/* Trust signals — inline with payment (Baymard: +18% completion) */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            gap: 16, flexWrap: "wrap", marginTop: 16,
+            fontSize: 12, color: "#6b7280", fontFamily: "system-ui, sans-serif",
+          }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              256-bit SSL
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Instant download
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+              7-day refund
+            </span>
+          </div>
         </div>
 
         {/* ═══ RIGHT — Cart summary + coupon ═══ */}
