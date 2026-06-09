@@ -209,10 +209,25 @@ export default function CheckoutV2Page() {
       }
       if (expressGooglePayRef.current && !expressInstancesRef.current.googlePay) {
         try {
+          // Steven 2026-06-09: Airwallex SDK was logging
+          // "please check the required options of google pay button element"
+          // because we were missing currency + amount + buttonType structure.
+          // Required keys per Airwallex JS SDK reference:
+          //   intent_id, client_secret, currency, countryCode, amount,
+          //   button: { buttonType, buttonColor, height, sizeMode }
           const gp = Airwallex.createElement("googlePayButton", {
-            intent_id: intent.intentId, client_secret: intent.clientSecret,
+            intent_id: intent.intentId,
+            client_secret: intent.clientSecret,
+            currency: intent.currency || "USD",
+            amount: intent.amount,
             countryCode: billingCountry || "US",
-            buttonType: "buy", buttonColor: "black", height: 44,
+            origin: window.location.origin,
+            button: {
+              buttonType: "buy",
+              buttonColor: "black",
+              height: 44,
+              sizeMode: "fill",
+            },
           });
           gp.mount(expressGooglePayRef.current);
           expressInstancesRef.current.googlePay = gp;
