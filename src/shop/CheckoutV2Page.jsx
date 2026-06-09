@@ -238,7 +238,7 @@ export default function CheckoutV2Page() {
           try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: intent.intentId, email }); } catch {}
           // Confirm delivery — create purchase rows + send download email
           try {
-            await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
+            const confirmRes = await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -249,6 +249,10 @@ export default function CheckoutV2Page() {
                 provider: "airwallex",
               }),
             });
+            const confirmData = await confirmRes.json().catch(() => ({}));
+            if (confirmData.token) {
+              try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds })); } catch {}
+            }
           } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
           clearCart();
           navigate("/shop/thank-you");
@@ -320,6 +324,9 @@ export default function CheckoutV2Page() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Capture failed");
       try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: data.orderID, email: json.email }); } catch {}
+      if (json.token) {
+        try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: json.token, productIds })); } catch {}
+      }
       clearCart();
       navigate("/shop/thank-you");
     } catch (err) {
