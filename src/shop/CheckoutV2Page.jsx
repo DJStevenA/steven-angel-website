@@ -399,25 +399,48 @@ export default function CheckoutV2Page() {
             </div>
           </section>
 
-          {/* Email — required for delivery */}
+          {/* Email + Country side-by-side — Steven 2026-06-09 placement:
+              Country sits next to Email so the customer fills both at once.
+              On mobile they stack. */}
           <section style={{ marginBottom: 24 }}>
-            <label style={labelStyle} htmlFor="cv2-email">
-              Email <span style={{ color: "#ef4444" }}>*</span>
-              <span style={{ color: "#6b7280", fontWeight: 400, marginLeft: 6 }}>— we send your download here</span>
-            </label>
-            <input
-              id="cv2-email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
-              style={{
-                ...inputStyle,
-                border: !emailValid && email.length > 0 ? "1px solid #ef4444" : inputStyle.border,
-              }}
-              disabled={!!user}
-            />
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "2fr 1fr",
+              gap: 12,
+            }}>
+              <div>
+                <label style={labelStyle} htmlFor="cv2-email">
+                  Email <span style={{ color: "#ef4444" }}>*</span>
+                  <span style={{ color: "#6b7280", fontWeight: 400, marginLeft: 6 }}>— we send your download here</span>
+                </label>
+                <input
+                  id="cv2-email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@email.com"
+                  style={{
+                    ...inputStyle,
+                    border: !emailValid && email.length > 0 ? "1px solid #ef4444" : inputStyle.border,
+                  }}
+                  disabled={!!user}
+                />
+              </div>
+              <div>
+                <label style={labelStyle} htmlFor="cv2-country">Country</label>
+                <select
+                  id="cv2-country"
+                  value={billingCountry}
+                  onChange={(e) => setBillingCountry(e.target.value)}
+                  style={inputStyle}
+                >
+                  {COUNTRIES.map(([code, name]) => (
+                    <option key={code} value={code}>{name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
             {!emailValid && email.length > 0 && (
               <div style={{ fontSize: 12, color: "#ef4444", marginTop: 4 }}>Please enter a valid email address</div>
             )}
@@ -464,20 +487,7 @@ export default function CheckoutV2Page() {
             </div>
           </section>
 
-          {/* Country (needed for Apple Pay / Google Pay rendering up top) */}
-          <section style={{ marginBottom: 24 }}>
-            <label style={labelStyle} htmlFor="cv2-country">Country</label>
-            <select
-              id="cv2-country"
-              value={billingCountry}
-              onChange={(e) => setBillingCountry(e.target.value)}
-              style={inputStyle}
-            >
-              {COUNTRIES.map(([code, name]) => (
-                <option key={code} value={code}>{name}</option>
-              ))}
-            </select>
-          </section>
+          {/* Country was here — moved up next to Email by Steven 2026-06-09. */}
 
           {/* payNowError display removed — no more custom Pay Now button.
               Airwallex Drop-in's own Pay button handles errors internally. */}
