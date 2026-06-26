@@ -20,6 +20,9 @@ const Sign = lazy(() => import("./Sign.jsx"));
 const Privacy = lazy(() => import("./Privacy.jsx"));
 const Terms = lazy(() => import("./Terms.jsx"));
 const Refund = lazy(() => import("./Refund.jsx"));
+// Hidden order page — NOT linked from anywhere on the public site.
+// Steven sends the URL directly to customers who want to order.
+const CustomOrder = lazy(() => import("./CustomOrder.jsx"));
 const ShopPage = lazy(() => import("./shop/ShopPage.jsx"));
 const ProductPage = lazy(() => import("./shop/ProductPage.jsx"));
 const Blog = lazy(() => import("./blog/Blog.jsx"));
@@ -201,6 +204,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/mix" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/mix-master" element={<Navigate to="/mix-mastering" replace />} />
             <Route path="/sign" element={<Sign />} />
+            <Route path="/custom-order" element={<CustomOrder />} />
             {/* Blog — "THE LAB" production notes */}
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />

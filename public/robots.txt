@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /custom-order
+Disallow: /sign
 
 Sitemap: https://steven-angel.com/sitemap.xml
