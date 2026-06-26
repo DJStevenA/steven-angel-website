@@ -49,7 +49,7 @@ function staticSeoPages() {
       { '@type': 'Offer', name: 'Demo Finishing', price: '300', priceCurrency: 'USD', url: 'https://steven-angel.com/ghost/finish-demo' },
       { '@type': 'Offer', name: 'Full Production (No Vocal)', price: '800', priceCurrency: 'USD', url: 'https://steven-angel.com/ghost/custom' },
       { '@type': 'Offer', name: 'Full Production with Vocal', price: '1500', priceCurrency: 'USD', url: 'https://steven-angel.com/ghost/custom' },
-      { '@type': 'Offer', name: 'Ready-Made Ghost Track', priceRange: '€39–€870', priceCurrency: 'EUR', url: 'https://steven-angel.com/ghost', availability: 'https://schema.org/InStock' },
+      { '@type': 'Offer', name: 'Ready-Made Ghost Track', priceRange: '€299–€1200', priceCurrency: 'EUR', url: 'https://steven-angel.com/ghost', availability: 'https://schema.org/InStock' },
     ],
   });
 

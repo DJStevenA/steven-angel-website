@@ -44,7 +44,7 @@ const eyebrow = {
 
 const SERVICES = [
   {
-    eyebrow: "Premium · From €39",
+    eyebrow: "Premium · From €299",
     title: "Ghost Production",
     desc: "Ready-made Afro House, Tech House & Indie Dance tracks. NDA included.",
     to: "/ghost",

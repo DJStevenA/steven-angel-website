@@ -767,7 +767,7 @@ function GhostPage() {
             {/* 3-CTA bar — Browse / Custom / Finish Demo */}
             <div style={{ display: "flex", flexWrap: isMobile ? "wrap" : "nowrap", gap: isMobile ? 10 : 16, marginTop: isMobile ? 24 : 36, justifyContent: "center" }}>
               {[
-                { title: "Browse Tracks ↓", sub: "From €39", href: "#catalog", filled: true,
+                { title: "Browse Tracks ↓", sub: "From €299", href: "#catalog", filled: true,
                   onClick: (e) => { e.preventDefault(); const el = document.getElementById("catalog"); if (el) el.scrollIntoView({ behavior: "smooth" }); } },
                 { title: "Custom Made →", sub: "From $800", href: "/ghost/custom" },
                 { title: "Finish My Demo →", sub: "From $300", href: "/ghost/finish-demo" },
