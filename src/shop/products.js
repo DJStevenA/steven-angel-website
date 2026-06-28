@@ -117,7 +117,7 @@ export const PRODUCTS = [
     seoTitle: "Balkan Boy — Afro House Ableton Template (Hugel Style) | Steven Angel",
     seoDescription:
       "Balkan Afro House Ableton Live 12 template — Hugel & Grossomodo style. Full project file with Serum presets, mixdown, and 269 MB sample pack. Royalty-free. $19.99 instant download.",
-    price: 9,
+    price: 19,
     currency: "USD",
     badge: null,
     badgeColor: null,
@@ -191,7 +191,7 @@ export const PRODUCTS = [
     seoTitle: "Maria Maria Afro House Remix — Ableton Live 11 Template | Steven Angel",
     seoDescription:
       "The Angels' official Santana 'Maria Maria' Afro House remix — full Ableton Live 11 session. Vocal chops, percussion, mixdown. Supported by DJ Chus. $19.99 instant download.",
-    price: 9,
+    price: 19,
     currency: "USD",
     badge: null,
     badgeColor: null,
@@ -260,7 +260,7 @@ export const PRODUCTS = [
     seoTitle: "El Barrio — MTGD Afro House Ableton Live Template (Hugel & Claptone Style) | Steven Angel",
     seoDescription:
       "The actual Ableton Live 11 project for 'El Barrio' — MTGD release played live by Hugel & Claptone at Pacha Ibiza. Real session, drums, bass, vocal chops, full mixdown. $19.99.",
-    price: 9,
+    price: 24,
     currency: "USD",
     badge: "PLAYED BY HUGEL & CLAPTONE",
     badgeColor: "cyan",
@@ -336,7 +336,7 @@ export const PRODUCTS = [
     seoTitle: "Solomun & Artbat Style Melodic Techno Ableton Template — Arabian | Steven Angel",
     seoDescription:
       "Arabian-influenced Melodic Techno Ableton Live template — Solomun & Artbat style. Middle Eastern percussion, atmospheric synths, festival-ready mixdown. $19.99 instant download.",
-    price: 9,
+    price: 19,
     currency: "USD",
     badge: null,
     badgeColor: null,
@@ -497,7 +497,7 @@ export const PRODUCTS = [
     seoTitle: "Indie Dance / Nu Disco Ableton Live Template (Solomun · Adam Ten Style) | Steven Angel",
     seoDescription:
       "Indie Dance / Nu Disco Ableton Live template — Hotsince 82, Purple Disco Machine, Solomun, Adam Ten, Darco style. 6 MIDI + 31 audio channels, fully mixed and mastered. $9 instant download.",
-    price: 9,
+    price: 19,
     currency: "USD",
     badge: null,
     badgeColor: null,
@@ -568,7 +568,7 @@ export const PRODUCTS = [
     seoTitle: "Dirty Tech House Ableton Live Template (Michael Bibi · Clonnee Style) | Steven Angel",
     seoDescription:
       "Michael Bibi / Clonnee / Solid Grooves style Tech House Ableton Live project. 2 MIDI + 25 audio channels, fully mixed and mastered. No external plugins. $9 instant download.",
-    price: 9,
+    price: 19,
     currency: "USD",
     badge: null,
     badgeColor: null,
@@ -638,7 +638,7 @@ export const PRODUCTS = [
     seoTitle: "Darbuka Loops Sample Pack — Afro Latin / Ethnic House | Steven Angel",
     seoDescription:
       "Darbuka percussion sample pack — 132 files: 51 dry + 51 wet loops + 30 one-shots (Tek / Slap / Dum). Sahara vibe for Techno, Tech-House, EDM, Psy Trance, Afro House. $7.",
-    price: 7,
+    price: 14,
     currency: "USD",
     badge: null,
     badgeColor: null,
@@ -718,7 +718,7 @@ export const PRODUCTS = [
     seoTitle: "Moog Loops & Samples — Analog Bass Sample Pack | Steven Angel",
     seoDescription:
       "Fat Moog bass sample pack — 30 loops + 10 one-shots. Warm analog sound for Techno, House, Tech-House, Melodic Techno, Afro-House. 100% royalty-free, WAV 24-bit. $7.",
-    price: 7,
+    price: 14,
     currency: "USD",
     badge: null,
     badgeColor: null,
