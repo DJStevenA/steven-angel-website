@@ -49,6 +49,7 @@ const HARDCODED_ROUTES = [
   '/mix-mastering',
   '/privacy',
   '/links',
+  '/angels',
   '/sign',
   '/blog',
   // '/mix-mastering/upload' — skipped: noindex, post-payment private

@@ -253,6 +253,12 @@ function staticSeoPages() {
             'All Steven Angel links — Ghost Production, Mix & Mastering, Lessons, Templates, Masterclass and more. Beatport Top 10 producer based in Tel Aviv.',
         },
         {
+          path: '/angels',
+          title: 'THE ANGELS — All Links · Afro House Duo from Tel Aviv',
+          description:
+            'All The Angels links — Spotify, Instagram, YouTube, SoundCloud, bookings, EPK, masterclass and live sets. Married afro-house DJ duo from Tel Aviv.',
+        },
+        {
           path: '/sign',
           title: 'Ghost Production Agreement | Steven Angel',
           description: 'Sign your ghost production agreement with Steven Angel.',
