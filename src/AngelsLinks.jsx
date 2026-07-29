@@ -17,6 +17,7 @@
  * dependency on linktr.ee.
  */
 import React from "react";
+import { Link } from "react-router-dom";
 import { trackEvent } from "./lib/analytics/gtag";
 import { usePageView, useTimeOnPage } from "./lib/analytics/hooks";
 
@@ -52,7 +53,9 @@ const LINKS = [
     label: "Afrohouse Masterclass",
     url: "https://www.drop-edm.co.il/product-page/the-complete-afro-house-production-masterclass",
   },
-  { label: "Booking", url: "https://theangelsinfo.my.canva.site/the-angels-epk" },
+  // Booking points at our own EPK page (Steven, 2026-07-29) — replaced the
+  // external Canva site. On-site, so it navigates in the same tab.
+  { label: "Booking", url: "/the-angels" },
   {
     label: "The Angels - Bio / About Us",
     url: "https://www.dropbox.com/s/agp3tr1ckby6cnt/The%20Angels%20-%20Bio%20.pdf?dl=0",
@@ -190,15 +193,19 @@ const STYLES = `
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 18px;
-  margin-bottom: 26px;
+  gap: 4px;
+  margin-bottom: 24px;
 }
+/* Nine glyphs must clear a 320px phone in one row, but a 27px icon is a
+   painfully small thumb target. So the tap area is padding around the glyph —
+   44px tall always, and as wide as the row allows — while the glyph itself
+   stays visually the same size. Spacing between marks is that padding, not gap. */
 .ag-social {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px; height: 30px;
+  width: 40px; height: 44px;
   color: #fff;
   border-radius: 6px;
   transition: transform 0.16s ease, opacity 0.16s ease;
@@ -268,13 +275,20 @@ const STYLES = `
   .ag-avatar { width: 88px; height: 88px; }
   .ag-name { font-size: 25px; }
   .ag-bio { font-size: 15px; }
-  /* Nine glyphs have to clear 375px in a single row — shrink the mark and the
-     gap together rather than letting the last icon wrap onto its own line. */
-  .ag-socials { gap: 10px; }
-  .ag-social { width: 26px; height: 26px; }
+  .ag-socials { gap: 0; }
+  .ag-social { width: 36px; height: 44px; }
   .ag-social svg { width: 24px; height: 24px; }
   .ag-card { min-height: 60px; padding: 10px 56px; }
   .ag-label { font-size: 15px; }
+}
+
+/* iPhone SE / small Androids — 9 × 32px still fits 320px minus page padding. */
+@media (max-width: 359px) {
+  .ag-page { padding: 28px 10px 42px; }
+  .ag-social { width: 32px; }
+  .ag-social svg { width: 22px; height: 22px; }
+  .ag-card { padding: 10px 52px; }
+  .ag-label { font-size: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -323,19 +337,35 @@ export default function AngelsLinks() {
         </nav>
 
         <div className="ag-links">
-          {LINKS.map((item) => (
-            <a
-              key={item.url}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ag-card"
-              onClick={() => track(item.url, item.label, "angels_bio")}
-            >
-              {item.thumbnail && <img className="ag-thumb" src={item.thumbnail} alt="" loading="lazy" />}
-              <span className="ag-label">{item.label}</span>
-            </a>
-          ))}
+          {LINKS.map((item) => {
+            const inner = (
+              <>
+                {item.thumbnail && <img className="ag-thumb" src={item.thumbnail} alt="" loading="lazy" />}
+                <span className="ag-label">{item.label}</span>
+              </>
+            );
+            const onClick = () => track(item.url, item.label, "angels_bio");
+
+            // On-site destinations navigate in the same tab via React Router —
+            // instant, and it keeps visitors on the site rather than stacking
+            // tabs in Instagram's in-app browser. Everything else opens a new tab.
+            return item.url.startsWith("/") ? (
+              <Link key={item.url} to={item.url} className="ag-card" onClick={onClick}>
+                {inner}
+              </Link>
+            ) : (
+              <a
+                key={item.url}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ag-card"
+                onClick={onClick}
+              >
+                {inner}
+              </a>
+            );
+          })}
         </div>
 
         <footer className="ag-footer">
