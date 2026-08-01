@@ -33,6 +33,15 @@ export default function App() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  const [showStartPopup, setShowStartPopup] = useState(false);
+  useEffect(() => {
+    if (!showStartPopup) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => { if (e.key === "Escape") setShowStartPopup(false); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
+  }, [showStartPopup]);
+
   // Remarketing signals
   usePageView("homepage");
   useScrollDepth("homepage");
@@ -128,107 +137,153 @@ export default function App() {
               Played by Hugel & Claptone at Pacha Ibiza
             </div>
 
-            {/* ── Hero CTA Cards ── */}
-            <div style={{
-              display: "flex",
-              flexWrap: "nowrap",
-              gap: isMobile ? 8 : 16,
-              marginTop: isMobile ? 32 : 48,
-              width: isMobile ? "100%" : "110%",
-              marginLeft: isMobile ? 0 : "-5%",
-            }}>
-              {[
-                { title: "GHOST PRODUCTION & DEMO FINISHING", sub: "For artists who need Label-Ready tracks", btn: "Get Your Track", to: "/ghost", premium: true },
-                { title: "MIX & MASTERING", sub: "Get your track club ready — from $35", btn: "Start Mastering", to: "/mix-mastering", premium: false },
-                { title: "PRODUCTION, MIX & MASTERING LESSONS", sub: "For producers who want to master it themselves", btn: "Start Learning", to: "/lessons", premium: false },
-                { title: "TEMPLATES & MASTERCLASS SHOP", sub: "For producers building their toolkit", btn: "Browse Shop", to: "/shop", premium: false },
-              ].map((card, i) => (
-                <Link
-                  key={i}
-                  to={card.to}
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 6,
-                    padding: isMobile ? "14px 12px 12px" : "24px 24px 20px",
-                    background: card.premium
-                      ? "linear-gradient(135deg, #0a0a20, #0d0418)"
-                      : "#04040f",
-                    border: card.premium
-                      ? `2px solid ${cyan}`
-                      : "1px solid #141420",
-                    borderRadius: 10,
-                    boxShadow: card.premium
-                      ? "0 0 40px rgba(0,229,255,0.12)"
-                      : "none",
-                    textDecoration: "none",
-                    color: "#fff",
-                    cursor: "pointer",
-                    textAlign: "left",
-                  }}
-                >
-                  <div style={{
-                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                    fontWeight: 800,
-                    fontSize: isMobile ? 12 : 16,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.03em",
-                    color: card.premium ? cyan : "#fff",
-                    lineHeight: 1.2,
-                  }}>
-                    {card.title}
-                  </div>
-                  <div style={{
-                    fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                    fontSize: isMobile ? 10 : 13,
-                    color: "rgba(255,255,255,0.55)",
-                    lineHeight: 1.4,
-                    flex: 1,
-                  }}>
-                    {card.sub}
-                  </div>
-                  <div style={{
-                    marginTop: isMobile ? 6 : 12,
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                    fontWeight: 700,
-                    fontSize: isMobile ? 10 : 13,
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: card.premium ? cyan : "rgba(255,255,255,0.6)",
-                  }}>
-                    {card.btn} <span style={{ fontSize: isMobile ? 12 : 15 }}>→</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* ── Listen CTA ── */}
-            <div style={{ textAlign: "center", marginTop: 24 }}>
-              <a
-                href="#listen"
+            {/* ── Hero CTA ── */}
+            <div style={{ marginTop: isMobile ? 32 : 48 }}>
+              <button
+                onClick={() => { setShowStartPopup(true); if (window.clarity) window.clarity("event", "homepageHeroStartProjectClick"); }}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 14,
+                  padding: isMobile ? "16px 30px" : "20px 44px",
+                  background: `linear-gradient(135deg, ${cyan}, ${purple})`,
+                  border: "none",
+                  borderRadius: 10,
+                  color: "#000",
                   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  letterSpacing: "0.2em",
+                  fontWeight: 900,
+                  fontSize: isMobile ? 17 : 22,
+                  letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: cyan,
-                  textDecoration: "none",
-                  opacity: 0.85,
-                  transition: "opacity 0.2s, text-decoration 0.2s",
+                  cursor: "pointer",
+                  boxShadow: "0 0 40px rgba(0,229,255,0.32), 0 0 80px rgba(187,134,252,0.2)",
                 }}
-                onMouseEnter={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.textDecoration = "underline"; }}
-                onMouseLeave={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.textDecoration = "none"; }}
               >
-                Listen To My Work →
-              </a>
+                Let's Start Your Project
+                <span style={{ display: "inline-flex", width: 26, height: 26, borderRadius: "50%", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.15)" }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </span>
+              </button>
+              <div style={{ marginTop: 14, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>
+                Free intro · No commitment
+              </div>
             </div>
           </div>
         </section>
+
+        {/* ══════ START PROJECT POPUP ══════ */}
+        {showStartPopup && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="start-popup-title"
+            onClick={(e) => { if (e.target === e.currentTarget) setShowStartPopup(false); }}
+            style={{
+              position: "fixed", inset: 0, zIndex: 300,
+              background: "rgba(0,0,0,0.72)",
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              padding: 20,
+            }}
+          >
+            <div style={{
+              background: "linear-gradient(135deg, #0d0d20, #100418)",
+              border: `1px solid rgba(0,229,255,0.28)`,
+              borderRadius: 16,
+              padding: "36px 32px 32px",
+              maxWidth: 460,
+              width: "100%",
+              position: "relative",
+              boxShadow: "0 40px 100px rgba(0,0,0,0.6), 0 0 40px rgba(0,229,255,0.08)",
+            }}>
+              <button
+                onClick={() => setShowStartPopup(false)}
+                aria-label="Close"
+                style={{
+                  position: "absolute", top: 14, right: 14,
+                  width: 32, height: 32, borderRadius: 8,
+                  background: "none", border: "none",
+                  color: "rgba(255,255,255,0.5)", fontSize: 22, lineHeight: 1, cursor: "pointer",
+                }}
+              >
+                &times;
+              </button>
+
+              <h3 id="start-popup-title" style={{ ...heading(24), marginBottom: 10 }}>Let's talk</h3>
+              <div style={{ ...body, fontSize: 14, marginBottom: 24 }}>
+                Pick the way you'd rather start.<br />Free 20-minute intro, no commitment.
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <a
+                  href="https://calendly.com/dj-steven-angel/15-min-zoom"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => { if (window.gtag) window.gtag("event", "book_appointment", { event_category: "calendly", event_label: "homepage_hero_popup" }); if (window.clarity) window.clarity("event", "homepageHeroZoomClick"); }}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 14,
+                    padding: "16px 18px",
+                    background: "rgba(0,229,255,0.06)",
+                    border: "1px solid rgba(0,229,255,0.25)",
+                    borderRadius: 10,
+                    textDecoration: "none", color: "#fff",
+                  }}
+                >
+                  <span style={{ display: "inline-flex", width: 40, height: 40, borderRadius: "50%", alignItems: "center", justifyContent: "center", background: "rgba(0,229,255,0.12)", color: cyan, flexShrink: 0 }}>
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </span>
+                  <span style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 15, textTransform: "uppercase" }}>Book a Zoom call</div>
+                    <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>20 min · Pick a time that suits you</div>
+                  </span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                </a>
+
+                <a
+                  href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi Steven, I'd love to talk about a project")}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => { trackWhatsAppLead("GP", "homepage_hero_popup"); if (window.clarity) window.clarity("event", "homepageHeroWhatsAppClick"); }}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 14,
+                    padding: "16px 18px",
+                    background: "rgba(37,211,102,0.06)",
+                    border: "1px solid rgba(37,211,102,0.25)",
+                    borderRadius: 10,
+                    textDecoration: "none", color: "#fff",
+                  }}
+                >
+                  <span style={{ display: "inline-flex", width: 40, height: 40, borderRadius: "50%", alignItems: "center", justifyContent: "center", background: "rgba(37,211,102,0.14)", color: "#25D366", flexShrink: 0 }}>
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                      <path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L.057 23.882a.5.5 0 00.61.61l6.163-1.529A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.626 0 11.999 0zm.001 21.818a9.818 9.818 0 01-5.012-1.374l-.36-.214-3.724.924.942-3.626-.234-.373A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818S21.818 6.58 21.818 12c0 5.421-4.398 9.818-9.818 9.818z" />
+                    </svg>
+                  </span>
+                  <span style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 15, textTransform: "uppercase" }}>Message on WhatsApp</div>
+                    <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>Fastest · I usually reply within an hour</div>
+                  </span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+                </a>
+              </div>
+
+              <div style={{ textAlign: "center", marginTop: 20, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
+                100% confidential · No sales pitch
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══════ LISTEN — moved directly under Hero ══════ */}
+        {/* id="player" is the anchor for Google Ads sitelink "Steven's Releases" → steven-angel.com#player */}
+        <div id="player">
+          <TrackPlayer />
+        </div>
 
         {/* ══════ 2. BIO — About Steven ══════ */}
         <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#04040f", borderTop: "1px solid #0d0d0d" }}>
@@ -263,7 +318,7 @@ export default function App() {
 
               <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>DJS SUPPORTING MY MUSIC</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
-                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · Pauza · MESTIZA · DJ Chus · Joeski
+                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Sofi Tukker · Roger Sanchez · Oscar G · Francis Mercier · Asher Swissa · Pauza · MESTIZA · DJ Chus · Joeski
               </div>
 
               <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8 }}>PERFORMED AT</div>
@@ -352,12 +407,6 @@ export default function App() {
             </div>
           </div>
         </section></Reveal>
-
-        {/* ══════ 3. MUSIC — "Listen to my work." ══════ */}
-        {/* id="player" is the anchor for Google Ads sitelink "Steven's Releases" → steven-angel.com#player */}
-        <div id="player">
-          <TrackPlayer />
-        </div>
 
         {/* ══════ 5. LESSON DEMO ══════ */}
         <Reveal><section style={{ padding: isMobile ? "52px 20px" : "72px 60px", background: "#000", borderTop: "1px solid #0d0d0d" }}>

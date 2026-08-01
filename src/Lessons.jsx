@@ -451,7 +451,7 @@ export default function Lessons() {
 
               <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>DJS SUPPORTING MY MUSIC</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
-                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · Pauza · MESTIZA · DJ Chus · Joeski
+                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Sofi Tukker · Roger Sanchez · Oscar G · Francis Mercier · Asher Swissa · Pauza · MESTIZA · DJ Chus · Joeski
               </div>
 
               <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>PERFORMED AT</div>

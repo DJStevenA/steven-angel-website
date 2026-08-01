@@ -2,7 +2,6 @@ import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import GhostDiscountPopup from "./GhostDiscountPopup.jsx";
-import GhostCatalog from "./shop/ghost/GhostCatalog.jsx";
 import InquiryForm from "./components/InquiryForm.jsx";
 import { trackWhatsAppLead, trackLeadFormSubmit } from "./lib/analytics/events";
 import { usePageView, useScrollDepth, useTimeOnPage } from "./lib/analytics/hooks";
@@ -353,6 +352,15 @@ function GhostPage() {
   /* Clarity: track ghost page visit */
   useEffect(() => {
     if (window.clarity) window.clarity("event", "ghostPageVisit");
+  }, []);
+
+  /* The ready-made track catalog moved to /shop?tab=ghost (2026-07-21).
+     The Google Ads sitelink "/ghost#catalog" still points here — redirect
+     it to the new catalog location instead of leaving a dead anchor. */
+  useEffect(() => {
+    if (window.location.hash === "#catalog") {
+      window.location.replace("/shop?tab=ghost");
+    }
   }, []);
 
   /* SEO: page title, meta description, and canonical URL are handled
@@ -764,18 +772,15 @@ function GhostPage() {
               Your Vision. My Sound.
             </div>
 
-            {/* 3-CTA bar — Browse / Custom / Finish Demo */}
+            {/* 2-CTA bar — Custom Made / Finish Demo (the two services this page focuses on) */}
             <div style={{ display: "flex", flexWrap: isMobile ? "wrap" : "nowrap", gap: isMobile ? 10 : 16, marginTop: isMobile ? 24 : 36, justifyContent: "center" }}>
               {[
-                { title: "Browse Tracks ↓", sub: "From €299", href: "#catalog", filled: true,
-                  onClick: (e) => { e.preventDefault(); const el = document.getElementById("catalog"); if (el) el.scrollIntoView({ behavior: "smooth" }); } },
                 { title: "Custom Made →", sub: "From $800", href: "/ghost/custom" },
                 { title: "Finish My Demo →", sub: "From $300", href: "/ghost/finish-demo" },
               ].map((card, i) => (
                 <a
                   key={i}
                   href={card.href}
-                  onClick={card.onClick}
                   style={{
                     flex: isMobile ? "1 1 100%" : 1,
                     display: "flex",
@@ -783,12 +788,12 @@ function GhostPage() {
                     alignItems: "center",
                     gap: 4,
                     padding: isMobile ? "14px 18px" : "18px 24px",
-                    background: card.filled ? `linear-gradient(135deg, ${CYAN}, #00b8d4)` : "transparent",
-                    border: card.filled ? "none" : `2px solid ${CYAN}`,
+                    background: `linear-gradient(135deg, ${CYAN}, #00b8d4)`,
+                    border: "none",
                     borderRadius: 10,
-                    boxShadow: card.filled ? `0 0 28px rgba(0,229,255,0.5)` : `0 0 24px rgba(0,229,255,0.4)`,
+                    boxShadow: `0 0 28px rgba(0,229,255,0.5)`,
                     textDecoration: "none",
-                    color: card.filled ? "#000" : CYAN,
+                    color: "#000",
                     cursor: "pointer",
                     transition: "transform 0.2s",
                   }}
@@ -805,8 +810,8 @@ function GhostPage() {
               ))}
             </div>
 
-            {/* ── Listen CTA ── */}
-            <div style={{ textAlign: "center", marginTop: 24 }}>
+            {/* ── Secondary links: Listen + ready-made catalog (now lives on the Shop) ── */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 24, flexWrap: "wrap", marginTop: 24 }}>
               <a
                 href="#listen"
                 style={{
@@ -825,49 +830,27 @@ function GhostPage() {
               >
                 Listen To My Work →
               </a>
+              <a
+                href="/shop?tab=ghost"
+                style={{
+                  fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.5)",
+                  textDecoration: "none",
+                  opacity: 0.85,
+                  transition: "opacity 0.2s, text-decoration 0.2s",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.textDecoration = "underline"; }}
+                onMouseLeave={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.textDecoration = "none"; }}
+              >
+                Looking for ready-made tracks? →
+              </a>
             </div>
 
           </div>
-        </section>
-
-        {/* ═══ Catalog ═══ */}
-        <section id="catalog" style={{ padding: isMobile ? "40px 0 20px" : "60px 0 30px", background: BG, borderTop: "1px solid #0d0d0d" }}>
-          <div style={{ textAlign: "center", padding: isMobile ? "0 20px 20px" : "0 60px 30px" }}>
-            <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: CYAN, marginBottom: 10 }}>
-              Ready-Made Tracks
-            </div>
-            <h2 style={{ ...heading(isMobile ? 28 : 40), color: "#fff", marginBottom: 8 }}>
-              Buy a Finished Track
-            </h2>
-            <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.55)", maxWidth: 540, margin: "0 auto", marginBottom: 20 }}>
-              Pre-made productions ready to release under your name. NDA + 100% rights transfer included.
-            </div>
-
-            {/* Deliverables badges */}
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 8 : 12, maxWidth: 600, margin: "0 auto" }}>
-              {[
-                { icon: "\uD83C\uDFA7", text: "Mastered WAV & MP3" },
-                { icon: "\uD83C\uDFB5", text: "Extended Edit & Radio Edit" },
-                { icon: "\uD83C\uDFDB\uFE0F", text: "Stems" },
-                { icon: "\uD83D\uDD12", text: "NDA + Full Rights" },
-              ].map(({ icon, text }) => (
-                <div key={text} style={{
-                  display: "flex", alignItems: "center", gap: 6,
-                  padding: "6px 14px",
-                  background: "rgba(0,229,255,0.05)",
-                  border: "1px solid rgba(0,229,255,0.15)",
-                  borderRadius: 20,
-                  fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
-                  fontSize: 12, color: "rgba(255,255,255,0.7)",
-                  whiteSpace: "nowrap",
-                }}>
-                  <span>{icon}</span>
-                  <span>{text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <GhostCatalog isMobile={isMobile} />
         </section>
 
         {/* ═══ About Steven (anchor: #afro-house — used by Google Ads STAG D) ═══ */}
@@ -919,7 +902,7 @@ function GhostPage() {
 
               <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>DJS SUPPORTING MY MUSIC</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 16 }}>
-                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Francis Mercier · Pauza · MESTIZA · DJ Chus · Joeski
+                Hugel · Claptone · ARTBAT · Hernan Cattaneo · Sofi Tukker · Roger Sanchez · Oscar G · Francis Mercier · Asher Swissa · Pauza · MESTIZA · DJ Chus · Joeski
               </div>
 
               <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8 }}>PERFORMED AT</div>
@@ -939,54 +922,6 @@ function GhostPage() {
                 I teach what I know. I produce what you hear.
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* ═══ Tech House Ghost Production (anchor: #tech-house — used by Google Ads STAG E) ═══ */}
-        <section
-          id="tech-house"
-          style={{
-            padding: isMobile ? "40px 20px" : "60px 60px",
-            background: BG,
-            borderTop: "1px solid #0d0d0d",
-          }}
-        >
-          <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-            <div style={{ ...label(CYAN), marginBottom: 14 }}>ALSO PRODUCING</div>
-            <h2 style={{ ...heading(isMobile ? 26 : 38), marginBottom: 14 }}>
-              Tech House Ghost Production
-            </h2>
-            <div style={{ ...body, fontSize: isMobile ? 15 : 17, color: "rgba(255,255,255,0.7)", maxWidth: 540, margin: "0 auto 18px" }}>
-              Driving basslines, club-ready grooves, peak-time energy. Same label-standard production
-              you hear on my Afro House work — adapted for Tech House dancefloors. Released across
-              MTGD, Moblack, Godeeva.
-            </div>
-            <div style={{ ...body, fontSize: isMobile ? 13 : 15, color: "rgba(255,255,255,0.5)", marginBottom: 24, fontStyle: "italic" }}>
-              From $300 (demo finishing) to $1,500 (full track + vocal). NDA + full copyright transfer included.
-            </div>
-            <a
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); const el = document.getElementById("contact"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "transparent",
-                border: `2px solid ${CYAN}`,
-                color: CYAN,
-                fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
-                fontWeight: 700,
-                fontSize: 14,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                padding: "14px 32px",
-                borderRadius: 50,
-                textDecoration: "none",
-                boxShadow: `0 0 24px ${SHADOW_CYAN}`,
-              }}
-            >
-              Discuss Your Tech House Track →
-            </a>
           </div>
         </section>
 
