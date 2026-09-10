@@ -67,7 +67,7 @@ export default function Sign() {
     page:   { background: BG, minHeight: "100vh", color: "#fff", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" },
     box:    { maxWidth: 680, width: "100%", background: "#07070f", border: "1px solid #1a1a2e", borderRadius: 12, padding: "48px 40px" },
     title:  { fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900, fontSize: 32, letterSpacing: "0.05em", marginBottom: 4 },
-    label:  { fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6, display: "block" },
+    label:  { fontSize: 11, letterSpacing: "0.12em", color: "rgba(255,255,255,0.62)", textTransform: "uppercase", marginBottom: 6, display: "block" },
     clause: { marginBottom: 16 },
     ctitle: { fontWeight: 700, fontSize: 13, marginBottom: 2 },
     ctext:  { fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.6 },
@@ -124,7 +124,7 @@ export default function Sign() {
         {/* Sign Section */}
         <div style={{ borderTop: "1px solid #1a1a2e", paddingTop: 32 }}>
           <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 18, marginBottom: 8 }}>Sign the Agreement</div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>After signing you'll be redirected to complete payment via PayPal.</div>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.62)", marginBottom: 24 }}>After signing you'll be redirected to complete payment via PayPal.</div>
 
           <div style={{ marginBottom: 16 }}>
             <label style={s.label}>Your Full Name</label>
@@ -146,7 +146,7 @@ export default function Sign() {
               placeholder="GHOST25"
               autoComplete="off"
             />
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 6 }}>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.62)", marginTop: 6 }}>
               Have a code from our newsletter? Enter it here.
             </div>
             {couponError && (
@@ -164,7 +164,7 @@ export default function Sign() {
             </div>
             <div style={{ background: "#0b0b18", border: "1px solid #1a1a2e", borderRadius: 8, padding: "16px 20px" }}>
               <div style={s.label}>Artist</div>
-              <div style={{ fontSize: 18, color: clientName ? "#fff" : "rgba(255,255,255,0.2)" }}>
+              <div style={{ fontSize: 18, color: clientName ? "#fff" : "rgba(255,255,255,0.55)" }}>
                 {clientName || "Your name above"}
               </div>
             </div>
@@ -194,7 +194,7 @@ export default function Sign() {
                     YOUR DROPBOX FOLDER →
                   </a>
                 )}
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", textAlign: "center" }}>The contract + folder link will be sent to your email</div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.62)", textAlign: "center" }}>The contract + folder link will be sent to your email</div>
               </div>
               <button style={s.btn} onClick={() => { window.location.href = signedData.paypalUrl; }}>
                 PROCEED TO PAYMENT →
@@ -205,14 +205,14 @@ export default function Sign() {
               <button style={{ ...s.btn, opacity: status === "signing" ? 0.7 : 1 }} onClick={handleSign} disabled={status === "signing"}>
                 {status === "signing" ? "Processing..." : "I AGREE & SIGN \u2014 PROCEED TO PAYMENT \u2192"}
               </button>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", textAlign: "center", marginTop: 12 }}>
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.62)", textAlign: "center", marginTop: 12 }}>
                 By clicking above you confirm you have read and agree to all terms.
               </div>
             </>
           )}
 
           <div style={{ textAlign: "center", marginTop: 20 }}>
-            <a href="/ghost" style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", textDecoration: "none" }}>&larr; Back to packages</a>
+            <a href="/ghost" style={{ fontSize: 12, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>&larr; Back to packages</a>
           </div>
         </div>
       </div>

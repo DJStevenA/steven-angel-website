@@ -14,7 +14,8 @@ const BG = "#080810";
  *   (B) Instagram Bot privacy — @stevenangel.prod automation (Meta App Review compliant)
  *
  * Section B preserves Steven's exact text per Meta App Review spec 2026-05-08.
- * Last updated: 2026-05-08.
+ * Last updated: 2026-09-10 (Israeli Privacy Protection Law + Amendment 13,
+ * Meta Pixel and Airwallex disclosures; Section B unchanged).
  */
 function PrivacyPage() {
   /* SEO: title + meta description for /privacy */
@@ -105,7 +106,7 @@ function PrivacyPage() {
               fontStyle: "italic",
             }}
           >
-            Steven Angel &middot; Last updated: 2026-05-08
+            Steven Angel &middot; Last updated: 2026-09-10
           </div>
 
           {/* Intro */}
@@ -121,17 +122,24 @@ function PrivacyPage() {
             the service you asked for. We do not sell or rent your personal data
             to anyone, ever.
           </p>
+          <p style={body}>
+            We handle personal data under the Israeli Protection of Privacy Law,
+            5741-1981, including Amendment 13 (in force since August 2025), and,
+            for visitors in the EU and UK, the GDPR. Where the two differ, we
+            apply whichever gives you more protection.
+          </p>
 
           {/* ════════════════════════════════════════════════
               SECTION A — WEBSITE PRIVACY
               ════════════════════════════════════════════════ */}
-          <h2 style={sectionDivider}>A &mdash; Website Privacy (steven-angel.com)</h2>
+          <h2 style={sectionDivider}>A &middot; Website Privacy (steven-angel.com)</h2>
 
           {/* Who we are */}
           <h3 style={subheading}>Who we are</h3>
           <p style={body}>
             steven-angel.com is operated by Steven Angel (sole proprietor),
-            based in Tel Aviv, Israel. Contact:{" "}
+            based in Tel Aviv, Israel, who is the controller (database owner)
+            of the personal data described here. Contact:{" "}
             <a href="mailto:hello@steven-angel.com" style={linkStyle}>
               hello@steven-angel.com
             </a>
@@ -146,7 +154,9 @@ function PrivacyPage() {
               <strong>Visiting any page:</strong> anonymous usage data via Google
               Analytics 4 (page views, device, country at city level, referrer)
               and Microsoft Clarity (session recordings, click maps, scroll
-              depth) &mdash; both standard analytics tools.
+              depth), plus the Google Ads tag and the Meta Pixel, which record
+              visits and purchases so we can measure ads on Google, Facebook
+              and Instagram.
             </li>
             <li>
               <strong>Submitting a contact / quote form:</strong> your name,
@@ -158,8 +168,9 @@ function PrivacyPage() {
             </li>
             <li>
               <strong>Buying a product:</strong> payment is processed by PayPal
-              &mdash; we receive a transaction ID, the product purchased, and
-              the email used. We do <em>not</em> see or store your card number.
+              or Airwallex (card, Apple Pay, Google Pay). We receive a
+              transaction ID, the product purchased, the amount, and the email
+              used. We do <em>not</em> see or store your card number.
             </li>
             <li>
               <strong>Clicking a Google Ads or Meta Ads link to the site:</strong>{" "}
@@ -168,7 +179,7 @@ function PrivacyPage() {
             </li>
             <li>
               <strong>Clicking a WhatsApp button:</strong> nothing is collected
-              by us &mdash; the click opens WhatsApp directly; if you message,
+              by us: the click opens WhatsApp directly; if you message,
               your phone number becomes visible to Steven.
             </li>
             <li>
@@ -198,24 +209,28 @@ function PrivacyPage() {
           <p style={body}>The site uses these cookie / storage categories:</p>
           <ul style={ulStyle}>
             <li>
-              <strong>Strictly necessary</strong> &mdash; auth session (JWT, set
+              <strong>Strictly necessary:</strong> auth session (JWT, set
               when you log in to the shop), 30-day expiry. Cannot be disabled.
             </li>
             <li>
-              <strong>Analytics</strong> &mdash; Google Analytics 4
+              <strong>Analytics:</strong> Google Analytics 4
               (<code>_ga</code>, <code>_ga_*</code>), Microsoft Clarity
               (<code>_clck</code>, <code>_clsk</code>). Anonymized.
             </li>
             <li>
-              <strong>Advertising</strong> &mdash; Google Ads conversion
-              tracking + remarketing tags. Used to measure ad performance and
-              show relevant ads on Google's network.
+              <strong>Advertising:</strong> Google Ads conversion tracking and
+              remarketing tags, and the Meta Pixel (<code>_fbp</code>,{" "}
+              <code>_fbc</code>). Used to measure ad performance and to show
+              relevant ads on Google's network and on Facebook and Instagram.
             </li>
           </ul>
           <p style={body}>
-            You can disable analytics + advertising cookies via your browser
-            settings. We are also planning a cookie consent banner (Klaro CMP)
-            for clearer per-category opt-in.
+            You can block or delete analytics and advertising cookies in your
+            browser settings at any time; the site keeps working without them.
+            You can also turn off personalised ads in your{" "}
+            <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" style={linkStyle}>Google ad settings</a>{" "}
+            and your{" "}
+            <a href="https://www.facebook.com/adpreferences" target="_blank" rel="noopener noreferrer" style={linkStyle}>Meta ad preferences</a>.
           </p>
 
           {/* Third-party services */}
@@ -224,14 +239,16 @@ function PrivacyPage() {
             We share the minimum data needed for these tools to function:
           </p>
           <ul style={ulStyle}>
-            <li><strong>Google Analytics 4</strong> &mdash; anonymized usage data (Google LLC, US; EU-US Data Privacy Framework certified).</li>
-            <li><strong>Microsoft Clarity</strong> &mdash; session recordings without sensitive form data (Microsoft Corp., US).</li>
-            <li><strong>Google Ads</strong> &mdash; click + conversion data (Google LLC).</li>
-            <li><strong>PayPal</strong> &mdash; payment processing only (PayPal Holdings).</li>
-            <li><strong>Brevo</strong> &mdash; email delivery for transactional + marketing emails (Brevo SAS, EU).</li>
-            <li><strong>Cloudflare</strong> &mdash; CDN, DDoS protection, R2 file storage (Cloudflare Inc., US/EU).</li>
-            <li><strong>Netlify</strong> &mdash; static site hosting (Netlify Inc., US).</li>
-            <li><strong>Railway</strong> &mdash; backend application hosting (Railway Corp., US).</li>
+            <li><strong>Google Analytics 4:</strong> anonymized usage data (Google LLC, US; EU-US Data Privacy Framework certified).</li>
+            <li><strong>Microsoft Clarity:</strong> session recordings without sensitive form data (Microsoft Corp., US).</li>
+            <li><strong>Google Ads:</strong> click and conversion data (Google LLC).</li>
+            <li><strong>Meta Pixel:</strong> page views, product views, add-to-cart and purchase events for Facebook and Instagram ads (Meta Platforms Ireland Ltd. / Meta Platforms Inc., US).</li>
+            <li><strong>PayPal:</strong> payment processing only (PayPal Holdings).</li>
+            <li><strong>Airwallex:</strong> card, Apple Pay and Google Pay processing only (Airwallex).</li>
+            <li><strong>Brevo:</strong> email delivery for transactional and marketing emails (Brevo SAS, EU).</li>
+            <li><strong>Cloudflare:</strong> CDN, DDoS protection, R2 file storage (Cloudflare Inc., US/EU).</li>
+            <li><strong>Netlify:</strong> static site hosting (Netlify Inc., US).</li>
+            <li><strong>Railway:</strong> backend application hosting (Railway Corp., US).</li>
           </ul>
 
           {/* Your rights */}
@@ -240,20 +257,42 @@ function PrivacyPage() {
             Regardless of where you are, you can:
           </p>
           <ul style={ulStyle}>
-            <li><strong>Access</strong> &mdash; request a copy of the data we hold on you.</li>
-            <li><strong>Correct</strong> &mdash; ask us to fix any incorrect data.</li>
-            <li><strong>Delete</strong> &mdash; ask us to delete your account and associated data.</li>
-            <li><strong>Object</strong> &mdash; opt out of analytics, advertising, or marketing emails.</li>
-            <li><strong>Portability</strong> (GDPR / EU) &mdash; receive your data in a machine-readable format.</li>
-            <li><strong>Do Not Sell My Personal Information</strong> (CCPA / California) &mdash; we never sell your data, but you can confirm this in writing if you want.</li>
+            <li><strong>Access:</strong> request a copy of the data we hold on you (section 13 of the Israeli Privacy Law).</li>
+            <li><strong>Correct:</strong> ask us to fix or delete data that is wrong, incomplete or out of date (section 14).</li>
+            <li><strong>Delete:</strong> ask us to delete your account and associated data.</li>
+            <li><strong>Object:</strong> opt out of analytics, advertising, or marketing emails, and ask to be removed from any mailing list (section 17F).</li>
+            <li><strong>Portability</strong> (GDPR / EU): receive your data in a machine-readable format.</li>
+            <li><strong>Do Not Sell My Personal Information</strong> (CCPA / California): we never sell your data, but you can confirm this in writing if you want.</li>
           </ul>
           <p style={body}>
             To exercise any of these rights, email{" "}
             <a href="mailto:hello@steven-angel.com" style={linkStyle}>
               hello@steven-angel.com
             </a>
-            . We respond within 30 days.
+            . We respond within 30 days. If you are not satisfied with our
+            answer, you can complain to the Israeli{" "}
+            <a href="https://www.gov.il/en/departments/the_privacy_protection_authority" target="_blank" rel="noopener noreferrer" style={linkStyle}>Privacy Protection Authority</a>
+            {" "}or, in the EU/UK, to your local data protection authority.
           </p>
+
+          {/* Israeli notice duty (section 11, as amended by Amendment 13) */}
+          <h3 style={subheading}>Is giving us your data required?</h3>
+          <p style={body}>
+            No law requires you to give us any personal data; it is your
+            choice. Without the details a form or checkout asks for, though, we
+            cannot complete that purchase, deliver the download, or answer your
+            request. Browsing the site needs no personal details at all.
+          </p>
+
+          {/* Security + transfers abroad */}
+          <h3 style={subheading}>How we protect your data</h3>
+          <ul style={ulStyle}>
+            <li>The whole site runs over HTTPS, and passwords are stored only as salted hashes.</li>
+            <li>Card details go straight to PayPal or Airwallex and never reach our servers.</li>
+            <li>Access to customer data is limited to Steven.</li>
+            <li>Some of the providers above store data outside Israel (mainly in the US and EU). We only use providers bound by security and privacy commitments that meet Israeli rules on transferring data abroad.</li>
+            <li>If a serious security incident affects your data, we report it to the Privacy Protection Authority as the law requires and tell affected users.</li>
+          </ul>
 
           {/* Data retention */}
           <h3 style={subheading}>Data retention</h3>
@@ -285,7 +324,7 @@ function PrivacyPage() {
           {/* ════════════════════════════════════════════════
               SECTION B — INSTAGRAM BOT PRIVACY
               ════════════════════════════════════════════════ */}
-          <h2 style={sectionDivider}>B &mdash; Instagram Bot Privacy (@stevenangel.prod)</h2>
+          <h2 style={sectionDivider}>B &middot; Instagram Bot Privacy (@stevenangel.prod)</h2>
 
           <p style={body}>
             This section covers data collected when you interact with the{" "}

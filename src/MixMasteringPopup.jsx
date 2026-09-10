@@ -399,7 +399,7 @@ export default function MixMasteringPopup() {
               style={{
                 fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 10,
-                color: "rgba(255,255,255,0.35)",
+                color: "rgba(255,255,255,0.62)",
                 lineHeight: 1.5,
               }}
             >

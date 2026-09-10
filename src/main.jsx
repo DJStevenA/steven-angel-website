@@ -8,6 +8,7 @@ import { ShopPlayerProvider } from "./shop/ShopPlayerContext.jsx";
 
 import { trackPageView } from "./lib/analytics/events";
 import { RevealStyles } from "./lib/useReveal.jsx";
+import { initA11y } from "./lib/a11y-widget.js";
 
 const Ghost = lazy(() => import("./Ghost.jsx"));
 const GhostCustom = lazy(() => import("./GhostCustom.jsx"));
@@ -20,6 +21,7 @@ const Sign = lazy(() => import("./Sign.jsx"));
 const Privacy = lazy(() => import("./Privacy.jsx"));
 const Terms = lazy(() => import("./Terms.jsx"));
 const Refund = lazy(() => import("./Refund.jsx"));
+const Accessibility = lazy(() => import("./Accessibility.jsx"));
 // Hidden order page — NOT linked from anywhere on the public site.
 // Steven sends the URL directly to customers who want to order.
 const CustomOrder = lazy(() => import("./CustomOrder.jsx"));
@@ -117,6 +119,7 @@ function PageTitle() {
       "/mix-mastering": "Professional Mix & Mastering from $35 | Steven Angel",
       "/sign": "Ghost Production Agreement | Steven Angel",
       "/privacy": "Privacy Policy — Steven Angel Marketing",
+      "/accessibility": "Accessibility Statement | Steven Angel",
       "/shop": "Ableton Templates & Afro House Masterclass | Steven Angel",
       "/blog": "THE LAB — Production Notes by Steven Angel",
       "/links": "Steven Angel — Links · Ghost Production · Mix & Mastering · Lessons",
@@ -132,6 +135,7 @@ function PageTitle() {
       "/mix-mastering": "Professional online mastering from $35. Trusted by Hernan Cattaneo & Dole & Kom. Mix + Master from $150. 3-day turnaround. Afro House, Melodic Techno, Electronic.",
       "/sign": "Sign your ghost production agreement with Steven Angel.",
       "/privacy": "Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.",
+      "/accessibility": "Accessibility statement for steven-angel.com: the standard we follow (IS 5568, WCAG 2.0 AA), the accessibility toolbar, known limitations and how to reach our accessibility contact.",
       "/shop": "Afro House Ableton templates and masterclass by Steven Angel — signed MTGD & Moblack artist. Hugel, Keinemusik, Moblack style. From $19.99. Instant download.",
       "/blog": "Production notes from a Beatport Top 10 producer. Mix, mastering, and the small decisions that separate hobbyist tracks from label releases.",
       "/links": "All Steven Angel links — Ghost Production, Mix & Mastering, Lessons, Templates, Masterclass and more. Beatport Top 10 producer based in Tel Aviv.",
@@ -177,6 +181,17 @@ function PageTitle() {
     }
   } catch (e) { /* noop — never block render */ }
 })();
+
+// Accessibility toolbar (IS 5568 / WCAG 2.0 AA). Bottom-left, lifted above the
+// 72px shop sticky player; WhatsApp owns the bottom-right corner.
+initA11y({
+  storageKey: "steven-angel-a11y",
+  statementUrl: "/accessibility",
+  side: "left",
+  bottom: 96,
+  skipTarget: "main, h1",
+  focusColor: "#00E5FF",
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -224,6 +239,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
             <Route path="/refund" element={<Refund />} />
             <Route path="/refund-policy" element={<Navigate to="/refund" replace />} />
+            <Route path="/accessibility" element={<Accessibility />} />
             {/* AI Tools — Mashup Generator */}
             <Route path="/tools/mashup" element={<MashupGeneratorPage />} />
             <Route path="/tools/mashup/credits" element={<MashupCreditsPage />} />

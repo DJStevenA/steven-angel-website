@@ -491,7 +491,7 @@ export default function CheckoutModal({ product, onClose }) {
                 marginTop: 16,
                 fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 10,
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.62)",
                 textAlign: "center",
                 lineHeight: 1.5,
               }}

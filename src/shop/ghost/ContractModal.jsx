@@ -314,7 +314,7 @@ export default function ContractModal({ track, onClose }) {
                 {paypalError}
               </div>
             )}
-            <div style={{ marginTop: 14, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 10, color: "rgba(255,255,255,0.4)", textAlign: "center" }}>
+            <div style={{ marginTop: 14, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 10, color: "rgba(255,255,255,0.62)", textAlign: "center" }}>
               Secure payment via PayPal · No card data stored
             </div>
           </div>

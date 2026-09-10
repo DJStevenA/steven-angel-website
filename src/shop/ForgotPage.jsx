@@ -87,10 +87,10 @@ export default function ForgotPage() {
                 Enter your email and we'll send you a link to reset your password.
               </p>
               <form onSubmit={handleSubmit}>
-                <label style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", marginBottom: 8 }}>
+                <label htmlFor="forgot-email" style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", marginBottom: 8 }}>
                   Email
                 </label>
-                <input
+                <input id="forgot-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -118,7 +118,7 @@ export default function ForgotPage() {
                 Remembered it?{" "}
                 <Link to="/shop/login" style={{ color: CYAN, textDecoration: "none", fontWeight: 600 }}>Sign in</Link>
                 <br />
-                <Link to="/shop" style={{ color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>Back to shop</Link>
+                <Link to="/shop" style={{ color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>Back to shop</Link>
               </div>
             </>
           )}

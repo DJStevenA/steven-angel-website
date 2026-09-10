@@ -84,7 +84,7 @@ export default function BlogAudioCompare({ label, beforeUrl, afterUrl }) {
           style={{
             fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 14,
-            color: "rgba(255,255,255,0.45)",
+            color: "rgba(255,255,255,0.62)",
             fontStyle: "italic",
           }}
         >

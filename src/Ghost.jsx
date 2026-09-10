@@ -747,7 +747,7 @@ function GhostPage() {
               style={{
                 fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: isMobile ? 12 : 14,
-                color: "rgba(255,255,255,0.45)",
+                color: "rgba(255,255,255,0.62)",
                 letterSpacing: "0.08em",
                 marginBottom: 24,
                 lineHeight: 1.6,
@@ -838,7 +838,7 @@ function GhostPage() {
                   fontSize: 13,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.5)",
+                  color: "rgba(255,255,255,0.72)",
                   textDecoration: "none",
                   opacity: 0.85,
                   transition: "opacity 0.2s, text-decoration 0.2s",
@@ -913,9 +913,9 @@ function GhostPage() {
               <div style={{ ...label(CYAN), fontSize: 10, marginBottom: 8, marginTop: 16 }}>THE ANGELS DUO</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
                 Part of the Afro / Latin House duo{" "}
-                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: CYAN, textDecoration: "none" }}>The Angels</a>
+                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: CYAN, textDecoration: "underline", textUnderlineOffset: 3 }}>The Angels</a>
                 {" "}— 15M+ streams ·{" "}
-                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: CYAN, textDecoration: "none" }}>Beatport</a>
+                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: CYAN, textDecoration: "underline", textUnderlineOffset: 3 }}>Beatport</a>
               </div>
 
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.55)", fontStyle: "italic", marginTop: 4 }}>
@@ -1167,11 +1167,11 @@ function GhostPage() {
                       <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>
                         {name}
                       </div>
-                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>
+                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.62)", marginTop: 2 }}>
                         {country}
                       </div>
                     </div>
-                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.62)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
                       {topic}
                     </div>
                   </div>

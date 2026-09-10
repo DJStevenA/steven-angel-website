@@ -108,10 +108,10 @@ export default function ResetPage() {
                 Enter a new password for your account.
               </p>
               <form onSubmit={handleSubmit}>
-                <label style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", marginBottom: 8 }}>
+                <label htmlFor="reset-new-password" style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", marginBottom: 8 }}>
                   New Password
                 </label>
-                <input
+                <input id="reset-new-password"
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -123,10 +123,10 @@ export default function ResetPage() {
                   onFocus={(e) => (e.currentTarget.style.borderColor = CYAN)}
                   onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
                 />
-                <label style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", marginBottom: 8 }}>
+                <label htmlFor="reset-confirm-password" style={{ display: "block", fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.65)", marginBottom: 8 }}>
                   Confirm Password
                 </label>
-                <input
+                <input id="reset-confirm-password"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

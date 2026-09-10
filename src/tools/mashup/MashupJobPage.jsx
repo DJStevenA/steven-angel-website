@@ -132,7 +132,7 @@ export default function MashupJobPage() {
           </div>
           <div className={styles.topBarRight}>
             {user?.email && (
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.4)" }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.62)" }}>
                 {user.email}
               </span>
             )}
@@ -146,7 +146,7 @@ export default function MashupJobPage() {
           fontSize: 11,
           letterSpacing: "0.25em",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.3)",
+          color: "rgba(255,255,255,0.62)",
           marginBottom: 24,
         }}>
           Job ID: {jobId}

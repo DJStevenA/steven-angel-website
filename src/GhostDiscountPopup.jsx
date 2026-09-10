@@ -261,7 +261,7 @@ export default function GhostDiscountPopup() {
                       style={{
                         fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                         fontSize: 12,
-                        color: "rgba(255,255,255,0.45)",
+                        color: "rgba(255,255,255,0.62)",
                         textTransform: "uppercase",
                         letterSpacing: "0.08em",
                       }}
@@ -304,7 +304,7 @@ export default function GhostDiscountPopup() {
                       style={{
                         fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                         fontSize: 11,
-                        color: "rgba(255,255,255,0.45)",
+                        color: "rgba(255,255,255,0.62)",
                       }}
                     >
                       {c.description}
@@ -313,7 +313,7 @@ export default function GhostDiscountPopup() {
                       style={{
                         fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                         fontSize: 11,
-                        color: copied === idx ? "#4CAF50" : "rgba(255,255,255,0.35)",
+                        color: copied === idx ? "#4CAF50" : "rgba(255,255,255,0.62)",
                         transition: "color 0.2s",
                         minWidth: 80,
                         textAlign: "right",
@@ -462,7 +462,7 @@ export default function GhostDiscountPopup() {
               style={{
                 fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 10,
-                color: "rgba(255,255,255,0.35)",
+                color: "rgba(255,255,255,0.62)",
                 lineHeight: 1.5,
               }}
             >

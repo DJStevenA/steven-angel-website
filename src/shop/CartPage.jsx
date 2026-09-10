@@ -157,7 +157,7 @@ export default function CartPage() {
         }}>
           Your <span style={{ color: CYAN }}>Cart</span>
           {cart.length > 0 && (
-            <span style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", marginLeft: 12, fontWeight: 600 }}>
+            <span style={{ fontSize: 16, color: "rgba(255,255,255,0.62)", marginLeft: 12, fontWeight: 600 }}>
               ({cart.length} {cart.length === 1 ? "item" : "items"})
             </span>
           )}
@@ -225,7 +225,7 @@ export default function CartPage() {
                     <button
                       onClick={() => removeFromCart(item.id)}
                       style={{
-                        background: "none", border: "none", color: "rgba(255,255,255,0.35)",
+                        background: "none", border: "none", color: "rgba(255,255,255,0.62)",
                         fontFamily: "'DM Sans', sans-serif", fontSize: 11, cursor: "pointer",
                         padding: 0, textDecoration: "underline",
                       }}
@@ -241,7 +241,7 @@ export default function CartPage() {
                       <span style={{
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: isMobile ? 12 : 13,
-                        color: "rgba(255,255,255,0.4)",
+                        color: "rgba(255,255,255,0.62)",
                         textDecoration: "line-through",
                         marginBottom: 2,
                       }}>
@@ -295,7 +295,7 @@ export default function CartPage() {
                   style={{
                     background: "none", border: "none", padding: "4px 6px",
                     fontFamily: "'DM Sans', sans-serif", fontSize: 12,
-                    color: "rgba(255,255,255,0.4)", cursor: "pointer",
+                    color: "rgba(255,255,255,0.62)", cursor: "pointer",
                     textDecoration: "underline", textUnderlineOffset: 3,
                   }}
                 >
@@ -415,7 +415,7 @@ export default function CartPage() {
                   <div style={{
                     fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
                     fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.4)", marginBottom: 12,
+                    color: "rgba(255,255,255,0.62)", marginBottom: 12,
                   }}>
                     Complete Your Studio
                   </div>
@@ -442,7 +442,7 @@ export default function CartPage() {
                           }}>
                             {p.name}
                           </Link>
-                          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                          <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.62)" }}>
                             {p.headline}
                           </div>
                         </div>

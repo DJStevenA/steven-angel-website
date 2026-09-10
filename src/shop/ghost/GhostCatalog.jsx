@@ -102,7 +102,7 @@ export default function GhostCatalog({ isMobile }) {
         {!loading && total > 0 && (
           <div style={{
             marginTop: 12, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12,
-            color: available > 0 ? CYAN : "rgba(255,255,255,0.35)",
+            color: available > 0 ? CYAN : "rgba(255,255,255,0.62)",
           }}>
             {available} of {total} tracks still available
           </div>
@@ -142,7 +142,7 @@ export default function GhostCatalog({ isMobile }) {
 
       {/* Loading */}
       {loading && (
-        <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.62)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
           Loading catalog…
         </div>
       )}
@@ -158,7 +158,7 @@ export default function GhostCatalog({ isMobile }) {
       {!loading && !error && (
         <>
           {filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,0.3)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
+            <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,0.62)", fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 14 }}>
               No tracks in this genre.
             </div>
           ) : (

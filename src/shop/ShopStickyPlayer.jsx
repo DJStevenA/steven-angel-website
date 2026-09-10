@@ -175,7 +175,7 @@ export default function ShopStickyPlayer() {
   const timeStyle = {
     fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
     fontSize: isMobile ? 9 : 10,
-    color: "rgba(255,255,255,0.45)",
+    color: "rgba(255,255,255,0.62)",
     whiteSpace: "nowrap",
     flexShrink: 0,
     lineHeight: 1,
@@ -224,7 +224,7 @@ export default function ShopStickyPlayer() {
     background: "transparent",
     border: "none",
     cursor: "pointer",
-    color: "rgba(255,255,255,0.45)",
+    color: "rgba(255,255,255,0.62)",
     fontSize: isMobile ? 18 : 20,
     lineHeight: 1,
     padding: isMobile ? "4px" : "6px",
@@ -320,13 +320,13 @@ export default function ShopStickyPlayer() {
             {isMobile ? fmt(displayTime) : fmt(duration)}
           </span>
           {isMobile && (
-            <span style={{ ...timeStyle, color: "rgba(255,255,255,0.25)" }}>/</span>
+            <span style={{ ...timeStyle, color: "rgba(255,255,255,0.62)" }}>/</span>
           )}
           {isMobile && (
             <span style={timeStyle}>{fmt(duration)}</span>
           )}
           {!isMobile && (
-            <span style={{ ...timeStyle, color: "rgba(255,255,255,0.25)" }}>/ {fmt(duration)}</span>
+            <span style={{ ...timeStyle, color: "rgba(255,255,255,0.62)" }}>/ {fmt(duration)}</span>
           )}
         </div>
 

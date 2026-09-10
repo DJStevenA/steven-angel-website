@@ -434,7 +434,7 @@ export default function ShopPage() {
         {activeTab === "shop" && (
           <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 8, padding: isMobile ? "0 16px 30px" : "0 60px 40px", maxWidth: 1000, margin: "0 auto" }}>
             {["Afro House Templates", "Melodic Techno Templates", "Ableton Live Projects", "Hugel Style", "Keinemusik Style", "Solomun Style", "Artbat Style", "Sample Packs", "Online Masterclass", "Royalty-Free"].map((text) => (
-              <span key={text} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(255,255,255,0.35)" }}>
+              <span key={text} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 500, fontSize: 11, color: "rgba(255,255,255,0.62)" }}>
                 {text}
               </span>
             ))}
@@ -590,12 +590,12 @@ function SupportWidget() {
           gap: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
           minWidth: 200,
         }}>
-          <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>
+          <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(255,255,255,0.62)", marginBottom: 2 }}>
             Need Help?
           </div>
           <a href={WA} target="_blank" rel="noreferrer" onClick={() => trackWhatsAppLead("SH", "shop_help")} style={{
             display: "flex", alignItems: "center", gap: 10, padding: "10px 14px",
-            background: "#25D366", borderRadius: 8, textDecoration: "none",
+            background: "#1a7a42", borderRadius: 8, textDecoration: "none",
             fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontWeight: 600, fontSize: 13, color: "#fff",
           }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.106 1.51 5.833L.057 23.054a.75.75 0 00.92.92l5.222-1.453A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 01-4.98-1.366l-.357-.214-3.706 1.032 1.032-3.706-.214-.357A9.75 9.75 0 1112 21.75z"/></svg>

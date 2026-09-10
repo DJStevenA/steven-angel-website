@@ -193,8 +193,8 @@ export default function SignupPage() {
           </p>
 
           <form onSubmit={handleSubmit}>
-            <label style={labelStyle}>Name (optional)</label>
-            <input
+            <label htmlFor="signup-name" style={labelStyle}>Name (optional)</label>
+            <input id="signup-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -204,8 +204,8 @@ export default function SignupPage() {
               onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
             />
 
-            <label style={labelStyle}>Email</label>
-            <input
+            <label htmlFor="signup-email" style={labelStyle}>Email</label>
+            <input id="signup-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -216,8 +216,8 @@ export default function SignupPage() {
               onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
             />
 
-            <label style={labelStyle}>Password (minimum 8 characters)</label>
-            <input
+            <label htmlFor="signup-password" style={labelStyle}>Password (minimum 8 characters)</label>
+            <input id="signup-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -229,8 +229,8 @@ export default function SignupPage() {
               onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
             />
 
-            <label style={labelStyle}>Confirm Password</label>
-            <input
+            <label htmlFor="signup-confirm-password" style={labelStyle}>Confirm Password</label>
+            <input id="signup-confirm-password"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -305,7 +305,7 @@ export default function SignupPage() {
             <br />
             <Link
               to="/shop"
-              style={{ color: "rgba(255,255,255,0.45)", textDecoration: "none" }}
+              style={{ color: "rgba(255,255,255,0.62)", textDecoration: "none" }}
             >
               Back to shop
             </Link>

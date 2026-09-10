@@ -174,7 +174,7 @@ function PackCheckoutButton({ pack, guestEmail, apiBase, token, onSuccess, onErr
           padding: "12px 0",
           fontFamily: "'DM Sans', sans-serif",
           fontSize: 13,
-          color: "rgba(255,255,255,0.4)",
+          color: "rgba(255,255,255,0.62)",
           textAlign: "center",
         }}>
           Loading checkout...
@@ -274,7 +274,7 @@ export default function MashupCreditsPage() {
           </div>
           <div className={styles.topBarRight}>
             {token && user?.email && (
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.4)" }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.62)" }}>
                 {user.email}
               </span>
             )}
@@ -393,7 +393,7 @@ export default function MashupCreditsPage() {
                       <p style={{
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: 13,
-                        color: "rgba(255,255,255,0.35)",
+                        color: "rgba(255,255,255,0.62)",
                         textAlign: "center",
                         padding: "12px 0",
                       }}>

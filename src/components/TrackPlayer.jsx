@@ -428,7 +428,7 @@ export default function TrackPlayer({
             style={{
               fontFamily:   "'DM Sans', 'DM Sans Fallback', sans-serif",
               fontSize:     isMobile ? 11 : 12,
-              color:        "rgba(255,255,255,0.38)",
+              color:        "rgba(255,255,255,0.62)",
               fontStyle:    "italic",
               textAlign:    isMobile ? "center" : "left",
               marginBottom: isMobile ? 12 : 14,
@@ -619,7 +619,7 @@ function TrackRow({
                 fontFamily:  "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
                 fontWeight:  700,
                 fontSize:    isMobile ? 11 : 12,
-                color:       "rgba(255,255,255,0.35)",
+                color:       "rgba(255,255,255,0.62)",
                 lineHeight:  1,
                 userSelect:  "none",
               }}
@@ -684,7 +684,7 @@ function TrackRow({
                 style={{
                   fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                   fontSize:   isMobile ? 10 : 11,
-                  color:      "rgba(255,255,255,0.38)",
+                  color:      "rgba(255,255,255,0.62)",
                   lineHeight: 1.4,
                 }}
               >
@@ -704,7 +704,7 @@ function TrackRow({
             fontSize:      10,
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color:         "rgba(255,255,255,0.22)",
+            color:         "rgba(255,255,255,0.62)",
             whiteSpace:    "nowrap",
             flexShrink:    0,
           }}
@@ -884,7 +884,7 @@ function MiniPlayer({
             display:        "flex",
             alignItems:     "center",
             gap:            12,
-            color:          "rgba(255,255,255,0.25)",
+            color:          "rgba(255,255,255,0.62)",
             fontFamily:     "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
             fontWeight:     600,
             fontSize:       12,
@@ -1002,7 +1002,7 @@ function MiniPlayer({
               }}
             >
               {fmt(currentTime)}
-              <span style={{ color: "rgba(255,255,255,0.2)", margin: "0 4px" }}>/</span>
+              <span style={{ color: "rgba(255,255,255,0.62)", margin: "0 4px" }}>/</span>
               {fmt(duration)}
             </div>
           </div>

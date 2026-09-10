@@ -200,7 +200,7 @@ export default function Links() {
             style={{
               ...body,
               fontSize: isMobile ? 12 : 13,
-              color: "rgba(255,255,255,0.4)",
+              color: "rgba(255,255,255,0.62)",
             }}
           >
             Released on Godeeva · MTGD · Moblack · Sony · Ultra · Armada
@@ -360,7 +360,7 @@ export default function Links() {
             marginTop: isMobile ? 28 : 36,
             fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 11,
-            color: "rgba(255,255,255,0.3)",
+            color: "rgba(255,255,255,0.62)",
             letterSpacing: "0.05em",
           }}
         >

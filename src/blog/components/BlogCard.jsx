@@ -141,7 +141,7 @@ export default function BlogCard({ post }) {
             marginTop: 6,
             fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
             fontSize: 12,
-            color: "rgba(255,255,255,0.4)",
+            color: "rgba(255,255,255,0.62)",
           }}
         >
           <span>

@@ -152,7 +152,7 @@ export default function ThankYouPage() {
 
         {/* ── Downloads ── */}
         {loading ? (
-          <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, fontFamily: "'DM Sans', sans-serif", marginBottom: 20 }}>
+          <div style={{ color: "rgba(255,255,255,0.62)", fontSize: 13, fontFamily: "'DM Sans', sans-serif", marginBottom: 20 }}>
             Preparing your downloads...
           </div>
         ) : downloads.length > 0 ? (
@@ -180,7 +180,7 @@ export default function ThankYouPage() {
                 Download {dl.filename || dl.productId}
               </a>
             ))}
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "'DM Sans', sans-serif", marginTop: 6 }}>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.62)", fontFamily: "'DM Sans', sans-serif", marginTop: 6 }}>
               Links expire in 15 minutes · Re-download anytime from your account
             </div>
           </div>
@@ -247,7 +247,7 @@ export default function ThankYouPage() {
             <div style={{
               fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
               fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.35)", marginBottom: 12, textAlign: "center",
+              color: "rgba(255,255,255,0.62)", marginBottom: 12, textAlign: "center",
             }}>
               You Might Also Like
             </div>

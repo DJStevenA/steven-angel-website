@@ -362,7 +362,7 @@ export default function MashupGeneratorPage() {
               </span>
             )}
             {balanceLoading && (
-              <span className={styles.balanceChip} style={{ color: "rgba(255,255,255,0.3)" }}>
+              <span className={styles.balanceChip} style={{ color: "rgba(255,255,255,0.62)" }}>
                 Loading balance...
               </span>
             )}
@@ -370,7 +370,7 @@ export default function MashupGeneratorPage() {
               <span style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: 13,
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.62)",
               }}>
                 {user.email}
               </span>

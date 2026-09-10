@@ -639,7 +639,7 @@ export default function MixMastering() {
             ))}
           </div>
 
-          <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.45)", textAlign: "center", marginTop: 28 }}>
+          <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.62)", textAlign: "center", marginTop: 28 }}>
             Up-front payment via secure checkout. Files delivered within turnaround time once received. Need more than 100 stems?{" "}
             <a href={BOOKING_WHATSAPP} target="_blank" rel="noopener noreferrer"
               onClick={() => trackWhatsAppLead("MM", "mix_master_pricing_overflow")}

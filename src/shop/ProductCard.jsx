@@ -130,10 +130,11 @@ function StarRating({ rating, size = 14 }) {
     } else if (rating >= i - 0.5) {
       stars.push(<span key={i} style={{ color: "#FFD700", fontSize: size, opacity: 0.7 }}>&#9733;</span>);
     } else {
-      stars.push(<span key={i} style={{ color: "rgba(255,255,255,0.15)", fontSize: size }}>&#9733;</span>);
+      stars.push(<span key={i} style={{ color: "rgba(255,255,255,0.3)", fontSize: size }}>&#9733;</span>);
     }
   }
-  return <span style={{ display: "inline-flex", gap: 1 }}>{stars}</span>;
+  // One image with a spoken rating instead of five "star" characters
+  return <span role="img" aria-label={`Rated ${rating} out of 5`} style={{ display: "inline-flex", gap: 1 }}>{stars}</span>;
 }
 
 /**
@@ -412,7 +413,7 @@ export default function ProductCard({ product, isMobile, onBuy }) {
         <span
           style={{
             fontSize: isMobile ? 12 : 14,
-            color: "rgba(255,255,255,0.4)",
+            color: "rgba(255,255,255,0.62)",
             marginLeft: 6,
             fontWeight: 600,
           }}

@@ -197,7 +197,7 @@ export default function CartCheckoutPage() {
               <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)" }}>Total</span>
               <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 32, color: CYAN }}>
                 ${total.toFixed(2)}
-                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginLeft: 6, fontWeight: 600 }}>USD</span>
+                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.62)", marginLeft: 6, fontWeight: 600 }}>USD</span>
               </span>
             </div>
           </div>
@@ -237,7 +237,7 @@ export default function CartCheckoutPage() {
               <div key={text} style={{
                 display: "flex", alignItems: "center", gap: 8,
                 fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                color: "rgba(255,255,255,0.45)",
+                color: "rgba(255,255,255,0.62)",
               }}>
                 <span>{icon}</span>
                 <span>{text}</span>

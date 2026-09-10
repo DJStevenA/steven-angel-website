@@ -166,7 +166,7 @@ export default function App() {
                   </svg>
                 </span>
               </button>
-              <div style={{ marginTop: 14, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>
+              <div style={{ marginTop: 14, fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.62)" }}>
                 Free intro · No commitment
               </div>
             </div>
@@ -272,7 +272,7 @@ export default function App() {
                 </a>
               </div>
 
-              <div style={{ textAlign: "center", marginTop: 20, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
+              <div style={{ textAlign: "center", marginTop: 20, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.62)" }}>
                 100% confidential · No sales pitch
               </div>
             </div>
@@ -329,9 +329,9 @@ export default function App() {
               <div style={{ ...label(cyan), fontSize: 10, marginBottom: 8, marginTop: 16 }}>THE ANGELS DUO</div>
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.7)", marginBottom: 12 }}>
                 Part of the Afro / Latin House duo{" "}
-                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none" }}>The Angels</a>
+                <a href="https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "underline", textUnderlineOffset: 3 }}>The Angels</a>
                 {" "}— 15M+ streams ·{" "}
-                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "none" }}>Beatport</a>
+                <a href="https://www.beatport.com/artist/the-angels-il/913642" target="_blank" rel="noreferrer" style={{ color: cyan, textDecoration: "underline", textUnderlineOffset: 3 }}>Beatport</a>
               </div>
 
               <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.55)", fontStyle: "italic", marginTop: 4 }}>
@@ -472,9 +472,9 @@ export default function App() {
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" }}>
                     <div>
                       <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "0.05em" }}>{n}</div>
-                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{f}</div>
+                      <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.62)", marginTop: 2 }}>{f}</div>
                     </div>
-                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.62)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
                       {g}
                     </div>
                   </div>
@@ -529,7 +529,7 @@ export default function App() {
           </a>
 
           {/* Divider: OR */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, color: "rgba(255,255,255,0.3)", fontSize: 12, letterSpacing: "0.2em" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, color: "rgba(255,255,255,0.62)", fontSize: 12, letterSpacing: "0.2em" }}>
             <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
             OR
             <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.08)" }} />
@@ -616,7 +616,7 @@ export default function App() {
             to ? (
               <Link key={lbl} to={to} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: cyan, textDecoration: "none" }}>{lbl}</Link>
             ) : (
-              <a key={lbl} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{lbl}</a>
+              <a key={lbl} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>{lbl}</a>
             )
           )}
         </div>
@@ -627,20 +627,21 @@ export default function App() {
             { label: "Privacy", to: "/privacy" },
             { label: "Terms", to: "/terms" },
             { label: "Refund Policy", to: "/refund" },
+            { label: "Accessibility", to: "/accessibility" },
             { label: "Contact", href: "mailto:dj.steven.angel@gmail.com" },
           ].map(({ label: lbl, to, href }) =>
             to ? (
-              <Link key={lbl} to={to} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>{lbl}</Link>
+              <Link key={lbl} to={to} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>{lbl}</Link>
             ) : (
-              <a key={lbl} href={href} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>{lbl}</a>
+              <a key={lbl} href={href} style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>{lbl}</a>
             )
           )}
         </div>
 
-        <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 6 }}>
+        <div style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: 6 }}>
           Tel Aviv, Israel
         </div>
-        <span style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+        <span style={{ fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11, color: "rgba(255,255,255,0.6)" }}>
           &copy; {new Date().getFullYear()} Steven Angel — All Rights Reserved
         </span>
       </footer>

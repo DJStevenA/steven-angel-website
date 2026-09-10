@@ -236,13 +236,13 @@ export default function CheckoutPage() {
                 fontSize: 42, color: accent, lineHeight: 1, marginBottom: 4,
               }}>
                 ${pricing.final.toFixed(2)}
-                <span style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginLeft: 6, fontWeight: 600 }}>USD</span>
+                <span style={{ fontSize: 14, color: "rgba(255,255,255,0.62)", marginLeft: 6, fontWeight: 600 }}>USD</span>
               </div>
               {pricing.discount > 0 && (
                 <div style={{
                   fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: accent, marginBottom: 16,
                 }}>
-                  <span style={{ textDecoration: "line-through", color: "rgba(255,255,255,0.4)", marginRight: 8 }}>
+                  <span style={{ textDecoration: "line-through", color: "rgba(255,255,255,0.62)", marginRight: 8 }}>
                     ${pricing.base.toFixed(2)}
                   </span>
                   {couponCode} applied
@@ -309,7 +309,7 @@ export default function CheckoutPage() {
                   />
                   <div style={{
                     fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                    color: "rgba(255,255,255,0.4)", marginBottom: 16, lineHeight: 1.5,
+                    color: "rgba(255,255,255,0.62)", marginBottom: 16, lineHeight: 1.5,
                   }}>
                     After payment you'll get your download link + a link to set a password.
                   </div>
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
                     <div style={{
                       padding: "14px", textAlign: "center", background: "rgba(255,255,255,0.03)",
                       border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 8,
-                      fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.35)",
+                      fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.62)",
                     }}>
                       Enter your email to continue to payment
                     </div>
@@ -365,7 +365,7 @@ export default function CheckoutPage() {
                   <div key={text} style={{
                     display: "flex", alignItems: "center", gap: 8,
                     fontFamily: "'DM Sans', sans-serif", fontSize: 11,
-                    color: "rgba(255,255,255,0.45)",
+                    color: "rgba(255,255,255,0.62)",
                   }}>
                     <span dangerouslySetInnerHTML={{ __html: icon }} />
                     <span>{text}</span>

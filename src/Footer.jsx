@@ -25,6 +25,7 @@ const LEGAL_LINKS = [
   { label: "Privacy", to: "/privacy" },
   { label: "Terms", to: "/terms" },
   { label: "Refund Policy", to: "/refund" },
+  { label: "Accessibility", to: "/accessibility" },
   { label: "Contact", href: "mailto:dj.steven.angel@gmail.com" },
 ];
 
@@ -39,7 +40,7 @@ export default function Footer() {
           to ? (
             <Link key={label} to={to} style={{ fontFamily: FONT_BODY, fontSize: 12, color: CYAN, textDecoration: "none" }}>{label}</Link>
           ) : (
-            <a key={label} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: FONT_BODY, fontSize: 12, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}>{label}</a>
+            <a key={label} href={href} target="_blank" rel="noreferrer" style={{ fontFamily: FONT_BODY, fontSize: 12, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>{label}</a>
           )
         )}
       </div>
@@ -48,17 +49,17 @@ export default function Footer() {
       <div style={{ display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", marginBottom: 10 }}>
         {LEGAL_LINKS.map(({ label, to, href }) =>
           to ? (
-            <Link key={label} to={to} style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>{label}</Link>
+            <Link key={label} to={to} style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>{label}</Link>
           ) : (
-            <a key={label} href={href} style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.45)", textDecoration: "none" }}>{label}</a>
+            <a key={label} href={href} style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.62)", textDecoration: "none" }}>{label}</a>
           )
         )}
       </div>
 
-      <div style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.35)", marginBottom: 6 }}>
+      <div style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: 6 }}>
         Tel Aviv, Israel
       </div>
-      <span style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+      <span style={{ fontFamily: FONT_BODY, fontSize: 11, color: "rgba(255,255,255,0.6)" }}>
         &copy; {new Date().getFullYear()} Steven Angel — All Rights Reserved
       </span>
     </footer>

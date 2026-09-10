@@ -157,7 +157,7 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit}>
             {/* Email field */}
-            <label
+            <label htmlFor="login-email"
               style={{
                 display: "block",
                 fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
@@ -171,7 +171,7 @@ export default function LoginPage() {
             >
               Email
             </label>
-            <input
+            <input id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -196,7 +196,7 @@ export default function LoginPage() {
             />
 
             {/* Password field */}
-            <label
+            <label htmlFor="login-password"
               style={{
                 display: "block",
                 fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
@@ -210,7 +210,7 @@ export default function LoginPage() {
             >
               Password
             </label>
-            <input
+            <input id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -307,7 +307,7 @@ export default function LoginPage() {
             <br />
             <Link
               to="/shop"
-              style={{ color: "rgba(255,255,255,0.45)", textDecoration: "none" }}
+              style={{ color: "rgba(255,255,255,0.62)", textDecoration: "none" }}
             >
               Back to shop
             </Link>

@@ -161,7 +161,7 @@ function DeliveredCard({ order, isMobile }) {
         >
           Download Your Master →
         </button>
-        <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.4)" }}>
+        <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.62)" }}>
           Opens Dropbox in a new tab.
         </div>
       </div>
@@ -279,7 +279,7 @@ function UploadUI({ order, isMobile, onComplete }) {
         >
           Upload Your Stems →
         </button>
-        <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.45)", textAlign: "center", marginTop: 8 }}>
+        <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.62)", textAlign: "center", marginTop: 8 }}>
           Opens Dropbox in a new tab. No login needed.
         </div>
       </div>
@@ -366,7 +366,7 @@ function UploadUI({ order, isMobile, onComplete }) {
           {completing ? "Sending..." : "I'm Done Uploading →"}
         </button>
         {!canComplete && (
-          <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.35)", textAlign: "center", marginTop: 8 }}>
+          <div style={{ ...body, fontSize: 12, color: "rgba(255,255,255,0.62)", textAlign: "center", marginTop: 8 }}>
             Click "Upload Your Stems" first to enable this button.
           </div>
         )}

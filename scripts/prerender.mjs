@@ -48,6 +48,7 @@ const HARDCODED_ROUTES = [
   '/the-angels',
   '/mix-mastering',
   '/privacy',
+  '/accessibility',
   '/links',
   '/angels',
   '/sign',

@@ -247,6 +247,12 @@ function staticSeoPages() {
             'Privacy policy for Steven Angel Marketing — covers the @stevenangel.prod Instagram automation built with the Steven Angel Marketing Meta App.',
         },
         {
+          path: '/accessibility',
+          title: 'Accessibility Statement | Steven Angel',
+          description:
+            'Accessibility statement for steven-angel.com: the standard we follow (IS 5568, WCAG 2.0 AA), the accessibility toolbar, known limitations and how to reach our accessibility contact.',
+        },
+        {
           path: '/links',
           title: 'Steven Angel — Links · Ghost Production · Mix & Mastering · Lessons',
           description:

@@ -292,7 +292,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
         <div style={{
           fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900,
           fontSize: isMobile ? 20 : 22, textTransform: "uppercase",
-          letterSpacing: "0.04em", color: isSold ? "rgba(255,255,255,0.4)" : "#fff",
+          letterSpacing: "0.04em", color: isSold ? "rgba(255,255,255,0.62)" : "#fff",
           lineHeight: 1.2, marginBottom: 6,
         }}>
           {track.name}
@@ -301,7 +301,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
         {/* Exclusive tag */}
         <div style={{
           fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 11,
-          color: "rgba(255,255,255,0.4)", marginBottom: 8,
+          color: "rgba(255,255,255,0.62)", marginBottom: 8,
         }}>
           {isSold ? "No longer available" : "Exclusive · One-time sale · Full rights transfer"}
         </div>
@@ -335,7 +335,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
               <span style={{
                 fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 700,
                 fontSize: isMobile ? 16 : 18,
-                color: "rgba(255,255,255,0.4)",
+                color: "rgba(255,255,255,0.62)",
                 textDecoration: "line-through",
                 letterSpacing: "0.02em",
               }}>
@@ -346,7 +346,7 @@ export default function GhostTrackCard({ track, isMobile, onBuy }) {
             <div style={{
               fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif", fontWeight: 900,
               fontSize: isMobile ? 24 : 28,
-              color: isSold ? "rgba(255,255,255,0.3)" : accentColor,
+              color: isSold ? "rgba(255,255,255,0.62)" : accentColor,
               letterSpacing: "0.02em",
             }}>
               €{track.price_eur}

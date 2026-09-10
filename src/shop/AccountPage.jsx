@@ -457,7 +457,7 @@ export default function AccountPage() {
                         style={{
                           fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                           fontSize: 11,
-                          color: "rgba(255,255,255,0.4)",
+                          color: "rgba(255,255,255,0.62)",
                           fontStyle: "italic",
                           alignSelf: isMobile ? "stretch" : "center",
                         }}

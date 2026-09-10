@@ -396,7 +396,7 @@ export default function BlogPost() {
               style={{
                 fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif",
                 fontSize: 13,
-                color: "rgba(255,255,255,0.45)",
+                color: "rgba(255,255,255,0.62)",
               }}
             >
               {formatDate(post.date)}
