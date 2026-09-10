@@ -110,7 +110,11 @@ const ICON = '<svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true" focusable=
  * @param {string} [o.focusColor] outline colour for keyboard focus
  */
 export function initA11y(o) {
-  if (typeof document === "undefined" || document.querySelector(".a11yw-btn")) return;
+  if (typeof document === "undefined" || window.__a11yw) return;
+  window.__a11yw = true;
+  // A prerendered page can already contain a snapshot of the button and skip
+  // link, without their styles or listeners. Replace them with live ones.
+  document.querySelectorAll(".a11yw-btn, .a11yw-skip, .a11yw-panel").forEach((n) => n.remove());
   const side = o.side === "right" ? "right" : "left";
   const bottom = o.bottom ?? 22;
   const lang = () => ((document.documentElement.lang || "he").startsWith("he") ? "he" : "en");

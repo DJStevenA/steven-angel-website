@@ -103,6 +103,15 @@ function mergeHead(prerenderedHtml, originalHtml) {
   return merged;
 }
 
+// The accessibility toolbar (src/lib/a11y-widget.js) is built at runtime. A
+// snapshot of it in the static HTML would show an unstyled button and a bare
+// "Skip to content" link to crawlers and no-JS visitors, so drop it here.
+function stripA11yToolbar(html) {
+  return html
+    .replace(/<a class="a11yw-skip"[^>]*>[^<]*<\/a>/g, '')
+    .replace(/<button[^>]*class="a11yw-btn"[\s\S]*?<\/button>/g, '');
+}
+
 function writeRouteHtml(route, html) {
   // Map route '/' → dist/index.html, '/foo' → dist/foo/index.html
   const segments = route.split('/').filter(Boolean);
@@ -204,7 +213,7 @@ async function main() {
         continue;
       }
 
-      const merged = mergeHead(rendered.html, original);
+      const merged = mergeHead(stripA11yToolbar(rendered.html), original);
       writeRouteHtml(route, merged);
       console.log(`✓ ${route}`);
       ok++;
