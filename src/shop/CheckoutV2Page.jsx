@@ -142,6 +142,43 @@ export default function CheckoutV2Page() {
   const paidHandledRef = useRef(false);
   const [intentId, setIntentId] = useState(null);
 
+  // A card payment carries the buyer's name and country but no email
+  // (checked on Andre's real payment), so without a valid email here there is
+  // nowhere to send the files. Card, Apple Pay and Google Pay stay visible but
+  // locked until the email is valid; PayPal supplies its own email and stays
+  // open. Steven 2026-09-13: "צריך את המייל התקין".
+  const emailInputRef = useRef(null);
+  const [emailPrompt, setEmailPrompt] = useState(false);
+  const paymentsLocked = !emailValid;
+  const focusEmail = () => {
+    setEmailPrompt(true);
+    emailInputRef.current?.focus();
+    emailInputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+  };
+  const PayLock = ({ label }) => paymentsLocked ? (
+    <button
+      type="button"
+      onClick={focusEmail}
+      style={{
+        position: "absolute", inset: 0, zIndex: 2, width: "100%",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "0 12px", border: "1px dashed #9ca3af", borderRadius: 6,
+        background: "rgba(255,255,255,0.9)", color: "#111", cursor: "pointer",
+        fontFamily: "system-ui, -apple-system, sans-serif", fontSize: 13, fontWeight: 600, textAlign: "center",
+      }}
+    >
+      {label}
+    </button>
+  ) : null;
+
+  // A signed-in buyer's email field is disabled and filled from the account,
+  // but the account can finish loading after the first render. Fill it then,
+  // or the locked field would stay empty and block payment.
+  useEffect(() => {
+    if (user?.email && !email) setEmail(user.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.email]);
+
   // Report the email to the server as soon as it is valid, so the payment
   // webhook can deliver even if this page is closed before it reports back.
   useEffect(() => {
@@ -426,8 +463,14 @@ export default function CheckoutV2Page() {
               gap: 10,
             }}>
               <div ref={expressPayPalRef} style={{ minHeight: 44 }} />
-              <div ref={expressApplePayRef} style={{ minHeight: 44 }} />
-              <div ref={expressGooglePayRef} style={{ minHeight: 44 }} />
+              <div style={{ position: "relative" }}>
+                <div ref={expressApplePayRef} style={{ minHeight: 44 }} />
+                <PayLock label="Enter your email below first" />
+              </div>
+              <div style={{ position: "relative" }}>
+                <div ref={expressGooglePayRef} style={{ minHeight: 44 }} />
+                <PayLock label="Enter your email below first" />
+              </div>
             </div>
           </section>
 
@@ -446,6 +489,7 @@ export default function CheckoutV2Page() {
                   <span style={{ color: "#6b7280", fontWeight: 400, marginLeft: 6 }}>— we send your download here</span>
                 </label>
                 <input
+                  ref={emailInputRef}
                   id="cv2-email"
                   type="email"
                   autoComplete="email"
@@ -473,8 +517,10 @@ export default function CheckoutV2Page() {
                 </select>
               </div>
             </div>
-            {!emailValid && email.length > 0 && (
-              <div style={{ fontSize: 12, color: "#ef4444", marginTop: 4 }}>Please enter a valid email address</div>
+            {!emailValid && (email.length > 0 || emailPrompt) && (
+              <div role="alert" style={{ fontSize: 12, color: "#b91c1c", marginTop: 4 }}>
+                {email.length > 0 ? "Please enter a valid email address" : "Enter your email to pay by card, Apple Pay or Google Pay. Your download link goes there."}
+              </div>
             )}
             {!user && emailValid && (
               <div style={{ fontSize: 12, color: "#6b7280", marginTop: 6 }}>
@@ -495,6 +541,8 @@ export default function CheckoutV2Page() {
               `applepay: { disabled: true }` etc. config in mountAirwallexElements. */}
           <section style={{ marginBottom: 24 }}>
             <h3 style={sectionTitle}>Credit Card</h3>
+            <div style={{ position: "relative" }}>
+            <PayLock label="Enter your email above to pay by card. Your download link goes there." />
             <div ref={dropInContainerRef} style={{ minHeight: 220, position: "relative", border: "1px solid #e5e7eb", borderRadius: 6, padding: 0 }}>
               {/* Skeleton — visible until Airwallex Drop-in iframe replaces
                   the inner DOM. Drop-in mount replaces children of the
@@ -516,6 +564,7 @@ export default function CheckoutV2Page() {
                   Loading secure payment form…
                 </div>
               </div>
+            </div>
             </div>
           </section>
 
