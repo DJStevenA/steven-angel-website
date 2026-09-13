@@ -40,6 +40,7 @@ const AIRWALLEX_SDK_URL = "https://checkout.airwallex.com/assets/elements.bundle
 
 const COUPONS_CLIENT = { WELCOME15: { percentOff: 15 } };
 const round2 = (n) => Math.round(n * 100) / 100;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // ── Airwallex SDK singleton loader ───────────────────────────────────────────
 let awxSdkPromise = null;
@@ -131,7 +132,29 @@ export default function CheckoutV2Page() {
   const discount = coupon ? round2(subtotal * (coupon.percentOff / 100)) : 0;
   const total = round2(subtotal - discount);
 
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const emailValid = EMAIL_RE.test(email);
+
+  // The payment elements mount once, so their success handler must read the
+  // email through a ref. A handler that closed over `email` saw the empty value
+  // from page load, and that is how Andre's 11.9 order skipped delivery.
+  const emailRef = useRef(email);
+  emailRef.current = email;
+  const paidHandledRef = useRef(false);
+  const [intentId, setIntentId] = useState(null);
+
+  // Report the email to the server as soon as it is valid, so the payment
+  // webhook can deliver even if this page is closed before it reports back.
+  useEffect(() => {
+    if (!emailValid || !intentId) return;
+    const t = setTimeout(() => {
+      fetch(`${BACKEND}/shop/checkout/order-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: `awx_${intentId}`, email: email.trim() }),
+      }).catch(() => {});
+    }, 400);
+    return () => clearTimeout(t);
+  }, [email, emailValid, intentId]);
 
   // ── Refs for payment containers ────────────────────────────────────────────
   const expressPayPalRef = useRef(null);
@@ -191,10 +214,49 @@ export default function CheckoutV2Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productIds.join(","), couponCode]);
 
+  // One handler for every Airwallex way to pay: card form, Apple Pay, Google Pay
+  // (the wallets had no handler at all). The server delivers from the payment
+  // webhook regardless; this call makes the receipt arrive at once and signs the
+  // buyer straight into their account.
+  async function handleAirwallexPaid(event, intent) {
+    if (paidHandledRef.current) return;
+    paidHandledRef.current = true;
+    console.log("[checkout-v2] Airwallex success:", event);
+    const paymentMethod = event?.detail?.paymentIntent?.latest_payment_attempt?.payment_method;
+    const buyerEmail = [emailRef.current, paymentMethod?.billing?.email, user?.email]
+      .map((e) => (typeof e === "string" ? e.trim() : ""))
+      .find((e) => EMAIL_RE.test(e)) || "";
+    try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: intent.intentId, email: buyerEmail }); } catch {}
+    if (buyerEmail) {
+      try {
+        const confirmRes = await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: buyerEmail, orderId: `awx_${intent.intentId}`, provider: "airwallex" }),
+        });
+        if (confirmRes.ok) {
+          const confirmData = await confirmRes.json().catch(() => ({}));
+          if (confirmData.token) {
+            try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds, items: cart.map(i => ({ name: i.name, price: i.price })), total, email: buyerEmail })); } catch {}
+          }
+        }
+      } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
+    } else {
+      console.warn("[checkout-v2] No email on the page; the server delivers from the payment webhook.");
+    }
+    clearCart();
+    navigate("/shop/thank-you");
+  }
+
   async function mountAirwallexElements(intent) {
     try {
       const Airwallex = await loadAirwallexSdk();
       await Airwallex.init({ env: "prod", enabledElements: ["payments"] });
+      const onPaid = (event) => handleAirwallexPaid(event, intent);
+      // The elements mount once, on the first intent; a coupon typed later
+      // creates a new intent they never switch to. The email is reported against
+      // the intent the buyer actually pays on.
+      if (!dropInElementRef.current) setIntentId(intent.intentId);
 
       // Express buttons (Apple Pay, Google Pay) via Airwallex
       if (expressApplePayRef.current && !expressInstancesRef.current.applePay) {
@@ -204,6 +266,7 @@ export default function CheckoutV2Page() {
             countryCode: billingCountry || "US", style: { type: "buy", theme: "black", height: 44 },
           });
           ap.mount(expressApplePayRef.current);
+          if (typeof ap.on === "function") ap.on("success", onPaid);
           expressInstancesRef.current.applePay = ap;
         } catch (e) { console.error("[checkout-v2] Apple Pay init:", e); }
       }
@@ -232,6 +295,7 @@ export default function CheckoutV2Page() {
             },
           });
           gp.mount(expressGooglePayRef.current);
+          if (typeof gp.on === "function") gp.on("success", onPaid);
           expressInstancesRef.current.googlePay = gp;
         } catch (e) { console.error("[checkout-v2] Google Pay init:", e); }
       }
@@ -250,41 +314,7 @@ export default function CheckoutV2Page() {
         dropIn.mount(dropInContainerRef.current);
         dropInElementRef.current = dropIn;
 
-        dropIn.on("success", async (event) => {
-          console.log("[checkout-v2] Airwallex success:", event);
-          // Try to get email from: (1) form field, (2) Airwallex event, (3) logged-in user
-          const buyerEmail = email
-            || event?.detail?.paymentIntent?.latest_payment_attempt?.payment_method?.billing?.email
-            || user?.email
-            || "";
-          try { trackPurchase({ id: "cart-v2", name: "Cart-v2", price: total }, { transaction_id: intent.intentId, email: buyerEmail }); } catch {}
-          // Confirm delivery — create purchase rows + send download email
-          if (buyerEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)) {
-            try {
-              const confirmRes = await fetch(`${BACKEND}/shop/checkout/confirm-delivery`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  email: buyerEmail,
-                  productIds,
-                  couponCode: couponCode || null,
-                  orderId: `awx_${intent.intentId}`,
-                  provider: "airwallex",
-                }),
-              });
-              if (confirmRes.ok) {
-                const confirmData = await confirmRes.json().catch(() => ({}));
-                if (confirmData.token) {
-                  try { localStorage.setItem("shop_last_purchase", JSON.stringify({ token: confirmData.token, productIds, items: cart.map(i => ({ name: i.name, price: i.price })), total, email: buyerEmail })); } catch {}
-                }
-              }
-            } catch (e) { console.error("[checkout-v2] confirm-delivery:", e); }
-          } else {
-            console.warn("[checkout-v2] No valid email — skipping confirm-delivery. Payment succeeded but no email delivery.");
-          }
-          clearCart();
-          navigate("/shop/thank-you");
-        });
+        dropIn.on("success", onPaid);
         dropIn.on("error", (ev) => {
           console.error("[checkout-v2] Airwallex element error:", ev);
         });
