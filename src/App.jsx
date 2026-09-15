@@ -499,7 +499,7 @@ export default function App() {
 
           {/* WhatsApp Button */}
           <a
-            href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi steve, I'd love to connect about your services")}
+            href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi Steven, I'd love to connect about your services")}
             target="_blank"
             rel="noreferrer"
             onClick={() => { trackWhatsAppLead('GP', 'homepage_contact'); if (window.clarity) window.clarity("event", "homepageWhatsAppClick"); }}
@@ -546,7 +546,7 @@ export default function App() {
               fetch("https://ghost-backend-production-adb6.up.railway.app/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: data.name, email: data.email, message: "Hi Steve, I'd love to connect about your services. Reaching out from steven-angel.com.", source: "home-contact" }),
+                body: JSON.stringify({ name: data.name, email: data.email, message: "Hi Steven, I'd love to connect about your services. Reaching out from steven-angel.com.", source: "home-contact" }),
                 signal: AbortSignal.timeout(15000),
               })
                 .then((r) => r.ok ? r.json() : Promise.reject(r))
@@ -648,7 +648,7 @@ export default function App() {
 
       {/* ═══ Floating WhatsApp ═══ */}
       <a
-        href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi steve, I'd love to connect about your services")}
+        href={"https://wa.me/972523561353?text=" + encodeURIComponent("Hi Steven, I'd love to connect about your services")}
         target="_blank"
         rel="noreferrer"
         onClick={() => { trackWhatsAppLead("GP", "homepage_floating"); if (window.clarity) window.clarity("event", "homepageWhatsAppFloatingClick"); }}

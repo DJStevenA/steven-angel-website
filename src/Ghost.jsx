@@ -13,7 +13,7 @@ const BG = "#080810";
 
 /* ─── External Links ─── */
 const WHATSAPP_LINK =
-  "https://wa.me/972523561353?text=" + encodeURIComponent("Hi steve, I'm interested in your Production Services.");
+  "https://wa.me/972523561353?text=" + encodeURIComponent("Hi Steven, I'm interested in your Production Services.");
 
 /* ─── Shadow Colors ─── */
 const SHADOW_CYAN = "rgba(0,229,255,0.4)";
