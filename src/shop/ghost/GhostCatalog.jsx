@@ -72,9 +72,6 @@ export default function GhostCatalog({ isMobile }) {
         return tags.includes(activeGenre);
       });
 
-  const available = tracks.filter((t) => !t.sold).length;
-  const total = tracks.length;
-
   return (
     <div>
       {/* Section header */}
@@ -99,14 +96,8 @@ export default function GhostCatalog({ isMobile }) {
         }}>
           Each track sold once. Full copyright transfer. NDA included. Once it's gone, it's gone.
         </div>
-        {!loading && total > 0 && (
-          <div style={{
-            marginTop: 12, fontFamily: "'DM Sans', 'DM Sans Fallback', sans-serif", fontSize: 12,
-            color: available > 0 ? CYAN : "rgba(255,255,255,0.62)",
-          }}>
-            {available} of {total} tracks still available
-          </div>
-        )}
+        {/* "N of N tracks still available" counter removed: Steven flagged it
+            2026-05-06 and it was still live on 2026-09-15 (21 of 21). */}
       </div>
 
       {/* Genre filter bar */}
