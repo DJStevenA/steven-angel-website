@@ -2,7 +2,8 @@
  * The Angels EPK Page — /the-angels
  *
  * Electronic Press Kit for Steven Angel's duo "The Angels".
- * Single-page: Hero, Bio, Set (Miami), Two Videos, Instagram, Newsletter, Contact.
+ * Single-page: Hero, Bio, Set (Miami), After Movie (Fabrika), Two Videos,
+ * Instagram, Newsletter, Contact.
  */
 import React, { useState, useEffect, useRef } from "react";
 import Nav from "./Nav.jsx";
@@ -16,6 +17,7 @@ const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 const VIDEO_BASE = `${BACKEND}/shop/media/videos`;
 const SPAZIO_MIAMI_VIDEO = `${VIDEO_BASE}/the-angels-spazio-miami.mp4`;
 const SUPPORTERS_VIDEO = `${VIDEO_BASE}/the-angels-supporters.mp4`;
+const FABRIKA_VIDEO = `${VIDEO_BASE}/the-angels-fabrika.mp4`;
 const CANARY_YOUTUBE_ID = "sPArmZafsX8";
 
 const SPOTIFY_URL = "https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz";
@@ -582,6 +584,64 @@ export default function TheAngels() {
             {/* Foreground: vertical reel on mobile (cover), centered on desktop (contain) */}
             <LazyAutoVideo
               src={SPAZIO_MIAMI_VIDEO}
+              autoPlay
+              muted
+              loop
+              playsInline
+              controls
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: isMobile ? "cover" : "contain",
+                display: "block",
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ AFTER MOVIE — Fabrika, vertical reel, same treatment as the Miami set ═══ */}
+      <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: isMobile ? 24 : 36 }}>
+            <div style={{ ...label(PURPLE), marginBottom: 12 }}>After Movie</div>
+            <h2 style={{ ...heading(isMobile ? 32 : 44), color: "#fff", marginBottom: 8 }}>
+              Fabrika &middot; Philadelphia
+            </h2>
+            <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)" }}>USA</div>
+          </div>
+          <div style={{
+            position: "relative",
+            aspectRatio: isMobile ? "9/16" : "16/9",
+            borderRadius: 16,
+            overflow: "hidden",
+            background: "#0a0a14",
+            border: `1px solid ${PURPLE}33`,
+            maxWidth: isMobile ? "100%" : 880,
+            margin: "0 auto",
+            boxShadow: `0 0 60px ${PURPLE}22`,
+          }}>
+            {/* Desktop only: blurred backdrop fills the landscape sides */}
+            {!isMobile && (
+              <LazyAutoVideo
+                src={FABRIKA_VIDEO}
+                autoPlay muted loop playsInline
+                aria-hidden="true"
+                style={{
+                  position: "absolute", inset: 0,
+                  width: "100%", height: "100%",
+                  objectFit: "cover",
+                  filter: "blur(40px) brightness(0.5)",
+                  transform: "scale(1.25)",
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+            {/* Foreground: vertical reel on mobile (cover), centered on desktop (contain) */}
+            <LazyAutoVideo
+              src={FABRIKA_VIDEO}
               autoPlay
               muted
               loop
