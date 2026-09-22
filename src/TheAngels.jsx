@@ -2,7 +2,7 @@
  * The Angels EPK Page — /the-angels
  *
  * Electronic Press Kit for Steven Angel's duo "The Angels".
- * Single-page: Hero, Bio, Set (Miami), Vertical Reels (Fabrika + Canary),
+ * Single-page: Hero, Bio, Set (Miami), Vertical Reels (Canary + Fabrika),
  * Two Videos, Instagram, Newsletter, Contact.
  */
 import React, { useState, useEffect, useRef } from "react";
@@ -603,7 +603,7 @@ export default function TheAngels() {
         </div>
       </section>
 
-      {/* ═══ VERTICAL REELS — Fabrika after movie + Canary Islands reel ═══ */}
+      {/* ═══ VERTICAL REELS — Canary Islands reel first, then the Fabrika after movie ═══ */}
       <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <div style={{
@@ -612,8 +612,8 @@ export default function TheAngels() {
             gap: isMobile ? 40 : 32,
           }}>
             {[
-              { src: FABRIKA_VIDEO, color: PURPLE, tag: "After Movie", title: "Fabrika", place: "Philadelphia · USA" },
               { src: CANARY_REEL_VIDEO, color: CYAN, tag: "Reel", title: "Canary Islands", place: "Spain" },
+              { src: FABRIKA_VIDEO, color: PURPLE, tag: "After Movie", title: "Fabrika", place: "Philadelphia · USA" },
             ].map((reel) => (
               <div key={reel.title}>
                 <div style={{
