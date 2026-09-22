@@ -2,8 +2,8 @@
  * The Angels EPK Page — /the-angels
  *
  * Electronic Press Kit for Steven Angel's duo "The Angels".
- * Single-page: Hero, Bio, Set (Miami), After Movie (Fabrika), Two Videos,
- * Instagram, Newsletter, Contact.
+ * Single-page: Hero, Bio, Set (Miami), Vertical Reels (Fabrika + Canary),
+ * Two Videos, Instagram, Newsletter, Contact.
  */
 import React, { useState, useEffect, useRef } from "react";
 import Nav from "./Nav.jsx";
@@ -18,6 +18,7 @@ const VIDEO_BASE = `${BACKEND}/shop/media/videos`;
 const SPAZIO_MIAMI_VIDEO = `${VIDEO_BASE}/the-angels-spazio-miami.mp4`;
 const SUPPORTERS_VIDEO = `${VIDEO_BASE}/the-angels-supporters.mp4`;
 const FABRIKA_VIDEO = `${VIDEO_BASE}/the-angels-fabrika.mp4`;
+const CANARY_REEL_VIDEO = `${VIDEO_BASE}/the-angels-canary-reel.mp4`;
 const CANARY_YOUTUBE_ID = "sPArmZafsX8";
 
 const SPOTIFY_URL = "https://open.spotify.com/artist/2pVGLwnxVTzWK6fdTzwVSz";
@@ -602,60 +603,52 @@ export default function TheAngels() {
         </div>
       </section>
 
-      {/* ═══ AFTER MOVIE — Fabrika, vertical reel, same treatment as the Miami set ═══ */}
+      {/* ═══ VERTICAL REELS — Fabrika after movie + Canary Islands reel ═══ */}
       <section style={{ padding: isMobile ? "60px 24px" : "100px 48px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: isMobile ? 24 : 36 }}>
-            <div style={{ ...label(PURPLE), marginBottom: 12 }}>After Movie</div>
-            <h2 style={{ ...heading(isMobile ? 32 : 44), color: "#fff", marginBottom: 8 }}>
-              Fabrika &middot; Philadelphia
-            </h2>
-            <div style={{ ...body, fontSize: 14, color: "rgba(255,255,255,0.5)" }}>USA</div>
-          </div>
+        <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <div style={{
-            position: "relative",
-            aspectRatio: isMobile ? "9/16" : "16/9",
-            borderRadius: 16,
-            overflow: "hidden",
-            background: "#0a0a14",
-            border: `1px solid ${PURPLE}33`,
-            maxWidth: isMobile ? "100%" : 880,
-            margin: "0 auto",
-            boxShadow: `0 0 60px ${PURPLE}22`,
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+            gap: isMobile ? 40 : 32,
           }}>
-            {/* Desktop only: blurred backdrop fills the landscape sides */}
-            {!isMobile && (
-              <LazyAutoVideo
-                src={FABRIKA_VIDEO}
-                autoPlay muted loop playsInline
-                aria-hidden="true"
-                style={{
-                  position: "absolute", inset: 0,
-                  width: "100%", height: "100%",
-                  objectFit: "cover",
-                  filter: "blur(40px) brightness(0.5)",
-                  transform: "scale(1.25)",
-                  pointerEvents: "none",
-                }}
-              />
-            )}
-            {/* Foreground: vertical reel on mobile (cover), centered on desktop (contain) */}
-            <LazyAutoVideo
-              src={FABRIKA_VIDEO}
-              autoPlay
-              muted
-              loop
-              playsInline
-              controls
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: isMobile ? "cover" : "contain",
-                display: "block",
-              }}
-            />
+            {[
+              { src: FABRIKA_VIDEO, color: PURPLE, tag: "After Movie", title: "Fabrika", place: "Philadelphia · USA" },
+              { src: CANARY_REEL_VIDEO, color: CYAN, tag: "Reel", title: "Canary Islands", place: "Spain" },
+            ].map((reel) => (
+              <div key={reel.title}>
+                <div style={{
+                  position: "relative",
+                  aspectRatio: "9/16",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  background: "#0a0a14",
+                  border: `1px solid ${reel.color}33`,
+                  boxShadow: `0 0 50px ${reel.color}1A`,
+                }}>
+                  <LazyAutoVideo
+                    src={reel.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                  />
+                </div>
+                <div style={{ textAlign: "center", marginTop: 14 }}>
+                  <div style={{ ...label(reel.color), marginBottom: 4 }}>{reel.tag}</div>
+                  <div style={{ ...heading(20), color: "#fff" }}>{reel.title}</div>
+                  <div style={{ ...body, fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 4 }}>{reel.place}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
