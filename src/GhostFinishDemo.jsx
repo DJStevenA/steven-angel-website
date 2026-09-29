@@ -5,8 +5,9 @@
  * have a demo and want it taken label-ready (3–5 day turnaround).
  *
  * Positioned alongside /ghost (ready-made tracks) and /ghost/custom
- * (from-scratch ghost production). Single fixed entry price ($300 starting),
- * lead capture via WhatsApp + InquiryForm modal.
+ * (from-scratch ghost production). No price on the page (Steven 29.9.2026):
+ * a demo comes in and is answered with a price for that project. Lead capture
+ * via WhatsApp + InquiryForm modal.
  */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -93,18 +94,8 @@ export default function GhostFinishDemo() {
     areaServed: "Worldwide",
     description:
       "Take your unfinished demo from rough idea to label-ready: full mix, master, stems, MIDI, project file, radio + extended versions, 100% rights transfer, NDA included. 3-5 day turnaround.",
-    offers: {
-      "@type": "Offer",
-      price: "300",
-      priceCurrency: "USD",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        price: "300",
-        priceCurrency: "USD",
-        valueAddedTaxIncluded: false,
-      },
-    },
-    priceRange: "$300+",
+    // No offers block and no priceRange: structured data must not state a price
+    // the page does not state.
   };
 
   /* ═══════════════════════ RENDER ═══════════════════════ */
@@ -287,7 +278,7 @@ export default function GhostFinishDemo() {
         </div>
       </section>
 
-      {/* ═══ PRICING — single row ═══ */}
+      {/* ═══ PRICE — quoted per project, no number on the page (Steven 29.9.2026) ═══ */}
       <section
         style={{
           padding: isMobile ? "60px 24px" : "100px 48px",
@@ -295,57 +286,15 @@ export default function GhostFinishDemo() {
           background: BG_ALT,
         }}
       >
-        <div style={{ maxWidth: 720, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: isMobile ? 32 : 48 }}>
-            <div style={{ ...label(CYAN), marginBottom: 14 }}>Pricing</div>
-            <h2 style={{ ...heading(isMobile ? 30 : 44) }}>One Track. One Price.</h2>
-          </div>
-
-          <div
-            style={{
-              background: BG,
-              border: `1px solid ${CYAN}33`,
-              borderRadius: 12,
-              padding: isMobile ? "32px 24px" : "40px 36px",
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: isMobile ? 18 : 32,
-              boxShadow: `0 0 40px ${CYAN}14`,
-            }}
-          >
-            <div style={{ textAlign: isMobile ? "center" : "left", flex: 1 }}>
-              <div
-                style={{
-                  ...heading(isMobile ? 26 : 32),
-                  marginBottom: 6,
-                }}
-              >
-                Demo Finishing
-              </div>
-              <div
-                style={{
-                  ...body,
-                  fontStyle: "italic",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.45)",
-                }}
-              >
-                Starting price.
-              </div>
-            </div>
-            <div
-              style={{
-                ...heading(isMobile ? 48 : 64),
-                color: CYAN,
-                lineHeight: 1,
-                letterSpacing: "0.02em",
-              }}
-            >
-              $300
-            </div>
-          </div>
+        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
+          <div style={{ ...label(CYAN), marginBottom: 14 }}>Packages</div>
+          <h2 style={{ ...heading(isMobile ? 30 : 44), marginBottom: 16 }}>
+            Priced Per Track
+          </h2>
+          <p style={{ ...body, maxWidth: 560, margin: "0 auto" }}>
+            Every demo arrives at a different stage, so the price follows the work the track
+            actually needs. Send it over and you get a price and a timeline within 24 hours.
+          </p>
         </div>
       </section>
 

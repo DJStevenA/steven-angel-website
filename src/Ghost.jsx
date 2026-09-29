@@ -20,12 +20,8 @@ const SHADOW_CYAN = "rgba(0,229,255,0.4)";
 const SHADOW_PURPLE = "rgba(187,134,252,0.4)";
 const SHADOW_GREEN = "rgba(37,211,102,0.4)";
 
-/* ─── Package Prices ─── */
-const PRICES = {
-  demo: "$300",
-  full: "$800",
-  vocal: "$1,500",
-};
+/* Package prices are not shown on the site (Steven 29.9.2026). A demo comes in,
+   we answer with a price for that project. Do not put numbers back here. */
 
 /* ─── FAQ Data ─── */
 const FAQ_DATA = [
@@ -378,7 +374,7 @@ function GhostPage() {
       name: "Afro House, Tech House & Indie Dance Ghost Production",
       serviceType: "Ghost Production Service",
       description:
-        "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. From $300. NDA included.",
+        "Buy an Afro House, Tech House or Indie Dance Ghost Production — releases on MTGD, Moblack & Godeeva. Beatport Top 10. NDA included.",
       provider: {
         "@type": "Person",
         name: "Steven Angel",
@@ -393,13 +389,8 @@ function GhostPage() {
       },
       areaServed: "Worldwide",
       url: "https://steven-angel.com/ghost",
-      offers: {
-        "@type": "Offer",
-        price: "300",
-        priceCurrency: "USD",
-        url: "https://steven-angel.com/ghost",
-        availability: "https://schema.org/InStock",
-      },
+      // No Offer block: an offer in structured data needs a price, and the page
+      // no longer states one.
     });
 
     document.head.appendChild(ld);
@@ -513,8 +504,7 @@ function GhostPage() {
               >
                 {howItWorksPackage === "demo"
                   ? "Demo Finishing"
-                  : "Full Production"}{" "}
-                &mdash; {PRICES[howItWorksPackage]}
+                  : "Full Production"}
               </span>
             </div>
 
@@ -527,7 +517,7 @@ function GhostPage() {
               {
                 n: "2",
                 title: "Complete Payment",
-                desc: `Pay ${PRICES[howItWorksPackage]} via PayPal (secure checkout). A signed PDF copy of the contract is sent to your email immediately.`,
+                desc: "Pay through the PayPal link for your project (secure checkout). A signed PDF copy of the contract is sent to your email immediately.",
               },
               {
                 n: "3",
@@ -775,8 +765,8 @@ function GhostPage() {
             {/* 2-CTA bar — Custom Made / Finish Demo (the two services this page focuses on) */}
             <div style={{ display: "flex", flexWrap: isMobile ? "wrap" : "nowrap", gap: isMobile ? 10 : 16, marginTop: isMobile ? 24 : 36, justifyContent: "center" }}>
               {[
-                { title: "Custom Made →", sub: "From $800", href: "/ghost/custom" },
-                { title: "Finish My Demo →", sub: "From $300", href: "/ghost/finish-demo" },
+                { title: "Custom Made →", sub: "Built from scratch", href: "/ghost/custom" },
+                { title: "Finish My Demo →", sub: "From your idea", href: "/ghost/finish-demo" },
               ].map((card, i) => (
                 <a
                   key={i}

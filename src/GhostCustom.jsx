@@ -9,7 +9,7 @@
  *   FORBIDDEN: Hernan Cattaneo, Dole & Kom, ARTBAT (Mix & Mastering line — Red Line)
  *
  * Sections:
- *   Hero · Process (4 steps) · Pricing (3 rows) · Talk to Steven (WhatsApp + Inquiry)
+ *   Hero · Process (4 steps) · Packages (3 rows, no prices) · Talk to Steven (WhatsApp + Inquiry)
  *   · Want a track today? (cross-promote /ghost) · Floating WhatsApp
  */
 import React, { useState, useEffect } from "react";
@@ -43,27 +43,8 @@ const SERVICE_JSONLD = {
   },
   "areaServed": "Worldwide",
   "url": "https://steven-angel.com/ghost/custom",
-  "priceRange": "$300-$1500",
-  "offers": [
-    {
-      "@type": "Offer",
-      "name": "Full Production",
-      "price": "800",
-      "priceCurrency": "USD",
-    },
-    {
-      "@type": "Offer",
-      "name": "Full Production + Vocals",
-      "price": "1500",
-      "priceCurrency": "USD",
-    },
-    {
-      "@type": "Offer",
-      "name": "Demo Finishing",
-      "price": "300",
-      "priceCurrency": "USD",
-    },
-  ],
+  // No priceRange and no offers: structured data must not state a price the page
+  // does not state (Steven 29.9.2026).
 };
 
 const PROCESS_STEPS = [
@@ -86,12 +67,15 @@ const PROCESS_STEPS = [
   },
 ];
 
+/* The packages, without prices (Steven 29.9.2026): a track is quoted per project.
+   `summary` sits where the price used to sit. `note` is a separate line under the
+   name and stays empty here. */
 const PRICING_ROWS = [
-  { name: "Full Production", price: "$800", note: null, link: null },
-  { name: "Full Production + Vocals", price: "$1,500+", note: null, link: null },
+  { name: "Full Production", summary: "Written and produced from scratch", note: null, link: null },
+  { name: "Full Production + Vocals", summary: "Including a topline and a vocalist", note: null, link: null },
   {
     name: "Demo Finishing",
-    price: "$300",
+    summary: "Your idea, taken label ready",
     note: null,
     link: { href: "/ghost/finish-demo", label: "Dedicated page →" },
   },
@@ -335,7 +319,7 @@ export default function GhostCustom() {
         <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: isMobile ? 36 : 52 }}>
             <div style={{ ...label(PURPLE), marginBottom: 14, color: PURPLE }}>
-              Pricing
+              Packages
             </div>
             <h2
               style={{
@@ -344,10 +328,11 @@ export default function GhostCustom() {
                 marginBottom: 12,
               }}
             >
-              Straight Numbers
+              What You Get
             </h2>
             <p style={{ ...body, maxWidth: 520, margin: "0 auto" }}>
-              No marketplaces, no middlemen — you talk to me directly.
+              No marketplaces, no middlemen. You talk to me directly, and every track
+              is priced for the work it needs.
             </p>
           </div>
 
@@ -410,12 +395,14 @@ export default function GhostCustom() {
                 </div>
                 <div
                   style={{
-                    ...heading(isMobile ? 26 : 32),
-                    color: CYAN,
-                    whiteSpace: "nowrap",
+                    ...body,
+                    fontSize: isMobile ? 13.5 : 14.5,
+                    color: "rgba(255,255,255,0.62)",
+                    textAlign: isMobile ? "start" : "end",
+                    maxWidth: isMobile ? "100%" : 230,
                   }}
                 >
-                  {row.price}
+                  {row.summary}
                 </div>
               </div>
             ))}
