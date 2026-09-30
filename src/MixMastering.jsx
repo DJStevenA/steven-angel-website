@@ -6,6 +6,7 @@
  */
 import React, { useState, useEffect, useRef } from "react";
 import Nav from "./Nav.jsx";
+import StartProjectCTA from "./components/StartProjectCTA.jsx";
 import Footer from "./Footer.jsx";
 import { Link } from "react-router-dom";
 import { trackWhatsAppLead } from "./lib/analytics/events";
@@ -121,7 +122,9 @@ const FAQS = [
   },
 ];
 
-const BOOKING_WHATSAPP = "https://wa.me/972523561353?text=" + encodeURIComponent("I'm interested in Mix & Mastering");
+// The bot routes a lead by these words (lead_routes.js: "interested in Mix & Mastering").
+const WA_TEXT = "I'm interested in Mix & Mastering";
+const BOOKING_WHATSAPP = "https://wa.me/972523561353?text=" + encodeURIComponent(WA_TEXT);
 
 /* ── A/B audio comparison player ── */
 function ABComparison({ example, isMobile }) {
@@ -369,6 +372,16 @@ export default function MixMastering() {
               <span>HMWL</span>
             </div>
           </div>
+
+          {/* The one main call to action, same as the homepage */}
+          <StartProjectCTA
+            whatsappText={WA_TEXT}
+            productLine="MM"
+            eventPrefix="mixMasterHero"
+            label="mix_master_hero"
+            marginTop={isMobile ? 20 : 28}
+            marginBottom={isMobile ? 20 : 28}
+          />
 
           {/* CTA Cards (Lessons-style) */}
           <div style={{ display: "flex", flexWrap: "nowrap", gap: isMobile ? 8 : 16, marginTop: isMobile ? 8 : 16, textAlign: "left" }}>

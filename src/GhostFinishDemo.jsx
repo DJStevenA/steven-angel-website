@@ -12,6 +12,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav.jsx";
+import StartProjectCTA from "./components/StartProjectCTA.jsx";
 import Footer from "./Footer.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import InquiryForm from "./components/InquiryForm.jsx";
@@ -26,8 +27,9 @@ const BG = "#080810";
 const BG_ALT = "#04040f";
 const BG_DARK = "#02020a";
 
-const WHATSAPP_URL =
-  "https://wa.me/972523561353?text=Hi%20Steven%2C%20I'm%20interested%20in%20finishing%20my%20demo.";
+// The bot routes a lead by these words (lead_routes.js: "finishing my demo").
+const WA_TEXT = "Hi Steven, I'm interested in finishing my demo.";
+const WHATSAPP_URL = "https://wa.me/972523561353?text=" + encodeURIComponent(WA_TEXT);
 
 /* Inline WhatsApp glyph — matches the rest of the site (MixMastering.jsx) */
 const WhatsAppGlyph = ({ size = 18 }) => (
@@ -168,6 +170,14 @@ export default function GhostFinishDemo() {
             <span style={{ color: CYAN }}>·</span>
             <span>Sony</span>
           </div>
+
+          <StartProjectCTA
+            whatsappText={WA_TEXT}
+            productLine="ghost_finish_demo"
+            eventPrefix="ghostFinishDemoHero"
+            label="ghost_finish_demo_hero"
+            marginTop={isMobile ? 32 : 44}
+          />
         </div>
       </section>
 

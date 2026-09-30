@@ -15,6 +15,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav.jsx";
+import StartProjectCTA from "./components/StartProjectCTA.jsx";
 import Footer from "./Footer.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import InquiryForm from "./components/InquiryForm.jsx";
@@ -25,8 +26,9 @@ const CYAN = "#00E5FF";
 const PURPLE = "#BB86FC";
 const WHATSAPP_GREEN = "#1a7a42";
 
-const WHATSAPP_URL =
-  "https://wa.me/972523561353?text=Hi%20Steven%2C%20I'm%20interested%20in%20custom%20ghost%20production.";
+// The bot routes a lead by these words (lead_routes.js: "custom ghost production").
+const WA_TEXT = "Hi Steven, I'm interested in custom ghost production.";
+const WHATSAPP_URL = "https://wa.me/972523561353?text=" + encodeURIComponent(WA_TEXT);
 
 /* JSON-LD Service schema — rendered once on mount */
 const SERVICE_JSONLD = {
@@ -201,6 +203,14 @@ export default function GhostCustom() {
             <span style={{ color: CYAN }}>·</span>
             <span>Sony</span>
           </div>
+
+          <StartProjectCTA
+            whatsappText={WA_TEXT}
+            productLine="ghost_custom"
+            eventPrefix="ghostCustomHero"
+            label="ghost_custom_hero"
+            marginTop={isMobile ? 32 : 44}
+          />
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Nav from "./Nav.jsx";
+import StartProjectCTA from "./components/StartProjectCTA.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import GhostDiscountPopup from "./GhostDiscountPopup.jsx";
 import InquiryForm from "./components/InquiryForm.jsx";
@@ -12,8 +13,9 @@ const PURPLE = "#BB86FC";
 const BG = "#080810";
 
 /* ─── External Links ─── */
-const WHATSAPP_LINK =
-  "https://wa.me/972523561353?text=" + encodeURIComponent("Hi Steven, I'm interested in your Production Services.");
+// The bot routes a lead by these words (lead_routes.js: "interested in your production services").
+const WA_TEXT = "Hi Steven, I'm interested in your Production Services.";
+const WHATSAPP_LINK = "https://wa.me/972523561353?text=" + encodeURIComponent(WA_TEXT);
 
 /* ─── Shadow Colors ─── */
 const SHADOW_CYAN = "rgba(0,229,255,0.4)";
@@ -761,6 +763,15 @@ function GhostPage() {
             >
               Your Vision. My Sound.
             </div>
+
+            {/* The one main call to action, same as the homepage */}
+            <StartProjectCTA
+              whatsappText={WA_TEXT}
+              productLine="GP"
+              eventPrefix="ghostHero"
+              label="ghost_hero"
+              marginTop={isMobile ? 12 : 18}
+            />
 
             {/* 2-CTA bar — Custom Made / Finish Demo (the two services this page focuses on) */}
             <div style={{ display: "flex", flexWrap: isMobile ? "wrap" : "nowrap", gap: isMobile ? 10 : 16, marginTop: isMobile ? 24 : 36, justifyContent: "center" }}>

@@ -8,6 +8,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav.jsx";
+import StartProjectCTA from "./components/StartProjectCTA.jsx";
 import Footer from "./Footer.jsx";
 import TrackPlayer from "./components/TrackPlayer";
 import { trackWhatsAppLead } from "./lib/analytics/events";
@@ -18,7 +19,9 @@ const PURPLE = "#BB86FC";
 const BG = "#080810";
 const SHADOW_CYAN = "0 0 24px rgba(0,229,255,0.35)";
 const SHADOW_PURPLE = "0 0 24px rgba(187,134,252,0.35)";
-const WHATSAPP_LINK = "https://wa.me/972523561353?text=" + encodeURIComponent("I'm interested in Production, Mix & Mastering Lessons");
+// The bot routes a lead by these words: "Production, Mix & Mastering Lessons" goes to DROP.
+const WA_TEXT = "I'm interested in Production, Mix & Mastering Lessons";
+const WHATSAPP_LINK = "https://wa.me/972523561353?text=" + encodeURIComponent(WA_TEXT);
 
 const heading = (sz) => ({
   fontFamily: "'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif",
@@ -355,6 +358,16 @@ export default function Lessons() {
             <div style={{ ...body, fontSize: isMobile ? 14 : 16, color: "rgba(255,255,255,0.5)", fontStyle: "italic", marginBottom: 36 }}>
               Hugel & Claptone play my releases and I've had releases on Sony, Moblack & Godeeva. Now I'll teach you the workflow that got me there.
             </div>
+
+            {/* The one main call to action, same as the homepage */}
+            <StartProjectCTA
+              whatsappText={WA_TEXT}
+              productLine="PL"
+              eventPrefix="lessonsHero"
+              label="lessons_hero"
+              marginTop={0}
+              marginBottom={isMobile ? 20 : 28}
+            />
 
             {/* CTA Cards */}
             <div style={{ display: "flex", flexWrap: "nowrap", gap: isMobile ? 8 : 16, marginTop: isMobile ? 8 : 16, textAlign: "left" }}>
