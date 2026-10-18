@@ -833,14 +833,14 @@ export const PRODUCTS = [
     ],
     image: "/shop/batidor-cover.webp",
     previewVideoUrl: null,
-    // Demos played on Batidor itself (Steven's "baridor demo" folder, 18.10).
+    // Demos played on Batidor itself (Steven's "baridor demo" folder, 18.10;
+    // the solo demo left out on his word).
     audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-ensemble-1.mp3",
-    audioLoopsLabel: "Listen to 4 more demos played on Batidor",
+    audioLoopsLabel: "Listen to 3 more demos played on Batidor",
     audioLoops: [
       { title: "Ensemble 2", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-ensemble-2.mp3" },
       { title: "Loop 1", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-loop-1.mp3" },
       { title: "Loop 2", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-loop-2.mp3" },
-      { title: "Solo mode", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-solo.mp3" },
     ],
     dropboxPath: null,
     fileSize: "72 MB",
