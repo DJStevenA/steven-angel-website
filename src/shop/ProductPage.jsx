@@ -647,7 +647,7 @@ export default function ProductPage() {
                 const startProductPreview = () => playTrack({
                   id: product.id,
                   title: product.name,
-                  subtitle: `${product.category || product.genre || "Afro House"} · Ableton Live 12`,
+                  subtitle: `${product.category || product.genre || "Afro House"} · ${product.type === "plugin" ? product.daw : "Ableton Live 12"}`,
                   audioUrl: product.audioUrl,
                   coverUrl: product.image,
                 });
@@ -797,7 +797,7 @@ export default function ProductPage() {
                     fontWeight: 700, fontSize: 11, letterSpacing: "0.22em",
                     textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: 8,
                   }}>
-                    Listen to {product.audioLoops.length} loops from the pack
+                    {product.audioLoopsLabel || `Listen to ${product.audioLoops.length} loops from the pack`}
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                     {product.audioLoops.map((loop, idx) => {

@@ -785,6 +785,90 @@ export const PRODUCTS = [
   },
 
   // ─────────────────────────────────────────────────────────
+  // Batidor: Steven's own percussion sampler plugin. $7 (Steven, 18.10.2026).
+  // Facts follow the VST PLUGIN BUILDER handoff ("BATIDOR - website info.md").
+  // The file is a .dmg in R2 (products/batidor-0.3.1.dmg), not a Dropbox ZIP.
+  // The installer is unsigned, so the notes carry the "Open Anyway" steps.
+  // No rating: it has no reviews yet.
+  {
+    id: "batidor",
+    slug: "batidor-percussion-sampler-plugin-au-vst3-mac",
+    enabled: true,
+    type: "plugin",
+    name: "Batidor",
+    headline: "Percussion Sampler Plugin for Afro, Latin & House",
+    seoTitle: "Batidor: Percussion Sampler Plugin (AU / VST3, Mac) | Steven Angel",
+    seoDescription:
+      "Batidor is a percussion sampler plugin for Afro, Latin and house grooves: 11 drums and hand drums, Deep / Warm / Bright congas, bongos, djembe and darbuka, and 483 samples by The Angels. AU + VST3 for macOS. $7.",
+    price: 7,
+    currency: "USD",
+    badge: "NEW",
+    badgeColor: "cyan",
+    genre: "Afro / Latin / House",
+    daw: "AU + VST3 Plugin",
+    bpm: null,
+    musicalKey: null,
+    description:
+      "A percussion sampler for Afro, Latin and house grooves: eleven drums and hand drums on one stage, with Deep, Warm and Bright characters for congas, bongos, djembe and darbuka. Play the whole groove from one MIDI clip in Ensemble mode, or spread one instrument across the keyboard in Solo mode. Every instrument has its own channel strip and its own output. Ships with 483 samples by The Angels.",
+    shortDescription: "Percussion sampler · 11 instruments · 483 samples · AU + VST3 (Mac)",
+    keywords: [
+      "percussion sampler plugin",
+      "afro house percussion plugin",
+      "conga vst",
+      "bongo plugin",
+      "djembe vst",
+      "darbuka plugin",
+      "latin percussion vst",
+      "hand drum sampler",
+      "afro house drums vst",
+      "au vst3 percussion plugin mac",
+    ],
+    features: [
+      "11 instruments, kick to darbuka",
+      "Ensemble and Solo modes",
+      "Deep / Warm / Bright hand drums",
+      "Built-in mixer, 12 stereo outs",
+      "483 samples by The Angels",
+      "AU + VST3 for macOS",
+    ],
+    image: "/shop/batidor-cover.webp",
+    previewVideoUrl: null,
+    // Demos played on Batidor itself (Steven's "baridor demo" folder, 18.10).
+    audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-ensemble-1.mp3",
+    audioLoopsLabel: "Listen to 4 more demos played on Batidor",
+    audioLoops: [
+      { title: "Ensemble 2", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-ensemble-2.mp3" },
+      { title: "Loop 1", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-loop-1.mp3" },
+      { title: "Loop 2", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-loop-2.mp3" },
+      { title: "Solo mode", audioUrl: "https://ghost-backend-production-adb6.up.railway.app/shop/media/audio/batidor-solo.mp3" },
+    ],
+    dropboxPath: null,
+    fileSize: "72 MB",
+    specs: {
+      daw: "Any AU / VST3 host on macOS (tested: Ableton Live, Logic Pro)",
+      whatYouGet: [
+        "11 instruments: kick, snare, clap, hi-hat, toms, congas, bongos, djembe, darbuka, shaker, perc",
+        "Ensemble mode: every instrument in its own octave, so one MIDI clip holds the whole groove",
+        "Solo mode: one instrument across the keyboard, every sample on its own key",
+        "Hand-drum characters Deep / Warm / Bright: a low and a high drum played Dum / Slap / Tek, up to 4 round-robin variations per stroke",
+        "A playable stage in four scenes: Studio, Party, Beach, Street",
+        "Built-in mixer: 3-band EQ, drive, compressor, reverb send, pan, level and meter per instrument",
+        "Multi out: 12 stereo outputs (Main + one per instrument)",
+        "Root-note detection, tuning in semitones and cents",
+        "Drop any folder of one-shots onto it and it sorts them into instruments",
+        "3 kits with 483 samples by The Angels: Full Kit (all 483), One Shots (136), Loop Cuts (347)",
+      ],
+      notes: [
+        "Mac only: macOS 10.15 or later, Apple Silicon and Intel. No Windows version.",
+        "In your DAW it is listed under Nuonda > Batidor.",
+        "The installer is not signed with an Apple Developer ID, so macOS warns the first time. On macOS 15 or later: click Done, then System Settings > Privacy & Security > Open Anyway. On older macOS: right-click the .pkg and choose Open.",
+        "Install steps in English and Hebrew are inside the download.",
+      ],
+    },
+    seoTags: ["Percussion Plugin", "AU / VST3", "Afro House Drums", "Latin Percussion", "Hand Drums"],
+  },
+
+  // ─────────────────────────────────────────────────────────
   // HIDDEN TEST PRODUCT — accessible only via direct URL, not in shop grid
   {
     id: "test-1-dollar",
@@ -838,6 +922,7 @@ export const getProductSpecs = (product) => {
 // Sort order for the shop grid (best sellers first)
 export const SHOP_DISPLAY_ORDER = [
   "afro-house-masterclass",
+  "batidor",
   "balkan-boy",
   "maria-maria",
   "el-barrio",
