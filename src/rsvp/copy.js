@@ -17,7 +17,8 @@ export const COPY = {
     "title": "Tel Aviv's Hottest Afro Latin House DJ is coming to Miami, as part of their US tour.",
     "metaTitle": "The Angels at AIRE Miami | Free Guest List",
     "paras": [
-      "Tel Aviv's Afro & Latin House, played by HUGEL & Claptone. RSVP for free entry before 12AM. Wed Nov 11th, 9PM at AIRE Miami.",
+      // Steven, 29.10: the summary keeps only the RSVP part.
+      "RSVP for free entry before 12AM. Wed Nov 11th, 9PM at AIRE Miami.",
       "With records supported by Hugel & Claptone, and releases on MoBlack, GoDeeva, MTGD, Made In Miami with over 15mil' streams on their catalogue, they are in the cutting edge of the house music scene.",
       "\"El Barrio\" came out on HUGEL's label and made it into both of their sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10, and their music has passed 15 million streams, with releases on Sony, MTGD, MoBlack, Godeeva and Redolent.",
       "WEDNESDAY NOV 11TH · 9PM–4AM\nAIRE Miami · 111 NE 20th St, Edgewater\nAlso playing: Størmii, Francesco Theodoli (new release set), Lerso, Dbasch",

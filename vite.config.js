@@ -501,6 +501,12 @@ function staticSeoPages() {
       const escRsvp = (v) =>
         String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       const dollarSafe = (v) => String(v).replace(/\$/g, '$$$$'); // String.replace treats $& / $$ specially
+      /* The page's own stylesheet (a lazy chunk) must be in the static head.
+         Without it the prerendered body painted unstyled until the JS arrived,
+         and the wide banner meant for the blurred background flashed in full
+         for a moment (Steven, 29.10: "למה לשניה עולה איזה תמונה אחרת?"). */
+      const rsvpCss = fs.readdirSync(path.join(distDir, 'assets')).filter((f) => /^RsvpPage-.*\.css$/.test(f));
+      if (rsvpCss.length !== 1) throw new Error(`RSVP: expected one RsvpPage css chunk, found ${rsvpCss.length}`);
       for (const ev of EVENTS) {
         const head = rsvpHead(ev);
         let out = replaceMeta(html, {
@@ -518,6 +524,7 @@ function staticSeoPages() {
           `<link id="rsvp-font-pc-1" rel="preconnect" href="https://fonts.googleapis.com" />`,
           `<link id="rsvp-font-pc-2" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
           `<link id="rsvp-font-css" rel="stylesheet" href="${INTER_CSS}" />`,
+          `<link rel="stylesheet" href="/assets/${rsvpCss[0]}" />`,
           `<link rel="preload" as="image" href="${escRsvp(ev.flyer)}" fetchpriority="high" />`,
         ];
         out = out.replace('</head>', () => `    ${tags.join('\n    ')}\n  </head>`);
