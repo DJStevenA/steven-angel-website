@@ -19,11 +19,12 @@ const make = (key, extra) => {
     key,
     ...extra,
     title: c.title,
+    metaTitle: c.metaTitle || c.title,
     summary: c.paras[0],
     about: c.paras.slice(1),
     thanks: c.thanks,
     // The brief's own date line, e.g. "WEDNESDAY NOV 11TH · 9PM–4AM"
-    dateLine: c.paras[4].split("\n")[0],
+    dateLine: c.paras.find((p) => /^[A-Z]+DAY /.test(p)).split("\n")[0],
   };
 };
 

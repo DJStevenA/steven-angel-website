@@ -10,12 +10,16 @@
  */
 export const COPY = {
   "aire": {
-    "title": "The Angels at AIRE Miami | Free Guest List",
+    // Steven, 29.10 in chat: his own heading and "About" text for AIRE
+    // (spelling fixed only: their, catalogue, cutting, scene, "MoBlack, GoDeeva",
+    // the missing opening quote before El Barrio). The brief's title stays as
+    // the browser/share title.
+    "title": "Tel Aviv's Hottest Afro Latin House DJ is coming to Miami, as part of their US tour.",
+    "metaTitle": "The Angels at AIRE Miami | Free Guest List",
     "paras": [
       "Tel Aviv's Afro & Latin House, played by HUGEL & Claptone. RSVP for free entry before 12AM. Wed Nov 11th, 9PM at AIRE Miami.",
-      "The Angels bring Tel Aviv's Afro & Latin House back to the room they played when it was Boho Miami. 🌴",
-      "Their records are the kind HUGEL and Claptone play: \"El Barrio\" came out on HUGEL's label and made it into both of their sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10, and their music has passed 15 million streams, with releases on Sony, MTGD, MoBlack, Godeeva and Redolent.",
-      "They've played Gaia Beach and Spazio in Florida, Somewhere Nowhere in New York, Bonbonniere in Tulum, Zero One in Lisbon and ADE in Amsterdam, with the drums, horns and Latin vocals that they bring to every set.",
+      "With records supported by Hugel & Claptone, and releases on MoBlack, GoDeeva, MTGD, Made In Miami with over 15mil' streams on their catalogue, they are in the cutting edge of the house music scene.",
+      "\"El Barrio\" came out on HUGEL's label and made it into both of their sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10, and their music has passed 15 million streams, with releases on Sony, MTGD, MoBlack, Godeeva and Redolent.",
       "WEDNESDAY NOV 11TH · 9PM–4AM\nAIRE Miami · 111 NE 20th St, Edgewater\nAlso playing: Størmii, Francesco Theodoli (new release set), Lerso, Dbasch",
       "🎟️ RSVP here to join The Angels guest list: free entry before 12AM."
     ],

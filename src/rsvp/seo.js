@@ -15,11 +15,11 @@ export const OG_IMAGE_SIZE = { width: 2160, height: 1080, type: "image/jpeg" };
 
 export function rsvpHead(ev) {
   return {
-    title: ev.title,
+    title: ev.metaTitle,
     description: ev.summary,
     canonical: eventUrl(ev),
     image: absUrl(ev.banner),
-    imageAlt: ev.title,
+    imageAlt: ev.metaTitle,
     robots: "noindex",
   };
 }

@@ -101,7 +101,7 @@ function RsvpEvent({ ev }) {
     const url = `${window.location.origin}${window.location.pathname}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title: ev.title, url });
+        await navigator.share({ title: ev.metaTitle, url });
         return;
       } catch (err) {
         if (err && err.name === "AbortError") return;
@@ -129,7 +129,7 @@ function RsvpEvent({ ev }) {
               src={ev.flyer}
               width="1080"
               height="1350"
-              alt={ev.title}
+              alt={ev.metaTitle}
               fetchpriority="high"
             />
           </div>
@@ -157,6 +157,16 @@ function RsvpEvent({ ev }) {
 
             <div className="rsvp-divider" aria-hidden="true" />
             <p className="rsvp-summary"><Copy text={ev.summary} /></p>
+            {/* Steven, 29.10: the Canary Islands live set, under the RSVP line */}
+            <div className="rsvp-set">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/sPArmZafsX8"
+                title="The Angels live at Canary Islands"
+                loading="lazy"
+                allow="encrypted-media; picture-in-picture; fullscreen"
+                allowFullScreen
+              />
+            </div>
             <div className="rsvp-divider" aria-hidden="true" />
 
             <h2 className="rsvp-h2">About this event</h2>
