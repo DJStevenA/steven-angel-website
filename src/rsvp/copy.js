@@ -10,19 +10,17 @@
  */
 export const COPY = {
   "aire": {
-    // Steven, 29.10 in chat: his own heading and "About" text for AIRE
-    // (spelling fixed only: their, catalogue, cutting, scene, "MoBlack, GoDeeva",
-    // the missing opening quote before El Barrio). The brief's title stays as
-    // the browser/share title.
-    "title": "Tel Aviv's Hottest Afro Latin House DJ is coming to Miami, as part of their US tour.",
+    // Steven, 29.10: his heading and About text, copy-edited (duplicates out,
+    // "DJ Duo" so "their" agrees). The brief's title stays the browser/share title.
+    "title": "Tel Aviv's Hottest Afro Latin House DJ Duo is coming to Miami, as part of their US tour.",
     "metaTitle": "The Angels at AIRE Miami | Free Guest List",
+    "dateLine": "WEDNESDAY NOV 11TH · 9PM–4AM",
     "paras": [
       // Steven, 29.10: the summary keeps only the RSVP part.
       "RSVP for free entry before 12AM. Wed Nov 11th, 9PM at AIRE Miami.",
-      "With records supported by Hugel & Claptone, and releases on MoBlack, GoDeeva, MTGD, Made In Miami with over 15mil' streams on their catalogue, they are in the cutting edge of the house music scene.",
-      "\"El Barrio\" came out on HUGEL's label and made it into both of their sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10, and their music has passed 15 million streams, with releases on Sony, MTGD, MoBlack, Godeeva and Redolent.",
-      "WEDNESDAY NOV 11TH · 9PM–4AM\nAIRE Miami · 111 NE 20th St, Edgewater\nAlso playing: Størmii, Francesco Theodoli (new release set), Lerso, Dbasch",
-      "🎟️ RSVP here to join The Angels guest list: free entry before 12AM."
+      "With records supported by HUGEL and Claptone, releases on Sony, MTGD, MoBlack, Godeeva, Redolent and Made In Miami, and over 15 million streams across their catalog, The Angels are on the cutting edge of the house music scene.",
+      "\"El Barrio\" came out on HUGEL's label and made it into both HUGEL's and Claptone's sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10.",
+      "Also playing: Størmii, Francesco Theodoli (new release set), Lerso, Dbasch"
     ],
     "thanks": "You're on The Angels guest list. WEDNESDAY NOV 11TH · 9PM–4AM · AIRE Miami. Free entry before 12AM."
   },

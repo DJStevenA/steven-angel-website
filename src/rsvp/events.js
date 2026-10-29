@@ -24,7 +24,7 @@ const make = (key, extra) => {
     about: c.paras.slice(1),
     thanks: c.thanks,
     // The brief's own date line, e.g. "WEDNESDAY NOV 11TH · 9PM–4AM"
-    dateLine: c.paras.find((p) => /^[A-Z]+DAY /.test(p)).split("\n")[0],
+    dateLine: c.dateLine || c.paras.find((p) => /^[A-Z]+DAY /.test(p)).split("\n")[0],
   };
 };
 
