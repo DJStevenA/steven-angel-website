@@ -4,6 +4,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import matter from 'gray-matter'
 import { PRODUCTS } from './src/shop/products.js'
+import { EVENTS } from './src/rsvp/events.js'
+import { rsvpHead, OG_IMAGE_SIZE, INTER_CSS } from './src/rsvp/seo.js'
 
 // Plugin to add prefetch hints for lazy-loaded chunks
 function prefetchLazyChunks() {
@@ -487,6 +489,41 @@ function staticSeoPages() {
         const productDir = path.join(distDir, 'shop', product.slug);
         fs.mkdirSync(productDir, { recursive: true });
         fs.writeFileSync(path.join(productDir, 'index.html'), productHtml);
+      }
+
+      /* ───────── THE ANGELS RSVP — /the-angels/<show> (guest-list pages) ─────────
+       * One page per show in src/rsvp/events.js. Title, description and og:image
+       * come from src/rsvp/seo.js (the same function the page uses at run time),
+       * so a link shared to Instagram/Facebook shows the right banner. noindex,
+       * and none of these URLs is in the sitemap or the nav. Inter (the Posh
+       * Haas Grotesk stand-in) is loaded here only, not site-wide.
+       * scripts/prerender.mjs has the matching routes and keeps this <head>. */
+      const escRsvp = (v) =>
+        String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const dollarSafe = (v) => String(v).replace(/\$/g, '$$$$'); // String.replace treats $& / $$ specially
+      for (const ev of EVENTS) {
+        const head = rsvpHead(ev);
+        let out = replaceMeta(html, {
+          title: dollarSafe(escRsvp(head.title)),
+          description: dollarSafe(escRsvp(head.description)),
+          canonical: head.canonical,
+          ogImage: head.image,
+          ogImageWidth: OG_IMAGE_SIZE.width,
+          ogImageHeight: OG_IMAGE_SIZE.height,
+          ogImageType: OG_IMAGE_SIZE.type,
+          ogImageAlt: dollarSafe(head.imageAlt),
+        });
+        const tags = [
+          `<meta name="robots" content="${head.robots}" />`,
+          `<link id="rsvp-font-pc-1" rel="preconnect" href="https://fonts.googleapis.com" />`,
+          `<link id="rsvp-font-pc-2" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
+          `<link id="rsvp-font-css" rel="stylesheet" href="${INTER_CSS}" />`,
+          `<link rel="preload" as="image" href="${escRsvp(ev.flyer)}" fetchpriority="high" />`,
+        ];
+        out = out.replace('</head>', () => `    ${tags.join('\n    ')}\n  </head>`);
+        const dir = path.join(distDir, 'the-angels', ev.slug);
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(path.join(dir, 'index.html'), out);
       }
     },
   };

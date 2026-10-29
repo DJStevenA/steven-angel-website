@@ -31,6 +31,9 @@ const Blog = lazy(() => import("./blog/Blog.jsx"));
 const BlogPost = lazy(() => import("./blog/BlogPost.jsx"));
 const Links = lazy(() => import("./Links.jsx"));
 const AngelsLinks = lazy(() => import("./AngelsLinks.jsx"));
+// The Angels guest-list (RSVP) pages: /the-angels/aire-miami, /the-angels/spazio.
+// Unlisted (noindex, no nav/footer/sitemap link). Data: src/rsvp/events.js
+const RsvpPage = lazy(() => import("./rsvp/RsvpPage.jsx"));
 const LoginPage = lazy(() => import("./shop/LoginPage.jsx"));
 const SignupPage = lazy(() => import("./shop/SignupPage.jsx"));
 const AccountPage = lazy(() => import("./shop/AccountPage.jsx"));
@@ -108,6 +111,8 @@ function PageTitle() {
     // Blog post pages set their own title/meta via useEffect in BlogPost.jsx — skip the override here
     const isBlogPost = location.pathname.startsWith("/blog/") && location.pathname !== "/blog";
     if (isBlogPost) return;
+    // The Angels RSVP pages (/the-angels/<show>) set their own head (src/rsvp/head.js)
+    if (location.pathname.startsWith("/the-angels/")) return;
 
     const titles = {
       "/": "Steven Angel — Afro House DJ, Producer & Ableton Mentor",
@@ -216,6 +221,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/ghost/finish-demo" element={<GhostFinishDemo />} />
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/the-angels" element={<TheAngels />} />
+            <Route path="/the-angels/:slug" element={<RsvpPage />} />
             <Route path="/mix-mastering" element={<MixMastering />} />
             <Route path="/mix-mastering/upload" element={<MixMasteringUpload />} />
             <Route path="/mastering" element={<Navigate to="/mix-mastering" replace />} />

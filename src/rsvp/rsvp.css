@@ -1,0 +1,392 @@
+/* Guest-list (RSVP) pages. A close copy of a Posh event page, measured at
+   1440px: bg #09090b, text #fafafa, 976px container (569 + 32 + 375), 4:5 flyer
+   sticky at 84px, 1px dividers at rgba(235,235,235,.2). Inter stands in for
+   Haas Grotesk. Everything is scoped under .rsvp. */
+
+.rsvp {
+  /* Posh's Haas Grotesk "Medium" (500) is drawn heavier than Inter Medium, so
+     the stand-in uses 600 wherever the Posh page uses 500 for headings/names. */
+  --rsvp-medium: 600;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #09090b;
+  color: #fafafa;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip; /* clip, not hidden: keeps position: sticky working */
+}
+.rsvp *, .rsvp *::before, .rsvp *::after { box-sizing: border-box; }
+.rsvp img { display: block; }
+/* :where() keeps the reset at zero specificity so the rules below win */
+:where(.rsvp) :where(p, h1, h2) { margin: 0; }
+:where(.rsvp) :where(button, input, select) { font-family: inherit; }
+
+html.rsvp-page, html.rsvp-page body { background: #09090b; }
+
+/* ───── Background: the wide banner, darkened, under a full-viewport blur layer.
+        On desktop the banner is drawn ~1.19x the width of its 2160px original
+        (178vw wide) and shifted up, which is what gives the Posh draft its big
+        blurred "THE ANGELS" across the top. On phones it is plain cover. ───── */
+.rsvp-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #09090b;
+}
+.rsvp-bg img {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 178vw;
+  height: 89vw;
+  max-width: none;
+  transform: translate(-50%, -8.4vw);
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+.rsvp-blur {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  background: linear-gradient(180deg, rgba(9, 9, 11, 0.18) 0, rgba(9, 9, 11, 0.55) 130px, #09090b 280px);
+}
+
+.rsvp-main { position: relative; z-index: 2; }
+
+/* ───── Desktop grid ───── */
+.rsvp-grid {
+  width: 976px;
+  margin: 0 auto;
+  padding-top: 84px;
+  display: grid;
+  grid-template-columns: 569px 375px;
+  column-gap: 32px;
+  align-items: start;
+}
+.rsvp-flyer-col {
+  grid-column: 2;
+  grid-row: 1;
+  position: sticky;
+  top: 84px;
+}
+.rsvp-flyer {
+  width: 375px;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  border-radius: 12px;
+  background: #111;
+}
+.rsvp-info {
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: 8px;
+  min-width: 0;
+  padding-bottom: 48px;
+}
+
+.rsvp-nowrap { white-space: nowrap; }
+.rsvp-divider { height: 1px; background: rgba(235, 235, 235, 0.2); }
+
+/* host row */
+.rsvp-host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+}
+.rsvp-host-id { display: flex; align-items: center; gap: 8px; font-weight: var(--rsvp-medium); }
+.rsvp-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; background: #222; }
+.rsvp-avatar-lg { width: 48px; height: 48px; }
+.rsvp-icon-btn {
+  width: 40px;
+  height: 40px;
+  margin-right: -2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #fafafa;
+  cursor: pointer;
+}
+.rsvp-icon-btn:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* title + when */
+.rsvp-title {
+  margin: 64px 0 74px;
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: var(--rsvp-medium);
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+.rsvp-venue { font-weight: var(--rsvp-medium); color: #fff; }
+.rsvp-date { margin-top: 4px; color: #fff; }
+.rsvp-status { margin-top: 4px; font-weight: var(--rsvp-medium); color: #fafafa; }
+.rsvp-when { margin-bottom: 27px; }
+
+.rsvp-summary { padding: 24px 0; color: #d4d4d8; }
+
+.rsvp-h2 { margin-top: 30px; font-size: 16px; line-height: 24px; font-weight: var(--rsvp-medium); color: #fff; }
+.rsvp-h2-section { margin-top: 48px; }
+
+.rsvp-about { margin-top: 24px; color: #d4d4d8; line-height: 28px; }
+.rsvp-about p { white-space: pre-line; margin-bottom: 28px; overflow-wrap: anywhere; }
+.rsvp-about p:last-child { margin-bottom: 0; }
+
+/* location */
+.rsvp-address { color: #d4d4d8; }
+.rsvp-map {
+  margin-top: 16px;
+  width: 100%;
+  max-width: 569px;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1a1a1d;
+}
+.rsvp-map iframe { display: block; width: 100%; height: 100%; border: 0; }
+.rsvp-maplink {
+  display: inline-block;
+  margin-top: 12px;
+  color: #fafafa;
+  font-weight: var(--rsvp-medium);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* hosted by */
+.rsvp-hosted {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  color: #fafafa;
+  font-weight: var(--rsvp-medium);
+  text-decoration: none;
+}
+.rsvp-hosted:hover { background: rgba(255, 255, 255, 0.09); }
+
+/* ───── Sticky button ───── */
+.rsvp-cta {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(9, 9, 11, 0) 0%, rgba(9, 9, 11, 0.85) 60%);
+}
+.rsvp-pill {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 450px;
+  height: 48px;
+  border: 0;
+  border-radius: 9999px;
+  background: #04d60a;
+  color: #000; /* black, not white: white on this green is 2:1, black is 10.6:1 */
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+.rsvp-pill:hover:not(:disabled) { filter: brightness(1.08); }
+.rsvp-pill:active:not(:disabled) { transform: scale(0.985); }
+.rsvp-pill:disabled { cursor: default; }
+.rsvp-cta .rsvp-pill:disabled { background: #2b2b2f; color: rgba(250, 250, 250, 0.7); } /* solid: text scrolls under the pill */
+.rsvp-form .rsvp-pill:disabled { opacity: 0.6; }
+
+.rsvp a:focus-visible,
+.rsvp button:focus-visible,
+.rsvp input:focus-visible,
+.rsvp select:focus-visible {
+  outline: 2px solid #04d60a;
+  outline-offset: 2px;
+}
+.rsvp-pill:focus-visible { outline-color: #fff; outline-offset: 3px; }
+
+/* ───── Modal / bottom sheet ───── */
+.rsvp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646; /* above the site-wide accessibility button (2147483645), so it cannot sit on the form */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.62);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: rsvp-fade 0.18s ease-out;
+}
+.rsvp-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 56px 24px 24px;
+  background: #151518;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  color: #fafafa;
+  animation: rsvp-pop 0.2s ease-out;
+}
+.rsvp-dialog:focus { outline: none; }
+.rsvp-dialog { color-scheme: dark; } /* dark native checkbox + country list */
+.rsvp-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fafafa;
+  cursor: pointer;
+}
+.rsvp-close:hover { background: rgba(255, 255, 255, 0.16); }
+
+.rsvp-form { position: relative; display: grid; gap: 16px; }
+.rsvp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rsvp-field { display: block; min-width: 0; }
+.rsvp-field > span,
+.rsvp-field > label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #d4d4d8;
+}
+.rsvp-field input,
+.rsvp-field select {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 16px; /* 16px stops iOS zooming into the field */
+  line-height: 24px;
+}
+.rsvp-field input:focus,
+.rsvp-field select:focus { border-color: rgba(255, 255, 255, 0.5); }
+.rsvp-form.is-tried input:invalid { border-color: #ff6b6b; }
+
+.rsvp-phone { display: grid; grid-template-columns: 104px 1fr; gap: 8px; }
+.rsvp-phone select { appearance: none; -webkit-appearance: none; padding-right: 28px;
+  background-image: linear-gradient(45deg, transparent 50%, #a1a1aa 50%), linear-gradient(135deg, #a1a1aa 50%, transparent 50%);
+  background-position: calc(100% - 17px) 21px, calc(100% - 12px) 21px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+.rsvp-phone select option { color: #000; }
+
+.rsvp-consent { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+.rsvp-consent input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: #04d60a; }
+.rsvp-consent span { font-size: 14px; line-height: 20px; color: #d4d4d8; }
+
+/* Honeypot: clipped in place. Never left: -9999px (sideways scroll on mobile). */
+.rsvp-hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.rsvp-form .rsvp-pill { max-width: none; margin-top: 4px; }
+.rsvp-privacy {
+  justify-self: center;
+  font-size: 13px;
+  line-height: 20px;
+  color: #a1a1aa;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rsvp-privacy:hover { color: #fafafa; }
+
+.rsvp-thanks { font-size: 20px; line-height: 28px; font-weight: 500; color: #fff; padding: 8px 4px 16px; }
+
+@keyframes rsvp-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rsvp-pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes rsvp-sheet { from { transform: translateY(100%); } to { transform: none; } }
+
+/* ───── Tablet and phone: one column, flyer first ───── */
+@media (max-width: 1007px) {
+  .rsvp-bg img { left: 0; top: 0; width: 100%; height: 100%; transform: none; }
+  .rsvp-grid { display: block; width: 100%; padding-top: 0; }
+  .rsvp-flyer-col { position: static; }
+  .rsvp-flyer { width: 100%; max-width: 480px; margin: 0 auto; border-radius: 0; }
+  .rsvp-info { max-width: 600px; margin: 0 auto; padding: 0 16px 24px; }
+  .rsvp-divider-top { display: none; }
+  .rsvp-host { height: 56px; }
+  .rsvp-title { margin: 12px 0 28px; font-size: 28px; line-height: 32px; }
+  .rsvp-when { margin-bottom: 20px; }
+  .rsvp-h2 { margin-top: 28px; }
+  .rsvp-h2-section { margin-top: 40px; }
+  .rsvp-map { height: 240px; }
+}
+@media (min-width: 600px) and (max-width: 1007px) {
+  .rsvp-flyer { margin-top: 24px; border-radius: 12px; }
+}
+
+/* Bottom sheet on phones */
+@media (max-width: 640px) {
+  .rsvp-overlay { align-items: flex-end; padding: 0; }
+  .rsvp-dialog {
+    max-width: none;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: 20px 20px 0 0;
+    border-bottom: 0;
+    padding: 56px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+    animation: rsvp-sheet 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-overlay, .rsvp-dialog { animation: none; }
+  .rsvp-pill { transition: none; }
+}
+
+/* The site-wide accessibility button (bottom-left everywhere else) moves to the
+   right on these pages while the text column is close to the left edge, so it
+   never sits on the copy or the date line above the sticky pill. */
+@media (max-width: 1120px) {
+  html.rsvp-page .a11yw-btn { left: auto; right: 12px; }
+  html.rsvp-page .a11yw-panel { left: auto; right: 12px; }
+}
+@media (max-width: 640px) {
+  html.rsvp-page .a11yw-btn { width: 44px; height: 44px; }
+}

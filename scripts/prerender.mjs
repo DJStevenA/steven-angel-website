@@ -12,6 +12,7 @@
  *   - 12 hardcoded routes (homepage + ghost + shop + simple pages + blog index)
  *   - All published blog posts (auto-derived from src/blog/posts/<slug>.md)
  *   - All enabled shop products (auto-derived from PRODUCTS in src/shop/products.js)
+ *   - The Angels RSVP pages /the-angels/<show> (auto-derived from src/rsvp/events.js)
  *
  * /mix-mastering/upload is intentionally skipped — it has noindex meta and is
  * a post-payment private page.
@@ -29,6 +30,7 @@ import matter from 'gray-matter';
 import Prerenderer from '@prerenderer/prerenderer';
 import PuppeteerRenderer from '@prerenderer/renderer-puppeteer';
 import { PRODUCTS } from '../src/shop/products.js';
+import { EVENTS } from '../src/rsvp/events.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -73,10 +75,16 @@ function productRoutes() {
   return PRODUCTS.filter((p) => p.enabled).map((p) => `/shop/${p.slug}`);
 }
 
+// The Angels guest-list pages (noindex, unlisted). Head comes from vite.config.js.
+function rsvpRoutes() {
+  return EVENTS.map((e) => `/the-angels/${e.slug}`);
+}
+
 const ALL_ROUTES = [
   ...HARDCODED_ROUTES,
   ...blogRoutes(),
   ...productRoutes(),
+  ...rsvpRoutes(),
 ];
 
 // ─────────────────────────────────────────────────────────────
