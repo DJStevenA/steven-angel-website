@@ -25,6 +25,7 @@ export default function RsvpModal({ ev, onClose }) {
   const [country, setCountry] = useState(DEFAULT_COUNTRY);
   const [tried, setTried] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [done, setDone] = useState(false);
   const dial = dialFor(country);
 
@@ -102,13 +103,15 @@ export default function RsvpModal({ ev, onClose }) {
     }
 
     setSending(true);
+    setError("");
     try {
       await submitRsvp(ev, values);
       setDone(true);
     } catch (err) {
-      // Only reachable once RSVP_LIVE is true. TODO(live): decide the failure UI
-      // with Steven (copy is his call). For now the button simply re-enables.
+      // The server's own message ("Please enter a valid email.", "Guest list
+      // closed"), or a plain retry line when the network failed.
       console.error(err);
+      setError(err.message && !/fetch/i.test(err.message) ? err.message : "Something went wrong. Please try again.");
       setSending(false);
     }
   }
@@ -193,13 +196,14 @@ export default function RsvpModal({ ev, onClose }) {
               <input name="website" type="text" tabIndex={-1} autoComplete="off" />
             </div>
 
+            {error && <p className="rsvp-error" role="alert">{error}</p>}
+
             <button type="submit" className="rsvp-pill" disabled={sending}>
               Join the guest list
             </button>
 
-            {/* TODO: once the privacy policy has its section C (guest lists), link
-                to /privacy#c. Today /privacy has A, B and Contact only. */}
-            <a className="rsvp-privacy" href="/privacy" target="_blank" rel="noopener">
+            {/* Section C of the privacy policy covers the guest lists. */}
+            <a className="rsvp-privacy" href="/privacy#guest-lists" target="_blank" rel="noopener">
               steven-angel.com/privacy
             </a>
           </form>

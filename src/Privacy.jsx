@@ -12,6 +12,8 @@ const BG = "#080810";
  * Public, no-login required. Covers BOTH:
  *   (A) Website privacy — steven-angel.com (analytics, accounts, payments, cookies)
  *   (B) Instagram Bot privacy — @stevenangel.prod automation (Meta App Review compliant)
+ *   (C) The Angels event guest lists (29.10.2026, marketing briefs of 25.10 and 29.10,
+ *       approved by Steven; anchor #guest-lists, linked from the RSVP form)
  *
  * Section B preserves Steven's exact text per Meta App Review spec 2026-05-08.
  * Last updated: 2026-09-10 (Israeli Privacy Protection Law + Amendment 13,
@@ -106,16 +108,17 @@ function PrivacyPage() {
               fontStyle: "italic",
             }}
           >
-            Steven Angel &middot; Last updated: 2026-09-10
+            Steven Angel &middot; Last updated: 2026-10-29
           </div>
 
           {/* Intro */}
           <p style={body}>
-            This privacy policy covers two surfaces: <strong>(A)</strong> the
+            This privacy policy covers three surfaces: <strong>(A)</strong> the
             steven-angel.com website (including the shop, ghost production
-            service, lessons, and mix &amp; mastering inquiries); and{" "}
+            service, lessons, and mix &amp; mastering inquiries);{" "}
             <strong>(B)</strong> the @stevenangel.prod Instagram automation built
-            with the Steven Angel Marketing Meta App.
+            with the Steven Angel Marketing Meta App; and{" "}
+            <strong>(C)</strong> The Angels event guest lists.
           </p>
           <p style={body}>
             We follow the principle of collecting only what we need to deliver
@@ -376,6 +379,58 @@ function PrivacyPage() {
             </a>{" "}
             with the subject &ldquo;Delete my data&rdquo;. We will delete your
             record within 30 days.
+          </p>
+
+          {/* ════════════════════════════════════════════════
+              SECTION C — THE ANGELS EVENT GUEST LISTS
+              Text: marketing brief 2026-10-25 + the two edits and the
+              retention line of 2026-10-29. Don't reword without Steven.
+              ════════════════════════════════════════════════ */}
+          <h2 id="guest-lists" style={sectionDivider}>C &middot; The Angels event guest lists</h2>
+
+          <p style={body}>
+            When you sign up for a The Angels guest list (through a sign-up form
+            on Facebook or Instagram, or on our website), we collect your full
+            name, email address, phone number and the event you signed up for.
+            If you tick the consent box, we also record that you agreed to
+            receive updates.
+          </p>
+
+          <h3 style={subheading}>How we use it</h3>
+          <ul style={ulStyle}>
+            <li>
+              To put your name on the guest list for that event. Before the
+              event, we share your name with the event&rsquo;s promoter, who
+              passes it to the venue for entry at the door. We share only what
+              the door needs.
+            </li>
+            <li>
+              Only if you ticked the consent box: to send you updates about
+              upcoming The Angels events by email, text message and WhatsApp.
+              Message frequency varies. Message and data rates may apply.
+            </li>
+          </ul>
+
+          <p style={body}>
+            Ticking the consent box is optional. It is not a condition for
+            getting on the guest list.
+          </p>
+          <p style={body}>
+            <strong>Where it is stored:</strong> in our customer database (CRM),
+            and, if you signed up on Facebook or Instagram, the original sign-up
+            in Meta&rsquo;s lead forms.
+          </p>
+          <p style={body}>
+            <strong>How long we keep it:</strong> one year after the event,
+            unless you ticked the consent box, in which case until you opt out.
+          </p>
+          <p style={body}>
+            <strong>Opting out:</strong> reply STOP to any text message, use the
+            unsubscribe link in any email, or write to{" "}
+            <a href="mailto:hello@steven-angel.com" style={linkStyle}>
+              hello@steven-angel.com
+            </a>
+            . To have your details deleted, write to the same address.
           </p>
 
           {/* ════════════════════════════════════════════════

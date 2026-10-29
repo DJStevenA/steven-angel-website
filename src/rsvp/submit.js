@@ -19,32 +19,38 @@
  *  - After a successful save, send the Meta Pixel Lead event (fbq is already
  *    initialised in index.html).
  */
-export const RSVP_LIVE = false;
+export const RSVP_LIVE = true;
 
-// TODO(live): agreed with whatsbot / the CRM agent. Not decided yet.
-const RSVP_ENDPOINT = null;
+/* LIVE since 29.10 (Steven: "תדחוף את מה שיש"). Guests are saved by
+   ghost-backend (angels-rsvp.js): one list per show, consent stored with its
+   sentence, a confirmation e-mail from "The Angels", no ping per RSVP, not
+   /api/site-leads. The CRM sync reads that list. */
+const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
 
 export async function submitRsvp(ev, values) {
   if (!RSVP_LIVE) return { ok: true, sample: true };
 
-  if (!RSVP_ENDPOINT) throw new Error("RSVP_LIVE is true but RSVP_ENDPOINT is not set");
-  const res = await fetch(RSVP_ENDPOINT, {
+  const res = await fetch(`${BACKEND}/angels/rsvp/${ev.slug}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      event: ev.key,
-      source: ev.source,
-      firstName: values.firstName,
-      lastName: values.lastName,
+      first: values.firstName,
+      last: values.lastName,
       email: values.email,
       phone: values.phone, // E.164, e.g. +13055551234
       consent: values.consent, // boolean
     }),
   });
-  if (!res.ok) throw new Error(`RSVP failed: ${res.status}`);
+  if (res.status === 410) throw new Error("Guest list closed");
+  if (!res.ok) {
+    const d = await res.json().catch(() => ({}));
+    throw new Error(d.error || "Something went wrong. Please try again.");
+  }
 
-  // Pixel: only after a saved RSVP, and only if the pixel loaded.
-  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+  // Pixel: only after a saved RSVP, only on the real site (a draft or preview
+  // sign-up must not count as an ad lead), and only if the pixel loaded.
+  if (typeof window !== "undefined" && /(^|\.)steven-angel\.com$/.test(window.location.hostname)
+      && typeof window.fbq === "function") {
     window.fbq("track", "Lead");
   }
   return { ok: true };
