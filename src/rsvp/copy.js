@@ -18,7 +18,8 @@ export const COPY = {
     "paras": [
       // Steven, 29.10: the summary keeps only the RSVP part.
       "RSVP for free entry before 12AM. Wed Nov 11th, 9PM at AIRE Miami.",
-      "With records supported by HUGEL and Claptone, releases on Sony, MTGD, MoBlack, Godeeva, Redolent and Made In Miami, and over 15 million streams across their catalog, The Angels are on the cutting edge of the house music scene.",
+      "With records supported by HUGEL and Claptone, releases on MTGD, MoBlack, Godeeva, and shows around the globe at Made In Miami, and over 15 million streams across their catalog, The Angels are on the cutting edge of the house music scene.",
+      "Their sound is global, with shows at Somewhere Nowhere (NY), Bonbonniere (Tulum), ADE (Amsterdam), Zero One (Lisbon) and many more.",
       "\"El Barrio\" came out on HUGEL's label and made it into both HUGEL's and Claptone's sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10.",
       "Also playing: Størmii, Francesco Theodoli (new release set), Lerso, Dbasch"
     ],
