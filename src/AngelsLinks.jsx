@@ -26,7 +26,7 @@ import { usePageView, useTimeOnPage } from "./lib/analytics/hooks";
 const PROFILE = {
   name: "THE ANGELS",
   bio: "The Angels are a married duo of afro-house DJs hailing from Tel Aviv, Israel.",
-  avatar: "/images/angels/avatar.jpg",
+  avatar: "/images/angels/avatar-ig.jpg", // same picture as the Instagram profile
 };
 
 // Order matches the Linktree icon row.
@@ -42,12 +42,37 @@ const SOCIALS = [
   { label: "Email", icon: "email", url: "mailto:theangelstlv@gmail.com" },
 ];
 
-// { label, url, thumbnail? }
+// { label, url, thumbnail?, sub?, rsvp?, until? }
+// `until` hides a card by itself once the show's guest list has closed.
 const LINKS = [
+  {
+    label: "RSVP · AIRE Miami",
+    sub: "THURSDAY NOV 12TH",
+    url: "/the-angels/aire-miami",
+    rsvp: true,
+    until: "2026-11-13T04:00:00-05:00",
+  },
+  // Spazio sells through its own Eventbrite (Steven, 2026-11-01). Their Nov 14
+  // event was not listed yet on that day, so this is their organizer page: swap
+  // it for the event's own link once it is up.
+  {
+    label: "RSVP · Spazio West Palm Beach",
+    sub: "SATURDAY NOV 14TH",
+    url: "https://www.eventbrite.com/o/spaziowpb-32024137689",
+    rsvp: true,
+    until: "2026-11-15T04:00:00-05:00",
+  },
+  {
+    label: "RSVP · Blind Barber Chicago",
+    sub: "SUNDAY NOV 15TH",
+    url: "/the-angels/chicago",
+    rsvp: true,
+    until: "2026-11-16T04:00:00-06:00",
+  },
   {
     label: "Watch the angels live set - Canary Islands",
     url: "https://www.youtube.com/watch?v=sPArmZafsX8",
-    thumbnail: "/images/angels/canary.jpg",
+    thumbnail: "/images/angels/canary-set.jpg",
   },
   {
     label: "Afrohouse Masterclass",
@@ -245,6 +270,15 @@ const STYLES = `
   text-align: center;
   color: #fff;
 }
+.ag-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.7);
+}
+.ag-card-rsvp { box-shadow: inset 0 0 0 1.5px #04d60a, 0 2px 10px rgba(0,0,0,0.35); }
 .ag-thumb {
   position: absolute;
   left: 8px; top: 50%;
@@ -337,20 +371,24 @@ export default function AngelsLinks() {
         </nav>
 
         <div className="ag-links">
-          {LINKS.map((item) => {
+          {LINKS.filter((l) => !l.until || Date.now() < Date.parse(l.until)).map((item) => {
             const inner = (
               <>
                 {item.thumbnail && <img className="ag-thumb" src={item.thumbnail} alt="" loading="lazy" />}
-                <span className="ag-label">{item.label}</span>
+                <span className="ag-label">
+                  {item.label}
+                  {item.sub && <span className="ag-sub">{item.sub}</span>}
+                </span>
               </>
             );
             const onClick = () => track(item.url, item.label, "angels_bio");
+            const cardClass = item.rsvp ? "ag-card ag-card-rsvp" : "ag-card";
 
             // On-site destinations navigate in the same tab via React Router —
             // instant, and it keeps visitors on the site rather than stacking
             // tabs in Instagram's in-app browser. Everything else opens a new tab.
             return item.url.startsWith("/") ? (
-              <Link key={item.url} to={item.url} className="ag-card" onClick={onClick}>
+              <Link key={item.url} to={item.url} className={cardClass} onClick={onClick}>
                 {inner}
               </Link>
             ) : (
@@ -359,7 +397,7 @@ export default function AngelsLinks() {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ag-card"
+                className={cardClass}
                 onClick={onClick}
               >
                 {inner}

@@ -31,7 +31,7 @@ const Blog = lazy(() => import("./blog/Blog.jsx"));
 const BlogPost = lazy(() => import("./blog/BlogPost.jsx"));
 const Links = lazy(() => import("./Links.jsx"));
 const AngelsLinks = lazy(() => import("./AngelsLinks.jsx"));
-// The Angels guest-list (RSVP) pages: /the-angels/aire-miami, /the-angels/spazio.
+// The Angels guest-list (RSVP) pages: /the-angels/aire-miami, /the-angels/spazio, /the-angels/chicago.
 // Unlisted (noindex, no nav/footer/sitemap link). Data: src/rsvp/events.js
 const RsvpPage = lazy(() => import("./rsvp/RsvpPage.jsx"));
 const LoginPage = lazy(() => import("./shop/LoginPage.jsx"));

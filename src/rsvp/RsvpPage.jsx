@@ -17,7 +17,7 @@ import RsvpModal from "./RsvpModal.jsx";
 import { Copy, Title } from "./Text.jsx";
 import "./rsvp.css";
 
-const AVATAR = "/images/angels/avatar.jpg"; // The Angels avatar from the /angels page
+const AVATAR = "/images/angels/avatar-ig.jpg"; // The Angels avatar from the /angels page
 
 const mapEmbed = (q) => `https://www.google.com/maps?q=${encodeURIComponent(q)}&output=embed`;
 const mapLink = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;

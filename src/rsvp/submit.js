@@ -13,7 +13,7 @@
  *    HOT list and pings the bot to open a chat, and Steven asked for no ping per
  *    RSVP. The endpoint and fields are to be agreed with `whatsbot` / the CRM
  *    agent (a separate list per show, like the Meta lead form flow).
- *  - Source: ev.source ("Site RSVP · The Angels · AIRE · 2026-11-11" etc).
+ *  - Source: ev.source ("Site RSVP · The Angels · AIRE · 2026-11-12" etc).
  *  - Consent: store whether the box was ticked (true / false). Untickers are
  *    still on the list.
  *  - After a successful save, send the Meta Pixel Lead event (fbq is already
