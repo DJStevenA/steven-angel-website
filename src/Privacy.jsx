@@ -108,7 +108,7 @@ function PrivacyPage() {
               fontStyle: "italic",
             }}
           >
-            Steven Angel &middot; Last updated: 2026-10-29
+            Steven Angel &middot; Last updated: 2026-11-02
           </div>
 
           {/* Intro */}
@@ -384,7 +384,8 @@ function PrivacyPage() {
           {/* ════════════════════════════════════════════════
               SECTION C — THE ANGELS EVENT GUEST LISTS
               Text: marketing brief 2026-10-25 + the two edits and the
-              retention line of 2026-10-29. Don't reword without Steven.
+              retention line of 2026-10-29; the Meta paragraph of 2026-11-02
+              (the Lead from the server). Don't reword without Steven.
               ════════════════════════════════════════════════ */}
           <h2 id="guest-lists" style={sectionDivider}>C &middot; The Angels event guest lists</h2>
 
@@ -419,6 +420,13 @@ function PrivacyPage() {
             <strong>Where it is stored:</strong> in our customer database (CRM),
             and, if you signed up on Facebook or Instagram, the original sign-up
             in Meta&rsquo;s lead forms.
+          </p>
+          <p style={body}>
+            <strong>Measuring our ads:</strong> when you sign up on our website,
+            we tell Meta a sign-up happened so we can measure our Facebook and
+            Instagram ads. With it we send hashed (scrambled) copies of your
+            name, email address and phone number, plus your IP address, browser
+            details and Meta cookies.
           </p>
           <p style={body}>
             <strong>How long we keep it:</strong> one year after the event,

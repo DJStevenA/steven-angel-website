@@ -23,12 +23,21 @@ export const RSVP_LIVE = true;
 
 /* LIVE since 29.10 (Steven: "תדחוף את מה שיש"). Guests are saved by
    ghost-backend (angels-rsvp.js): one list per show, consent stored with its
-   sentence, a confirmation e-mail from "The Angels", no ping per RSVP, not
-   /api/site-leads. The CRM sync reads that list. */
+   sentence, a confirmation e-mail from "The Angels", a WhatsApp to the Social
+   Media group (Steven, 2.11), not /api/site-leads. The CRM sync reads that list. */
 const BACKEND = "https://ghost-backend-production-adb6.up.railway.app";
+
+const cookie = (name) => {
+  const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return m ? decodeURIComponent(m[1]) : "";
+};
 
 export async function submitRsvp(ev, values) {
   if (!RSVP_LIVE) return { ok: true, sample: true };
+
+  // The backend sends this Lead to Meta too (an ad blocker stops only the
+  // pixel). The shared id is how Meta counts the two as one.
+  const eventId = `rsvp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
   const res = await fetch(`${BACKEND}/angels/rsvp/${ev.slug}`, {
     method: "POST",
@@ -39,6 +48,9 @@ export async function submitRsvp(ev, values) {
       email: values.email,
       phone: values.phone, // E.164, e.g. +13055551234
       consent: values.consent, // boolean
+      event_id: eventId,
+      fbp: cookie("_fbp"),
+      fbc: cookie("_fbc"),
     }),
   });
   if (res.status === 410) throw new Error("Guest list closed");
@@ -51,7 +63,7 @@ export async function submitRsvp(ev, values) {
   // sign-up must not count as an ad lead), and only if the pixel loaded.
   if (typeof window !== "undefined" && /(^|\.)steven-angel\.com$/.test(window.location.hostname)
       && typeof window.fbq === "function") {
-    window.fbq("track", "Lead");
+    window.fbq("track", "Lead", {}, { eventID: eventId });
   }
   return { ok: true };
 }

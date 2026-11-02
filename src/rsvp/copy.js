@@ -16,7 +16,7 @@ export const COPY = {
     // "DJ Duo" so "their" agrees). The brief's title stays the browser/share title.
     "title": "Tel Aviv's Hottest Afro Latin House DJ Duo is coming to Miami, as part of their US tour.",
     "metaTitle": "The Angels at AIRE Miami | Free Guest List",
-    "dateLine": "THURSDAY NOV 12TH · 9PM–4AM",
+    "dateLine": "THURSDAY NOV 12TH · 9PM–4AM · 21+", // Steven, 2.11; airemia.com says 21 and over
     "paras": [
       // Steven, 29.10: the summary keeps only the RSVP part.
       "RSVP for free entry before 12AM. Thu Nov 12th, 9PM at AIRE Miami.",
@@ -25,7 +25,7 @@ export const COPY = {
       "\"El Barrio\" came out on HUGEL's label and made it into both HUGEL's and Claptone's sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10.",
       "Also playing: Størmii, Francesco Theodoli (new release set), Lerso, Dbasch"
     ],
-    "thanks": "You're on The Angels guest list. THURSDAY NOV 12TH · 9PM–4AM · AIRE Miami. Free entry before 12AM."
+    "thanks": "You're on The Angels guest list. THURSDAY NOV 12TH · 9PM–4AM · AIRE Miami · 21+. Free entry before 12AM."
   },
   "chicago": {
     "title": "Tel Aviv's Hottest Afro Latin House DJ Duo is coming to Chicago, as part of their US tour.",
