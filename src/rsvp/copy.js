@@ -51,5 +51,8 @@ export const COPY = {
     ],
     "thanks": "You're on The Angels guest list. SATURDAY NOV 14TH · 11PM–4AM · Spazio, West Palm Beach · 23+."
   },
+  // Steven, 2.11: small print on every page. Our wording: the venues' own pages
+  // carry no entry terms (marketing checked 2.11).
+  "finePrint": "Signing up does not guarantee entry. Entry is at the sole discretion of venue management and security.",
   "consent": "Yes, I agree to receive updates about The Angels events by email, text and WhatsApp."
 };

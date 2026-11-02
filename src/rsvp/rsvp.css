@@ -397,3 +397,7 @@ html.rsvp-page, html.rsvp-page body { background: #09090b; }
 
 /* A failed save: the server's message, above the button */
 .rsvp-error { margin: 0 0 12px; font-size: 14px; line-height: 20px; color: #ff8a7a; }
+
+/* Entry terms, small, under the RSVP line (Steven, 2.11) */
+.rsvp-summary:has(+ .rsvp-fine) { padding-bottom: 8px; }
+.rsvp-fine { font-size: 12px; line-height: 18px; color: #a1a1aa; }

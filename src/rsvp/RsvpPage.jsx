@@ -15,6 +15,7 @@ import { applyHead } from "./head.js";
 import { ShareIcon, CheckIcon } from "./icons.jsx";
 import RsvpModal from "./RsvpModal.jsx";
 import { Copy, Title } from "./Text.jsx";
+import { COPY } from "./copy.js";
 import "./rsvp.css";
 
 const AVATAR = "/images/angels/avatar-ig.jpg"; // The Angels avatar from the /angels page
@@ -157,6 +158,7 @@ function RsvpEvent({ ev }) {
 
             <div className="rsvp-divider" aria-hidden="true" />
             <p className="rsvp-summary"><Copy text={ev.summary} /></p>
+            <p className="rsvp-fine">{COPY.finePrint}</p>
             {/* Steven, 29.10: the Canary Islands live set, under the RSVP line */}
             <div className="rsvp-set">
               <iframe
