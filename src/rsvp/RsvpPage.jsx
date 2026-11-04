@@ -128,8 +128,8 @@ function RsvpEvent({ ev }) {
             <img
               className="rsvp-flyer"
               src={ev.flyer}
-              width={ev.flyerSize?.[0] ?? 1080}
-              height={ev.flyerSize?.[1] ?? 1350}
+              width="1080"
+              height="1350"
               alt={ev.metaTitle}
               fetchpriority="high"
             />

@@ -35,9 +35,7 @@ export const EVENTS = [
     venue: "AIRE Miami",
     address: "111 NE 20th St, Miami, FL 33137",
     mapQuery: "AIRE Miami, 111 NE 20th St, Miami, FL 33137",
-    // His new flyer replaces the old poster (Steven, 3.11.2026)
-    flyer: `${ASSET_DIR}/AIRE_12-11_flyer.jpg`,
-    flyerSize: [1086, 1448], // 3:4, so the page sizes the flyer from this instead of 4:5
+    flyer: `${ASSET_DIR}/AIRE_12-11_feed.jpg`, // 1080x1350 (4:5)
     banner: `${ASSET_DIR}/AIRE_12-11_eventbrite.jpg`, // 2160x1080 (page background + og:image)
     // The show moved to Thu Nov 12 (Steven, 1.11.2026). Registration closes
     // Fri Nov 13 2026, 04:00 Florida time. Nov 13 is after DST ends (Nov 1), so
