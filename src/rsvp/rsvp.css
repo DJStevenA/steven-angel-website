@@ -79,8 +79,7 @@ html.rsvp-page, html.rsvp-page body { background: #09090b; }
 }
 .rsvp-flyer {
   width: 375px;
-  height: auto;
-  aspect-ratio: 4 / 5;
+  height: auto; /* the shape comes from the img's width/height (4:5 unless the event says otherwise) */
   border-radius: 12px;
   background: #111;
 }
