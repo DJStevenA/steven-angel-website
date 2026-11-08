@@ -5,6 +5,8 @@
  * against them byte for byte. Two exceptions, both Steven's, 1.11.2026: AIRE
  * moved from Wed Nov 11 to Thu Nov 12 (only the date changed), and Chicago was
  * added, built from his AIRE text with no hours and no "free" (neither is known).
+ * 8.11.2026, Steven: Chicago is the same offer as AIRE, free entry for the
+ * guest list, with no end time (so no "before 12AM"). Hours still unknown.
  *
  * paras[0]  = the one-line summary
  * paras[1+] = the "About this event" text (line breaks inside a paragraph are
@@ -29,15 +31,15 @@ export const COPY = {
   },
   "chicago": {
     "title": "Tel Aviv's Hottest Afro Latin House DJ Duo is coming to Chicago, as part of their US tour.",
-    "metaTitle": "The Angels at Blind Barber Chicago | Guest List",
+    "metaTitle": "The Angels at Blind Barber Chicago | Free Guest List",
     "dateLine": "SUNDAY NOV 15TH",
     "paras": [
-      "RSVP to join The Angels guest list. Sun Nov 15th at Blind Barber Chicago.",
+      "RSVP for free entry. Sun Nov 15th at Blind Barber Chicago.",
       "With records supported by HUGEL and Claptone, releases on MTGD, MoBlack, Godeeva and Made In Miami, and over 15 million streams across their catalog, The Angels are on the cutting edge of the house music scene.",
       "Their sound is global, with shows at Somewhere Nowhere (NY), Bonbonniere (Tulum), ADE (Amsterdam), Zero One (Lisbon) and many more.",
       "\"El Barrio\" came out on HUGEL's label and made it into both HUGEL's and Claptone's sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10."
     ],
-    "thanks": "You're on The Angels guest list. SUNDAY NOV 15TH · Blind Barber, Chicago."
+    "thanks": "You're on The Angels guest list. SUNDAY NOV 15TH · Blind Barber, Chicago. Free entry."
   },
   "spazio": {
     "title": "The Angels at Spazio West Palm Beach | Free Guest List",
