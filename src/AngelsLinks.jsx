@@ -52,13 +52,12 @@ const LINKS = [
     rsvp: true,
     until: "2026-11-13T04:00:00-05:00",
   },
-  // Spazio sells through its own Eventbrite (Steven, 2026-11-01). Their Nov 14
-  // event was not listed yet on that day, so this is their organizer page: swap
-  // it for the event's own link once it is up.
+  // Our own Spazio guest-list page (Steven, 2026-11-12: «צריך כפתור גם לספאזיו
+  // לדף שלנו באתר»), the page the Spazio ad sends people to.
   {
     label: "RSVP · Spazio West Palm Beach",
     sub: "SATURDAY NOV 14TH",
-    url: "https://www.eventbrite.com/o/spaziowpb-32024137689",
+    url: "/the-angels/spazio",
     rsvp: true,
     until: "2026-11-15T04:00:00-05:00",
   },
