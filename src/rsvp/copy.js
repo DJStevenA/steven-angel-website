@@ -44,14 +44,15 @@ export const COPY = {
   "spazio": {
     "title": "The Angels at Spazio West Palm Beach | Free Guest List",
     "paras": [
-      "Tel Aviv's Afro & Latin House, played by HUGEL & Claptone. RSVP to join The Angels guest list. Sat Nov 14th, 11PM at Spazio.",
+      // Steven, 12.11: free entry on the guest list until 12:30AM (AIRE's wording, his hour).
+      "Tel Aviv's Afro & Latin House, played by HUGEL & Claptone. RSVP for free entry before 12:30AM. Sat Nov 14th, 11PM at Spazio.",
       "The Angels are back at Spazio, bringing Tel Aviv's Afro & Latin House upstairs on Clematis. 🌴",
       "Their records are the kind HUGEL and Claptone play: \"El Barrio\" came out on HUGEL's label and made it into both of their sets in Ibiza. \"Jungle Walk\" and \"Fuego En Tus Ojos\" (Sony) both hit Beatport's Afro House Top 10, and their music has passed 15 million streams, with releases on Sony, MTGD, MoBlack, Godeeva and Redolent.",
       "They've played Boho Miami and Gaia Beach, Somewhere Nowhere in New York, Bonbonniere in Tulum, Zero One in Lisbon and ADE in Amsterdam, with the drums, horns and Latin vocals that they bring to every set.",
       "SATURDAY NOV 14TH · 11PM–4AM\nSpazio · 207 Clematis St (upstairs), West Palm Beach · 23+\nWarm-up: DMEYER",
       "🎟️ RSVP here to join The Angels guest list."
     ],
-    "thanks": "You're on The Angels guest list. SATURDAY NOV 14TH · 11PM–4AM · Spazio, West Palm Beach · 23+."
+    "thanks": "You're on The Angels guest list. SATURDAY NOV 14TH · 11PM–4AM · Spazio, West Palm Beach · 23+. Free entry before 12:30AM."
   },
   // Steven, 2.11: small print on every page. Our wording: the venues' own pages
   // carry no entry terms (marketing checked 2.11).
